@@ -13,5 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require jquery.noty.packaged.min
+//= require jquery.noty.bootstrapTheme
 //= require bootstrap
 //= require_tree .
