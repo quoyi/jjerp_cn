@@ -19,6 +19,14 @@ module Jjerp
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+    I18n.config.enforce_available_locales = false
+    config.i18n.available_locales = ["zh-CN"]
+    config.i18n.default_locale = "zh-CN".to_sym
+    config.before_configuration do
+      I18n.locale = "zh-CN".to_sym
+      I18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '**', '*.{rb,yml}')]
+      I18n.reload!
+    end
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
