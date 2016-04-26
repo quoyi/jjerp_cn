@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>伊思尔生产管理</title>
+    <%= favicon_link_tag 'icon.png' %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <%= render '/layouts/header' %>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <% if current_user %>
+        <%= render '/layouts/sidebar' %>
+        <%= render '/layouts/content' %>
+        <% end %>
+        <%= yield %>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+    <%= render '/layouts/footer' %>
+  </body>
+</html>
