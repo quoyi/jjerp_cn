@@ -13,9 +13,11 @@ body{
 }
 
 footer{
-  // padding: 0 !important;
   & .copy {
     margin: 0 !important;
+  }
+  & a {
+    color: #428bca !important;
   }
 }
 
