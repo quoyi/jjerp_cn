@@ -16,4 +16,5 @@
 //= require jquery.noty.packaged.min
 //= require jquery.noty.bootstrapTheme
 //= require bootstrap
+//= require bootstrap-sprockets
 //= require_tree .

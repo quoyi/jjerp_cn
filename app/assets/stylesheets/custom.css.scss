@@ -1,14 +1,18 @@
 body{
-  &.home-body {
-    background: url('bj2.jpg') no-repeat fixed;
-    background-size: 100% 100%;
-    filter:alpha(opacity=95);
-    -moz-opacity:0.95;
-    -khtml-opacity: 0.95;
-    opacity: 0.95;
-  }
-  &.container-fluid {
+  & .container-fluid {
     min-height: 768px;
+  }
+}
+
+.sidebar .nav li  {
+  &.open > a {
+    border-bottom: none !important;
+  }
+  & > a:hover {
+    border-radius: 3px;
+    background: #5881A8 !important;
+    color:#fff !important;
+    border-bottom: 0px;
   }
 }
 
@@ -18,19 +22,6 @@ footer{
   }
   & a {
     color: #428bca !important;
-  }
-}
-
-// 定义logo 和 copy 的背景色
-.logo a, .copy a {
-  &:hover {
-    background: transparent;
-  }
-}
-
-.navbar-right li a{
-  &:focus{
-    outline: none !important;
   }
 }
 
@@ -48,6 +39,10 @@ footer{
 }
 
 .login-wrapper{
+  margin-top: 50px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
   & hr{
     margin-bottom: 40px;
   }

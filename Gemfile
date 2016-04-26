@@ -6,9 +6,12 @@ ruby '2.3.0'
 
 # 权限认证
 gem 'devise'
+gem 'cancancan'
 
 # 前端样式 Bootstrap
 gem 'bootstrap-sass'
+# 使用第三方图标库
+gem 'font-awesome-sass', '~> 4.2.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.6'

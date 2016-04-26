@@ -6,6 +6,11 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
 
 
+  # 重写用户登陆成功后跳转路径
+  def after_sign_in_path_for(resource)
+   return user_infos_path
+  end
+
   # protected
 
   # def configure_permitted_parameters

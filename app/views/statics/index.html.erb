@@ -1,46 +1,48 @@
-<div class="col-lg-offset-2 col-lg-8">
-  <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-    <!-- 图片下面的小导航 -->
-    <ol class="carousel-indicators">
-      <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-      <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-      <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-      <li data-target="#carousel-example-generic" data-slide-to="3"></li>
-      <li data-target="#carousel-example-generic" data-slide-to="4"></li>
-    </ol>
-    <!-- 滚动主体 -->
-    <div class="carousel-inner" role="listbox">
-      <div class="item active">
-        <%= image_tag '1' %>
-        <!-- <div class="carousel-caption">
-          图片1不能显示时，显示的文字注释
-        </div> -->
+<div class="row">
+  <div class="col-lg-offset-2 col-lg-8">
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+      <!-- 图片下面的小导航 -->
+      <ol class="carousel-indicators">
+        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+      </ol>
+      <!-- 滚动主体 -->
+      <div class="carousel-inner" role="listbox">
+        <div class="item active">
+          <%= image_tag '1' %>
+          <!-- <div class="carousel-caption">
+            图片1不能显示时，显示的文字注释
+          </div> -->
+        </div>
+        <div class="item">
+          <%= image_tag '2' %>
+          <!-- <div class="carousel-caption">
+            图片2不能显示时，显示的文字注释
+          </div> -->
+        </div>
+        <div class="item">
+          <%= image_tag '3' %>
+        </div>
+        <div class="item">
+          <%= image_tag '4' %>
+        </div>
+        <div class="item">
+          <%= image_tag '5' %>
+        </div>
       </div>
-      <div class="item">
-        <%= image_tag '2' %>
-        <!-- <div class="carousel-caption">
-          图片2不能显示时，显示的文字注释
-        </div> -->
-      </div>
-      <div class="item">
-        <%= image_tag '3' %>
-      </div>
-      <div class="item">
-        <%= image_tag '4' %>
-      </div>
-      <div class="item">
-        <%= image_tag '5' %>
-      </div>
+      <!-- 控制器 -->
+      <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">上一页</span>
+      </a>
+      <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">下一页</span>
+      </a>
     </div>
-    <!-- 控制器 -->
-    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-      <span class="sr-only">上一页</span>
-    </a>
-    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-      <span class="sr-only">下一页</span>
-    </a>
   </div>
 </div>
 <a href="#" id="noty_test">弹出消息</a>
