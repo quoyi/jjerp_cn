@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :units
+  resources :unit_categories
   resources :supplies
   resources :agents
   resources :user_categories

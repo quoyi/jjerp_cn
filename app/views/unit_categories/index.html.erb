@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Unit Categories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @unit_categories.each do |unit_category| %>
+      <tr>
+        <td><%= link_to 'Show', unit_category %></td>
+        <td><%= link_to 'Edit', edit_unit_category_path(unit_category) %></td>
+        <td><%= link_to 'Destroy', unit_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Unit category', new_unit_category_path %>

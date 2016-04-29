@@ -1,1 +1,78 @@
-<h1>Dashboard</h1>
+<div class="col-md-12 panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 个人首页 </h2></div>
+    <div class="panel-options">
+      <%= link_to '刷新', '', class: 'btn btn-info' %>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="content-box-header">
+          我的订单
+        </div>
+        <div class="panel-options">
+          <table class="table">
+            <tr>
+              <td>1</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="content-box-header">
+          个人信息
+        </div>
+        <div class="panel-options">
+          <table class="table">
+            <tr>
+              <td>&nbsp;&nbsp;&nbsp;&nbsp;姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名&nbsp;&nbsp;&nbsp;&nbsp;</td>
+              <td><%= current_user.name ||= "未知" %></td>
+              <td>&nbsp;&nbsp;&nbsp;&nbsp;电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话&nbsp;&nbsp;&nbsp;&nbsp;</td>
+              <td><%= current_user.mobile ||= "未知" %></td>
+            </tr>
+            <tr>
+              <td>&nbsp;&nbsp;&nbsp;&nbsp;类&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型&nbsp;&nbsp;&nbsp;&nbsp;</td>
+              <td><%= current_user.user_category ||= "-" %></td>
+              <td>登&nbsp;&nbsp;陆&nbsp;&nbsp;&nbsp;次&nbsp;&nbsp;数</td>
+              <td><%= current_user.sign_in_count ||= "未知" %></td>
+            </tr>
+            <tr>
+              <td>本次登陆时间</td>
+              <td><%= current_user.current_sign_in_at %></td>
+              <td>本次登陆地址</td>
+              <td><%= current_user.current_sign_in_ip %></td>
+            </tr>
+            <tr>
+              <td>上次登陆时间</td>
+              <td><%= current_user.last_sign_in_at %></td>
+              <td>上次登陆地址</td>
+              <td><%= current_user.last_sign_in_ip %>  </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

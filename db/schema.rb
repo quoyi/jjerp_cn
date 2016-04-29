@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20010101010114) do
+ActiveRecord::Schema.define(version: 20160429073348) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "serial",          limit: 255, default: "", null: false
@@ -217,6 +217,16 @@ ActiveRecord::Schema.define(version: 20010101010114) do
 
   add_index "supplies", ["name"], name: "index_supplies_on_name", using: :btree
   add_index "supplies", ["serial"], name: "index_supplies_on_serial", using: :btree
+
+  create_table "unit_categories", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "units", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "user_categories", force: :cascade do |t|
     t.string   "serial",     limit: 255,                null: false

@@ -5,5 +5,6 @@ class StaticsController < ApplicationController
   end
 
   def home
+    @indent = Indent.find_by(user_id: current_user)
   end
 end

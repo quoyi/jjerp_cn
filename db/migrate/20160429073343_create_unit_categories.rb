@@ -1,0 +1,8 @@
+class CreateUnitCategories < ActiveRecord::Migration
+  def change
+    create_table :unit_categories do |t|
+
+      t.timestamps null: false
+    end
+  end
+end

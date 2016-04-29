@@ -2,32 +2,80 @@ body{
   & .container-fluid {
     min-height: 768px;
   }
-  & .header .row {
-    margin-right: 0px;
-    margin-left: 0px;
-    & nav a:hover{
-      border-radius: 3px;
+  // 头部导航样式
+  & .header {
+    & .row {
+      margin-right: 0px;
+      margin-left: 0px;
+      & nav a:hover{
+        border-radius: 3px;
+      }
     }
   }
-
+  // 左边导航菜单样式
   & .sidebar .nav li  {
+    border-bottom: none !important;
     &.open > a {
+      border-radius: 3px;
       border-bottom: none !important;
+      background: #5881A8 !important;
+      color:#fff !important;
     }
     & > a:hover {
       border-radius: 3px;
-      background: #5881A8 !important;
+      background: #659BCF !important;
       color:#fff !important;
       border-bottom: 0px;
     }
+    & li.active > a {
+      border-radius: 3px;
+      background: #CDE1F4 !important;
+    }
   }
-
+  // 页脚版权样式
   & footer{
     & .copy {
       margin: 0 !important;
     }
     & a {
       color: #428bca !important;
+    }
+  }
+  // 内容标题样式
+  & .page-content {
+    & .panel-heading {
+      padding-top: 0px;
+      padding-bottom: 0px;
+      padding-left: 10px;
+      padding-right: 10px;
+
+      & .panel-title {
+        margin-top: 2px;
+        & .fa {
+          padding-right: 10px;
+        }
+      }
+
+      & .panel-options {
+        & .btn {
+          margin-top: 2px;
+        }
+      }
+    }
+    // 个人首页信息分组样式
+    & .content-box-large {
+      & .content-box-header {
+        border-left: solid 1px #DADADA;
+        border-right: solid 1px #DADADA;
+        border-top: solid 1px #DADADA;
+      }
+      & .panel-options {
+        border-left: solid 1px #DADADA;
+        border-right: solid 1px #DADADA;
+        border-bottom: solid 1px #DADADA;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }
     }
   }
 }
