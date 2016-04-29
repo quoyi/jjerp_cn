@@ -10,6 +10,7 @@
   <body>
     <%= render '/layouts/header' %>
     <div class="container-fluid">
+      <%= render '/layouts/message' %>
       <% if current_user %>
       <div class="page-content">
         <div class="row">
@@ -19,7 +20,6 @@
       </div>
       <% else %>
       <div class="text-center">
-        <%= render '/layouts/message' %>
         <%= yield %>
       </div>
       <% end %>

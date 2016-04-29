@@ -1,6 +1,20 @@
 Rails.application.routes.draw do
 
-  resources :user_infos
+  resources :supplies
+  resources :agents
+  resources :user_categories
+  resources :user_categories
+  resources :products
+  resources :order_categories
+  resources :parts
+  resources :part_categories
+  resources :orders
+  resources :materials
+  resources :material_categories
+  resources :departments
+  resources :indents
+  resources :permissions
+  resources :roles
   devise_for :users, controllers: {
     sessions: 'users/sessions',
     registrations: 'users/registrations',
@@ -8,6 +22,7 @@ Rails.application.routes.draw do
     confirmations: 'users/confirmations',
     unlocks: 'users/unlocks'
   }
+  get 'statics/home'
 
   root 'statics#index'
   # The priority is based upon order of creation: first created -> highest priority.
@@ -62,6 +77,5 @@ Rails.application.routes.draw do
   #   namespace :admin do
   #     # Directs /admin/products/* to Admin::ProductsController
   #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+  #     #   end
 end

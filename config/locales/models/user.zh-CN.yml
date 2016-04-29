@@ -1,0 +1,33 @@
+---
+zh-CN:
+  activerecord:
+    models:
+      user: 用户
+    attributes:
+      user:
+        user_category_id: 用户类型
+        email: 邮箱
+        username: 账号
+        mobile: 手机
+        name: 姓名
+        cert: 身份证号
+        password: 密码
+        password_confirmation: 重复密码
+        remember_me: 记住我
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: 不能为空
+              taken: 已被注册
+              invalid: 格式错误,请填写正确的 邮箱 地址
+            password:
+              blank: 不能为空
+              too_short: 最少为六位
+            password_confirmation:
+              blank: 不能为空
+              too_short: 最少为六位
+              confirmation: 与 密码 不一致
+  helpers:
+    agent:

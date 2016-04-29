@@ -1,28 +1,24 @@
 <div class="header">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-4">
-                <!-- Logo -->
-                <div class="logo text-center">
-                    <h1><%= link_to '伊思尔生产管理', root_path %></h1>
-                </div>
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Logo -->
+            <div class="logo text-center">
+                <h1><%= link_to '伊思尔生产管理', root_path %></h1>
             </div>
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-4">
-                <div class="navbar navbar-inverse text-center" role="banner">
-                    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-                        <ul class="nav navbar-nav">
-                            <% if current_user %>
-                            <li class="dropdown"><%= link_to current_user.email %></li>
-                            <li><%=link_to '退出', destroy_user_session_path, method: :delete%></li>
-                            <% else %>
-                            <li><%= link_to '登陆', new_user_session_path %></li>
-                            <li><%= link_to '注册', new_user_registration_path %></li>
-                            <% end %>
-                        </ul>
-                    </nav>
-                </div>
+        </div>
+        <div class="col-md-offset-4 col-md-3">
+            <div class="nav nav-bar pull-right" role="banner">
+                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+                    <ul class="nav navbar-nav">
+                        <% if current_user %>
+                        <li class="dropdown"><%= link_to current_user.email %></li>
+                        <li><%=link_to '退出', destroy_user_session_path, method: :delete%></li>
+                        <% else %>
+                        <li><%= link_to '登陆', new_user_session_path %></li>
+                        <li><%= link_to '注册', new_user_registration_path %></li>
+                        <% end %>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>

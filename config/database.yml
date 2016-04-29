@@ -19,7 +19,7 @@ default: &default
 
 development:
   <<: *default
-  database: jjerp_development
+  database: jjerp_dev
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -49,6 +49,6 @@ test:
 #
 production:
   <<: *default
-  database: jjerp_production
+  database: jjerp_pro
   username: jjerp
   password: <%= ENV['JJERP_DATABASE_PASSWORD'] %>
