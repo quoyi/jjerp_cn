@@ -11,12 +11,12 @@ class User < ActiveRecord::Base
 
 
   def role?(r)
-    roles.exists?(alias: r)
+    roles.exists?(nick: r)
   end
 
   def add_role!(r)
     return true if role?(r)
-    role = Role.find_by_alias(r)
+    role = Role.find_by_nick(r)
     return false unless role
     roles << role
   end

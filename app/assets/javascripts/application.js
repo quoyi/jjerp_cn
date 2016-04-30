@@ -9,6 +9,7 @@
 //
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
+// 注意: 不能同时引入 bootstrap(完整版) 和 bootstrap-sprockets(精简版) ,否则要出错！！！
 //
 //= require jquery
 //= require jquery.turbolinks
@@ -16,6 +17,5 @@
 //= require turbolinks
 //= require jquery.noty.packaged.min
 //= require jquery.noty.bootstrapTheme
-//= require bootstrap
-//= require bootstrap-sprockets
+// = require bootstrap
 //= require_tree .

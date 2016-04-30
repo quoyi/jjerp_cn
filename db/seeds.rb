@@ -4619,26 +4619,28 @@ Agent.create(id: 2,serial: 'DL0002',address: '贵州贵阳', name: '傣家代理
 Agent.create(id: 3,serial: 'DL0003',address: '河南郑州', name: '小孙代理', contacts: '孙x', mobile: '18610086123')
 puts 'created Agent success ! '
 ####################################### 供应商 #######################################
-UserCategory.create(id: 1, serial: 'UC0001', name: '普通用户', alias: 'normal', visible: true)
-UserCategory.create(id: 2, serial: 'UC0002', name: '企业用户', alias: 'employe', visible: true)
-UserCategory.create(id: 3, serial: 'UC0003', name: '经销商', alias: 'agent', visible: true)
-UserCategory.create(id: 4, serial: 'UC0004', name: '供应商', alias: 'supply', visible: true)
-UserCategory.create(id: 5, serial: 'UC0005', name: '管理员', alias: 'admin', visible: true)
-UserCategory.create(id: 6, serial: 'UC0006', name: '超级管理员', alias: 'super', visible: false)
+UserCategory.create(id: 1, serial: 'UC0001', name: '普通用户', nick: 'normal', visible: true)
+UserCategory.create(id: 2, serial: 'UC0002', name: '企业用户', nick: 'employe', visible: true)
+UserCategory.create(id: 3, serial: 'UC0003', name: '经销商', nick: 'agent', visible: true)
+UserCategory.create(id: 4, serial: 'UC0004', name: '供应商', nick: 'supply', visible: true)
+UserCategory.create(id: 5, serial: 'UC0005', name: '管理员', nick: 'admin', visible: true)
+UserCategory.create(id: 6, serial: 'UC0006', name: '超级管理员', nick: 'super', visible: false)
 puts 'created UserCategory success ! '
 ####################################### 角色 #######################################
-Role.find_or_create_by!(name: '管理员', alias: 'admin')
-Role.find_or_create_by!(name: '财务会计', alias: 'financial')
-Role.find_or_create_by!(name: '员工', alias: 'employe')
-Role.find_or_create_by!(name: '其他', alias: 'other')
+Role.find_or_create_by!(name: '管理员', nick: 'admin')
+Role.find_or_create_by!(name: '财务会计', nick: 'financial')
+Role.find_or_create_by!(name: '员工', nick: 'employe')
+Role.find_or_create_by!(name: '其他', nick: 'other')
 puts 'created Role success ! '
 ####################################### 用户 #######################################
 user = User.find_or_create_by!(email: Rails.application.secrets.admin_email) do |user|
   user.name = Rails.application.secrets.admin_name
   user.password = Rails.application.secrets.admin_password
   user.password_confirmation = Rails.application.secrets.admin_password
-  role = Role.find_or_create_by!(alias: 'admin', name: '管理员')
+  admin = Role.find_or_create_by!(nick: 'admin', name: '管理员')
+  financial = Role.find_or_create_by!(nick: 'financial', name: '财务会计')
   user.add_role!("admin")
+  user.add_role!("financial")
 end
 puts 'created User success ! '
 ####################################### 配件种类 #######################################
@@ -4698,10 +4700,10 @@ Material.create(id: 15, ply: 2, texture: 4, face: 6, color: 7, store: 50, buy: 1
 Material.create(id: 16, ply: 2, texture: 4, face: 6, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6p', unit: '平方', supply_id: 1);
 puts 'created Material success ! '
 ####################################### 订单类型 #######################################
-OrderCategory.create(:name => "橱柜体", :code => '1')
-OrderCategory.create(:name => "橱柜门", :code => '2')
-OrderCategory.create(:name => "家具", :code => '3')
-OrderCategory.create(:name => "衣柜门", :code => '4')
-OrderCategory.create(:name => "配件", :code => '5')
-OrderCategory.create(:name => "电器", :code => '6')
-OrderCategory.create(:name => "其他", :code => '7')
+OrderCategory.create(:name => "橱柜体")
+OrderCategory.create(:name => "橱柜门")
+OrderCategory.create(:name => "家具")
+OrderCategory.create(:name => "衣柜门")
+OrderCategory.create(:name => "配件")
+OrderCategory.create(:name => "电器")
+OrderCategory.create(:name => "其他")

@@ -1,11 +1,11 @@
 <script type="text/javascript">
-<% flash.keys.each do |k| %>
+<% flash.keys.each do |k, v| %>
   noty({
     text: "<%= flash[k].gsub('"', '\\"') %>",
     type: "<%= k %>",
     theme: 'bootstrapTheme',
     layout: 'bottomRight',
-    timeout: 8000,
+    // timeout: 8000,
     closeWith: ['button', 'click'],
     template: '<div class="alert alert-<%= k %>"><span class="noty_text"></span><div class="noty_close"></div></div>',
     animation: { // 动画方式

@@ -1,0 +1,31 @@
+<!-- Modal -->
+<div class="modal fade" id="addPartCategory" tabindex="-1" role="dialog" aria-labelledby="addPartCategoryLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <%= form_for @part_category, html: {class: 'form-horizontal'} do |f| %>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="addPartCategoryLabel"> 配件类型 <small>新建</small></h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <%= f.label '名称', for: 'part_category_name', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :name, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '备注', for: 'part_category_note', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :note, class: 'form-control col-sm-9' %>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
+        <%= f.submit '提交', class: 'btn btn-primary' %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>

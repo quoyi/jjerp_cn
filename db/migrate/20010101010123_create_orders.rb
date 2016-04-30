@@ -22,6 +22,7 @@ class CreateOrders < ActiveRecord::Migration
       t.datetime :require_at # 要求发货时间
       t.datetime :send_at # 发货时间
       t.integer :status, null: false, default: 0 # 状态: 0.正常 1.异常
+      t.string :history # 历史状态
       t.string :note # 备注
       t.boolean :deleted, null: false, default: false # 标记删除
       t.timestamps null: false

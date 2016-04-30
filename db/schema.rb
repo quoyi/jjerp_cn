@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160429073348) do
+ActiveRecord::Schema.define(version: 20010101010128) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "serial",          limit: 255, default: "", null: false
@@ -69,16 +69,29 @@ ActiveRecord::Schema.define(version: 20160429073348) do
 
   create_table "indents", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
-    t.integer  "user_id",    limit: 4,                   null: false
+    t.integer  "agent_id",   limit: 4,                   null: false
     t.integer  "status",     limit: 4,   default: 0,     null: false
+    t.string   "customer",   limit: 255
+    t.integer  "ply",        limit: 4,   default: 0,     null: false
+    t.integer  "texture",    limit: 4,   default: 0,     null: false
+    t.integer  "face",       limit: 4,   default: 0,     null: false
+    t.integer  "color",      limit: 4,   default: 0,     null: false
+    t.integer  "oftype",     limit: 4,   default: 1,     null: false
+    t.string   "origin",     limit: 255
+    t.datetime "offer_at"
+    t.datetime "check_at"
+    t.datetime "verify_at"
+    t.datetime "require_at"
+    t.datetime "send_at"
     t.string   "history",    limit: 255
+    t.string   "note",       limit: 255
     t.boolean  "deleted",                default: false, null: false
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
   end
 
+  add_index "indents", ["agent_id"], name: "index_indents_on_agent_id", using: :btree
   add_index "indents", ["name"], name: "index_indents_on_name", using: :btree
-  add_index "indents", ["user_id"], name: "index_indents_on_user_id", using: :btree
 
   create_table "material_categories", force: :cascade do |t|
     t.integer  "oftype",     limit: 4,   null: false
@@ -89,33 +102,30 @@ ActiveRecord::Schema.define(version: 20160429073348) do
   end
 
   create_table "materials", force: :cascade do |t|
-    t.string   "serial",     limit: 255
+    t.string   "serial",     limit: 255,                         default: "", null: false
     t.string   "name",       limit: 255
-    t.integer  "ply",        limit: 4,                                       null: false
-    t.integer  "texture",    limit: 4,                                       null: false
-    t.integer  "face",       limit: 4,                                       null: false
-    t.integer  "color",      limit: 4,                                       null: false
-    t.integer  "store",      limit: 4,                           default: 1, null: false
-    t.decimal  "buy",                    precision: 8, scale: 2
-    t.decimal  "sell",                   precision: 8, scale: 2
+    t.integer  "ply",        limit: 4,                                        null: false
+    t.integer  "texture",    limit: 4,                                        null: false
+    t.integer  "face",       limit: 4,                                        null: false
+    t.integer  "color",      limit: 4,                                        null: false
+    t.integer  "store",      limit: 4,                           default: 1,  null: false
+    t.decimal  "buy",                    precision: 8, scale: 2,              null: false
+    t.decimal  "sell",                   precision: 8, scale: 2,              null: false
     t.string   "unit",       limit: 255
     t.integer  "supply_id",  limit: 4
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
   end
 
   add_index "materials", ["supply_id"], name: "index_materials_on_supply_id", using: :btree
 
   create_table "order_categories", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.string   "code",       limit: 255,                 null: false
+    t.string   "name",       limit: 255,                 null: false
     t.string   "note",       limit: 255
     t.boolean  "deleted",                default: false, null: false
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
   end
-
-  add_index "order_categories", ["code"], name: "index_order_categories_on_code", using: :btree
 
   create_table "orders", force: :cascade do |t|
     t.integer  "indent_id",         limit: 4,                   null: false
@@ -138,6 +148,7 @@ ActiveRecord::Schema.define(version: 20160429073348) do
     t.datetime "require_at"
     t.datetime "send_at"
     t.integer  "status",            limit: 4,   default: 0,     null: false
+    t.string   "history",           limit: 255
     t.string   "note",              limit: 255
     t.boolean  "deleted",                       default: false, null: false
     t.datetime "created_at",                                    null: false
@@ -195,7 +206,7 @@ ActiveRecord::Schema.define(version: 20160429073348) do
 
   create_table "roles", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
-    t.string   "alias",      limit: 255
+    t.string   "nick",       limit: 255
     t.string   "note",       limit: 255
     t.boolean  "deleted",                default: false, null: false
     t.datetime "created_at",                             null: false
@@ -218,20 +229,73 @@ ActiveRecord::Schema.define(version: 20160429073348) do
   add_index "supplies", ["name"], name: "index_supplies_on_name", using: :btree
   add_index "supplies", ["serial"], name: "index_supplies_on_serial", using: :btree
 
+  create_table "tasks", force: :cascade do |t|
+    t.integer  "order_id",     limit: 4
+    t.integer  "item_id",      limit: 4
+    t.string   "item_type",    limit: 255
+    t.string   "sequence",     limit: 255
+    t.decimal  "area",                     precision: 9, scale: 6
+    t.integer  "mix_status",   limit: 4,                           default: 0
+    t.decimal  "availability",             precision: 8, scale: 2
+    t.integer  "work",         limit: 4,                           default: 0
+    t.integer  "state",        limit: 4
+    t.integer  "number",       limit: 4
+    t.datetime "created_at",                                                   null: false
+    t.datetime "updated_at",                                                   null: false
+  end
+
+  add_index "tasks", ["item_id"], name: "index_tasks_on_item_id", using: :btree
+  add_index "tasks", ["order_id"], name: "index_tasks_on_order_id", using: :btree
+
   create_table "unit_categories", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",       limit: 255,                 null: false
+    t.string   "note",       limit: 255
+    t.boolean  "deleted",                default: false, null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
   end
 
   create_table "units", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "unit_category_id", limit: 4
+    t.integer  "order_id",         limit: 4
+    t.string   "serial",           limit: 255,             null: false
+    t.string   "unit_name",        limit: 255
+    t.integer  "material_id",      limit: 4,               null: false
+    t.integer  "ply",              limit: 4
+    t.integer  "texture",          limit: 4
+    t.integer  "face",             limit: 4
+    t.integer  "color",            limit: 4
+    t.integer  "length",           limit: 4
+    t.integer  "width",            limit: 4
+    t.integer  "number",           limit: 4
+    t.string   "size",             limit: 255
+    t.string   "note",             limit: 255
+    t.string   "edge",             limit: 255
+    t.string   "customer",         limit: 255
+    t.integer  "out_edge_thick",   limit: 4
+    t.integer  "in_edge_thick",    limit: 4
+    t.string   "back_texture",     limit: 255
+    t.string   "door_type",        limit: 255
+    t.string   "door_mould",       limit: 255
+    t.string   "door_handle_type", limit: 255
+    t.string   "door_edge_type",   limit: 255
+    t.integer  "door_edge_thick",  limit: 4
+    t.integer  "task_id",          limit: 4
+    t.integer  "state",            limit: 4,   default: 0
+    t.string   "craft",            limit: 255
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
   end
+
+  add_index "units", ["order_id"], name: "index_units_on_order_id", using: :btree
+  add_index "units", ["serial"], name: "index_units_on_serial", using: :btree
+  add_index "units", ["task_id"], name: "index_units_on_task_id", using: :btree
+  add_index "units", ["unit_category_id"], name: "index_units_on_unit_category_id", using: :btree
 
   create_table "user_categories", force: :cascade do |t|
     t.string   "serial",     limit: 255,                null: false
     t.string   "name",       limit: 255,                null: false
-    t.string   "alias",      limit: 255, default: ""
+    t.string   "nick",       limit: 255, default: ""
     t.boolean  "visible",                default: true, null: false
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
@@ -282,4 +346,7 @@ ActiveRecord::Schema.define(version: 20160429073348) do
   add_foreign_key "cities", "provinces"
   add_foreign_key "districts", "cities"
   add_foreign_key "materials", "supplies"
+  add_foreign_key "tasks", "orders"
+  add_foreign_key "units", "orders"
+  add_foreign_key "units", "tasks"
 end

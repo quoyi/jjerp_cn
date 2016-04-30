@@ -1,25 +1,29 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Order Categories</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @order_categories.each do |order_category| %>
-      <tr>
-        <td><%= link_to 'Show', order_category %></td>
-        <td><%= link_to 'Edit', edit_order_category_path(order_category) %></td>
-        <td><%= link_to 'Destroy', order_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Order category', new_order_category_path %>
+<div class="col-md-12 panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 订单类型 <small>列表</small> </h2></div>
+    <div class="panel-options">
+      <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addOrderCategory'} %>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <table class="table table-hover table-striped table-bordered table-condensed text-center">
+      <thead>
+        <tr class="info">
+          <th class="text-center">名称</th>
+          <th class="text-center">备注</th>
+          <th class="text-center">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @order_categories.each do |oc| %>
+        <tr>
+          <td><%= oc.name %></td>
+          <td><%= oc.note %></td>
+          <td><%= link_to '删除', oc, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%= render 'new' %>

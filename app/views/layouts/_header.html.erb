@@ -11,7 +11,7 @@
                 <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
                     <ul class="nav navbar-nav">
                         <% if current_user %>
-                        <li class="dropdown"><%= link_to current_user.email %></li>
+                        <li class="dropdown"><%= link_to current_user.email, statics_home_path %></li>
                         <li><%=link_to '退出', destroy_user_session_path, method: :delete%></li>
                         <% else %>
                         <li><%= link_to '登陆', new_user_session_path %></li>

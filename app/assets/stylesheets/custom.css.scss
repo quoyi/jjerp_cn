@@ -1,6 +1,10 @@
 body{
   & .container-fluid {
     min-height: 768px;
+    & .static-index-page .row {
+      margin-right: 0px;
+      margin-left: 0px;
+    }
   }
   // 头部导航样式
   & .header {
@@ -63,7 +67,7 @@ body{
       }
     }
     // 个人首页信息分组样式
-    & .content-box-large {
+    & .box-with-header {
       & .content-box-header {
         border-left: solid 1px #DADADA;
         border-right: solid 1px #DADADA;
@@ -75,11 +79,28 @@ body{
         border-bottom: solid 1px #DADADA;
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
+        & .table {
+          margin-bottom: 0px;
+        }
+      }
+
+      & .content-title {
+        margin-bottom: 20px;
       }
     }
   }
 }
 
+.modal .modal-dialog.modal-sm {
+  & .modal-body {
+    padding-bottom: 0px;
+  }
+  & .modal-footer {
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+}
 
 // 调整首页轮播图片大小
 #carousel-example-generic {

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :tasks
   resources :units
   resources :unit_categories
   resources :supplies
