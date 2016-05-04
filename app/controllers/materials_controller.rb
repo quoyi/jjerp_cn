@@ -4,6 +4,7 @@ class MaterialsController < ApplicationController
   # GET /materials
   # GET /materials.json
   def index
+    @material = Material.new
     @materials = Material.all
   end
 

@@ -1,25 +1,56 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Materials</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @materials.each do |material| %>
-      <tr>
-        <td><%= link_to 'Show', material %></td>
-        <td><%= link_to 'Edit', edit_material_path(material) %></td>
-        <td><%= link_to 'Destroy', material, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Material', new_material_path %>
+<div class="col-md-12 panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 配件 <small>列表</small> </h2></div>
+    <div class="panel-options">
+      <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addPart'} %>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <div class="row content-title">
+      <div class="btn-group" role="group" aria-label="">
+        <% PartCategory.group(:name).map(&:name).push('所有').each do |k| %>
+        <%= link_to k, parts_path(name: k), class: "btn btn-default #{'btn-primary' if params[:name].presence == k}" %>
+        <% end %>
+      </div>
+    </div>
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr class="info">
+            <th  class="text-center">编码</th>
+            <th  class="text-center">名称</th>
+            <th  class="text-center">厚度</th>
+            <th  class="text-center">材质</th>
+            <th  class="text-center">表面</th>
+            <th  class="text-center">颜色</th>
+            <th  class="text-center">库存</th>
+            <th  class="text-center">进价</th>
+            <th  class="text-center">售价</th>
+            <th  class="text-center">单位</th>
+            <th  class="text-center">供应商</th>
+            <th  class="text-center">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @materials.each do |m| %>
+          <tr>
+            <td><%= m.serial %></td>
+            <td><%= m.name %></td>
+            <td><%= m.ply %></td>
+            <td><%= m.texture %></td>
+            <td><%= m.face %></td>
+            <td><%= m.color %></td>
+            <td><%= m.store %></td>
+            <td><%= m.buy %></td>
+            <td><%= m.sell %></td>
+            <td><%= m.unit %></td>
+            <td><%= m.supply.name %></td>
+            <td><%= link_to '删除', m, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<%= render 'new' %>

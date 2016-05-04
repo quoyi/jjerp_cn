@@ -1,0 +1,61 @@
+<!-- Modal -->
+<div class="modal fade" id="addPart" tabindex="-1" role="dialog" aria-labelledby="addPartLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <%= form_for @part, html: {class: 'form-horizontal'} do |f| %>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="addPartLabel"> 配件 <small>新建</small></h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <%= f.label '类型', for: 'part_part_category_id', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= select_tag 'part[part_category_id]', options_for_select(PartCategory.all), class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '名称', for: 'part_name', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :name, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '进价', for: 'part_buy', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :buy, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '售价', for: 'part_sell', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :sell, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '库存', for: 'part_store', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :store, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '品牌', for: 'part_brand', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :brand, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '供应商', for: 'part_supply_id', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= select_tag 'part[supply_id]', options_for_select(Supply.all), class: 'form-control', required: true %>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
+        <%= f.submit '提交', class: 'btn btn-primary' %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
