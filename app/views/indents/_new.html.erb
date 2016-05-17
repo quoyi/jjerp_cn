@@ -48,15 +48,15 @@
                   </div>
                   <div class="col-sm-2">
                     <label>厚度</label>
-                    <%= order_form.select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]).map{|mc| [mc.name, mc.id]} %>
+                    <%= order_form.select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]) %>
                   </div>
                   <div class="col-sm-2">
                     <label>材质</label>
-                    <%= order_form.select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]).map{|mc| [mc.name, mc.id]} %>
+                    <%= order_form.select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]) %>
                   </div>
                   <div class="col-sm-2">
                     <label>颜色</label>
-                    <%= order_form.select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]).map{|mc| [mc.name, mc.id]} %>
+                    <%= order_form.select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]) %>
                   </div>
                   <div class="col-sm-4">
                     <label>状态</label>
