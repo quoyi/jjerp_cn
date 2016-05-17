@@ -1,0 +1,13 @@
+.modal {
+  & .modal-table{
+    width: 100%;
+    min-width: 1024px;
+  }
+
+  & .indent-orders-title > h4 {
+    padding-top: 15px;
+  }
+  & .indent-orders-delete {
+    padding-top: 12px;
+  }
+}

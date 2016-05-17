@@ -13,11 +13,10 @@ class UnitCategoriesController < ApplicationController
   def create
     @unit_category = UnitCategory.new(unit_category_params)
     if @unit_category.save
-      msg = '部件类型创建成功！'
+      redirect_to unit_categories_path, notice: '部件类型创建成功！'
     else
-      msg = '请检查部件类型名称，创建失败！'
+      redirect_to unit_categories_path, error: '请检查部件类型名称，创建失败！'
     end
-     redirect_to unit_categories_path, notice: msg
   end
 
   # DELETE /unit_categories/1

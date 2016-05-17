@@ -6,7 +6,6 @@ class CreateMaterials < ActiveRecord::Migration
       t.string :name # 名称
       t.integer :ply, null: false # 厚度（板料种类主键）
       t.integer :texture, null: false # 材质（板料种类主键）
-      t.integer :face, null: false # 表面（板料种类主键）
       t.integer :color, null: false # 颜色（板料种类主键）
       t.integer :store, null: false, default: 1 # 库存
       t.decimal :buy, null: false, precision: 8, scale: 2 # 进货单价（仅管理员和财务可见）

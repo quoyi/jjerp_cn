@@ -13,11 +13,10 @@ class OrderCategoriesController < ApplicationController
   def create
     @order_category = OrderCategory.new(order_category_params)
     if @order_category.save
-      msg = '订单类型创建成功！'
+      redirect_to order_categories_path, notice: '订单类型创建成功！'
     else
-      msg = '请检查订单类型名称，创建失败！'
+      redirect_to order_categories_path, error: '请检查订单类型名称，创建失败！'
     end
-    redirect_to order_categories_path, notice: msg
   end
 
   # DELETE /order_categories/1

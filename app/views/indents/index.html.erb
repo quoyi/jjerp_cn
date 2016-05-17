@@ -1,25 +1,44 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Indents</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @indents.each do |indent| %>
-      <tr>
-        <td><%= link_to 'Show', indent %></td>
-        <td><%= link_to 'Edit', edit_indent_path(indent) %></td>
-        <td><%= link_to 'Destroy', indent, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Indent', new_indent_path %>
+<div class="col-md-12 panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 订单 <small>列表</small> </h2></div>
+    <div class="panel-options">
+      <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addIndent'} %>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <!-- <div class="row content-title">
+      <div class="btn-group" role="group" aria-label="">
+        <% PartCategory.group(:name).map(&:name).push('所有').each do |k| %>
+        <%= link_to k, parts_path(name: k), class: "btn btn-default #{'btn-primary' if params[:name].presence == k}" %>
+        <% end %>
+      </div>
+    </div> -->
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr class="info">
+            <th class="text-center">订单编号</th>
+            <th class="text-center">代理商</th>
+            <th class="text-center">终端信息</th>
+            <th class="text-center">下单时间</th>
+            <th class="text-center">发货时间</th>
+            <th class="text-center">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @indents.each do |i| %>
+          <tr>
+            <td><%= i.name %></td>
+            <td><%= i.agent_id %></td>
+            <td><%= i.customer %></td>
+            <td><%= i.verify_at.strftime('%Y-%m-%d') %></td>
+            <td><%= i.require_at.strftime('%Y-%m-%d') %></td>
+            <td><%= link_to '删除', i, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<%= render 'new' %>

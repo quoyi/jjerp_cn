@@ -9,7 +9,6 @@ class CreateUnits < ActiveRecord::Migration
       t.references :material, null: false # 板料名称
       t.integer :ply # 厚度
       t.integer :texture #纹理
-      t.integer :face #表面
       t.integer :color # 颜色
       t.integer :length # 长
       t.integer :width # 宽

@@ -11,9 +11,13 @@ body{
     & .row {
       margin-right: 0px;
       margin-left: 0px;
-      & nav a:hover{
-        border-radius: 3px;
-      }
+    }
+    & nav a {
+      color: #fff;
+    }
+    & nav a:hover {
+      border-radius: 1px;
+      color: #000;
     }
   }
   // 左边导航菜单样式
@@ -27,13 +31,14 @@ body{
     }
     & > a:hover {
       border-radius: 3px;
-      background: #659BCF !important;
-      color:#fff !important;
+      background: #CDE1F4 !important;
+      color:#000 !important;
       border-bottom: 0px;
     }
     & li.active > a {
       border-radius: 3px;
-      background: #CDE1F4 !important;
+      background: #659BCF !important;
+      color:#fff !important;
     }
   }
   // 页脚版权样式
@@ -91,6 +96,12 @@ body{
   }
 }
 
+// 去掉所有a标签的外虚线框
+a {
+  outline: none !important;
+}
+
+// 模态框样式
 .modal .modal-dialog.modal-sm {
   & .modal-body {
     padding-bottom: 0px;

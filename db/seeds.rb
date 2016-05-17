@@ -4673,31 +4673,26 @@ MaterialCategory.create(id: 10, oftype: 1, name:'密度板')
 MaterialCategory.create(id: 11, oftype: 1, name:'多层板')
 MaterialCategory.create(id: 12, oftype: 1, name:'生态板')
 MaterialCategory.create(id: 13, oftype: 1, name:'实木板')
-MaterialCategory.create(id: 14, oftype: 2, name:'光面')
-MaterialCategory.create(id: 15, oftype: 2, name:'麻面')
-MaterialCategory.create(id: 16, oftype: 2, name:'真木纹')
-MaterialCategory.create(id: 17, oftype: 2, name:'浮雕面')
-MaterialCategory.create(id: 18, oftype: 2, name:'同步纹')
-MaterialCategory.create(id: 19, oftype: 3, name:'国色天香')
-MaterialCategory.create(id: 20, oftype: 3, name:'一帘幽梦')
+MaterialCategory.create(id: 14, oftype: 2, name:'国色天香')
+MaterialCategory.create(id: 25, oftype: 2, name:'一帘幽梦')
 puts 'created MaterialCategory success ! '
 ####################################### 板料 #######################################
-Material.create(id: 1, ply: 1, texture: 3, face: 5, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6a', unit: '平方', supply_id: 1);
-Material.create(id: 2, ply: 1, texture: 3, face: 5, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6b', unit: '平方', supply_id: 1);
-Material.create(id: 3, ply: 1, texture: 3, face: 6, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6c', unit: '平方', supply_id: 1);
-Material.create(id: 4, ply: 1, texture: 3, face: 6, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6d', unit: '平方', supply_id: 1);
-Material.create(id: 5, ply: 1, texture: 4, face: 5, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6e', unit: '平方', supply_id: 1);
-Material.create(id: 6, ply: 1, texture: 4, face: 5, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6f', unit: '平方', supply_id: 1);
-Material.create(id: 7, ply: 1, texture: 4, face: 6, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6g', unit: '平方', supply_id: 1);
-Material.create(id: 8, ply: 1, texture: 4, face: 6, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6h', unit: '平方', supply_id: 1);
-Material.create(id: 9, ply: 2, texture: 3, face: 5, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6i', unit: '平方', supply_id: 1);
-Material.create(id: 10, ply: 2, texture: 3, face: 5, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6j', unit: '平方', supply_id: 1);
-Material.create(id: 11, ply: 2, texture: 3, face: 6, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6k', unit: '平方', supply_id: 1);
-Material.create(id: 12, ply: 2, texture: 3, face: 6, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6l', unit: '平方', supply_id: 1);
-Material.create(id: 13, ply: 2, texture: 4, face: 5, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6m', unit: '平方', supply_id: 1);
-Material.create(id: 14, ply: 2, texture: 4, face: 5, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6n', unit: '平方', supply_id: 1);
-Material.create(id: 15, ply: 2, texture: 4, face: 6, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6o', unit: '平方', supply_id: 1);
-Material.create(id: 16, ply: 2, texture: 4, face: 6, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6p', unit: '平方', supply_id: 1);
+Material.create(id: 1, ply: 1, texture: 3, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6a', unit: '平方', supply_id: 1);
+Material.create(id: 2, ply: 1, texture: 3, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6b', unit: '平方', supply_id: 1);
+Material.create(id: 3, ply: 1, texture: 3, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6c', unit: '平方', supply_id: 1);
+Material.create(id: 4, ply: 1, texture: 3, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6d', unit: '平方', supply_id: 1);
+Material.create(id: 5, ply: 1, texture: 4, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6e', unit: '平方', supply_id: 1);
+Material.create(id: 6, ply: 1, texture: 4, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6f', unit: '平方', supply_id: 1);
+Material.create(id: 7, ply: 1, texture: 4, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6g', unit: '平方', supply_id: 1);
+Material.create(id: 8, ply: 1, texture: 4, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6h', unit: '平方', supply_id: 1);
+Material.create(id: 9, ply: 2, texture: 3, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6i', unit: '平方', supply_id: 1);
+Material.create(id: 10, ply: 2, texture: 3, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6j', unit: '平方', supply_id: 1);
+Material.create(id: 11, ply: 2, texture: 3, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6k', unit: '平方', supply_id: 1);
+Material.create(id: 12, ply: 2, texture: 3, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6l', unit: '平方', supply_id: 1);
+Material.create(id: 13, ply: 2, texture: 4, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6m', unit: '平方', supply_id: 1);
+Material.create(id: 14, ply: 2, texture: 4, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6n', unit: '平方', supply_id: 1);
+Material.create(id: 15, ply: 2, texture: 4, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6o', unit: '平方', supply_id: 1);
+Material.create(id: 16, ply: 2, texture: 4, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6p', unit: '平方', supply_id: 1);
 puts 'created Material success ! '
 ####################################### 订单类型 #######################################
 OrderCategory.create(:name => "橱柜体")

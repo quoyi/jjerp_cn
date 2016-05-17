@@ -13,11 +13,10 @@ class PartCategoriesController < ApplicationController
   def create
     @part_category = PartCategory.new(part_category_params)
     if @part_category.save
-      msg = '配件类型创建成功！'
+      redirect_to part_categories_path, notice: '配件类型创建成功！'
     else
-      msg = '请检查配件类型名称，创建失败！'
+      redirect_to part_categories_path, error: '请检查配件类型名称，创建失败！'
     end
-    redirect_to part_categories_path, notice: msg
   end
 
   # DELETE /part_categories/1

@@ -70,20 +70,9 @@ ActiveRecord::Schema.define(version: 20010101010128) do
   create_table "indents", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
     t.integer  "agent_id",   limit: 4,                   null: false
-    t.integer  "status",     limit: 4,   default: 0,     null: false
     t.string   "customer",   limit: 255
-    t.integer  "ply",        limit: 4,   default: 0,     null: false
-    t.integer  "texture",    limit: 4,   default: 0,     null: false
-    t.integer  "face",       limit: 4,   default: 0,     null: false
-    t.integer  "color",      limit: 4,   default: 0,     null: false
-    t.integer  "oftype",     limit: 4,   default: 1,     null: false
-    t.string   "origin",     limit: 255
-    t.datetime "offer_at"
-    t.datetime "check_at"
     t.datetime "verify_at"
     t.datetime "require_at"
-    t.datetime "send_at"
-    t.string   "history",    limit: 255
     t.string   "note",       limit: 255
     t.boolean  "deleted",                default: false, null: false
     t.datetime "created_at",                             null: false
@@ -106,7 +95,6 @@ ActiveRecord::Schema.define(version: 20010101010128) do
     t.string   "name",       limit: 255
     t.integer  "ply",        limit: 4,                                        null: false
     t.integer  "texture",    limit: 4,                                        null: false
-    t.integer  "face",       limit: 4,                                        null: false
     t.integer  "color",      limit: 4,                                        null: false
     t.integer  "store",      limit: 4,                           default: 1,  null: false
     t.decimal  "buy",                    precision: 8, scale: 2,              null: false
@@ -131,24 +119,14 @@ ActiveRecord::Schema.define(version: 20010101010128) do
     t.integer  "indent_id",         limit: 4,                   null: false
     t.string   "name",              limit: 255,                 null: false
     t.integer  "order_category_id", limit: 4,                   null: false
-    t.string   "customer",          limit: 255
     t.integer  "ply",               limit: 4,   default: 0,     null: false
     t.integer  "texture",           limit: 4,   default: 0,     null: false
-    t.integer  "face",              limit: 4,   default: 0,     null: false
     t.integer  "color",             limit: 4,   default: 0,     null: false
     t.integer  "length",            limit: 4,   default: 0,     null: false
     t.integer  "width",             limit: 4,   default: 0,     null: false
     t.integer  "height",            limit: 4,   default: 0,     null: false
     t.integer  "number",            limit: 4,   default: 0,     null: false
-    t.integer  "oftype",            limit: 4,   default: 1,     null: false
-    t.string   "origin",            limit: 255
-    t.datetime "offer_at"
-    t.datetime "check_at"
-    t.datetime "verify_at"
-    t.datetime "require_at"
-    t.datetime "send_at"
     t.integer  "status",            limit: 4,   default: 0,     null: false
-    t.string   "history",           limit: 255
     t.string   "note",              limit: 255
     t.boolean  "deleted",                       default: false, null: false
     t.datetime "created_at",                                    null: false
@@ -263,7 +241,6 @@ ActiveRecord::Schema.define(version: 20010101010128) do
     t.integer  "material_id",      limit: 4,               null: false
     t.integer  "ply",              limit: 4
     t.integer  "texture",          limit: 4
-    t.integer  "face",             limit: 4
     t.integer  "color",            limit: 4
     t.integer  "length",           limit: 4
     t.integer  "width",            limit: 4

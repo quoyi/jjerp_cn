@@ -10,10 +10,11 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require bootstrap-datepicker3
  *= require_tree .
  *= require_self
  */
- // 为了正常使用 bootstrap 的字体和图标， 必须先引入 bootstrap-sprockets
+ // 为了正常使用 bootstrap 的字体和图标， 必须先引入 bootstrap-sprockets,同时需要将appliction.css改为scss后缀
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "font-awesome-sprockets";

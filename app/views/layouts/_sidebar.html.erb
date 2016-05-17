@@ -40,12 +40,12 @@
                     <li><a href="#">Signup</a></li>
                 </ul>
             </li>
-            <li  class="submenu">
+            <li  class="submenu <%= 'open' if ['indents'].include?(controller_name)%>">
                 <a href="#">
                     <i class="fa fa-briefcase"></i> 订单管理 <span class="caret pull-right"></span>
                 </a>
                 <ul>
-                    <li><a href="#">订单</a></li>
+                    <li class="<%="#{'active' if controller_name == 'indents'}" %>"><%= link_to '订单', indents_path %></li>
                     <li><a href="#">Signup</a></li>
                 </ul>
             </li>

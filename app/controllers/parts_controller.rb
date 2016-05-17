@@ -23,22 +23,20 @@ class PartsController < ApplicationController
   def create
     @part = Part.new(part_params)
     if @part.save
-      msg = '配件创建成功！'
+      redirect_to parts_path, notice: '配件创建成功！'
     else
-      msg = '请检查配件名称，创建失败！'
+      redirect_to parts_path, error: '请检查配件名称，创建失败！'
     end
-    redirect_to parts_path, notice: msg
   end
 
   # PATCH/PUT /parts/1
   # PATCH/PUT /parts/1.json
   def update
     if @part.update(part_params)
-      msg = '配件编辑成功！'
+      redirect_to parts_path, notice: '配件编辑成功！'
     else
-      msg = '配件编辑失败！'
+      redirect_to parts_path, error: '配件编辑失败！'
     end
-    redirect_to parts_path, notice: msg
   end
 
   # DELETE /parts/1

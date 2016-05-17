@@ -14,11 +14,10 @@ class MaterialCategoriesController < ApplicationController
   def create
     @material_category = MaterialCategory.new(material_category_params)
     if @material_category.save
-      msg = '板料类型创建成功！'
+      redirect_to material_categories_path, notice: '板料类型创建成功！'
     else
-      msg = '请检查板料类型名称，创建失败！'
+      redirect_to material_categories_path, error: '请检查板料类型名称，创建失败！'
     end
-    redirect_to material_categories_path, notice: msg
   end
 
   # DELETE /material_categories/1

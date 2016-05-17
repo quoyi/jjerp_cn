@@ -11,6 +11,10 @@ gem 'devise'
 gem 'bootstrap-sass'
 # 使用第三方图标库
 gem 'font-awesome-sass', '~> 4.2.0'
+# 日期选择插件
+gem 'bootstrap-datepicker-rails', '~> 1.6', '>= 1.6.0.1'
+# 嵌套表单
+gem 'nested_form'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.6'

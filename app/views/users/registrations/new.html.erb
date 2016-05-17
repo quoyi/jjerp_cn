@@ -1,7 +1,7 @@
 <% flash = devise_error_messages! %>
-<% binding.pry %>
 <script type="text/javascript">
-<% flash.each do |msg| %>
+<% unless flash.blank? %>
+  <% flash.each do |msg| %>
   noty({
     text: "<%= msg %>",
     type: "danger",
@@ -16,6 +16,7 @@
       speed: 500 // 非必须。使用 Animate.css 时，此设值无效
     }
   });
+  <% end %>
 <% end %>
 </script>
 <div class="login-wrapper">
