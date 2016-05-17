@@ -1,8 +1,8 @@
 class Indent < ActiveRecord::Base
-  has_many :order
+  has_many :orders
   validates_presence_of :name, :agent_id, :customer, :verify_at, :require_at
-  accepts_nested_attributes_for :order
-  
+
+  accepts_nested_attributes_for :orders
   #下单条件：1.正常单  2.补单  3.加急单 4.批量单
   enum oftype: [:normal, :repair, :instancy, :batch]
 
