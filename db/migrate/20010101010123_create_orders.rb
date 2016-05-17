@@ -3,7 +3,7 @@ class CreateOrders < ActiveRecord::Migration
     # 子订单
     create_table :orders do |t|
       t.references :indent, null: false, index: true # 总定单号
-      t.string :name, null: false # 编码
+      t.string :name, null: false, default: '' # 编码
       t.references :order_category, null: false # 订单类型: 1. 橱柜  2.地柜  3.家具等
       t.integer :ply, null: false, default: 0 # 厚度
       t.integer :texture, null: false, default: 0 # 材质

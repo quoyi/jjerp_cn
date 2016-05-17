@@ -90,6 +90,8 @@ ActiveRecord::Schema.define(version: 20010101010128) do
     t.datetime "updated_at",             null: false
   end
 
+  add_index "material_categories", ["oftype"], name: "index_material_categories_on_oftype", using: :btree
+
   create_table "materials", force: :cascade do |t|
     t.string   "serial",     limit: 255,                         default: "", null: false
     t.string   "name",       limit: 255
@@ -117,7 +119,7 @@ ActiveRecord::Schema.define(version: 20010101010128) do
 
   create_table "orders", force: :cascade do |t|
     t.integer  "indent_id",         limit: 4,                   null: false
-    t.string   "name",              limit: 255,                 null: false
+    t.string   "name",              limit: 255, default: "",    null: false
     t.integer  "order_category_id", limit: 4,                   null: false
     t.integer  "ply",               limit: 4,   default: 0,     null: false
     t.integer  "texture",           limit: 4,   default: 0,     null: false

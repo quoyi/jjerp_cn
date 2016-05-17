@@ -17,8 +17,8 @@
 //= require turbolinks
 //= require jquery.noty.packaged.min
 //= require jquery.noty.bootstrapTheme
-//= reuqire jquery_nested_form
 //= require bootstrap
+//= reuqire jquery_nested_form
 //= require bootstrap-datepicker/core
 //= require bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN
 //= require_tree .

@@ -14,6 +14,7 @@ class OrdersController < ApplicationController
 
   # GET /orders/new
   def new
+    binding.pry
     @order = Order.new
   end
 
