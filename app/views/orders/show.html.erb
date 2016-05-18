@@ -1,4 +1,121 @@
-<p id="notice"><%= notice %></p>
-
-<%= link_to 'Edit', edit_order_path(@order) %> |
-<%= link_to 'Back', orders_path %>
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 子订单 <small>详细</small> </h2></div>
+    <div class="panel-options">
+      <%= link_to '返回订单', indent_path(@order.indent), class: 'btn btn-info' %>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <!-- <div class="row content-title">
+      <div class="btn-group" role="group" aria-label="">
+        <% PartCategory.group(:name).map(&:name).push('所有').each do |k| %>
+        <%= link_to k, parts_path(name: k), class: "btn btn-default #{'btn-primary' if params[:name].presence == k}" %>
+        <% end %>
+      </div>
+    </div> -->
+    <!-- <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr>
+            <th>订单编号</th>
+            <th>代理商</th>
+            <th>终端信息</th>
+            <th>下单时间</th>
+            <th>发货时间</th>
+            <th>订单金额</th>
+            <th>历史合计</th>
+            <th>欠款合计</th>
+            <th>订单详细</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+    </div> -->
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h4 class="panel-title">客户信息</h4>
+          </div>
+          <table class="table table-hover table-striped table-bordered table-condensed text-center">
+            <tr>
+              <th>客户编号</th>
+              <td><%= @agent.try(:serial) %></td>
+            </tr>
+            <tr>
+              <th>客户名称</th>
+              <td><%= @agent.try(:name) %></td>
+            </tr>
+            <tr>
+              <th>负责人</th>
+              <td><%= @agent.try(:contacts) %></td>
+            </tr>
+            <tr>
+              <th>手机</th>
+              <td><%= @agent.try(:mobile) %></td>
+            </tr>
+            <tr>
+              <th>QQ</th>
+              <td><%= @agent.try(:e_account) %></td>
+            </tr>
+            <tr>
+              <th>传真</th>
+              <td><%= @agent.try(:fax) %></td>
+            </tr>
+            <tr>
+              <th>邮箱</th>
+              <td><%= @agent.try(:email) %></td>
+            </tr>
+            <tr>
+              <th>微信</th>
+              <td><%= @agent.try(:wechar) %></td>
+            </tr>
+            <tr>
+              <th>要求物流</th>
+              <td><%= @agent.try(:logistics) %></td>
+            </tr>
+            <tr>
+              <th>结账周期</th>
+              <td><%= @agent.try(:cycle) %></td>
+            </tr>
+            <tr>
+              <th>备注</th>
+              <td><%= @agent.try(:note) %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-9">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <div class="panel-title">订单信息 <small style="color:#000; font-size: 12px;"><%= @order.status_name %></small></div>
+          </div>
+          <table class="table table-hover table-striped table-bordered table-condensed text-center">
+            <tr>
+              <th>子订单号</th>
+              <td><code><%= @order.name %></code></td>
+              <th>登记时间</th>
+              <td><%= @order.created_at.strftime('%Y-%m-%d') if @indent.created_at.present? %></td>
+              <th>确认时间</th>
+              <td><%= @indent.verify_at.strftime('%Y-%m-%d') if @indent.verify_at.present? %></td>
+            </tr>
+            <tr>
+              <th>金额</th>
+              <td><%= @indent.amount %></td>
+              <th>要求出厂</th>
+              <td><%= @indent.require_at.strftime('%Y-%m-%d') if @indent.require_at.present? %></td>
+              <th>要求物流</th>
+              <td><%= @indent.logistics %></td>
+            </tr>
+            <tr>
+              <th>备注</th>
+              <td colspan="5"><%= @order.note || @indent.note %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

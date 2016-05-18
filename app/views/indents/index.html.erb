@@ -1,4 +1,4 @@
-<div class="col-md-12 panel-warning">
+<div class="panel-warning">
   <div class="content-box-header panel-heading">
     <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 订单 <small>列表</small> </h2></div>
     <div class="panel-options">
@@ -16,24 +16,28 @@
     <div class="row content-table">
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
-          <tr class="info">
-            <th class="text-center">订单编号</th>
-            <th class="text-center">代理商</th>
-            <th class="text-center">终端信息</th>
-            <th class="text-center">下单时间</th>
-            <th class="text-center">发货时间</th>
-            <th class="text-center">操作</th>
+          <tr>
+            <th>订单编号</th>
+            <th>代理商</th>
+            <th>终端信息</th>
+            <th>下单时间</th>
+            <th>发货时间</th>
+            <th>订单金额</th>
+            <th>欠款合计</th>
+            <th>历史合计</th>
           </tr>
         </thead>
         <tbody>
           <% @indents.each do |i| %>
           <tr>
-            <td><%= i.name %></td>
-            <td><%= i.agent_id %></td>
+            <td><%= link_to i.name, i %></td>
+            <td><%= i.agent.try(:name) %></td>
             <td><%= i.customer %></td>
             <td><%= i.verify_at.strftime('%Y-%m-%d') %></td>
             <td><%= i.require_at.strftime('%Y-%m-%d') %></td>
-            <td><%= link_to '删除', i, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
+            <td><%= i.amount %></td>
+            <td class="danger"><%= i.total_arrear %></td>
+            <td><%= i.total_history %></td>
           </tr>
           <% end %>
         </tbody>

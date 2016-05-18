@@ -68,15 +68,20 @@ ActiveRecord::Schema.define(version: 20010101010128) do
   add_index "districts", ["city_id"], name: "index_districts_on_city_id", using: :btree
 
   create_table "indents", force: :cascade do |t|
-    t.string   "name",       limit: 255,                 null: false
-    t.integer  "agent_id",   limit: 4,                   null: false
-    t.string   "customer",   limit: 255
+    t.string   "name",          limit: 255,                                         null: false
+    t.integer  "agent_id",      limit: 4,                                           null: false
+    t.string   "customer",      limit: 255
     t.datetime "verify_at"
     t.datetime "require_at"
-    t.string   "note",       limit: 255
-    t.boolean  "deleted",                default: false, null: false
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.string   "logistics",     limit: 255
+    t.string   "note",          limit: 255
+    t.decimal  "amount",                    precision: 8, scale: 2, default: 0.0
+    t.decimal  "arrear",                    precision: 8, scale: 2, default: 0.0
+    t.decimal  "total_history",             precision: 8, scale: 2, default: 0.0
+    t.decimal  "total_arrear",              precision: 8, scale: 2, default: 0.0
+    t.boolean  "deleted",                                           default: false, null: false
+    t.datetime "created_at",                                                        null: false
+    t.datetime "updated_at",                                                        null: false
   end
 
   add_index "indents", ["agent_id"], name: "index_indents_on_agent_id", using: :btree

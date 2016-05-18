@@ -95,6 +95,14 @@ body{
     }
   }
 }
+// table 统一样式
+.table {
+  text-align: center;
+  & th {
+    text-align: center;
+    background-color: #d9edf7;
+  }
+}
 
 // 去掉所有a标签的外虚线框
 a {

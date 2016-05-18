@@ -1,5 +1,6 @@
 class Indent < ActiveRecord::Base
   has_many :orders
+  belongs_to :agent
   validates_presence_of :name, :agent_id, :customer, :verify_at, :require_at
 
   accepts_nested_attributes_for :orders

@@ -4,12 +4,15 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = Order.all
+    @orders = Order.where(deleted:false)
   end
 
   # GET /orders/1
   # GET /orders/1.json
   def show
+    @indent = @order.indent
+    @agent = @indent.agent
+
   end
 
   # GET /orders/new
@@ -25,7 +28,6 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    binding.pry
     @order = Order.new(order_params)
 
     respond_to do |format|

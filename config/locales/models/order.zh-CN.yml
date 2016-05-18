@@ -1,0 +1,14 @@
+---
+zh-CN:
+  activerecord:
+    models:
+      order: 订单
+    attributes:
+      order:
+        name: 编码
+    errors:
+      models:
+        order:
+          attributes:
+  helpers:
+    agent:

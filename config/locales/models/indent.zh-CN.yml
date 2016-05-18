@@ -1,0 +1,24 @@
+---
+zh-CN:
+  activerecord:
+    models:
+      indent: 订单
+    attributes:
+      indent:
+        name: 订单编号
+        customer: 终端客户
+        verify_at: 确认时间
+        require_at: 发货时间
+        logistics: 发货物流
+        amount: 订单金额
+        arrear: 欠款
+        total_history: 历史合计
+        total_arrear: 欠款合计
+        note: 备注
+        deleted: 删除
+    errors:
+      models:
+        indent:
+          attributes:
+  helpers:
+    agent:

@@ -1,25 +1,32 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Orders</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @orders.each do |order| %>
-      <tr>
-        <td><%= link_to 'Show', order %></td>
-        <td><%= link_to 'Edit', edit_order_path(order) %></td>
-        <td><%= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Order', new_order_path %>
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 订单 <small>列表</small> </h2></div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <!-- <div class="row content-title">
+      <div class="btn-group" role="group" aria-label="">
+        <% PartCategory.group(:name).map(&:name).push('所有').each do |k| %>
+        <%= link_to k, parts_path(name: k), class: "btn btn-default #{'btn-primary' if params[:name].presence == k}" %>
+        <% end %>
+      </div>
+    </div> -->
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr>
+            <th>子订单号</th>
+            <th>订单详细</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @orders.each do |o| %>
+          <tr>
+            <td><%= o.name %></td>
+            <td><%= link_to '详细', o %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

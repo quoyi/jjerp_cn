@@ -10,17 +10,21 @@
 			<div class="modal-body">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<div class="form-group">
+						<div class="form-group indent-new">
 							<%= f.label '订单编号', for: 'indent_name', class: 'col-sm-1 control-label' %>
 							<div class="col-sm-3">
 								<%= f.text_field :name, class: 'form-control', required: true %>
 							</div>
 							<%= f.label '终端客户', for: 'indent_customer', class: 'col-sm-1 control-label' %>
-							<div class="col-sm-7">
+							<div class="col-sm-3">
 								<%= f.text_field :customer, class: 'form-control', required: true %>
 							</div>
+							<%= f.label '要求物流', for: 'indent_logistics', class: 'col-sm-1 control-label' %>
+							<div class="col-sm-3">
+								<%= f.text_field :logistics, class: 'form-control', required: true %>
+							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group indent-new">
 							<%= f.label '代理商', for: 'indent_agent_id', class: 'col-sm-1 control-label' %>
 							<div class="col-sm-3">
 								<%= f.select :agent_id, Agent.all.map{|a|[a.name, a.id]}, class: 'form-control' %>
@@ -50,6 +54,10 @@
 											<%= order_form.select :order_category_id, OrderCategory.all.map{|oc| [oc.name, oc.id]}, class: 'form-control', required: true %>
 										</div>
 										<div class="col-sm-2">
+											<label>数量</label>
+											<%= order_form.number_field :number, value: 1, min: 1, style: "width: 50%;" %>
+										</div>
+										<div class="col-sm-2">
 											<label>厚度</label>
 											<%= order_form.select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]).map{|mc|[mc.name, mc.id]} %>
 										</div>
@@ -61,31 +69,27 @@
 											<label>颜色</label>
 											<%= order_form.select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]).map{|mc|[mc.name, mc.id]} %>
 										</div>
-										<div class="col-sm-4">
-											<label>状态</label>
-											<%= order_form.select :status, Order.status %>
-										</div>
+										<!-- <div class="col-sm-4">
+													<label>状态</label>
+													<%= order_form.select :status, Order.status %>
+										</div> -->
 									</div>
 									<div class="row">
 										<div class="col-sm-2">
-											<label>数量</label>
-											<%= order_form.number_field :number, value: 1, min: 1 %>
-										</div>
-										<div class="col-sm-2">
 											<label>长度</label>
-											<%= order_form.number_field :length, value: 1, min: 1 %>
+											<%= order_form.number_field :length, value: 1, min: 1, style: "width: 50%;" %>
 										</div>
 										<div class="col-sm-2">
 											<label>宽度</label>
-											<%= order_form.number_field :width, value: 1, min: 1 %>
+											<%= order_form.number_field :width, value: 1, min: 1, style: "width: 50%;" %>
 										</div>
 										<div class="col-sm-2">
 											<label>高度</label>
-											<%= order_form.number_field :height, value: 1, min: 1 %>
+											<%= order_form.number_field :height, value: 1, min: 1, style: "width: 50%;" %>
 										</div>
 										<div class="col-sm-4">
 											<label>备注</label>
-											<%= order_form.text_field :note %>
+											<%= order_form.text_field :note, style: "width: 90%;" %>
 										</div>
 									</div>
 								</div>
@@ -94,7 +98,6 @@
 									<%= order_form.link_to_remove '删除', class: 'btn btn-info btn-lg' %>
 								</div>
 							</div>
-
 							<% end %>
 						</div>
 					</div>
