@@ -1,9 +1,9 @@
 class Order < ActiveRecord::Base
   belongs_to :order_category
   belongs_to :indent
-  validates_presence_of :indent_id, :name, :order_category_id, :number, :oftype, :status
+  validates_presence_of :name, :order_category_id, :number, :status
   # 发货时间需在十天以后
-  validate :validate_require_time
+  # validate :validate_require_time
 
 
   #订单状态：0.正常 1.异常 2.其他
@@ -23,7 +23,6 @@ class Order < ActiveRecord::Base
     end
   end
 
-
   def validate_require_time
     # (Time.now.to_i - updated_at.to_i)/86400 <= 3
     time =  self.created_at || Time.now
@@ -31,4 +30,5 @@ class Order < ActiveRecord::Base
       self.errors.add(:require_time, '发货时间需在十天以后')
     end
   end
+
 end

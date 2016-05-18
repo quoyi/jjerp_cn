@@ -25,6 +25,7 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
+    binding.pry
     @order = Order.new(order_params)
 
     respond_to do |format|
@@ -55,7 +56,8 @@ class OrdersController < ApplicationController
   # DELETE /orders/1
   # DELETE /orders/1.json
   def destroy
-    @order.destroy
+    # 需要标记删除，不能真正地删除
+    @order.update_attributes(deleted: true)
     respond_to do |format|
       format.html { redirect_to orders_url, notice: 'Order was successfully destroyed.' }
       format.json { head :no_content }
@@ -70,7 +72,7 @@ class OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:order_category_id, :customer, :ply, :texture, :color, :status, :number,
-                                    :length, :width, :height, :note)
+      params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture, :color,
+                                    :length, :width, :height, :number, :status, :note, :_destroy)
     end
 end

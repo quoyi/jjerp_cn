@@ -21,8 +21,8 @@ class IndentsController < ApplicationController
   # POST /indents
   # POST /indents.json
   def create
-    @indent = Indent.new(indent_params)
     binding.pry
+    @indent = Indent.new(indent_params)
     if @indent.save
       redirect_to indents_path, notice: '订单创建成功！'
     else
@@ -56,8 +56,13 @@ class IndentsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def indent_params
+    if params[:indent][:orders_attributes].present?
+      params[:indent][:orders_attributes].each_pair do |k, v|
+        v[:status] = Order.statuses[v[:status]]
+      end
+    end
     params.require(:indent).permit(:name, :agent_id, :customer, :verify_at, :require_at, :note,
-                                   order_attributes: [:id, :order_category_id, :customer, :ply, :number,
-                                                      :texture, :color, :length, :width, :height,:status, :note])
+                                   orders_attributes: [:id, :order_category_id, :customer, :number, :ply, :_destroy,
+                                                       :texture, :color, :length, :width, :height,:status, :note])
   end
 end
