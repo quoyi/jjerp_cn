@@ -4649,15 +4649,15 @@ PartCategory.create(id: 2, name:'滑轨')
 PartCategory.create(id: 3, name:'角线')
 puts 'created PartCategory success ! '
 ####################################### 配件 #######################################
-Part.create(id: 1, part_category_id: 1, name: '100侧拉篮', buy: 100.00, sell: 110.00, store: 100, brand: '耐用牌', supply_id: 1)
-Part.create(id: 2, part_category_id: 1, name: '200侧拉篮', buy: 200.00, sell: 210.00, store: 50, brand: '坚固牌', supply_id: 1)
-Part.create(id: 3, part_category_id: 1, name: '400侧拉篮', buy: 300.00, sell: 310.00, store: 10, brand: '无敌牌', supply_id: 3)
-Part.create(id: 4, part_category_id: 2, name: '铜质滑轨', buy: 100.00, sell: 110.00, store: 50, brand: '耐用牌', supply_id: 1)
-Part.create(id: 5, part_category_id: 2, name: '铁质滑轨', buy: 200.00, sell: 210.00, store: 50, brand: '坚固牌', supply_id: 2)
-Part.create(id: 6, part_category_id: 2, name: '钢质滑轨', buy: 300.00, sell: 310.00, store: 10, brand: '无敌牌', supply_id: 3)
-Part.create(id: 7, part_category_id: 3, name: '普通角线', buy: 100.00, sell: 110.00, store: 100, brand: '耐用牌', supply_id: 1)
-Part.create(id: 8, part_category_id: 3, name: '高级角线', buy: 200.00, sell: 210.00, store: 50, brand: '坚固牌', supply_id: 2)
-Part.create(id: 9, part_category_id: 3, name: '特制角线', buy: 500.00, sell: 510.00, store: 10, brand: '无敌牌', supply_id: 3)
+Part.create(id: 1, part_category_id: 1, name: '100侧拉篮', buy: 100.00, price: 110.00, store: 100, brand: '耐用牌', supply_id: 1)
+Part.create(id: 2, part_category_id: 1, name: '200侧拉篮', buy: 200.00, price: 210.00, store: 50, brand: '坚固牌', supply_id: 1)
+Part.create(id: 3, part_category_id: 1, name: '400侧拉篮', buy: 300.00, price: 310.00, store: 10, brand: '无敌牌', supply_id: 3)
+Part.create(id: 4, part_category_id: 2, name: '铜质滑轨', buy: 100.00, price: 110.00, store: 50, brand: '耐用牌', supply_id: 1)
+Part.create(id: 5, part_category_id: 2, name: '铁质滑轨', buy: 200.00, price: 210.00, store: 50, brand: '坚固牌', supply_id: 2)
+Part.create(id: 6, part_category_id: 2, name: '钢质滑轨', buy: 300.00, price: 310.00, store: 10, brand: '无敌牌', supply_id: 3)
+Part.create(id: 7, part_category_id: 3, name: '普通角线', buy: 100.00, price: 110.00, store: 100, brand: '耐用牌', supply_id: 1)
+Part.create(id: 8, part_category_id: 3, name: '高级角线', buy: 200.00, price: 210.00, store: 50, brand: '坚固牌', supply_id: 2)
+Part.create(id: 9, part_category_id: 3, name: '特制角线', buy: 500.00, price: 510.00, store: 10, brand: '无敌牌', supply_id: 3)
 puts 'created Part success ! '
 ####################################### 板料种类 #######################################
 MaterialCategory.create(id: 1, oftype: 0, name:'3mm')
@@ -4674,25 +4674,25 @@ MaterialCategory.create(id: 11, oftype: 1, name:'多层板')
 MaterialCategory.create(id: 12, oftype: 1, name:'生态板')
 MaterialCategory.create(id: 13, oftype: 1, name:'实木板')
 MaterialCategory.create(id: 14, oftype: 2, name:'国色天香')
-MaterialCategory.create(id: 25, oftype: 2, name:'一帘幽梦')
+MaterialCategory.create(id: 15, oftype: 2, name:'一帘幽梦')
 puts 'created MaterialCategory success ! '
 ####################################### 板料 #######################################
-Material.create(id: 1, ply: 1, texture: 3, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6a', unit: '平方', supply_id: 1);
-Material.create(id: 2, ply: 1, texture: 3, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6b', unit: '平方', supply_id: 1);
-Material.create(id: 3, ply: 1, texture: 3, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6c', unit: '平方', supply_id: 1);
-Material.create(id: 4, ply: 1, texture: 3, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6d', unit: '平方', supply_id: 1);
-Material.create(id: 5, ply: 1, texture: 4, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6e', unit: '平方', supply_id: 1);
-Material.create(id: 6, ply: 1, texture: 4, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6f', unit: '平方', supply_id: 1);
-Material.create(id: 7, ply: 1, texture: 4, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6g', unit: '平方', supply_id: 1);
-Material.create(id: 8, ply: 1, texture: 4, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6h', unit: '平方', supply_id: 1);
-Material.create(id: 9, ply: 2, texture: 3, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6i', unit: '平方', supply_id: 1);
-Material.create(id: 10, ply: 2, texture: 3, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6j', unit: '平方', supply_id: 1);
-Material.create(id: 11, ply: 2, texture: 3, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6k', unit: '平方', supply_id: 1);
-Material.create(id: 12, ply: 2, texture: 3, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6l', unit: '平方', supply_id: 1);
-Material.create(id: 13, ply: 2, texture: 4, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6m', unit: '平方', supply_id: 1);
-Material.create(id: 14, ply: 2, texture: 4, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6n', unit: '平方', supply_id: 1);
-Material.create(id: 15, ply: 2, texture: 4, color: 7, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6o', unit: '平方', supply_id: 1);
-Material.create(id: 16, ply: 2, texture: 4, color: 8, store: 50, buy: 100.00, sell: 110.00, serial: '39fd6p', unit: '平方', supply_id: 1);
+Material.create(id: 1, ply: 1, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6a', full_name: '国色天香多层板3mm', uom: '平方', supply_id: 1);
+Material.create(id: 2, ply: 1, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6b', full_name: '一帘幽梦多层板3mm', uom: '平方', supply_id: 1);
+Material.create(id: 3, ply: 1, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6c', full_name: '国色天香多层板3mm', uom: '平方', supply_id: 1);
+Material.create(id: 4, ply: 1, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6d', full_name: '一帘幽梦多层板3mm', uom: '平方', supply_id: 1);
+Material.create(id: 5, ply: 1, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6e', full_name: '国色天香颗粒板3mm', uom: '平方', supply_id: 1);
+Material.create(id: 6, ply: 1, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6f', full_name: '一帘幽梦颗粒板3mm', uom: '平方', supply_id: 1);
+Material.create(id: 7, ply: 1, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6g', full_name: '国色天香颗粒板3mm', uom: '平方', supply_id: 1);
+Material.create(id: 8, ply: 1, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6h', full_name: '一帘幽梦颗粒板3mm', uom: '平方', supply_id: 1);
+Material.create(id: 9, ply: 2, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6i', full_name: '国色天香多层板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 10, ply: 2, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6j', full_name: '一帘幽梦多层板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 11, ply: 2, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6k', full_name: '国色天香多层板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 12, ply: 2, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6l', full_name: '一帘幽梦多层板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 13, ply: 2, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6m', full_name: '国色天香颗粒板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 14, ply: 2, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6n', full_name: '一帘幽梦颗粒板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 15, ply: 2, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6o', full_name: '国色天香颗粒板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 16, ply: 2, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6p', full_name: '一帘幽梦颗粒板5mm', uom: '平方', supply_id: 1);
 puts 'created Material success ! '
 ####################################### 订单类型 #######################################
 OrderCategory.create(:name => "橱柜体")
@@ -4702,3 +4702,9 @@ OrderCategory.create(:name => "衣柜门")
 OrderCategory.create(:name => "配件")
 OrderCategory.create(:name => "电器")
 OrderCategory.create(:name => "其他")
+puts 'created OrderCategory success ! '
+####################################### 部件类型 #######################################
+UnitCategory.create(:name => "板料")
+UnitCategory.create(:name => "配件")
+UnitCategory.create(:name => "工艺")
+puts 'created UnitCategory success ! '

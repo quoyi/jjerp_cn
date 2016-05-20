@@ -11,6 +11,7 @@ class IndentsController < ApplicationController
   # GET /units/1
   # GET /units/1.json
   def show
+    @order = Order.new
     @orders = Order.where(indent:@indent)
   end
 
@@ -21,6 +22,8 @@ class IndentsController < ApplicationController
 
   # GET /indents/1/edit
   def edit
+    # @order = Order.new
+    # @orders = Order.where(indent:@indent)
   end
 
   # POST /indents
@@ -37,6 +40,7 @@ class IndentsController < ApplicationController
   # PATCH/PUT /indents/1
   # PATCH/PUT /indents/1.json
   def update
+    binding.pry
     if @indent.update(indent_params)
       redirect_to indents_path, notice: "订单编辑成功！"
     else

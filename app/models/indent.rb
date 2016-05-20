@@ -3,7 +3,7 @@ class Indent < ActiveRecord::Base
   belongs_to :agent
   validates_presence_of :name, :agent_id, :customer, :verify_at, :require_at
 
-  accepts_nested_attributes_for :orders
+  accepts_nested_attributes_for :orders, allow_destroy: true
   #下单条件：1.正常单  2.补单  3.加急单 4.批量单
   enum oftype: [:normal, :repair, :instancy, :batch]
 

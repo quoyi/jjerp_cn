@@ -1,23 +1,27 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [:show, :edit, :update, :destroy]
+  include OrdersHelper
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :import]
 
   # GET /orders
   # GET /orders.json
   def index
     @orders = Order.where(deleted:false)
+    binding.pry
   end
 
   # GET /orders/1
   # GET /orders/1.json
   def show
+    # 这里可能需要修改, 应查找unit_category并获取ID值，再查找对应的material；而不是写固定值“1”
+    @materials = Unit.where(order_id: @order.id, unit_category_id: 1)
+    @parts = Unit.where(order_id: @order_id, unit_category_id: 2)
+    @crafts = Unit.where(order_id: @order_id, unit_category_id: 3)
     @indent = @order.indent
     @agent = @indent.agent
-
   end
 
   # GET /orders/new
   def new
-    binding.pry
     @order = Order.new
   end
 
@@ -66,15 +70,32 @@ class OrdersController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_order
-      @order = Order.find(params[:id])
-    end
+  # 导入文件，或手工输入
+  def import
+    msg = import_order_units(params[:file], @order.name)
+    return redirect_to order_path(@order), notice: msg
+    # 有上传文件时
+    # if params[:file].original_filename !~ /.csv$/
+    #   return redirect_to order_path(@order), error: '文件格式不正确！'
+    # else
+    #   msg = import_order_units(params[:file], @order.name)
+    #   if msg == "success"
+    #     return redirect_to order_path(@order), notice: "拆单导入成功"
+    #   else
+    #     return redirect_to order_path(@order), alert: msg
+    #   end
+    # end
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def order_params
-      params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture, :color,
-                                    :length, :width, :height, :number, :status, :note, :_destroy)
-    end
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_order
+    @order = Order.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def order_params
+    params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture, :color, :file,
+                                  :length, :width, :height, :number, :status, :note, :_destroy)
+  end
 end

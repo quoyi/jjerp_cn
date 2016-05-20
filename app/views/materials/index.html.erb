@@ -33,16 +33,16 @@
         <tbody>
           <% @materials.each do |m| %>
           <tr>
-            <td><%= m.serial %></td>
             <td><%= m.name %></td>
-            <td><%= m.ply %></td>
-            <td><%= m.texture %></td>
-            <td><%= m.color %></td>
+            <td><%= m.full_name %></td>
+            <td><%= MaterialCategory.find_by_id(m.ply).try(:name) %></td>
+            <td><%= MaterialCategory.find_by_id(m.texture).try(:name) %></td>
+            <td><%= MaterialCategory.find_by_id(m.color).try(:name) %></td>
             <td><%= m.store %></td>
             <td><%= m.buy %></td>
-            <td><%= m.sell %></td>
-            <td><%= m.unit %></td>
-            <td><%= m.supply.name %></td>
+            <td><%= m.price %></td>
+            <td><%= m.uom %></td>
+            <td><%= m.supply.try(:name) %></td>
             <td><%= link_to '删除', m, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
           </tr>
           <% end %>

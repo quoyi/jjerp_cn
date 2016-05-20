@@ -10,5 +10,7 @@ zh-CN:
       models:
         order:
           attributes:
+            order_category_id:
+              blank: 不能为空
   helpers:
     agent:

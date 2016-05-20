@@ -1,19 +1,23 @@
 Rails.application.routes.draw do
 
+  resources :crafts
   resources :tasks
   resources :units
-  resources :unit_categories
   resources :supplies
   resources :agents
+  resources :unit_categories
   resources :user_categories
-  resources :user_categories
-  resources :products
   resources :order_categories
-  resources :parts
   resources :part_categories
-  resources :orders
-  resources :materials
   resources :material_categories
+  resources :products
+  resources :parts
+  resources :materials
+  resources :orders do
+    collection do
+      post :import
+    end
+  end
   resources :departments
   resources :indents
   resources :permissions

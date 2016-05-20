@@ -2,42 +2,15 @@
   <div class="content-box-header panel-heading">
     <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 子订单 <small>详细</small> </h2></div>
     <div class="panel-options">
-      <%= link_to '返回订单', indent_path(@order.indent), class: 'btn btn-info' %>
+      <%= link_to '返回', indent_path(@order.indent), class: 'btn btn-info', data: {toggle:'tooltip'}, title: '返回到所属父级订单' %>
     </div>
   </div>
   <div class="content-box-large box-with-header">
-    <!-- <div class="row content-title">
-      <div class="btn-group" role="group" aria-label="">
-        <% PartCategory.group(:name).map(&:name).push('所有').each do |k| %>
-        <%= link_to k, parts_path(name: k), class: "btn btn-default #{'btn-primary' if params[:name].presence == k}" %>
-        <% end %>
-      </div>
-    </div> -->
-    <!-- <div class="row content-table">
-      <table class="table table-hover table-striped table-bordered table-condensed text-center">
-        <thead>
-          <tr>
-            <th>订单编号</th>
-            <th>代理商</th>
-            <th>终端信息</th>
-            <th>下单时间</th>
-            <th>发货时间</th>
-            <th>订单金额</th>
-            <th>历史合计</th>
-            <th>欠款合计</th>
-            <th>订单详细</th>
-          </tr>
-        </thead>
-        <tbody>
-          
-        </tbody>
-      </table>
-    </div> -->
     <div class="row">
       <div class="col-sm-3">
         <div class="panel panel-info">
           <div class="panel-heading">
-            <h4 class="panel-title">客户信息</h4>
+            客户信息
           </div>
           <table class="table table-hover table-striped table-bordered table-condensed text-center">
             <tr>
@@ -90,29 +63,141 @@
       <div class="col-sm-9">
         <div class="panel panel-info">
           <div class="panel-heading">
-            <div class="panel-title">订单信息 <small style="color:#000; font-size: 12px;"><%= @order.status_name %></small></div>
+            <span>子订单详细</span> <small>订单号：<%= link_to @indent.name, indent_path(@indent) %>&nbsp;&nbsp;&nbsp;&nbsp;状态：<%= @order.status_name %></small>
+            <div class="pull-right">
+              <%= form_tag import_orders_path, multipart: true, id: 'import-form' do %>
+              <%= hidden_field_tag :id, @order.id, id: 'import-field-id', class: 'hidden' %>
+              <%= file_field_tag :file, accept: 'csv', multiple: false, id: 'import-field-file', class: 'hidden' %>
+              <%= link_to '手动编辑', '#', class: 'btn-xs btn-primary', data: {toggle:'tooltip'}, title: '手动拆单或编辑' %>
+              <%= link_to '导入拆单', '#', id: 'import-btn', class: 'btn-xs btn-primary', data: {toggle:'tooltip'}, title: '从外部文件导入拆单信息' %>
+              <% end %>
+            </div>
           </div>
           <table class="table table-hover table-striped table-bordered table-condensed text-center">
             <tr>
               <th>子订单号</th>
-              <td><code><%= @order.name %></code></td>
+              <td colspan="3"><code><%= @order.name %></code></td>
               <th>登记时间</th>
-              <td><%= @order.created_at.strftime('%Y-%m-%d') if @indent.created_at.present? %></td>
+              <td colspan="2"><%= @order.created_at.strftime('%Y-%m-%d') if @indent.created_at.present? %></td>
               <th>确认时间</th>
-              <td><%= @indent.verify_at.strftime('%Y-%m-%d') if @indent.verify_at.present? %></td>
+              <td colspan="2"><%= @indent.verify_at.strftime('%Y-%m-%d') if @indent.verify_at.present? %></td>
             </tr>
             <tr>
               <th>金额</th>
-              <td><%= @indent.amount %></td>
+              <td colspan="3"><%= @indent.amount %></td>
               <th>要求出厂</th>
-              <td><%= @indent.require_at.strftime('%Y-%m-%d') if @indent.require_at.present? %></td>
+              <td colspan="2"><%= @indent.require_at.strftime('%Y-%m-%d') if @indent.require_at.present? %></td>
               <th>要求物流</th>
-              <td><%= @indent.logistics %></td>
+              <td colspan="2"><%= @indent.logistics %></td>
             </tr>
             <tr>
               <th>备注</th>
-              <td colspan="5"><%= @order.note || @indent.note %></td>
+              <td colspan="9"><%= @order.note || @indent.note %></td>
             </tr>
+            <!-- 板料 start -->
+            <tr>
+              <td colspan="10"></td>
+            </tr>
+            <tr>
+              <th colspan="10">板料信息</th>
+            </tr>
+            <tr>
+              <th>名称</th>
+              <th>数量</th>
+              <th>厚度</th>
+              <th>长</th>
+              <th>宽</th>
+              <th>尺寸</th>
+              <th>单位</th>
+              <th>单价</th>
+              <th>合计金额</th>
+              <th>备注</th>
+            </tr>
+            <% if @materials.present? %>
+            <% @materials.each do |m| %>
+            <tr>
+              <td><%= m.unit_name %></td>
+              <td><%= m.number %></td>
+              <td><%= MaterialCategory.find_by_id(m.ply).try(:name) %></td>
+              <td><%= m.length %></td>
+              <td><%= m.width %></td>
+              <td><%= m.size %></td>
+              <td><%= m.uom %></td>
+              <td><%= m.price %></td>
+              <td><%= m.price * m.number %></td>
+              <td><%= m.note %></td>
+            </tr>
+            <% end %>
+            <% else %>
+            <tr>
+              <td colspan="10">暂无板料信息</td>
+            </tr>
+            <% end %>
+            <!-- 板料 end -->
+            <!-- 配件 start -->
+            <tr>
+              <td colspan="10"></td>
+            </tr>
+            <tr>
+              <th colspan="10">配件信息</th>
+            </tr>
+            <tr>
+              <th>名称</th>
+              <th>单位</th>
+              <th>单价</th>
+              <th>数量</th>
+              <th>合计金额</th>
+              <th colspan="5">备注</th>
+            </tr>
+            <% if @parts.present? %>
+            <% @parts.each do |p| %>
+            <tr>
+              <td><%= p.name %></td>
+              <td><%= p.uom %></td>
+              <td><%= p.price %></td>
+              <td><%= p.number %></td>
+              <td><%= p.price * p.number %></td>
+              <td colspan="5"><%= p.note %></td>
+            </tr>
+            <% end %>
+            <% else %>
+            <tr>
+              <td colspan="10">暂无配件信息</td>
+            </tr>
+            <% end %>
+            <!-- 配件 end -->
+            <!-- 工艺 start -->
+            <tr>
+              <td colspan="10"></td>
+            </tr>
+            <tr>
+              <th colspan="10">工艺费用</th>
+            </tr>
+            <tr>
+              <th>名称</th>
+              <th>单位</th>
+              <th>单价</th>
+              <th>数量</th>
+              <th>合计金额</th>
+              <th colspan="5">备注</th>
+            </tr>
+            <% if @crafts.present? %>
+            <% @crafts.each do |c| %>
+            <tr>
+              <td><%= c.name %></td>
+              <td><%= c.uom %></td>
+              <td><%= c.price %></td>
+              <td><%= c.number %></td>
+              <td><%= c.price * c.number %></td>
+              <td colspan="5"><%= c.note %></td>
+            </tr>
+            <% end %>
+            <% else %>
+            <tr>
+              <td colspan="10">暂无工艺费用</td>
+            </tr>
+            <% end %>
+            <!-- 工艺 end -->
           </table>
         </div>
       </div>

@@ -15,6 +15,7 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require turbolinks
+//= require jquery.serializejson.min
 //= require jquery.noty.packaged.min
 //= require jquery.noty.bootstrapTheme
 //= require bootstrap

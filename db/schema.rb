@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20010101010128) do
+ActiveRecord::Schema.define(version: 20160520132241) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "serial",          limit: 255, default: "", null: false
@@ -45,6 +45,17 @@ ActiveRecord::Schema.define(version: 20010101010128) do
 
   add_index "cities", ["province_id", "name"], name: "index_cities_on_province_id_and_name", unique: true, using: :btree
   add_index "cities", ["province_id"], name: "index_cities_on_province_id", using: :btree
+
+  create_table "crafts", force: :cascade do |t|
+    t.string   "name",       limit: 255, null: false
+    t.string   "full_name",  limit: 255
+    t.string   "note",       limit: 255
+    t.boolean  "status"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "crafts", ["name"], name: "index_crafts_on_name", using: :btree
 
   create_table "departments", force: :cascade do |t|
     t.string   "serial",     limit: 255,                null: false
@@ -98,20 +109,21 @@ ActiveRecord::Schema.define(version: 20010101010128) do
   add_index "material_categories", ["oftype"], name: "index_material_categories_on_oftype", using: :btree
 
   create_table "materials", force: :cascade do |t|
-    t.string   "serial",     limit: 255,                         default: "", null: false
-    t.string   "name",       limit: 255
+    t.string   "name",       limit: 255,                         default: "", null: false
+    t.string   "full_name",  limit: 255
     t.integer  "ply",        limit: 4,                                        null: false
     t.integer  "texture",    limit: 4,                                        null: false
     t.integer  "color",      limit: 4,                                        null: false
     t.integer  "store",      limit: 4,                           default: 1,  null: false
     t.decimal  "buy",                    precision: 8, scale: 2,              null: false
-    t.decimal  "sell",                   precision: 8, scale: 2,              null: false
-    t.string   "unit",       limit: 255
+    t.decimal  "price",                  precision: 8, scale: 2,              null: false
+    t.string   "uom",        limit: 255
     t.integer  "supply_id",  limit: 4
     t.datetime "created_at",                                                  null: false
     t.datetime "updated_at",                                                  null: false
   end
 
+  add_index "materials", ["full_name"], name: "index_materials_on_full_name", using: :btree
   add_index "materials", ["supply_id"], name: "index_materials_on_supply_id", using: :btree
 
   create_table "order_categories", force: :cascade do |t|
@@ -125,7 +137,7 @@ ActiveRecord::Schema.define(version: 20010101010128) do
   create_table "orders", force: :cascade do |t|
     t.integer  "indent_id",         limit: 4,                   null: false
     t.string   "name",              limit: 255, default: "",    null: false
-    t.integer  "order_category_id", limit: 4,                   null: false
+    t.integer  "order_category_id", limit: 4,   default: 1,     null: false
     t.integer  "ply",               limit: 4,   default: 0,     null: false
     t.integer  "texture",           limit: 4,   default: 0,     null: false
     t.integer  "color",             limit: 4,   default: 0,     null: false
@@ -150,15 +162,17 @@ ActiveRecord::Schema.define(version: 20010101010128) do
   end
 
   create_table "parts", force: :cascade do |t|
-    t.integer  "part_category_id", limit: 4,                                       null: false
-    t.string   "name",             limit: 255,                                     null: false
+    t.integer  "part_category_id", limit: 4,                                          null: false
+    t.string   "name",             limit: 255,                                        null: false
     t.decimal  "buy",                          precision: 8, scale: 2
-    t.decimal  "sell",                         precision: 8, scale: 2
-    t.integer  "store",            limit: 4,                           default: 0, null: false
+    t.decimal  "price",                        precision: 8, scale: 2
+    t.integer  "store",            limit: 4,                           default: 0,    null: false
     t.string   "brand",            limit: 255
-    t.integer  "supply_id",        limit: 4,                                       null: false
-    t.datetime "created_at",                                                       null: false
-    t.datetime "updated_at",                                                       null: false
+    t.integer  "supply_id",        limit: 4,                                          null: false
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
+    t.string   "uom",              limit: 255,                         default: "平方"
+    t.integer  "number",           limit: 4,                           default: 1,    null: false
   end
 
   add_index "parts", ["name"], name: "index_parts_on_name", using: :btree
@@ -241,11 +255,11 @@ ActiveRecord::Schema.define(version: 20010101010128) do
   end
 
   create_table "units", force: :cascade do |t|
-    t.integer  "unit_category_id", limit: 4
+    t.integer  "unit_category_id", limit: 4,                           default: 1
     t.integer  "order_id",         limit: 4
-    t.string   "serial",           limit: 255,             null: false
+    t.string   "name",             limit: 255,                                        null: false
     t.string   "unit_name",        limit: 255
-    t.integer  "material_id",      limit: 4,               null: false
+    t.integer  "material_id",      limit: 4
     t.integer  "ply",              limit: 4
     t.integer  "texture",          limit: 4
     t.integer  "color",            limit: 4
@@ -265,14 +279,18 @@ ActiveRecord::Schema.define(version: 20010101010128) do
     t.string   "door_edge_type",   limit: 255
     t.integer  "door_edge_thick",  limit: 4
     t.integer  "task_id",          limit: 4
-    t.integer  "state",            limit: 4,   default: 0
+    t.integer  "state",            limit: 4,                           default: 0
     t.string   "craft",            limit: 255
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
+    t.string   "unit",             limit: 255,                         default: "平方", null: false
+    t.decimal  "price",                        precision: 8, scale: 2, default: 0.0
+    t.integer  "part_id",          limit: 4
+    t.integer  "craft_id",         limit: 4
   end
 
+  add_index "units", ["name"], name: "index_units_on_name", using: :btree
   add_index "units", ["order_id"], name: "index_units_on_order_id", using: :btree
-  add_index "units", ["serial"], name: "index_units_on_serial", using: :btree
   add_index "units", ["task_id"], name: "index_units_on_task_id", using: :btree
   add_index "units", ["unit_category_id"], name: "index_units_on_unit_category_id", using: :btree
 

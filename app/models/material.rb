@@ -1,13 +1,12 @@
 class Material < ActiveRecord::Base
   belongs_to :material_category
-  validates_presence_of :serial, :name, :ply, :texture, :color, :buy, :sell, :supply_id
-  before_create :generate_order_code
+  belongs_to :supply
+  has_many :unit
+  validates_presence_of :name, :ply, :texture, :color, :buy, :price, :supply_id
+  before_create :generate_code
 
   # 生成编码
-  def generate_order_code
-    begin
-      self.serial = "" + (orders_count+1).to_s
-      self.work_id = 1
-    end while self.class.exists?(:name => name)
+  def generate_code
+    self.name = "JCBL" + Time.new.strftime('%y%m%d') + SecureRandom.hex(1).upcase
   end
 end

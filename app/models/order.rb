@@ -1,7 +1,6 @@
 class Order < ActiveRecord::Base
   belongs_to :order_category
   belongs_to :indent
-  validates_presence_of :order_category_id, :number
   # 发货时间需在十天以后
   # validate :validate_require_time
   before_save :generate_order_code

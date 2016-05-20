@@ -30,7 +30,7 @@
         <tbody>
           <% @indents.each do |i| %>
           <tr>
-            <td><%= link_to i.name, i %></td>
+            <td><%= link_to i.name, i, data: {toggle:'tooltip'}, title: '查看订单详细信息' %></td>
             <td><%= i.agent.try(:name) %></td>
             <td><%= i.customer %></td>
             <td><%= i.verify_at.strftime('%Y-%m-%d') %></td>
