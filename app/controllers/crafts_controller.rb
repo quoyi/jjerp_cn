@@ -4,7 +4,7 @@ class CraftsController < ApplicationController
   # GET /crafts
   # GET /crafts.json
   def index
-    @crafts = Craft.all
+    @crafts = Craft.where(deleted: false)
   end
 
   # GET /crafts/1
@@ -54,11 +54,8 @@ class CraftsController < ApplicationController
   # DELETE /crafts/1
   # DELETE /crafts/1.json
   def destroy
-    @craft.destroy
-    respond_to do |format|
-      format.html { redirect_to crafts_url, notice: 'Craft was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    @craft.update_attributes(deleted: true)
+    redirect_to crafts_url, notice: '工艺已删除。'
   end
 
   private
@@ -69,6 +66,6 @@ class CraftsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def craft_params
-      params.require(:craft).permit(:name, :full_name, :note, :status)
+      params.require(:craft).permit(:name, :full_name, :note, :status, :deleted)
     end
 end

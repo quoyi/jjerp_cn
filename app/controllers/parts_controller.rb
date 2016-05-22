@@ -5,7 +5,7 @@ class PartsController < ApplicationController
   # GET /parts.json
   def index
     @part = Part.new
-    @parts = Part.all
+    @parts = Part.where(deleted: false)
     @parts = Part.joins(:part_category).where(part_categories: {name: params[:name]}) if params[:name].present? && params[:name] != '所有'
   end
 
@@ -42,7 +42,7 @@ class PartsController < ApplicationController
   # DELETE /parts/1
   # DELETE /parts/1.json
   def destroy
-    @part.destroy
+    @part.update_attributes(deleted: true)
     redirect_to parts_path, notice: '配件已删除！'
   end
 
@@ -54,6 +54,7 @@ class PartsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def part_params
-    params.require(:part).permit(:part_category_id, :name, :buy, :price, :store, :brand, :supply_id)
+    params.require(:part).permit(:part_category_id, :name, :buy, :price, :store,
+                                :uom, :number, :brand, :supply_id, :deleted)
   end
 end

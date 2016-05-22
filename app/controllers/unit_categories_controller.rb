@@ -5,7 +5,7 @@ class UnitCategoriesController < ApplicationController
   # GET /unit_categories.json
   def index
     @unit_category = UnitCategory.new
-    @unit_categories = UnitCategory.all
+    @unit_categories = UnitCategory.where(deleted: false)
   end
 
   # POST /unit_categories
@@ -22,7 +22,7 @@ class UnitCategoriesController < ApplicationController
   # DELETE /unit_categories/1
   # DELETE /unit_categories/1.json
   def destroy
-    @unit_category.destroy
+    @unit_category.update_attributes(deleted: true)
     redirect_to unit_categories_path, notice: '部件类型已删除！'
   end
 

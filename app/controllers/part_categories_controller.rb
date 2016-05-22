@@ -5,7 +5,7 @@ class PartCategoriesController < ApplicationController
   # GET /part_categories.json
   def index
     @part_category = PartCategory.new
-    @part_categories = PartCategory.all
+    @part_categories = PartCategory.where(deleted: false)
   end
 
   # POST /part_categories
@@ -22,7 +22,7 @@ class PartCategoriesController < ApplicationController
   # DELETE /part_categories/1
   # DELETE /part_categories/1.json
   def destroy
-    @part_category.destroy
+    @part_category.update_attributes(deleted: true)
     redirect_to part_categories_path, notice: '配件类型已删除！'
   end
 
@@ -34,6 +34,6 @@ class PartCategoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def part_category_params
-      params.require(:part_category).permit(:name, :note)
+      params.require(:part_category).permit(:name, :note, :deleted)
     end
 end

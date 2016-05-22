@@ -4,7 +4,7 @@ class SuppliesController < ApplicationController
   # GET /supplies
   # GET /supplies.json
   def index
-    @supplies = Supply.all
+    @supplies = Supply.where(deleted: false)
   end
 
   # GET /supplies/1
@@ -54,11 +54,8 @@ class SuppliesController < ApplicationController
   # DELETE /supplies/1
   # DELETE /supplies/1.json
   def destroy
-    @supply.destroy
-    respond_to do |format|
-      format.html { redirect_to supplies_url, notice: 'Supply was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    @supply.update_attributes(deleted: true)
+    redirect_to supplies_url, notice: '供应商已删除。'
   end
 
   private
@@ -69,6 +66,7 @@ class SuppliesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def supply_params
-      params.fetch(:supply, {})
+      params.require(:supply).permit(:name, :full_name, :mobile, :bank_account, :address,
+                                    :note, :deleted)
     end
 end

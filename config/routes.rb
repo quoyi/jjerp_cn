@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
 
+  resources :offers do
+    collection do
+      get :generate
+    end
+  end
+  resources :expends
+  resources :incomes
   resources :crafts
   resources :tasks
   resources :units

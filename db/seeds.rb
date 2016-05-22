@@ -4609,14 +4609,14 @@ puts 'created District success ! '
 
 
 ####################################### 供应商 #######################################
-Supply.create(id: 1,serial: 'GY0001', name: '小胡供应', mobile: '15215211521', bank_account: '627001702381000001', address: '重庆市', note: '优质代理商')
-Supply.create(id: 2,serial: 'GY0002', name: '小李供应', mobile: '18618611861', bank_account: '627402709342020582', address: '成都市', note: '一级代理商')
-Supply.create(id: 3,serial: 'GY0003', name: '小杨供应', mobile: '18318311831', bank_account: '600807920384014023', address: '贵阳市', note: '普通代理商')
+Supply.create(id: 1,name: 'GY0001', full_name: '小胡供应', mobile: '15215211521', bank_account: '627001702381000001', address: '重庆市', note: '优质代理商')
+Supply.create(id: 2,name: 'GY0002', full_name: '小李供应', mobile: '18618611861', bank_account: '627402709342020582', address: '成都市', note: '一级代理商')
+Supply.create(id: 3,name: 'GY0003', full_name: '小杨供应', mobile: '18318311831', bank_account: '600807920384014023', address: '贵阳市', note: '普通代理商')
 puts 'created Supplier success ! '
 ####################################### 代理商、经销商 #######################################
-Agent.create(id: 1,serial: 'DL0001',address: '湖北武汉', name: '小秦代理', contacts: '王xx', mobile: '18610086121')
-Agent.create(id: 2,serial: 'DL0002',address: '贵州贵阳', name: '傣家代理', contacts: '岳xx', mobile: '18610086122')
-Agent.create(id: 3,serial: 'DL0003',address: '河南郑州', name: '小孙代理', contacts: '孙x', mobile: '18610086123')
+Agent.create(id: 1,name: 'DL0001',address: '湖北武汉', full_name: '小秦代理', contacts: '王xx', mobile: '18610086121')
+Agent.create(id: 2,name: 'DL0002',address: '贵州贵阳', full_name: '傣家代理', contacts: '岳xx', mobile: '18610086122')
+Agent.create(id: 3,name: 'DL0003',address: '河南郑州', full_name: '小孙代理', contacts: '孙x', mobile: '18610086123')
 puts 'created Agent success ! '
 ####################################### 供应商 #######################################
 UserCategory.create(id: 1, serial: 'UC0001', name: '普通用户', nick: 'normal', visible: true)
@@ -4679,20 +4679,20 @@ puts 'created MaterialCategory success ! '
 ####################################### 板料 #######################################
 Material.create(id: 1, ply: 1, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6a', full_name: '国色天香多层板3mm', uom: '平方', supply_id: 1);
 Material.create(id: 2, ply: 1, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6b', full_name: '一帘幽梦多层板3mm', uom: '平方', supply_id: 1);
-Material.create(id: 3, ply: 1, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6c', full_name: '国色天香多层板3mm', uom: '平方', supply_id: 1);
-Material.create(id: 4, ply: 1, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6d', full_name: '一帘幽梦多层板3mm', uom: '平方', supply_id: 1);
+Material.create(id: 3, ply: 2, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6c', full_name: '国色天香多层板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 4, ply: 2, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6d', full_name: '一帘幽梦多层板5mm', uom: '平方', supply_id: 1);
 Material.create(id: 5, ply: 1, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6e', full_name: '国色天香颗粒板3mm', uom: '平方', supply_id: 1);
 Material.create(id: 6, ply: 1, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6f', full_name: '一帘幽梦颗粒板3mm', uom: '平方', supply_id: 1);
-Material.create(id: 7, ply: 1, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6g', full_name: '国色天香颗粒板3mm', uom: '平方', supply_id: 1);
-Material.create(id: 8, ply: 1, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6h', full_name: '一帘幽梦颗粒板3mm', uom: '平方', supply_id: 1);
-Material.create(id: 9, ply: 2, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6i', full_name: '国色天香多层板5mm', uom: '平方', supply_id: 1);
-Material.create(id: 10, ply: 2, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6j', full_name: '一帘幽梦多层板5mm', uom: '平方', supply_id: 1);
-Material.create(id: 11, ply: 2, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6k', full_name: '国色天香多层板5mm', uom: '平方', supply_id: 1);
-Material.create(id: 12, ply: 2, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6l', full_name: '一帘幽梦多层板5mm', uom: '平方', supply_id: 1);
-Material.create(id: 13, ply: 2, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6m', full_name: '国色天香颗粒板5mm', uom: '平方', supply_id: 1);
-Material.create(id: 14, ply: 2, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6n', full_name: '一帘幽梦颗粒板5mm', uom: '平方', supply_id: 1);
-Material.create(id: 15, ply: 2, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6o', full_name: '国色天香颗粒板5mm', uom: '平方', supply_id: 1);
-Material.create(id: 16, ply: 2, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6p', full_name: '一帘幽梦颗粒板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 7, ply: 2, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6g', full_name: '国色天香颗粒板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 8, ply: 2, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6h', full_name: '一帘幽梦颗粒板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 9, ply: 3, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6i', full_name: '国色天香多层板15mm', uom: '平方', supply_id: 1);
+Material.create(id: 10, ply: 3, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6j', full_name: '一帘幽梦多层板15mm', uom: '平方', supply_id: 1);
+Material.create(id: 11, ply: 4, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6k', full_name: '国色天香多层板16mm', uom: '平方', supply_id: 1);
+Material.create(id: 12, ply: 4, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6l', full_name: '一帘幽梦多层板16mm', uom: '平方', supply_id: 1);
+Material.create(id: 13, ply: 3, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6m', full_name: '国色天香颗粒板15mm', uom: '平方', supply_id: 1);
+Material.create(id: 14, ply: 3, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6n', full_name: '一帘幽梦颗粒板15mm', uom: '平方', supply_id: 1);
+Material.create(id: 15, ply: 4, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6o', full_name: '国色天香颗粒板16mm', uom: '平方', supply_id: 1);
+Material.create(id: 16, ply: 4, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6p', full_name: '一帘幽梦颗粒板16mm', uom: '平方', supply_id: 1);
 puts 'created Material success ! '
 ####################################### 订单类型 #######################################
 OrderCategory.create(:name => "橱柜体")

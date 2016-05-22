@@ -1,0 +1,55 @@
+<!-- 工艺 start -->
+<tr>
+  <td colspan="10"></td>
+</tr>
+<tr>
+  <th colspan="10">
+    工艺费用
+    <%= link_to '手动编辑', '#', class: 'pull-right btn-xs btn-primary' %>
+  </th>
+</tr>
+<tr>
+  <th>名称</th>
+  <th>单位</th>
+  <th>单价</th>
+  <th>数量</th>
+  <th>合计金额</th>
+  <th colspan="5">备注</th>
+</tr>
+<% if @crafts.present? %>
+<% @crafts.each do |c| %>
+<tr>
+  <td><%= c.name %></td>
+  <td><%= c.uom %></td>
+  <td><%= c.price %></td>
+  <td><%= c.number %></td>
+  <td><%= c.price * c.number %></td>
+  <td colspan="5"><%= c.note %></td>
+</tr>
+<% end %>
+<% else %>
+<tr>
+  <td colspan="10">暂无工艺费用</td>
+</tr>
+<% end %>
+<!-- 工艺 end -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="addOrderUnits" tabindex="-1" role="dialog" aria-labelledby="addOrderUnitsLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="addOrderUnitsLabel">部件 <small>编辑</small></h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary">提交</button>
+      </div>
+    </div>
+  </div>
+</div>

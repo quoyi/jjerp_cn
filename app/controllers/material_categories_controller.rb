@@ -5,7 +5,7 @@ class MaterialCategoriesController < ApplicationController
   # GET /material_categories.json
   def index
     @material_category = MaterialCategory.new
-    @material_categories = MaterialCategory.all
+    @material_categories = MaterialCategory.where(deleted: false)
     @material_categories = MaterialCategory.where(oftype:  MaterialCategory.oftypes[params[:oftype]]) if params[:oftype].present?
   end
 
@@ -23,7 +23,7 @@ class MaterialCategoriesController < ApplicationController
   # DELETE /material_categories/1
   # DELETE /material_categories/1.json
   def destroy
-    @material_category.destroy
+    @material_category.update_attributes(deleted: true)
     redirect_to material_categories_url, notice: '板料类型已删除！'
   end
 
@@ -35,6 +35,6 @@ class MaterialCategoriesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def material_category_params
-    params.require(:material_category).permit(:oftype, :name, :note)
+    params.require(:material_category).permit(:oftype, :name, :note, :deleted)
   end
 end

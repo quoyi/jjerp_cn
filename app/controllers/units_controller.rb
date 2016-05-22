@@ -4,7 +4,8 @@ class UnitsController < ApplicationController
   # GET /units
   # GET /units.json
   def index
-    @units = Unit.all
+    @unit = Unit.new
+    @units = Unit.where(deleted: false)
   end
 
   # GET /units/1
@@ -54,11 +55,8 @@ class UnitsController < ApplicationController
   # DELETE /units/1
   # DELETE /units/1.json
   def destroy
-    @unit.destroy
-    respond_to do |format|
-      format.html { redirect_to units_url, notice: 'Unit was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    @unit.update_attributes(deleted: true)
+    redirect_to units_url, notice: '部件已删除。'
   end
 
   private
@@ -69,6 +67,10 @@ class UnitsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def unit_params
-      params.fetch(:unit, {})
+      params.require(:unit).permit(:unit_category_id, :order_id, :name, :full_name, :material_id,
+                                  :part_id, :craft_id, :ply, :texture, :color, :length, :width,
+                                  :number, :uom, :price, :size, :note, :edge, :customer, :out_edge_thick,
+                                  :in_edge_thick, :back_texture, :door_type, :door_mould, :door_handle_type,
+                                  :door_edge_type, :door_edge_thick, :task, :state, :craft, :deleted)
     end
 end

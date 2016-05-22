@@ -1,0 +1,48 @@
+<div class="col-md-12 panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 收入记录 <small>列表</small> </h2></div>
+    <div class="panel-options">
+      <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addIncomes'} %>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <!-- <div class="row content-title">
+      <div class="btn-group" role="group" aria-label="">
+        <% MaterialCategory.oftype.push(['所有', nil]).each do |k, name| %>
+        <%= link_to k, material_categories_path(oftype: name), class: "btn btn-default #{'btn-primary' if params[:oftype].presence == name}" %>
+        <% end %>
+      </div>
+    </div> -->
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>来源</th>
+            <th>订单号</th>
+            <th>收入时间</th>
+            <th>收入金额</th>
+            <th>经手人</th>
+            <th>备注</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @incomes.each do |i| %>
+          <tr>
+            <td><%= i.name %></td>
+            <td><%= i.reason %></td>
+            <td><%= i.indent.try(:name) %></td>
+            <td><%= i.income_at.strftime('%Y-%m-%d') %></td>
+            <td><%= i.money %></td>
+            <td><%= i.username %></td>
+            <td><%= i.note %></td>
+            <td><%= link_to '删除', i, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<%= render 'new' %>

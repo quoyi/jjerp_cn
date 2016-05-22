@@ -30,7 +30,7 @@ module OrdersHelper
               unit = Unit.new(
                 order_id: order.id,
                 name: "ESR" + order.name + index.to_s,
-                unit_name: row[0],
+                full_name: row[0],
                 ply: ply_id,
                 length: row[2],
                 width: row[3],

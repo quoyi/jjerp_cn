@@ -5,6 +5,7 @@ class CreateMaterialCategories < ActiveRecord::Migration
       t.integer :oftype, null: false, index: true # 类型: 0. 厚度  1. 材质  2.表面  3.颜色
       t.string :name # 名称
       t.string :note # 备注
+      t.boolean :deleted, default: false # 标记删除
       t.timestamps null: false
     end
   end

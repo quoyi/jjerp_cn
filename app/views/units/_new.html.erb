@@ -1,0 +1,79 @@
+<!-- Modal -->
+<div class="modal fade" id="addUnits" tabindex="-1" role="dialog" aria-labelledby="addUnitsLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <%= form_for @unit, html: {class: 'form-horizontal'} do |f| %>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="addUnitsLabel"> 部件 <small>新建</small></h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <%= f.label '类型', for: 'unit_unit_category_id', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= select_tag 'unit[unit_category_id]', options_for_select(UnitCategory.all.map{|uc|[uc.name, uc.id]}), class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '名称', for: 'unit_full_name', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :full_name, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '单位', for: 'unit_uom', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :uom, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '数量', for: 'unit_number', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :number, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '单价', for: 'unit_price', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :price, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '厚度', for: 'unit_ply', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :ply, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '尺寸', for: 'unit_size', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :size, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '终端', for: 'unit_customer', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :customer, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '供应商', for: 'unit_supply_id', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= select_tag 'unit[supply_id]', options_for_select(Supply.all.map{|s|[s.full_name, s.id]}), class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '备注', for: 'unit_note', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :note, class: 'form-control', required: true %>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
+        <%= f.submit '提交', class: 'btn btn-primary' %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>

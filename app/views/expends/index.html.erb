@@ -1,0 +1,39 @@
+<div class="col-md-12 panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 支出记录 <small>列表</small> </h2></div>
+    <div class="panel-options">
+      <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addExpends'} %>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>来源</th>
+            <th>支出时间</th>
+            <th>支出金额</th>
+            <th>经手人</th>
+            <th>备注</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @expends.each do |e| %>
+          <tr>
+            <td><%= e.name %></td>
+            <td><%= e.reason %></td>
+            <td><%= e.expend_at.strftime('%Y-%m-%d') %></td>
+            <td><%= e.money %></td>
+            <td><%= e.username %></td>
+            <td><%= e.note %></td>
+            <td><%= link_to '删除', e, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<%= render 'new' %>

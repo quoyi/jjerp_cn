@@ -6,7 +6,6 @@ class OrdersController < ApplicationController
   # GET /orders.json
   def index
     @orders = Order.where(deleted:false)
-    binding.pry
   end
 
   # GET /orders/1
@@ -64,10 +63,7 @@ class OrdersController < ApplicationController
   def destroy
     # 需要标记删除，不能真正地删除
     @order.update_attributes(deleted: true)
-    respond_to do |format|
-      format.html { redirect_to orders_url, notice: 'Order was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to orders_url, notice: '子订单已删除。'
   end
 
   # 导入文件，或手工输入
@@ -95,7 +91,11 @@ class OrdersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def order_params
-    params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture, :color, :file,
-                                  :length, :width, :height, :number, :status, :note, :_destroy)
+    params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture,
+                                  :color, :length, :width, :height, :number, :price,
+                                  :status, :note, :deleted, :file, :_destroy,
+                                  units_attributes: [],
+                                  parts_attributes: [],
+                                  crafts_attributes: [])
   end
 end

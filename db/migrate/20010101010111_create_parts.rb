@@ -11,6 +11,7 @@ class CreateParts < ActiveRecord::Migration
       t.integer :number, null: false, default: 1 # 数量
       t.string :brand # 品牌
       t.references :supply, null: false, index: true # 供货商
+      t.boolean :deleted, default: false # 标记删除
       t.timestamps null: false
     end
   end

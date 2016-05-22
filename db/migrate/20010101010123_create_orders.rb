@@ -8,10 +8,11 @@ class CreateOrders < ActiveRecord::Migration
       t.integer :ply, null: false, default: 0 # 厚度
       t.integer :texture, null: false, default: 0 # 材质
       t.integer :color, null: false, default: 0 # 颜色
-      t.integer :length, null: false, default: 0
-      t.integer :width, null: false, default: 0
-      t.integer :height, null: false, default: 0
-      t.integer :number, null: false, default: 0 # 数量
+      t.integer :length, null: false, default: 1
+      t.integer :width, null: false, default: 1
+      t.integer :height, null: false, default: 1
+      t.integer :number, null: false, default: 1 # 数量
+      t.decimal :price, precision: 8, scale: 2, default: 0 # 价格
       t.integer :status, null: false, default: 0 # 状态: 0.正常 1.异常
       t.string :note # 备注
       t.boolean :deleted, null: false, default: false # 标记删除

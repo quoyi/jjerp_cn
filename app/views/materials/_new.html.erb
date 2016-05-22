@@ -9,39 +9,45 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <%= f.label '编码', for: 'material_serial', class: 'control-label col-sm-3' %>
+          <%= f.label '厚度', for: 'material_ply', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
-            <%= f.text_field 'material[name]', value: @material.name, class: 'form-control', readOnly: true %>
+            <%= select_tag 'material[ply]', options_for_select(MaterialCategory.where(oftype: 0).map{|mc|[mc.name, mc.id]}), class: 'form-control', required: true %>
           </div>
         </div>
         <div class="form-group">
-          <%= f.label '名称', for: 'part_name', class: 'control-label col-sm-3' %>
+          <%= f.label '材质', for: 'material_texture', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
-            <%= f.text_field :full_name, class: 'form-control', required: true %>
+            <%= select_tag 'material[texture]', options_for_select(MaterialCategory.where(oftype: 1).map{|mc|[mc.name, mc.id]}), class: 'form-control', required: true %>
           </div>
         </div>
         <div class="form-group">
-          <%= f.label '进价', for: 'part_buy', class: 'control-label col-sm-3' %>
+          <%= f.label '颜色', for: 'material_color', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
-            <%= f.text_field :buy, class: 'form-control', required: true %>
+            <%= select_tag 'material[color]', options_for_select(MaterialCategory.where(oftype: 2).map{|mc|[mc.name, mc.id]}), class: 'form-control', required: true %>
           </div>
         </div>
         <div class="form-group">
-          <%= f.label '售价', for: 'part_sell', class: 'control-label col-sm-3' %>
+          <%= f.label '进价', for: 'material_buy', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
-            <%= f.text_field :price, class: 'form-control', required: true %>
+            <%= f.number_field :buy, class: 'form-control', min: 1, required: true %>
           </div>
         </div>
         <div class="form-group">
-          <%= f.label '库存', for: 'part_store', class: 'control-label col-sm-3' %>
+          <%= f.label '售价', for: 'material_sell', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
-            <%= f.text_field :store, class: 'form-control', required: true %>
+            <%= f.number_field :price, class: 'form-control', min: 1, required: true %>
           </div>
         </div>
         <div class="form-group">
-          <%= f.label '供应商', for: 'part_supply_id', class: 'control-label col-sm-3' %>
+          <%= f.label '库存', for: 'material_store', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
-            <%= select_tag 'part[supply_id]', options_for_select(Supply.all), class: 'form-control', required: true %>
+            <%= f.number_field :store, class: 'form-control', min: 1, required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '供应商', for: 'material_supply_id', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= select_tag 'material[supply_id]', options_for_select(Supply.all.map{|s|[s.full_name,s.id]}), class: 'form-control', required: true %>
           </div>
         </div>
       </div>

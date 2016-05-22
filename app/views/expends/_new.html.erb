@@ -1,0 +1,43 @@
+<!-- Modal -->
+<div class="modal fade" id="addExpends" tabindex="-1" role="dialog" aria-labelledby="addExpendsLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <%= form_for @expend, html: {class: 'form-horizontal'} do |f| %>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="addExpendsLabel"> 支出记录 <small>新建</small></h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <%= f.label '金额', for: 'expend_money', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.number_field :money, min: 0, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '经手人', for: 'expend_username', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :username, class: 'form-control col-sm-9', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '时间', for: 'expend_expend_at', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.date_field :expend_at, class: 'form-control col-sm-9', data: {provide: 'datepicker'}, required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '备注', for: 'income_note', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :note, class: 'form-control col-sm-9' %>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
+        <%= f.submit '提交', class: 'btn btn-primary' %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>

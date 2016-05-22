@@ -5,7 +5,7 @@ class CreateUnits < ActiveRecord::Migration
       t.references :unit_category, index: true, default: 1
       t.references :order, index: true, foreign_key: true
       t.string :name, null: false, index: true, uniq: true # 编码
-      t.string :unit_name #部件名称
+      t.string :full_name #部件名称
       t.references :material # 板料
       t.references :part # 部件
       t.references :craft # 工艺
@@ -32,6 +32,7 @@ class CreateUnits < ActiveRecord::Migration
       t.references :task, index: true, foreign_key: true
       t.integer :state, default: 0 #已创建生产任务，未创建生产任务
       t.string :craft # 工艺员
+      t.boolean :deleted, default: false # 标记删除
       t.timestamps null: false
     end
   end

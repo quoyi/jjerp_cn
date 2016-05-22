@@ -4,7 +4,7 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = Task.all
+    @tasks = Task.where(deleted: false)
   end
 
   # GET /tasks/1
@@ -54,11 +54,8 @@ class TasksController < ApplicationController
   # DELETE /tasks/1
   # DELETE /tasks/1.json
   def destroy
-    @task.destroy
-    respond_to do |format|
-      format.html { redirect_to tasks_url, notice: 'Task was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    @task.update_attributes(deleted: true)
+    redirect_to tasks_url, notice: '生产任务已删除。'
   end
 
   private
@@ -69,6 +66,7 @@ class TasksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
-      params.fetch(:task, {})
+      params.require(:task).permit(:order_id, :item_id, :item_type, :sequence, :area
+                                  :mix_status, :availability, :work, :state, :number, :deleted)
     end
 end
