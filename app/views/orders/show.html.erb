@@ -93,12 +93,125 @@
               <th>备注</th>
               <td colspan="9"><%= @order.note || @indent.note %></td>
             </tr>
-            <%= render 'order_units' %>
-            <%= render 'order_parts' %>
-            <%= render 'order_crafts' %>
+            <!-- 板料 start -->
+            <tr>
+              <td colspan="10"></td>
+            </tr>
+            <tr>
+              <th colspan="10">
+                部件信息
+                <%= link_to '手动编辑', '#', data: {toggle:'modal', target: '#addOrderUnits'}, class: 'pull-right btn-xs btn-primary' %>
+              </th>
+            </tr>
+            <tr>
+              <th>名称</th>
+              <th>数量</th>
+              <th>厚度</th>
+              <th>长</th>
+              <th>宽</th>
+              <th>尺寸</th>
+              <th>单位</th>
+              <th>单价</th>
+              <th>合计金额</th>
+              <th>备注</th>
+            </tr>
+            <% if @materials.present? %>
+            <% @materials.each do |m| %>
+            <tr>
+              <td><%= m.full_name %></td>
+              <td><%= m.number %></td>
+              <td><%= MaterialCategory.find_by_id(m.ply).try(:name) %></td>
+              <td><%= m.length %></td>
+              <td><%= m.width %></td>
+              <td><%= m.size %></td>
+              <td><%= m.uom %></td>
+              <td><%= m.price %></td>
+              <td><%= m.price * m.number %></td>
+              <td><%= m.note %></td>
+            </tr>
+            <% end %>
+            <% else %>
+            <tr>
+              <td colspan="10">暂无板料信息</td>
+            </tr>
+            <% end %>
+            <!-- 板料 end -->
+            <!-- 配件 start -->
+            <tr>
+              <td colspan="10"></td>
+            </tr>
+            <tr>
+              <th colspan="10">
+                配件信息
+                <%= link_to '手动编辑', '#', data: {toggle:'modal', target: '#addOrderParts'}, class: 'pull-right btn-xs btn-primary' %>
+              </th>
+            </tr>
+            <tr>
+              <th>名称</th>
+              <th>单位</th>
+              <th>单价</th>
+              <th>数量</th>
+              <th>合计金额</th>
+              <th colspan="5">备注</th>
+            </tr>
+            <% if @parts.present? %>
+            <% @parts.each do |p| %>
+            <tr>
+              <td><%= p.name %></td>
+              <td><%= p.uom %></td>
+              <td><%= p.price %></td>
+              <td><%= p.number %></td>
+              <td><%= p.price * p.number %></td>
+              <td colspan="5"><%= p.note %></td>
+            </tr>
+            <% end %>
+            <% else %>
+            <tr>
+              <td colspan="10">暂无配件信息</td>
+            </tr>
+            <% end %>
+            <!-- 配件 end -->
+            <!-- 工艺 start -->
+            <tr>
+              <td colspan="10"></td>
+            </tr>
+            <tr>
+              <th colspan="10">
+                工艺费用
+                <%= link_to '手动编辑', '#', data: {toggle:'modal', target: '#addOrderCrafts'}, class: 'pull-right btn-xs btn-primary' %>
+              </th>
+            </tr>
+            <tr>
+              <th>名称</th>
+              <th>单位</th>
+              <th>单价</th>
+              <th>数量</th>
+              <th>合计金额</th>
+              <th colspan="5">备注</th>
+            </tr>
+            <% if @crafts.present? %>
+            <% @crafts.each do |c| %>
+            <tr>
+              <td><%= c.name %></td>
+              <td><%= c.uom %></td>
+              <td><%= c.price %></td>
+              <td><%= c.number %></td>
+              <td><%= c.price * c.number %></td>
+              <td colspan="5"><%= c.note %></td>
+            </tr>
+            <% end %>
+            <% else %>
+            <tr>
+              <td colspan="10">暂无工艺费用</td>
+            </tr>
+            <% end %>
+            <!-- 工艺 end -->
           </table>
         </div>
       </div>
     </div>
   </div>
 </div>
+<%= render 'order_units' %>
+<%= render 'order_parts' %>
+<%= render 'order_crafts' %>

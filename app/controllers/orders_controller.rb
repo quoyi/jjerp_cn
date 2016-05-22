@@ -5,6 +5,10 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
+    @unit = Unit.new
+    @part = Part.new
+    @craft = Craft.new
+    @order = Order.new
     @orders = Order.where(deleted:false)
   end
 
@@ -94,8 +98,8 @@ class OrdersController < ApplicationController
     params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture,
                                   :color, :length, :width, :height, :number, :price,
                                   :status, :note, :deleted, :file, :_destroy,
-                                  units_attributes: [],
-                                  parts_attributes: [],
-                                  crafts_attributes: [])
+                                  units_attributes: [:_destroy],
+                                  parts_attributes: [:_destroy],
+                                  crafts_attributes: [:_destroy])
   end
 end
