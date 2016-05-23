@@ -3,6 +3,7 @@ class CreateCrafts < ActiveRecord::Migration
     # 工艺
     create_table :crafts do |t|
       t.string :name, index: true, null: false, uniq: true # 编码
+      t.references :order # 所属订单号
       t.string :full_name # 名称
       t.string :note # 备注
       t.boolean :status # 状态

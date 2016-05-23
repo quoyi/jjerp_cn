@@ -4,6 +4,7 @@ class IndentsController < ApplicationController
   # GET /indents
   # GET /indents.json
   def index
+    @agent = Agent.new
     @indent = Indent.new
     @indents = Indent.where(deleted:false).order(created_at: :desc)
   end

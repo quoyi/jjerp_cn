@@ -16,7 +16,7 @@ class OrdersController < ApplicationController
   # GET /orders/1.json
   def show
     # 这里可能需要修改, 应查找unit_category并获取ID值，再查找对应的material；而不是写固定值“1”
-    @materials = Unit.where(order_id: @order.id, unit_category_id: 1)
+    @units = Unit.where(order_id: @order.id, unit_category_id: 1)
     @parts = Unit.where(order_id: @order_id, unit_category_id: 2)
     @crafts = Unit.where(order_id: @order_id, unit_category_id: 3)
     @indent = @order.indent
@@ -51,6 +51,7 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
+    binding.pry
     respond_to do |format|
       if @order.update(order_params)
         format.html { redirect_to @order, notice: 'Order was successfully updated.' }

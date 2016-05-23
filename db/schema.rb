@@ -209,15 +209,19 @@ ActiveRecord::Schema.define(version: 20160521091452) do
   add_index "orders", ["indent_id"], name: "index_orders_on_indent_id", using: :btree
 
   create_table "part_categories", force: :cascade do |t|
-    t.string   "name",       limit: 255
+    t.integer  "parent_id",  limit: 4,   default: 0
+    t.string   "name",       limit: 255, default: "",    null: false
     t.string   "note",       limit: 255
     t.boolean  "deleted",                default: false
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
   end
 
+  add_index "part_categories", ["name"], name: "index_part_categories_on_name", unique: true, using: :btree
+
   create_table "parts", force: :cascade do |t|
     t.integer  "part_category_id", limit: 4,                                           null: false
+    t.integer  "order_id",         limit: 4
     t.string   "name",             limit: 255,                                         null: false
     t.decimal  "buy",                          precision: 8, scale: 2
     t.decimal  "price",                        precision: 8, scale: 2
@@ -315,25 +319,23 @@ ActiveRecord::Schema.define(version: 20160521091452) do
   create_table "units", force: :cascade do |t|
     t.integer  "unit_category_id", limit: 4,                           default: 1
     t.integer  "order_id",         limit: 4
-    t.string   "name",             limit: 255,                                         null: false
+    t.string   "name",             limit: 255,                         default: "",    null: false
     t.string   "full_name",        limit: 255
     t.integer  "material_id",      limit: 4
-    t.integer  "part_id",          limit: 4
-    t.integer  "craft_id",         limit: 4
     t.integer  "ply",              limit: 4
     t.integer  "texture",          limit: 4
     t.integer  "color",            limit: 4
-    t.integer  "length",           limit: 4
-    t.integer  "width",            limit: 4
-    t.integer  "number",           limit: 4
+    t.integer  "length",           limit: 4,                           default: 1,     null: false
+    t.integer  "width",            limit: 4,                           default: 1,     null: false
+    t.integer  "number",           limit: 4,                           default: 1,     null: false
     t.string   "uom",              limit: 255,                         default: "平方",  null: false
     t.decimal  "price",                        precision: 8, scale: 2, default: 0.0
     t.string   "size",             limit: 255
     t.string   "note",             limit: 255
     t.string   "edge",             limit: 255
     t.string   "customer",         limit: 255
-    t.integer  "out_edge_thick",   limit: 4
-    t.integer  "in_edge_thick",    limit: 4
+    t.integer  "out_edge_thick",   limit: 4,                           default: 0,     null: false
+    t.integer  "in_edge_thick",    limit: 4,                           default: 0,     null: false
     t.string   "back_texture",     limit: 255
     t.string   "door_type",        limit: 255
     t.string   "door_mould",       limit: 255

@@ -4,25 +4,23 @@ class CreateUnits < ActiveRecord::Migration
     create_table :units do |t|
       t.references :unit_category, index: true, default: 1
       t.references :order, index: true, foreign_key: true
-      t.string :name, null: false, index: true, uniq: true # 编码
+      t.string :name, null: false, index: true, default: '', uniq: true # 编码
       t.string :full_name #部件名称
       t.references :material # 板料
-      t.references :part # 部件
-      t.references :craft # 工艺
       t.integer :ply # 厚度
       t.integer :texture #纹理
       t.integer :color # 颜色
-      t.integer :length # 长
-      t.integer :width # 宽
-      t.integer :number #数量
+      t.integer :length, null:false, default: 1 # 长
+      t.integer :width, null:false, default: 1 # 宽
+      t.integer :number, null:false, default: 1 #数量
       t.string :uom, null: false, default: '平方' # 单位
       t.decimal :price, precision: 8, scale: 2, default: 0 # 单价
       t.string  :size #剪裁尺寸
       t.string :note # 备注
       t.string :edge #封边
       t.string :customer #终端信息
-      t.integer :out_edge_thick # 看面封边厚
-      t.integer :in_edge_thick # 里面封边厚
+      t.integer :out_edge_thick, null:false, default: 0 # 看面封边厚
+      t.integer :in_edge_thick, null:false, default: 0 # 里面封边厚
       t.string :back_texture # 背板材质
       t.string :door_type # 门板类别
       t.string :door_mould # 门板造型

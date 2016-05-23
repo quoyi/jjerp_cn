@@ -2,17 +2,33 @@
 <div class="modal fade" id="addOrderCrafts" tabindex="-1" role="dialog" aria-labelledby="addOrderCraftsLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
+      <%= nested_form_for @order, html: {class: 'form-horizontal', multipart: true} do |f| %>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="addOrderCraftsLabel">部件 <small>编辑</small></h4>
       </div>
       <div class="modal-body">
-        ...
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div id="orderCraftsForm">
+              <%= f.fields_for :crafts, wrapper: false do |craft_form| %>
+              <hr>
+              <div class="fields row">
+                <div class="col-sm-2">
+                  <label>名称</label>
+                  <%= unit_form.text_field :full_name %>
+                </div>
+              </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
         <button type="button" class="btn btn-primary">提交</button>
       </div>
+      <% end %>
     </div>
   </div>
 </div>

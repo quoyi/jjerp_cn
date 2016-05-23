@@ -115,19 +115,19 @@
               <th>合计金额</th>
               <th>备注</th>
             </tr>
-            <% if @materials.present? %>
-            <% @materials.each do |m| %>
+            <% if @units.present? %>
+            <% @units.each do |u| %>
             <tr>
-              <td><%= m.full_name %></td>
-              <td><%= m.number %></td>
-              <td><%= MaterialCategory.find_by_id(m.ply).try(:name) %></td>
-              <td><%= m.length %></td>
-              <td><%= m.width %></td>
-              <td><%= m.size %></td>
-              <td><%= m.uom %></td>
-              <td><%= m.price %></td>
-              <td><%= m.price * m.number %></td>
-              <td><%= m.note %></td>
+              <td><%= u.full_name %></td>
+              <td><%= u.number %></td>
+              <td><%= MaterialCategory.find_by_id(u.ply).try(:name) %></td>
+              <td><%= u.length %></td>
+              <td><%= u.width %></td>
+              <td><%= u.size %></td>
+              <td><%= u.uom %></td>
+              <td><%= u.price %></td>
+              <td><%= u.price * u.number %></td>
+              <td><%= u.note %></td>
             </tr>
             <% end %>
             <% else %>

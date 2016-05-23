@@ -6,10 +6,18 @@
     </div>
   </div>
   <div class="content-box-large box-with-header">
+    <div class="row content-title">
+      <div class="btn-group" role="group" aria-label="">
+        <% PartCategory.where(parent_id:0).map{|pc|[pc.name, pc.id]}.push(['所有', nil]).each do |k, p| %>
+        <%= link_to k, part_categories_path(id: p), class: "btn btn-default #{'btn-primary' if params[:id] == p.to_s || params[:id].presence == p}" %>
+        <% end %>
+      </div>
+    </div>
     <div class="row content-table">
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
           <tr>
+            <th>父类型</th>
             <th>名称</th>
             <th>备注</th>
             <th>操作</th>
@@ -18,6 +26,7 @@
         <tbody>
           <% @part_categories.each do |pc| %>
           <tr>
+            <td><%= pc.parent_id? ? PartCategory.find_by_id(pc.parent_id).try(:name) : '基本类型'  %></td>
             <td><%= pc.name %></td>
             <td><%= pc.note %></td>
             <td><%= link_to '删除', pc, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
