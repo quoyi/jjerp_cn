@@ -14,8 +14,8 @@
           <div class="panel-body">
             <div id="orderUnitsForm">
               <%= f.fields_for :units, wrapper: false do |unit_form| %>
-              <hr>
               <div class="fields row">
+              <hr>
                 <div class="col-sm-2">
                   <label>名称</label>
                   <%= unit_form.text_field :full_name %>

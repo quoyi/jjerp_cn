@@ -46,7 +46,7 @@ class IncomesController < ApplicationController
   # DELETE /incomes/1
   # DELETE /incomes/1.json
   def destroy
-    @income.update_attributes(deleted: true)
+    @income.destroy
     redirect_to incomes_path, notice: '收入记录已删除。'
   end
 

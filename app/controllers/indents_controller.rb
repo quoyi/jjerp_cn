@@ -6,7 +6,7 @@ class IndentsController < ApplicationController
   def index
     @agent = Agent.new
     @indent = Indent.new
-    @indents = Indent.where(deleted:false).order(created_at: :desc)
+    @indents = Indent.all.order(created_at: :desc)
   end
 
   # GET /units/1
@@ -52,10 +52,7 @@ class IndentsController < ApplicationController
   # DELETE /indents/1.json
   def destroy
     # 需要标记删除，不能真正地删除
-    @indent.update_attributes(deleted: true)
-    orders = Order.where(indent:@indent)
-    # 同时也要把子订单标记删除
-    orders.each{|o| o.update_attributes(deleted: true) } if orders.present?
+    @indent.destroy
     redirect_to indents_path, notice: '订单已删除。'
   end
 

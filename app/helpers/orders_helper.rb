@@ -17,6 +17,13 @@ module OrdersHelper
         if order
           # 开启事务
           ActiveRecord::Base.transaction do
+            units = Unit.where(order_id: order.id).order("name ASC")
+            # 其实这里可以不用提取出来（性能上一样，都是计算两次）
+            last_units = units.last
+            last_unit_index = last_units.present? ? (last_units.name.split(/-/).last.to_i + 1).to_s : '1'
+            units.destroy_all
+            
+            binding.pry
             # 删除已存在的拆单记录
             Unit.where(order_id: order.id).destroy_all
             table.each do |row|
@@ -26,10 +33,11 @@ module OrdersHelper
               unless MaterialCategory.all.map(&:name).include?(ply)
                 _return = "找不到板料: #{ply}"
               end
+
               ply_id = MaterialCategory.find_by(name: ply).id
               unit = Unit.new(
                 order_id: order.id,
-                name: "ESR" + order.name + index.to_s,
+                name: "ESR" + order.name + "-" + (index + 1).to_s,
                 full_name: row[0],
                 ply: ply_id,
                 length: row[2],

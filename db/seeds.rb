@@ -4644,21 +4644,19 @@ user = User.find_or_create_by!(email: Rails.application.secrets.admin_email) do 
 end
 puts 'created User success ! '
 ####################################### 配件种类 #######################################
-PartCategory.create(id: 1, name:'拉篮')
-PartCategory.create(id: 2, name:'滑轨')
-PartCategory.create(id: 3, name:'角线')
+PartCategory.create(id: 1, parent_id: 0, name:'拉篮')
+PartCategory.create(id: 2, parent_id: 0, name:'滑轨')
+PartCategory.create(id: 3, parent_id: 0, name:'角线')
+PartCategory.create(id: 4, parent_id: 1, name: '100侧拉篮', buy: 100.00, price: 110.00, store: 100, brand: '耐用牌', supply_id: 1)
+PartCategory.create(id: 5, parent_id: 1, name: '200侧拉篮', buy: 200.00, price: 210.00, store: 50, brand: '坚固牌', supply_id: 1)
+PartCategory.create(id: 6, parent_id: 1, name: '400侧拉篮', buy: 300.00, price: 310.00, store: 10, brand: '无敌牌', supply_id: 3)
+PartCategory.create(id: 7, parent_id: 2, name: '铜质滑轨', buy: 100.00, price: 110.00, store: 50, brand: '耐用牌', supply_id: 1)
+PartCategory.create(id: 8, parent_id: 2, name: '铁质滑轨', buy: 200.00, price: 210.00, store: 50, brand: '坚固牌', supply_id: 2)
+PartCategory.create(id: 9, parent_id: 2, name: '钢质滑轨', buy: 300.00, price: 310.00, store: 10, brand: '无敌牌', supply_id: 3)
+PartCategory.create(id: 10, parent_id: 3, name: '普通角线', buy: 100.00, price: 110.00, store: 100, brand: '耐用牌', supply_id: 1)
+PartCategory.create(id: 11, parent_id: 3, name: '高级角线', buy: 200.00, price: 210.00, store: 50, brand: '坚固牌', supply_id: 2)
+PartCategory.create(id: 12, parent_id: 3, name: '特制角线', buy: 500.00, price: 510.00, store: 10, brand: '无敌牌', supply_id: 3)
 puts 'created PartCategory success ! '
-####################################### 配件 #######################################
-Part.create(id: 1, part_category_id: 1, name: '100侧拉篮', buy: 100.00, price: 110.00, store: 100, brand: '耐用牌', supply_id: 1)
-Part.create(id: 2, part_category_id: 1, name: '200侧拉篮', buy: 200.00, price: 210.00, store: 50, brand: '坚固牌', supply_id: 1)
-Part.create(id: 3, part_category_id: 1, name: '400侧拉篮', buy: 300.00, price: 310.00, store: 10, brand: '无敌牌', supply_id: 3)
-Part.create(id: 4, part_category_id: 2, name: '铜质滑轨', buy: 100.00, price: 110.00, store: 50, brand: '耐用牌', supply_id: 1)
-Part.create(id: 5, part_category_id: 2, name: '铁质滑轨', buy: 200.00, price: 210.00, store: 50, brand: '坚固牌', supply_id: 2)
-Part.create(id: 6, part_category_id: 2, name: '钢质滑轨', buy: 300.00, price: 310.00, store: 10, brand: '无敌牌', supply_id: 3)
-Part.create(id: 7, part_category_id: 3, name: '普通角线', buy: 100.00, price: 110.00, store: 100, brand: '耐用牌', supply_id: 1)
-Part.create(id: 8, part_category_id: 3, name: '高级角线', buy: 200.00, price: 210.00, store: 50, brand: '坚固牌', supply_id: 2)
-Part.create(id: 9, part_category_id: 3, name: '特制角线', buy: 500.00, price: 510.00, store: 10, brand: '无敌牌', supply_id: 3)
-puts 'created Part success ! '
 ####################################### 板料种类 #######################################
 MaterialCategory.create(id: 1, oftype: 0, name:'3mm')
 MaterialCategory.create(id: 2, oftype: 0, name:'5mm')

@@ -1,13 +1,15 @@
 class Order < ActiveRecord::Base
   belongs_to :order_category
   belongs_to :indent
-  has_many :units
-  has_many :parts
-  has_many :crafts
+  has_many :units, dependent: :destroy
+  has_many :parts, dependent: :destroy
+  has_many :crafts, dependent: :destroy
   # 发货时间需在十天以后
   # validate :validate_require_time
   before_save :generate_order_code
-  accepts_nested_attributes_for :units, :parts, :crafts, allow_destroy: true
+  accepts_nested_attributes_for :units, allow_destroy: true
+  accepts_nested_attributes_for :parts, allow_destroy: true
+  accepts_nested_attributes_for :crafts, allow_destroy: true
 
   #订单状态：0.生产中 1.已发货 2.其他
   enum status: [:producing, :sent, :other]
@@ -36,8 +38,9 @@ class Order < ActiveRecord::Base
 
   def generate_order_code
     begin
-      orders_count = self.indent.orders.count
-      self.name = self.indent.name + "-" + (orders_count+1).to_s
+      last_order = Order.where(indent_id: self.indent.id).order('name ASC').last
+      order_index = last_order.present? ? (last_order.name.split(/-/).last.to_i + 1).to_s : 1
+      self.name = self.indent.name + "-" + order_index.to_s
     end while self.class.exists?(:name => name)
   end
 

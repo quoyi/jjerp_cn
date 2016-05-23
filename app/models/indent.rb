@@ -1,7 +1,7 @@
 class Indent < ActiveRecord::Base
-  has_one :offer
-  has_many :orders
-  has_many :income
+  has_one :offer, dependent: :destroy
+  has_many :orders, dependent: :destroy
+  has_many :income, dependent: :destroy
   belongs_to :agent
   # 验证唯一性
   validates_uniqueness_of :name
