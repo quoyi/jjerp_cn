@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="addIndent" tabindex="-1" role="dialog" aria-labelledby="addIndentLabel">
-	<div class="modal-dialog" role="document" style="width: 100%;">
+	<div class="modal-dialog" role="document" style="width: 80%;">
 		<div class="modal-content">
 			<%= nested_form_for @indent, html: {class: 'form-horizontal', multipart: true} do |f| %>
 			<div class="modal-header">
@@ -27,7 +27,8 @@
 						<div class="form-group indent-new">
 							<%= f.label '代理商', for: 'indent_agent_id', class: 'col-sm-1 control-label' %>
 							<div class="col-sm-3">
-								<%= f.select :agent_id, Agent.all.map{|a|[a.name, a.id]}, class: 'form-control' %>
+								<%= f.select :agent_id, Agent.all.map{|a|[a.full_name, a.id]}, class: 'form-control' %>
+								<%= link_to '新建代理商', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm' %>
 							</div>
 							<%= f.label '下单时间', for: 'indent_verify_at', class: 'col-sm-1 control-label' %>
 							<div class="col-sm-3">
@@ -114,3 +115,5 @@
 		</div>
 	</div>
 </div>
+
+<%= render 'agents/new' %>

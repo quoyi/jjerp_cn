@@ -1,18 +1,18 @@
 <div class="col-md-12 panel-warning">
   <div class="content-box-header panel-heading">
-    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 配件 <small>列表</small> </h2></div>
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 板料 <small>列表</small> </h2></div>
     <div class="panel-options">
       <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addPart'} %>
     </div>
   </div>
   <div class="content-box-large box-with-header">
-    <div class="row content-title">
+    <!-- <div class="row content-title">
       <div class="btn-group" role="group" aria-label="">
-        <% PartCategory.group(:name).map(&:name).push('所有').each do |k| %>
-        <%= link_to k, parts_path(name: k), class: "btn btn-default #{'btn-primary' if params[:name].presence == k}" %>
-        <% end %>
+        <%= select_tag :ply, options_for_select(MaterialCategory.where(oftype:0).map{|mc| [mc.name, mc.id]}), prompt: '选择厚度', id: 'search-material-by-ply' %>
+        <%= select_tag :texture, options_for_select(MaterialCategory.where(oftype:1).map{|mc| [mc.name, mc.id]}), prompt: '选择材质', id: 'search-material-by-texture' %>
+        <%= select_tag :color, options_for_select(MaterialCategory.where(oftype:2).map{|mc| [mc.name, mc.id]}), prompt: '选择颜色', id: 'search-material-by-color' %>
       </div>
-    </div>
+    </div> -->
     <div class="row content-table">
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>

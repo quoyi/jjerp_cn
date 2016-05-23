@@ -4,7 +4,7 @@ class DepartmentsController < ApplicationController
   # GET /departments
   # GET /departments.json
   def index
-    @departments = Department.all
+    @departments = Department.where(deleted: false)
   end
 
   # GET /departments/1
@@ -54,11 +54,8 @@ class DepartmentsController < ApplicationController
   # DELETE /departments/1
   # DELETE /departments/1.json
   def destroy
-    @department.destroy
-    respond_to do |format|
-      format.html { redirect_to departments_url, notice: 'Department was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    @department.update_attributes(deleted: true)
+    redirect_to departments_url, notice: '部门已删除。'
   end
 
   private
@@ -69,6 +66,6 @@ class DepartmentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def department_params
-      params.fetch(:department, {})
+      params.require(:department).permit(:name, :full_name, :user_id, :total, :desc, :deleted)
     end
 end

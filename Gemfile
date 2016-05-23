@@ -16,6 +16,8 @@ gem 'font-awesome-sass', '~> 4.2.0'
 gem 'bootstrap-datepicker-rails', '~> 1.6', '>= 1.6.0.1'
 # 嵌套表单
 gem 'nested_form'
+# 增强型下拉选择框(基于jquery的增强型选择框)
+gem 'select2-rails'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.6'

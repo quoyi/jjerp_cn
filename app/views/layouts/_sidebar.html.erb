@@ -31,13 +31,13 @@
                     <li class="<%="#{'active' if controller_name == 'materials'}" %>"><%= link_to '板料', materials_path %></li>
                 </ul>
             </li>
-            <li  class="submenu">
+            <li  class="submenu <%= 'open' if ['incomes', 'expends'].include?(controller_name)%>">
                 <a href="#">
                     <i class="fa fa-calculator"></i> 财务数据 <span class="caret pull-right"></span>
                 </a>
                 <ul>
-                    <li><a href="#">Login</a></li>
-                    <li><a href="#">Signup</a></li>
+                    <li class='<%="#{'active' if controller_name == 'incomes'}" %>'><%= link_to '收入', incomes_path %></li>
+                    <li class='<%="#{'active' if controller_name == 'expends'}" %>'><%= link_to '支出', expends_path %></li>
                 </ul>
             </li>
             <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name)%>">

@@ -2,7 +2,7 @@
   <div class="content-box-header panel-heading">
     <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 子订单 <small>详细</small> </h2></div>
     <div class="panel-options">
-      <%= link_to '返回', indent_path(@order.indent), class: 'btn btn-info', data: {toggle:'tooltip'}, title: '返回到所属父级订单' %>
+      <%= link_to '返回', :back, class: 'btn btn-info', data: {toggle:'tooltip'}, title: '返回到上一级' %>
     </div>
   </div>
   <div class="content-box-large box-with-header">
@@ -10,16 +10,16 @@
       <div class="col-sm-3">
         <div class="panel panel-info">
           <div class="panel-heading">
-            客户信息
+            <span>客户信息</span>
           </div>
           <table class="table table-hover table-striped table-bordered table-condensed text-center">
             <tr>
               <th>客户编号</th>
-              <td><%= @agent.try(:serial) %></td>
+              <td><%= @agent.try(:name) %></td>
             </tr>
             <tr>
               <th>客户名称</th>
-              <td><%= @agent.try(:name) %></td>
+              <td><%= @agent.try(:full_name) %></td>
             </tr>
             <tr>
               <th>负责人</th>
@@ -63,12 +63,11 @@
       <div class="col-sm-9">
         <div class="panel panel-info">
           <div class="panel-heading">
-            <span>子订单详细</span> <small>订单号：<%= link_to @indent.name, indent_path(@indent) %>&nbsp;&nbsp;&nbsp;&nbsp;状态：<%= @order.status_name %></small>
-            <div class="pull-right">
+            <span>子订单详细</span> <small>总订单号：<%= link_to @indent.name, indent_path(@indent), data: {toggle: 'tooltip'}, title: '总订单编号' %>&nbsp;&nbsp;&nbsp;&nbsp;状态：<%= @order.status_name %></small>
+            <div class="pull-right" style="padding: 3px 0;">
               <%= form_tag import_orders_path, multipart: true, id: 'import-form' do %>
               <%= hidden_field_tag :id, @order.id, id: 'import-field-id', class: 'hidden' %>
               <%= file_field_tag :file, accept: 'csv', multiple: false, id: 'import-field-file', class: 'hidden' %>
-              <%= link_to '手动编辑', '#', class: 'btn-xs btn-primary', data: {toggle:'tooltip'}, title: '手动拆单或编辑' %>
               <%= link_to '导入拆单', '#', id: 'import-btn', class: 'btn-xs btn-primary', data: {toggle:'tooltip'}, title: '从外部文件导入拆单信息' %>
               <% end %>
             </div>
@@ -99,7 +98,10 @@
               <td colspan="10"></td>
             </tr>
             <tr>
-              <th colspan="10">板料信息</th>
+              <th colspan="10">
+                部件信息
+                <%= link_to '手动编辑', '#', data: {toggle:'modal', target: '#addOrderUnits'}, class: 'pull-right btn-xs btn-primary' %>
+              </th>
             </tr>
             <tr>
               <th>名称</th>
@@ -113,19 +115,19 @@
               <th>合计金额</th>
               <th>备注</th>
             </tr>
-            <% if @materials.present? %>
-            <% @materials.each do |m| %>
+            <% if @units.present? %>
+            <% @units.each do |u| %>
             <tr>
-              <td><%= m.unit_name %></td>
-              <td><%= m.number %></td>
-              <td><%= MaterialCategory.find_by_id(m.ply).try(:name) %></td>
-              <td><%= m.length %></td>
-              <td><%= m.width %></td>
-              <td><%= m.size %></td>
-              <td><%= m.uom %></td>
-              <td><%= m.price %></td>
-              <td><%= m.price * m.number %></td>
-              <td><%= m.note %></td>
+              <td><%= u.full_name %></td>
+              <td><%= u.number %></td>
+              <td><%= MaterialCategory.find_by_id(u.ply).try(:name) %></td>
+              <td><%= u.length %></td>
+              <td><%= u.width %></td>
+              <td><%= u.size %></td>
+              <td><%= u.uom %></td>
+              <td><%= u.price %></td>
+              <td><%= u.price * u.number %></td>
+              <td><%= u.note %></td>
             </tr>
             <% end %>
             <% else %>
@@ -139,7 +141,10 @@
               <td colspan="10"></td>
             </tr>
             <tr>
-              <th colspan="10">配件信息</th>
+              <th colspan="10">
+                配件信息
+                <%= link_to '手动编辑', '#', data: {toggle:'modal', target: '#addOrderParts'}, class: 'pull-right btn-xs btn-primary' %>
+              </th>
             </tr>
             <tr>
               <th>名称</th>
@@ -171,7 +176,10 @@
               <td colspan="10"></td>
             </tr>
             <tr>
-              <th colspan="10">工艺费用</th>
+              <th colspan="10">
+                工艺费用
+                <%= link_to '手动编辑', '#', data: {toggle:'modal', target: '#addOrderCrafts'}, class: 'pull-right btn-xs btn-primary' %>
+              </th>
             </tr>
             <tr>
               <th>名称</th>
@@ -204,3 +212,6 @@
     </div>
   </div>
 </div>
+<%= render 'order_units' %>
+<%= render 'order_parts' %>
+<%= render 'order_crafts' %>

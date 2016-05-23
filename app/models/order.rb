@@ -1,10 +1,13 @@
 class Order < ActiveRecord::Base
   belongs_to :order_category
   belongs_to :indent
+  has_many :units
+  has_many :parts
+  has_many :crafts
   # 发货时间需在十天以后
   # validate :validate_require_time
   before_save :generate_order_code
-
+  accepts_nested_attributes_for :units, :parts, :crafts, allow_destroy: true
 
   #订单状态：0.生产中 1.已发货 2.其他
   enum status: [:producing, :sent, :other]

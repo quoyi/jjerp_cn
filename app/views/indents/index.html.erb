@@ -1,6 +1,6 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
-    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 订单 <small>列表</small> </h2></div>
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 总订单 <small>列表</small> </h2></div>
     <div class="panel-options">
       <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addIndent'} %>
     </div>
@@ -17,7 +17,7 @@
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
           <tr>
-            <th>订单编号</th>
+            <th>总订单号</th>
             <th>代理商</th>
             <th>终端信息</th>
             <th>下单时间</th>
@@ -25,19 +25,33 @@
             <th>订单金额</th>
             <th>欠款合计</th>
             <th>历史合计</th>
+            <th>报价单</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
           <% @indents.each do |i| %>
           <tr>
-            <td><%= link_to i.name, i, data: {toggle:'tooltip'}, title: '查看订单详细信息' %></td>
-            <td><%= i.agent.try(:name) %></td>
+            <td><%= link_to i.name, i, data: {toggle:'tooltip'}, title: '总订单详细' %></td>
+            <td><%= i.agent.try(:full_name) %></td>
             <td><%= i.customer %></td>
             <td><%= i.verify_at.strftime('%Y-%m-%d') %></td>
             <td><%= i.require_at.strftime('%Y-%m-%d') %></td>
             <td><%= i.amount %></td>
             <td class="danger"><%= i.total_arrear %></td>
             <td><%= i.total_history %></td>
+            <!-- 这里需要判断是否已生成报价单 -->
+            <td>
+              <% if i.offer_id.present? %>
+              <%= link_to '报价单', offer_path(i.offer_id) %>
+              <% else %>
+              未报价
+              <% end %>
+            </td>
+            <td>
+              <%= link_to '生成报价', generate_offers_path(indent_id: i.id), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '生成总订单的报价单' %>
+              <%= link_to '添加到款', '#', class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '为总订单添加到款信息' %>
+            </td>
           </tr>
           <% end %>
         </tbody>

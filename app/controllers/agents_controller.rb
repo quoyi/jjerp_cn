@@ -4,7 +4,7 @@ class AgentsController < ApplicationController
   # GET /agents
   # GET /agents.json
   def index
-    @agents = Agent.all
+    @agents = Agent.where(deleted: false)
   end
 
   # GET /agents/1
@@ -54,11 +54,8 @@ class AgentsController < ApplicationController
   # DELETE /agents/1
   # DELETE /agents/1.json
   def destroy
-    @agent.destroy
-    respond_to do |format|
-      format.html { redirect_to agents_url, notice: 'Agent was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    @agent.update_attributes(deleted: true)
+    redirect_to agents_url, notice: '经销商已删除。'
   end
 
   private
@@ -69,6 +66,9 @@ class AgentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def agent_params
-      params.fetch(:agent, {})
+      params.require(:agent).permit(:name, :province_id, :city_id, :district_id, :address,
+                                    :full_name, :contacts, :mobile, :e_account, :fax, :email,
+                                    :wechar, :logistics, :order_condition, :send_condition,
+                                    :cycle, :note, :deleted)
     end
 end

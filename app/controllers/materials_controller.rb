@@ -5,7 +5,8 @@ class MaterialsController < ApplicationController
   # GET /materials.json
   def index
     @material = Material.new
-    @materials = Material.all
+    @materials = Material.where(deleted: false)
+    # @materials = Material.where(ply: params[:ply]) if params[:ply].present?
   end
 
   # GET /materials/1
@@ -26,15 +27,10 @@ class MaterialsController < ApplicationController
   # POST /materials.json
   def create
     @material = Material.new(material_params)
-
-    respond_to do |format|
-      if @material.save
-        format.html { redirect_to @material, notice: 'Material was successfully created.' }
-        format.json { render :show, status: :created, location: @material }
-      else
-        format.html { render :new }
-        format.json { render json: @material.errors, status: :unprocessable_entity }
-      end
+    if @material.save
+      redirect_to materials_path, notice: '板料创建成功！'
+    else
+      redirect_to materials_path, error: '板料创建失败！'
     end
   end
 
@@ -55,11 +51,8 @@ class MaterialsController < ApplicationController
   # DELETE /materials/1
   # DELETE /materials/1.json
   def destroy
-    @material.destroy
-    respond_to do |format|
-      format.html { redirect_to materials_url, notice: 'Material was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    @material.update_attributes(deleted: true)
+    redirect_to materials_url, notice: '板料已删除。'
   end
 
   private
@@ -71,6 +64,6 @@ class MaterialsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def material_params
       params.require(:material).permit(:name, :full_name, :ply, :texture, :color, :store, :buy,
-                                      :price, :uom, :supply_id)
+                                      :price, :uom, :supply_id, :deleted)
     end
 end

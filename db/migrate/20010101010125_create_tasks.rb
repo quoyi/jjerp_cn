@@ -12,6 +12,7 @@ class CreateTasks < ActiveRecord::Migration
       t.integer :work, default: 0  #工序进度
       t.integer :state #板料或者配件
       t.integer :number #所需物料或者配件的数量
+      t.boolean :deleted, default: false # 标记删除
       t.timestamps null: false
     end
   end

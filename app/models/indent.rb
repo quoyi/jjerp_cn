@@ -1,6 +1,10 @@
 class Indent < ActiveRecord::Base
+  has_one :offer
   has_many :orders
+  has_many :income
   belongs_to :agent
+  # 验证唯一性
+  validates_uniqueness_of :name
   validates_presence_of :name, :agent_id, :customer, :verify_at, :require_at
 
   accepts_nested_attributes_for :orders, allow_destroy: true

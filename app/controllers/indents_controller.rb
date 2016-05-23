@@ -4,6 +4,7 @@ class IndentsController < ApplicationController
   # GET /indents
   # GET /indents.json
   def index
+    @agent = Agent.new
     @indent = Indent.new
     @indents = Indent.where(deleted:false).order(created_at: :desc)
   end
@@ -30,19 +31,18 @@ class IndentsController < ApplicationController
   # POST /indents.json
   def create
     @indent = Indent.new(indent_params)
-    if @indent.save!
+    if @indent.save
       redirect_to indents_path, notice: '订单创建成功！'
     else
-      redirect_to indents_path, error: '订单创建失败！'
+      redirect_to indents_path, error: '请检查编号是否唯一且数据正确，订单创建失败！'
     end
   end
 
   # PATCH/PUT /indents/1
   # PATCH/PUT /indents/1.json
   def update
-    binding.pry
     if @indent.update(indent_params)
-      redirect_to indents_path, notice: "订单编辑成功！"
+      redirect_to @indent, notice: "订单编辑成功！"
     else
       redirect_to indents_path, error: "订单编辑失败！"
     end
@@ -53,7 +53,6 @@ class IndentsController < ApplicationController
   def destroy
     # 需要标记删除，不能真正地删除
     @indent.update_attributes(deleted: true)
-    binding.pry
     orders = Order.where(indent:@indent)
     # 同时也要把子订单标记删除
     orders.each{|o| o.update_attributes(deleted: true) } if orders.present?
@@ -74,8 +73,8 @@ class IndentsController < ApplicationController
     #     v[:status] = Order.statuses[v[:status]]
     #   end
     # end
-    params.require(:indent).permit(:id, :name, :agent_id, :customer, :verify_at, :require_at, :note, :logistics,
-                                   :amount, :arrear, :total_history, :total_arrear,
+    params.require(:indent).permit(:id, :name, :offer_id, :agent_id, :customer, :verify_at, :require_at, :note,
+                                  :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted,
                                    orders_attributes: [:id, :order_category_id, :customer, :number, :ply,
                                                        :texture, :color, :length, :width, :height,
                                                        :note, :_destroy])

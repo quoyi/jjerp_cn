@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="addOrders" tabindex="-1" role="dialog" aria-labelledby="addOrdersLabel">
-  <div class="modal-dialog" role="document" style="width: 100%;">
+  <div class="modal-dialog" role="document" style="width: 80%;">
     <div class="modal-content">
       <%= nested_form_for @indent, html: {class: 'form-horizontal', multipart: true} do |f| %>
       <div class="modal-header">
@@ -23,7 +23,7 @@
               </div>
               <div class="col-sm-2">
                 <label>数量</label>
-                <%= order_form.number_field :number, min: 1, style: "width: 50%;" %>
+                <%= order_form.number_field :number, min: 1, style: "width: 50%;", required: true %>
               </div>
               <div class="col-sm-2">
                 <label>厚度</label>
@@ -41,15 +41,15 @@
             <div class="row">
               <div class="col-sm-2">
                 <label>长度</label>
-                <%= order_form.number_field :length, value: 1, min: 1, style: "width: 50%;" %>
+                <%= order_form.number_field :length, min: 1, style: "width: 50%;", required: true %>
               </div>
               <div class="col-sm-2">
                 <label>宽度</label>
-                <%= order_form.number_field :width, value: 1, min: 1, style: "width: 50%;" %>
+                <%= order_form.number_field :width, min: 1, style: "width: 50%;", required: true %>
               </div>
               <div class="col-sm-2">
                 <label>高度</label>
-                <%= order_form.number_field :height, value: 1, min: 1, style: "width: 50%;" %>
+                <%= order_form.number_field :height, min: 1, style: "width: 50%;", required: true %>
               </div>
               <div class="col-sm-4">
                 <label>备注</label>

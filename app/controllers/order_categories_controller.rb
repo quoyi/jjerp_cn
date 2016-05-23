@@ -5,7 +5,7 @@ class OrderCategoriesController < ApplicationController
   # GET /order_categories.json
   def index
     @order_category = OrderCategory.new
-    @order_categories = OrderCategory.all
+    @order_categories = OrderCategory.where(deleted: false)
   end
 
   # POST /order_categories
@@ -22,7 +22,7 @@ class OrderCategoriesController < ApplicationController
   # DELETE /order_categories/1
   # DELETE /order_categories/1.json
   def destroy
-    @order_category.destroy
+    @order_category.update_attributes(deleted: true)
     redirect_to order_categories_path, notice: '订单类型已删除！'
   end
 

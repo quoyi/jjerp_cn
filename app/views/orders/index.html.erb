@@ -14,15 +14,31 @@
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
           <tr>
+            <th>订单号</th>
             <th>子订单号</th>
+            <th>子订单类型</th>
+            <th>长</th>
+            <th>宽</th>
+            <th>高</th>
+            <th>价格</th>
+            <th>数量</th>
+            <th>备注</th>
             <th>订单详细</th>
           </tr>
         </thead>
         <tbody>
           <% @orders.each do |o| %>
           <tr>
+            <td><%= o.indent.try(:name) %></td>
             <td><%= o.name %></td>
-            <td><%= link_to '详细', o %></td>
+            <td><%= o.order_category.try(:name) %></td>
+            <td><%= o.length %></td>
+            <td><%= o.width %></td>
+            <td><%= o.height %></td>
+            <td><%= o.price %></td>
+            <td><%= o.number %></td>
+            <td><%= o.note %></td>
+            <td><%= link_to '详细', o, data: {toggle: 'tooltip'}, title: '查看子订单详细信息' %></td>
           </tr>
           <% end %>
         </tbody>
