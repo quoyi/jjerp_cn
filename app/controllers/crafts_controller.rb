@@ -54,7 +54,7 @@ class CraftsController < ApplicationController
   # DELETE /crafts/1
   # DELETE /crafts/1.json
   def destroy
-    @craft.update_attributes(deleted: true)
+    @craft.destroy
     redirect_to crafts_url, notice: '工艺已删除。'
   end
 

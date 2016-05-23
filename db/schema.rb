@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 20160521091452) do
 
   create_table "crafts", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
+    t.integer  "order_id",   limit: 4
     t.string   "full_name",  limit: 255
     t.string   "note",       limit: 255
     t.boolean  "status"
@@ -209,19 +210,26 @@ ActiveRecord::Schema.define(version: 20160521091452) do
   add_index "orders", ["indent_id"], name: "index_orders_on_indent_id", using: :btree
 
   create_table "part_categories", force: :cascade do |t|
-    t.integer  "parent_id",  limit: 4,   default: 0
-    t.string   "name",       limit: 255, default: "",    null: false
+    t.integer  "parent_id",  limit: 4,                           default: 1
+    t.string   "name",       limit: 255,                         default: "",    null: false
+    t.decimal  "buy",                    precision: 8, scale: 2
+    t.decimal  "price",                  precision: 8, scale: 2
+    t.integer  "store",      limit: 4,                           default: 0,     null: false
+    t.string   "uom",        limit: 255,                         default: "平方"
+    t.string   "brand",      limit: 255
+    t.integer  "supply_id",  limit: 4
     t.string   "note",       limit: 255
-    t.boolean  "deleted",                default: false
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.boolean  "deleted",                                        default: false
+    t.datetime "created_at",                                                     null: false
+    t.datetime "updated_at",                                                     null: false
   end
 
   add_index "part_categories", ["name"], name: "index_part_categories_on_name", unique: true, using: :btree
+  add_index "part_categories", ["supply_id"], name: "index_part_categories_on_supply_id", using: :btree
 
   create_table "parts", force: :cascade do |t|
     t.integer  "part_category_id", limit: 4,                                           null: false
-    t.integer  "order_id",         limit: 4
+    t.integer  "order_id",         limit: 4,                                           null: false
     t.string   "name",             limit: 255,                                         null: false
     t.decimal  "buy",                          precision: 8, scale: 2
     t.decimal  "price",                        precision: 8, scale: 2
@@ -322,7 +330,7 @@ ActiveRecord::Schema.define(version: 20160521091452) do
     t.string   "name",             limit: 255,                         default: "",    null: false
     t.string   "full_name",        limit: 255
     t.integer  "material_id",      limit: 4
-    t.integer  "ply",              limit: 4
+    t.integer  "ply",              limit: 4,                           default: 0
     t.integer  "texture",          limit: 4
     t.integer  "color",            limit: 4
     t.integer  "length",           limit: 4,                           default: 1,     null: false
@@ -332,6 +340,7 @@ ActiveRecord::Schema.define(version: 20160521091452) do
     t.decimal  "price",                        precision: 8, scale: 2, default: 0.0
     t.string   "size",             limit: 255
     t.string   "note",             limit: 255
+    t.integer  "supply_id",        limit: 4
     t.string   "edge",             limit: 255
     t.string   "customer",         limit: 255
     t.integer  "out_edge_thick",   limit: 4,                           default: 0,     null: false
@@ -342,7 +351,6 @@ ActiveRecord::Schema.define(version: 20160521091452) do
     t.string   "door_handle_type", limit: 255
     t.string   "door_edge_type",   limit: 255
     t.integer  "door_edge_thick",  limit: 4
-    t.integer  "task_id",          limit: 4
     t.integer  "state",            limit: 4,                           default: 0
     t.string   "craft",            limit: 255
     t.boolean  "deleted",                                              default: false
@@ -352,7 +360,6 @@ ActiveRecord::Schema.define(version: 20160521091452) do
 
   add_index "units", ["name"], name: "index_units_on_name", using: :btree
   add_index "units", ["order_id"], name: "index_units_on_order_id", using: :btree
-  add_index "units", ["task_id"], name: "index_units_on_task_id", using: :btree
   add_index "units", ["unit_category_id"], name: "index_units_on_unit_category_id", using: :btree
 
   create_table "user_categories", force: :cascade do |t|
@@ -411,6 +418,4 @@ ActiveRecord::Schema.define(version: 20160521091452) do
   add_foreign_key "districts", "cities"
   add_foreign_key "materials", "supplies"
   add_foreign_key "tasks", "orders"
-  add_foreign_key "units", "orders"
-  add_foreign_key "units", "tasks"
 end
