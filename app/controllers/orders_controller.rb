@@ -92,7 +92,9 @@ class OrdersController < ApplicationController
                                   :status, :note, :deleted, :file, :_destroy,
                                   units_attributes: [:id, :full_name, :number, :ply, :length,
                                   :width, :size, :uom, :price, :note, :_destroy],
-                                  parts_attributes: [:order_id, :_destroy],
+                                  parts_attributes: [:part_category_id, :order_id, :name, :buy,
+                                  :price, :store, :uom, :number, :brand, :supply_id, :deleted, 
+                                  :_destroy],
                                   crafts_attributes: [:order_id, :_destroy])
   end
 end
