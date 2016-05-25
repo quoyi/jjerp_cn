@@ -157,12 +157,12 @@
             <% if @parts.present? %>
             <% @parts.each do |p| %>
             <tr>
-              <td><%= p.name %></td>
+              <td><%#= p.name %></td>
               <td><%= p.uom %></td>
               <td><%= p.price %></td>
               <td><%= p.number %></td>
               <td><%= p.price * p.number %></td>
-              <td colspan="5"><%= p.note %></td>
+              <td colspan="5"><%#= p.note %></td>
             </tr>
             <% end %>
             <% else %>
