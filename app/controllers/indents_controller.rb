@@ -13,7 +13,7 @@ class IndentsController < ApplicationController
   # GET /units/1.json
   def show
     @order = Order.new
-    @orders = Order.where(indent:@indent)
+    @orders = Order.where(indent:@indent).order(created_at: :desc)
   end
 
   # GET /indents/new

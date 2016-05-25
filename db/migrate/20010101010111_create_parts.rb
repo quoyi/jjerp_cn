@@ -4,10 +4,10 @@ class CreateParts < ActiveRecord::Migration
     create_table :parts do |t|
       t.references :part_category, null: false, index: true # 所属类型
       t.references :order, null: false
-      t.string :name, null: false, index: true # 名称
+      # t.string :name, index: true # 名称
       t.decimal :buy, precision: 8, scale: 2 # 进价
       t.decimal :price, precision: 8, scale: 2 # 售价
-      t.integer :store, null: false, default: 0 # 库存
+      t.integer :store, null: false, default: 1 # 库存
       t.string :uom, default: '平方' # 单位
       t.integer :number, null: false, default: 1 # 数量
       t.string :brand # 品牌

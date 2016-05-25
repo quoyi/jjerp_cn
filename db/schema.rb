@@ -230,10 +230,9 @@ ActiveRecord::Schema.define(version: 20160521091452) do
   create_table "parts", force: :cascade do |t|
     t.integer  "part_category_id", limit: 4,                                           null: false
     t.integer  "order_id",         limit: 4,                                           null: false
-    t.string   "name",             limit: 255,                                         null: false
     t.decimal  "buy",                          precision: 8, scale: 2
     t.decimal  "price",                        precision: 8, scale: 2
-    t.integer  "store",            limit: 4,                           default: 0,     null: false
+    t.integer  "store",            limit: 4,                           default: 1,     null: false
     t.string   "uom",              limit: 255,                         default: "平方"
     t.integer  "number",           limit: 4,                           default: 1,     null: false
     t.string   "brand",            limit: 255
@@ -243,7 +242,6 @@ ActiveRecord::Schema.define(version: 20160521091452) do
     t.datetime "updated_at",                                                           null: false
   end
 
-  add_index "parts", ["name"], name: "index_parts_on_name", using: :btree
   add_index "parts", ["part_category_id"], name: "index_parts_on_part_category_id", using: :btree
   add_index "parts", ["supply_id"], name: "index_parts_on_supply_id", using: :btree
 
@@ -330,7 +328,7 @@ ActiveRecord::Schema.define(version: 20160521091452) do
     t.string   "name",             limit: 255,                         default: "",    null: false
     t.string   "full_name",        limit: 255
     t.integer  "material_id",      limit: 4
-    t.integer  "ply",              limit: 4,                           default: 0
+    t.integer  "ply",              limit: 4,                           default: 1
     t.integer  "texture",          limit: 4
     t.integer  "color",            limit: 4
     t.integer  "length",           limit: 4,                           default: 1,     null: false
@@ -338,7 +336,7 @@ ActiveRecord::Schema.define(version: 20160521091452) do
     t.integer  "number",           limit: 4,                           default: 1,     null: false
     t.string   "uom",              limit: 255,                         default: "平方",  null: false
     t.decimal  "price",                        precision: 8, scale: 2, default: 0.0
-    t.string   "size",             limit: 255
+    t.string   "size",             limit: 255,                         default: ""
     t.string   "note",             limit: 255
     t.integer  "supply_id",        limit: 4
     t.string   "edge",             limit: 255

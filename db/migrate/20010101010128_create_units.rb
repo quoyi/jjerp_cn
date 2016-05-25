@@ -7,7 +7,7 @@ class CreateUnits < ActiveRecord::Migration
       t.string :name, null: false, index: true, default: '', uniq: true # 编码
       t.string :full_name #部件名称
       t.references :material # 板料
-      t.integer :ply, default: 0 # 厚度
+      t.integer :ply, default: 1 # 厚度
       t.integer :texture #纹理
       t.integer :color # 颜色
       t.integer :length, null:false, default: 1 # 长
@@ -15,7 +15,7 @@ class CreateUnits < ActiveRecord::Migration
       t.integer :number, null:false, default: 1 #数量
       t.string :uom, null: false, default: '平方' # 单位
       t.decimal :price, precision: 8, scale: 2, default: 0 # 单价
-      t.string  :size #剪裁尺寸
+      t.string  :size, default: '' #剪裁尺寸
       t.string :note # 备注
       t.references :supply # 供应商
 
