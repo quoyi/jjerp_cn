@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   # validates :email, format: {with: /\A[^@]+@([^@\.]+\.)+[^@\.]+\z/ }
   # validates_length_of :password, within: 6..30, allow_blank: true
   # validates_length_of :password_confirmation, within: 6..30, allow_blank: true
-
+  after_save :add_normal_role
 
   def role?(r)
     roles.exists?(nick: r)
@@ -20,4 +20,18 @@ class User < ActiveRecord::Base
     return false unless role
     roles << role
   end
+
+  def permission?(klass, action)
+    return true if roles.find { |r| r.nick == Role::ADMINISTRATOR }
+    roles.find { |r| r.permission?(klass, action) }
+  end
+
+  def permit!(klass, action)
+    fail Account::PermissionDenied unless permission?(klass, action)
+  end
+
+  def add_normal_role
+    add_role!('normal')
+  end
+
 end

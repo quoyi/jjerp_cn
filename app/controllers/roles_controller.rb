@@ -5,12 +5,9 @@ class RolesController < ApplicationController
   # GET /roles.json
   def index
     @roles = Role.all
+    @controller_hash = all_controller(true)
   end
 
-  # GET /roles/1
-  # GET /roles/1.json
-  def show
-  end
 
   # GET /roles/new
   def new
@@ -25,14 +22,11 @@ class RolesController < ApplicationController
   # POST /roles.json
   def create
     @role = Role.new(role_params)
-
     respond_to do |format|
-      if @role.save
-        format.html { redirect_to @role, notice: 'Role was successfully created.' }
-        format.json { render :show, status: :created, location: @role }
+      if @role.save && set_roles_permissions(@role, params[:roles_permissions])
+        format.html { redirect_to roles_path, notice: '角色创建成功' }
       else
         format.html { render :new }
-        format.json { render json: @role.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -40,25 +34,26 @@ class RolesController < ApplicationController
   # PATCH/PUT /roles/1
   # PATCH/PUT /roles/1.json
   def update
-    respond_to do |format|
-      if @role.update(role_params)
-        format.html { redirect_to @role, notice: 'Role was successfully updated.' }
-        format.json { render :show, status: :ok, location: @role }
-      else
-        format.html { render :edit }
-        format.json { render json: @role.errors, status: :unprocessable_entity }
+    if @role.editable?
+      if @role.update(role_params) && set_roles_permissions(@role, params[:roles_permissions])
+        flash[:notice] = '角色修改成功！'
       end
+    else
+      flash[:alert] = '修改失败！'
     end
+    render :edit
   end
 
   # DELETE /roles/1
   # DELETE /roles/1.json
   def destroy
-    @role.destroy
-    respond_to do |format|
-      format.html { redirect_to roles_url, notice: 'Role was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    msg = if @role.editable?
+            @role.destroy
+            { notice: '角色已删除。' }
+          else
+            { alert: '删除失败！' }
+          end
+    redirect_to roles_url, msg
   end
 
   private
@@ -69,6 +64,26 @@ class RolesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def role_params
-      params.fetch(:role, {})
+      params.require(:role).permit(:name, :nick)
     end
+
+    def set_roles_permissions(role, options={})
+      role.role_permissions.destroy_all
+      if options
+        options.each_pair do |k, v|
+          role.role_permissions.create(klass: k, actions: v.join(','))
+        end
+      end
+    end
+
+    def all_controller(flag)
+      controller_hash = {}
+      controller_arr = []
+      Role.permissions.each_pair do |k, v|
+        controller_hash[k] = v[:name]
+        controller_arr << k
+      end
+      return flag ? controller_hash : controller_arr
+    end
+
 end

@@ -1,5 +1,13 @@
-<h1>New Role</h1>
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 角色权限 <small>新建</small> </h2></div>
+    <div class="panel-options">
+      <%= link_to '返回', roles_path, class: 'btn btn-info'%>
+    </div>
+  </div>
 
-<%= render 'form' %>
-
-<%= link_to 'Back', roles_path %>
+  <div class="content-box-large box-with-header">
+      <%= render 'form' %>
+  </div>
+  
+<div>

@@ -1,0 +1,34 @@
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 员工 <small>列表</small> </h2></div>
+    <div class="panel-options">
+      
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr>
+            <th>邮箱</th>
+            <th>角色</th>
+            <th>修改角色</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @users.each do |u| %>
+          <tr>
+            <td><%= u.email %></td>
+            <td><%= u.roles.map(&:name).join(',') %></td>
+            <td>
+              <%unless u.roles.map(&:nick).include?('super_admin')%>
+                <%= link_to '修改',  edit_user_path(u), class: 'btn btn-info btn-sm'%>
+              <% end %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
