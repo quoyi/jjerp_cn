@@ -66,6 +66,6 @@ class CraftsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def craft_params
-      params.require(:craft).permit(:name, :full_name, :note, :status, :deleted)
+      params.require(:craft).permit(:order_id, :full_name, :note, :status, :price, :number, :deleted)
     end
 end

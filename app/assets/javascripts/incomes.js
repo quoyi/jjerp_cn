@@ -32,3 +32,10 @@
 //     }
 //   });
 // });
+
+$(function(){
+  $("#addIncomes").on('show.bs.modal', function(e){
+    var indent_id = e.relatedTarget.dataset.indent;
+    $("#income_indent_id").val(indent_id);
+  });
+});

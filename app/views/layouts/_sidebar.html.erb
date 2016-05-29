@@ -3,11 +3,11 @@
         <ul class="nav">
             <!-- Main menu -->
             <li class='<%= 'open' if controller_name == 'statics' %>'><a href="<%= statics_home_path %>"><i class="fa fa-home"></i> 个人首页 </a></li>
-            <li  class="submenu">
+            <!-- <li  class="submenu">
                 <a href="#">
                     <i class="fa fa-sitemap"></i> 部门信息 </span>
                 </a>
-            </li>
+            </li> -->
             <% if current_user.permission?("RolesController", "index") ||
                   current_user.permission?("UsersController", "index")
             %>

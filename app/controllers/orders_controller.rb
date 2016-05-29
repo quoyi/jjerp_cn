@@ -17,9 +17,9 @@ class OrdersController < ApplicationController
   def show
     @unit = Unit.new
     # 这里可能需要修改, 应查找unit_category并获取ID值，再查找对应的material；而不是写固定值“1”
-    @units = Unit.where(order_id: @order.id, unit_category_id: 1)
+    @units = Unit.where(order_id: @order.id)
     @parts = Part.where(order_id: @order.id)
-    @crafts = Unit.where(order_id: @order_id, unit_category_id: 3)
+    @crafts = Craft.where(order_id: @order.id)
     @indent = @order.indent
     @agent = @indent.agent
   end
@@ -39,9 +39,9 @@ class OrdersController < ApplicationController
     @order = Order.new(order_params)
     binding.pry
     if @order.save
-      redirect_to orders_path, notice: '子订单创建成功！'
+      redirect_to :back, notice: '子订单创建成功！'
     else
-      redirect_to orders_path, error: '子订单创建失败！'
+      redirect_to :back, error: '子订单创建失败！'
     end
   end
 
@@ -49,9 +49,9 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1.json
   def update
     if @order.update!(order_params)
-      redirect_to orders_path, notice: '子订单编辑成功！'
+      redirect_to @order, notice: '子订单编辑成功！'
     else
-      redirect_to orders_path, error: '子订单编辑失败！'
+      redirect_to @order, error: '子订单编辑失败！'
     end
   end
 

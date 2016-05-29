@@ -30,7 +30,7 @@
         <tbody>
           <% @incomes.each do |i| %>
           <tr>
-            <td><%= i.name %></td>
+            <td><%= i.id %></td>
             <td><%= i.reason %></td>
             <td><%= i.indent.try(:name) %></td>
             <td><%= i.income_at.strftime('%Y-%m-%d') %></td>

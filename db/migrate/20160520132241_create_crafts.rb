@@ -2,9 +2,11 @@ class CreateCrafts < ActiveRecord::Migration
   def change
     # 工艺
     create_table :crafts do |t|
-      t.string :name, index: true, null: false, uniq: true # 编码
       t.references :order # 所属订单号
-      t.string :full_name # 名称
+      t.string :full_name, null: false, index: true, default: '' # 名称
+      t.string :uom # 单位
+      t.decimail :price, precision: 8, scale: 2, null: false, default: 0 # 单价
+      t.integer :number, null: false, default: 1 # 数量
       t.string :note # 备注
       t.boolean :status # 状态
       t.boolean :deleted, default: false # 标记删除

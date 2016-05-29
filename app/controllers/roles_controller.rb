@@ -35,13 +35,11 @@ class RolesController < ApplicationController
   # PATCH/PUT /roles/1.json
   def update
     if @role.editable?
-      if @role.update(role_params) && set_roles_permissions(@role, params[:roles_permissions])
-        flash[:notice] = '角色修改成功！'
-      end
+      msg = '角色修改成功！' if @role.update(role_params) && set_roles_permissions(@role, params[:roles_permissions])
     else
-      flash[:alert] = '修改失败！'
+      msg = '修改失败！'
     end
-    render :edit
+    redirect_to roles_path, notice: msg
   end
 
   # DELETE /roles/1

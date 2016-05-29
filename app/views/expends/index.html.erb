@@ -11,7 +11,7 @@
         <thead>
           <tr>
             <th>编号</th>
-            <th>来源</th>
+            <th>支出事由</th>
             <th>支出时间</th>
             <th>支出金额</th>
             <th>经手人</th>
@@ -22,7 +22,7 @@
         <tbody>
           <% @expends.each do |e| %>
           <tr>
-            <td><%= e.name %></td>
+            <td><%= e.id %></td>
             <td><%= e.reason %></td>
             <td><%= e.expend_at.strftime('%Y-%m-%d') %></td>
             <td><%= e.money %></td>

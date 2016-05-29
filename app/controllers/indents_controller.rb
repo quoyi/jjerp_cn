@@ -6,6 +6,7 @@ class IndentsController < ApplicationController
   def index
     @agent = Agent.new
     @indent = Indent.new
+    @income = @indent.incomes.new
     @indents = Indent.all.order(created_at: :desc)
   end
 

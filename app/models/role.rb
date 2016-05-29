@@ -19,7 +19,7 @@ class Role < ActiveRecord::Base
     # require 'pry'
     # binding.pry
     klass.constantize.rescue_from Account::PermissionDenied do |exception|
-      redirect_to root_path(message: '没有访问权限')
+      redirect_to root_path, notice: '没有访问权限'
     end
 
     klass.constantize.before_action do
@@ -36,7 +36,7 @@ class Role < ActiveRecord::Base
   end
 
   def editable?
-    key != ADMINISTRATOR
+    nick != ADMINISTRATOR
   end
 
 end

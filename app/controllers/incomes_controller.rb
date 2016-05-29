@@ -5,7 +5,7 @@ class IncomesController < ApplicationController
   # GET /incomes.json
   def index
     @income = Income.new
-    @incomes = Income.where(deleted: false)
+    @incomes = params[:indent_id].present? ? Income.where(indent_id: params[:indent_id]) : Income.all
   end
 
   # GET /incomes/1

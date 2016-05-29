@@ -105,13 +105,13 @@
             </tr>
             <tr>
               <th>名称</th>
-              <th>数量</th>
               <th>厚度</th>
               <th>长</th>
               <th>宽</th>
               <th>尺寸</th>
               <th>单位</th>
               <th>单价</th>
+              <th>数量</th>
               <th>合计金额</th>
               <th>备注</th>
             </tr>
@@ -119,20 +119,20 @@
             <% @units.each do |u| %>
             <tr>
               <td><%= u.full_name %></td>
-              <td><%= u.number %></td>
               <td><%= MaterialCategory.find_by_id(u.ply).try(:name) %></td>
               <td><%= u.length %></td>
               <td><%= u.width %></td>
               <td><%= u.size %></td>
               <td><%= u.uom %></td>
               <td><%= u.price %></td>
+              <td><%= u.number %></td>
               <td><%= u.price * u.number %></td>
               <td><%= u.note %></td>
             </tr>
             <% end %>
             <% else %>
             <tr>
-              <td colspan="10">暂无板料信息</td>
+              <td colspan="10">暂无部件信息</td>
             </tr>
             <% end %>
             <!-- 板料 end -->
@@ -177,7 +177,7 @@
             </tr>
             <tr>
               <th colspan="10">
-                工艺费用
+                工艺
                 <%= link_to '手动编辑', '#', data: {toggle:'modal', target: '#addOrderCrafts'}, class: 'pull-right btn-xs btn-primary' %>
               </th>
             </tr>
@@ -192,7 +192,7 @@
             <% if @crafts.present? %>
             <% @crafts.each do |c| %>
             <tr>
-              <td><%= c.name %></td>
+              <td><%= c.full_name %></td>
               <td><%= c.uom %></td>
               <td><%= c.price %></td>
               <td><%= c.number %></td>
@@ -202,7 +202,7 @@
             <% end %>
             <% else %>
             <tr>
-              <td colspan="10">暂无工艺费用</td>
+              <td colspan="10">暂无工艺信息</td>
             </tr>
             <% end %>
             <!-- 工艺 end -->

@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="addOrderParts" tabindex="-1" role="dialog" aria-labelledby="addOrderPartsLabel">
-  <div class="modal-dialog" role="document" style="width:90%">
+  <div class="modal-dialog" role="document" style="width:80%">
     <div class="modal-content">
       <%= nested_form_for @order, html: {class: 'form-horizontal'} do |f| %>
       <div class="modal-header">
@@ -8,59 +8,45 @@
         <h4 class="modal-title" id="addOrderPartsLabel"> 配件 <small>编辑</small></h4>
       </div>
       <div class="modal-body">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <div id="orderPartsForm">
-              <%= f.fields_for :parts, wrapper: false do |part_form| %>
-              <div class="fields">
-                <hr>
-                <div class="row">
-                  <div class="col-sm-3">
-                    <label>类型</label>
-                    <%= part_form.collection_select :part_category_id, PartCategory.where.not(parent_id:0), :id, :name%>
-                  </div>
-                  <div class="col-sm-3">
-                    <label>进价</label>
-                    <%= part_form.number_field :buy %>
-                  </div>
-                  <div class="col-sm-3">
-                    <label>售价</label>
-                    <%= part_form.number_field :price %>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-3">
-                    <label>单位</label>
-                    <%= part_form.text_field :uom %>
-                  </div>
-                  <div class="col-sm-3">
-                    <label>数量</label>
-                    <%= part_form.number_field :number %>
-                  </div>
-                  <div class="col-sm-3">
-                    <label>库存</label>
-                    <%= part_form.number_field :store %>
-                  </div>
-                  <div class="col-sm-3">
-                    <label>供应商</label>
-                    <%= part_form.collection_select :supply_id, Supply.all, :id, :full_name%>
-                  </div>
-                  <div class="col-sm-2">
-                    <%= part_form.link_to_remove '删除', class:'btn btn-info btn-xs' %>
-                  </div>
-                </div>
+        <div id="orderPartsForm">
+          <%= f.fields_for :parts, wrapper: false do |part_form| %>
+          <div class="fields">
+            <div class="row">
+              <div class="col-sm-2">
+                <label>类型</label>
+                <%= part_form.collection_select :part_category_id, PartCategory.where.not(parent_id:0), :id, :name%>
               </div>
-              <% end %>
+              <div class="col-sm-2">
+                <label>供应商</label>
+                <%= part_form.collection_select :supply_id, Supply.all, :id, :full_name%>
+              </div>
+              <div class="col-sm-2">
+                <label>单位</label>
+                <%= part_form.text_field :uom %>
+              </div>
+              <div class="col-sm-2">
+                <label>售价</label>
+                <%= part_form.number_field :price, min: 0, required: true %>
+              </div>
+              <div class="col-sm-2">
+                <label>数量</label>
+                <%= part_form.number_field :number, min: 1, required: true %>
+              </div>
+              <div class="col-sm-2 text-center">
+                <%= part_form.link_to_remove '删除', class:'btn btn-info btn-sm' %>
+              </div>
             </div>
+            <hr>
           </div>
+          <% end %>
         </div>
       </div>
       <div class="modal-footer">
         <div class="pull-left">
           <%= f.link_to_add '添加配件', :parts, data: {target: '#orderPartsForm'}, class: 'btn btn-info' %>
         </div>
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-         <%= f.submit %>
+        <%= f.button '取消', class:'btn btn-default', data: {dismiss: 'modal'} %>
+        <%= f.submit '提交', class: 'btn btn-primary' %>
       </div>
       <% end %>
     </div>

@@ -1,6 +1,7 @@
 class Order < ActiveRecord::Base
   belongs_to :order_category
   belongs_to :indent
+  has_many :offers, dependent: :destroy
   has_many :units, dependent: :destroy
   has_many :parts, dependent: :destroy
   has_many :crafts, dependent: :destroy
