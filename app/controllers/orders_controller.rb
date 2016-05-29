@@ -18,7 +18,7 @@ class OrdersController < ApplicationController
     @unit = Unit.new
     # 这里可能需要修改, 应查找unit_category并获取ID值，再查找对应的material；而不是写固定值“1”
     @units = Unit.where(order_id: @order.id, unit_category_id: 1)
-    @parts = Unit.where(order_id: @order_id, unit_category_id: 2)
+    @parts = Part.where(order_id: @order.id)
     @crafts = Unit.where(order_id: @order_id, unit_category_id: 3)
     @indent = @order.indent
     @agent = @indent.agent
