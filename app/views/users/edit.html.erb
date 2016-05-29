@@ -1,0 +1,35 @@
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 修改员工 </h2></div>
+    <div class="panel-options">
+      
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-inverse">
+          <div class="panel-body">
+            <div class="form-horizontal">
+               <%= form_for(@user, wrapper: :horizontal_form, url: user_path(@user)) do |f| %>
+                 <%= f.text_field :email, disabled: true %>
+
+                 <%= f.collection_select :role_ids, Role.all, :id, :name, prompt: true %>
+                  
+                 <div class="form-group">
+                    <label class="col-md-3 control-label"></label>
+                    <div class="col-md-3">
+                      <%= f.submit value: "保存", class: "btn btn-sm btn-success" %>
+                      <%= link_to '返回', users_path, class: 'btn btn-sm btn-default' %>
+                    </div>
+                 </div>
+               <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

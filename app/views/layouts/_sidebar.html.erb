@@ -8,47 +8,94 @@
                     <i class="fa fa-sitemap"></i> 部门信息 </span>
                 </a>
             </li>
-            <li  class="submenu <%= 'current open' if ['users', 'staffs'].include?(controller_name)%>">
-                <a href="#">
-                    <i class="fa fa-user"></i> 员工权限 <span class="caret pull-right"></span>
-                </a>
-                <ul>
-                    <li><a href="#">员工列表</a></li>
-                    <li><a href="#">权限管理</a></li>
-                </ul>
-            </li>
-            <li  class="submenu <%= 'open' if ['order_categories', 'unit_categories', 'units', 'part_categories', 'parts', 'material_categories', 'materials'].include?(controller_name)%>">
-                <a href="#">
-                    <i class="fa fa-cogs"></i> 基础信息 <span class="caret pull-right"></span>
-                </a>
-                <ul>
-                    <li class="<%="#{'active' if controller_name == 'order_categories'}" %>"><%= link_to '订单类型', order_categories_path %></li>
-                    <li class="<%="#{'active' if controller_name == 'unit_categories'}" %>"><%= link_to '部件类型', unit_categories_path %></li>
-                    <li class="<%="#{'active' if controller_name == 'units'}" %>"><%= link_to '部件', units_path %></li>
-                    <li class="<%="#{'active' if controller_name == 'part_categories'}" %>"><%= link_to '配件类型', part_categories_path %></li>
-                    <li class="<%="#{'active' if controller_name == 'parts'}" %>"><%= link_to '配件', parts_path %></li>
-                    <li class="<%="#{'active' if controller_name == 'material_categories'}" %>"><%= link_to '板料类型', material_categories_path %></li>
-                    <li class="<%="#{'active' if controller_name == 'materials'}" %>"><%= link_to '板料', materials_path %></li>
-                </ul>
-            </li>
-            <li  class="submenu <%= 'open' if ['incomes', 'expends'].include?(controller_name)%>">
-                <a href="#">
-                    <i class="fa fa-calculator"></i> 财务数据 <span class="caret pull-right"></span>
-                </a>
-                <ul>
-                    <li class='<%="#{'active' if controller_name == 'incomes'}" %>'><%= link_to '收入', incomes_path %></li>
-                    <li class='<%="#{'active' if controller_name == 'expends'}" %>'><%= link_to '支出', expends_path %></li>
-                </ul>
-            </li>
-            <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name)%>">
-                <a href="#">
-                    <i class="fa fa-briefcase"></i> 订单管理 <span class="caret pull-right"></span>
-                </a>
-                <ul>
-                    <li class='<%="#{'active' if controller_name == 'indents'}" %>'><%= link_to '订单', indents_path %></li>
-                    <li class='<%="#{'active' if controller_name == 'orders'}" %>'><%= link_to '子订单', orders_path %></li>
-                </ul>
-            </li>
+            <% if current_user.permission?("RolesController", "index") ||
+                  current_user.permission?("UsersController", "index")
+            %>
+                <li  class="submenu <%= 'current open' if ['users', 'roles'].include?(controller_name)%>">
+                    <a href="#">
+                        <i class="fa fa-user"></i> 员工权限 <span class="caret pull-right"></span>
+                    </a>
+                    <ul>
+                        <% if current_user.permission?("UsersController", "index")%>
+                            <li class="<%="#{'active' if controller_name == 'users'}" %>"><%= link_to '员工列表', users_path %></li>
+                        <% end %>
+                        <% if current_user.permission?("RolesController", "index")%>
+                            <li class="<%="#{'active' if controller_name == 'roles'}" %>"><%= link_to '权限管理', roles_path %></li>
+                        <%end%>
+                    </ul>
+                </li>
+            <%end%>
+            <% if current_user.permission?("OrderCategoriesController", "index") || 
+                  current_user.permission?("UnitCategoriesController", "index") || 
+                  current_user.permission?("UnitsController", "index") || 
+                  current_user.permission?("PartCategoriesController", "index") || 
+                  current_user.permission?("PartsController", "index") || 
+                  current_user.permission?("MaterialCategoriesController", "index") || 
+                  current_user.permission?("MaterialsController", "index")
+            %>
+                <li  class="submenu <%= 'open' if ['order_categories', 'unit_categories', 'units', 'part_categories', 'parts', 'material_categories', 'materials'].include?(controller_name)%>">
+                    <a href="#">
+                        <i class="fa fa-cogs"></i> 基础信息 <span class="caret pull-right"></span>
+                    </a>
+                    <ul>
+                        <%if current_user.permission?("OrderCategoriesController", "index")%>
+                          <li class="<%="#{'active' if controller_name == 'order_categories'}" %>"><%= link_to '订单类型', order_categories_path %></li>
+                        <%end%>
+                        <% if current_user.permission?("UnitCategoriesController", "index")%>
+                            <li class="<%="#{'active' if controller_name == 'unit_categories'}" %>"><%= link_to '部件类型', unit_categories_path %></li>
+                        <%end%>
+                        <% if current_user.permission?("UnitsController", "index")%>
+                            <li class="<%="#{'active' if controller_name == 'units'}" %>"><%= link_to '部件', units_path %></li>
+                        <%end%>
+                        <% if current_user.permission?("PartCategoriesController", "index")%>
+                            <li class="<%="#{'active' if controller_name == 'part_categories'}" %>"><%= link_to '配件类型', part_categories_path %></li>
+                        <%end%>
+                        <% if current_user.permission?("PartsController", "index")%>
+                            <li class="<%="#{'active' if controller_name == 'parts'}" %>"><%= link_to '配件', parts_path %></li>
+                        <% end %>
+                        <% if current_user.permission?("MaterialCategoriesController", "index") %>
+                            <li class="<%="#{'active' if controller_name == 'material_categories'}" %>"><%= link_to '板料类型', material_categories_path %></li>
+                        <% end %>
+                        <% if current_user.permission?("MaterialsController", "index") %>
+                            <li class="<%="#{'active' if controller_name == 'materials'}" %>"><%= link_to '板料', materials_path %></li>
+                        <% end %>
+                    </ul>
+                </li>
+            <%end%>
+            <% if current_user.permission?("IncomesController", "index") ||
+                  current_user.permission?("ExpendsController", "index")
+            %>
+                <li  class="submenu <%= 'open' if ['incomes', 'expends'].include?(controller_name)%>">
+                    <a href="#">
+                        <i class="fa fa-calculator"></i> 财务数据 <span class="caret pull-right"></span>
+                    </a>
+                    <ul>
+                        <% if current_user.permission?("IncomesController", "index") %>
+                            <li class='<%="#{'active' if controller_name == 'incomes'}" %>'><%= link_to '收入', incomes_path %></li>
+                        <% end %>
+                        <% if current_user.permission?("ExpendsController", "index") %>
+                            <li class='<%="#{'active' if controller_name == 'expends'}" %>'><%= link_to '支出', expends_path %></li>
+                        <% end %>
+                    </ul>
+                </li>
+            <% end %>
+            <% if current_user.permission?("IndentsController", "index") ||
+                  current_user.permission?("OrdersController", "index")
+            %>
+                <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name)%>">
+                    <a href="#">
+                        <i class="fa fa-briefcase"></i> 订单管理 <span class="caret pull-right"></span>
+                    </a>
+                    <ul>
+                        <% if current_user.permission?("IndentsController", "index")%>
+                            <li class='<%="#{'active' if controller_name == 'indents'}" %>'><%= link_to '订单', indents_path %></li>
+                        <% end %>
+                        <% if current_user.permission?("OrdersController", "index")%>
+                            <li class='<%="#{'active' if controller_name == 'orders'}" %>'><%= link_to '子订单', orders_path %></li>
+                        <% end %>
+                    </ul>
+                </li>
+            <% end %>
             <li  class="submenu">
                 <a href="#">
                     <i class="fa fa-wrench"></i> 生产任务 <span class="caret pull-right"></span>

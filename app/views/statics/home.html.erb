@@ -1,3 +1,9 @@
+<% if params[:message] %>
+  <div class="alert alert-danger%>">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <%= content_tag :div, params[:message], :id => "flash_danger" %>
+  </div>
+<% end %>
 <div class="col-md-12 panel-warning">
   <div class="content-box-header panel-heading">
     <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 个人首页 </h2></div>
