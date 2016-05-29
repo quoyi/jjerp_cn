@@ -4627,6 +4627,7 @@ UserCategory.create(id: 5, serial: 'UC0005', name: '管理员', nick: 'admin', v
 UserCategory.create(id: 6, serial: 'UC0006', name: '超级管理员', nick: 'super', visible: false)
 puts 'created UserCategory success ! '
 ####################################### 角色 #######################################
+Role.find_or_create_by!(name: '超级管理员', nick: 'super_admin')
 Role.find_or_create_by!(name: '管理员', nick: 'admin')
 Role.find_or_create_by!(name: '财务会计', nick: 'financial')
 Role.find_or_create_by!(name: '员工', nick: 'employe')
@@ -4637,9 +4638,9 @@ user = User.find_or_create_by!(email: Rails.application.secrets.admin_email) do 
   user.name = Rails.application.secrets.admin_name
   user.password = Rails.application.secrets.admin_password
   user.password_confirmation = Rails.application.secrets.admin_password
-  admin = Role.find_or_create_by!(nick: 'admin', name: '管理员')
+  super_admin = Role.find_or_create_by!(nick: 'super_admin', name: '超级管理员')
   financial = Role.find_or_create_by!(nick: 'financial', name: '财务会计')
-  user.add_role!("admin")
+  user.add_role!("super_admin")
   user.add_role!("financial")
 end
 puts 'created User success ! '

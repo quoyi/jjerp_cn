@@ -1,0 +1,19 @@
+---
+zh-CN:
+  activerecord:
+    models:
+      role: 角色
+    attributes:
+      role:
+        name: 名称
+        nick: 标识
+        note: 备注
+        deleted: 删除
+    errors:
+      models:
+        role:
+          attributes:
+            name:
+              blank: 不能为空
+            nick:
+              blank: 不能为空

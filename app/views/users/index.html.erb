@@ -10,6 +10,8 @@
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
           <tr>
+            <th>账号</th>
+            <th>电话</th>
             <th>邮箱</th>
             <th>角色</th>
             <th>修改角色</th>
@@ -18,11 +20,13 @@
         <tbody>
           <% @users.each do |u| %>
           <tr>
+            <td><%= u.username %></td>
+            <td><%= u.mobile %></td>
             <td><%= u.email %></td>
-            <td><%= u.roles.map(&:name).join(',') %></td>
+            <td><%= u.roles.map(&:name).join('，') %></td>
             <td>
               <%unless u.roles.map(&:nick).include?('super_admin')%>
-                <%= link_to '修改',  edit_user_path(u), class: 'btn btn-info btn-sm'%>
+                <%= link_to '修改', edit_user_path(u), class: 'btn btn-info btn-xs'%>
               <% end %>
             </td>
           </tr>

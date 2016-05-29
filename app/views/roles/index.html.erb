@@ -1,6 +1,6 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
-    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 角色 <small>列表</small> </h2></div>
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 角色权限 <small>列表</small> </h2></div>
     <div class="panel-options">
       <%= link_to '新建', new_role_path, class: 'btn btn-info'%>
     </div>
@@ -8,13 +8,13 @@
 </div>
 <% @roles.each do |role| %>
    <% next if role.nick == 'super_admin'%>
-  <div class="panel panel-primary" style="margin-top: 10px;">
+  <div class="panel panel-default" style="margin-top: 10px;">
     <div class="panel-heading">
       <div class="row">
-        <div class="col-sm-3"><p>角色名称：<span><%= role.name%></span></p></div>
-        <div class="col-sm-3"><p>关键字：<span><%= role.nick%></span></p></div>
-        <div class="col-sm-3"><%= link_to '编辑', edit_role_path(role), class: 'btn btn-warning' %></div>
-        <div class="col-sm-3"><%= link_to '删除', role, method: :delete, data: { confirm: '你确定要删除该角色吗？' }, class: 'btn btn-danger' %></div>
+        <div class="col-sm-3">角色名称：<span><%= role.name%></span></div>
+        <div class="col-sm-3">符号(英文名)：<span><%= role.nick%></span></div>
+        <div class="col-sm-3"><%= link_to '编辑', edit_role_path(role), class: 'btn btn-xs btn-warning' %></div>
+        <div class="col-sm-3"><%= link_to '删除', role, method: :delete, data: { confirm: '你确定要删除该角色吗？' }, class: 'btn btn-xs btn-danger' %></div>
       </div>
     </div>
     <div class="panel-body">
@@ -29,7 +29,7 @@
                   <% show_action = []
                      current_action = permission.actions.split(/\s*,\s*/)
                      Role.permissions[permission.klass][:actions].each_pair do |k, v|
-                       if (Array(v).join(',').split(/,/) - current_action).size == 0
+                       if (Array(v).join('，').split(/,/) - current_action).size == 0
                          show_action << k
                        end
                      end

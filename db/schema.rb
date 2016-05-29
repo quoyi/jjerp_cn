@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160521091452) do
+ActiveRecord::Schema.define(version: 20160528123838) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",            limit: 255, default: "",    null: false
@@ -262,8 +262,10 @@ ActiveRecord::Schema.define(version: 20160521091452) do
   create_table "role_permissions", force: :cascade do |t|
     t.integer  "role_id",       limit: 4
     t.integer  "permission_id", limit: 4
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "klass",         limit: 255, null: false
+    t.string   "actions",       limit: 255, null: false
   end
 
   add_index "role_permissions", ["permission_id"], name: "index_role_permissions_on_permission_id", using: :btree

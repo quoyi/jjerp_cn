@@ -13,11 +13,11 @@
   <div class="form-group">
     <%= f.label '角色名', class: "col-md-2 control-label" %>
     <div class="col-md-4">
-      <%= f.text_field :name, class: "form-control" %>
+      <%= f.text_field :name, class: "form-control", required: true %>
     </div>
-    <%= f.label '关键字(英文名)', class: "col-md-2 control-label" %>
+    <%= f.label '符号(英文名)', class: "col-md-2 control-label" %>
     <div class="col-md-4">
-      <%= f.text_field :nick, class: "form-control" %>
+      <%= f.text_field :nick, class: "form-control", required: true %>
     </div>
   </div>
   <table class="table table-hover table-striped table-bordered table-condensed text-center">
@@ -26,19 +26,16 @@
       <th class="text-center info"><%= v[:name] %></th>
       <% v[:actions].each_pair do |kk, vv| %>
       <td>
-      <label>
-      <input type="checkbox" value="<%= Array(vv).join(',') %>" <%= 'checked' if Array(vv).find{ |vvv| @role.permission?(k, vvv) } %> name="roles_permissions[<%=k%>][]"><%= kk %></label>
-      </td>
+        <label>
+          <input type="checkbox" value="<%= Array(vv).join(',') %>" <%= 'checked' if Array(vv).find{ |vvv| @role.permission?(k, vvv) } %> name="roles_permissions[<%=k%>][]"><%= kk %></label>
+        </td>
+        <% end %>
+      </tr>
       <% end %>
-    </tr>
-    <% end %>
-  </table>
-  <div class="form-group">
-    <label class="col-md-4 control-label"></label>
-    <div class="col-md-4">
+    </table>
+    <div class="form-group text-center">
       <%= f.submit value: "保存", class: "btn btn-sm btn-primary" %>
-      <%#= link_to '返回', @role.name.present? ? role_path : roles_path, class: 'btn btn-sm btn-default' %>
+      <%= link_to '返回', roles_path, class: 'btn btn-sm btn-default' %>
     </div>
+    <% end %>
   </div>
-  <% end %>
-</div>

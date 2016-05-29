@@ -17,10 +17,10 @@
                     </a>
                     <ul>
                         <% if current_user.permission?("UsersController", "index")%>
-                            <li class="<%="#{'active' if controller_name == 'users'}" %>"><%= link_to '员工列表', users_path %></li>
+                            <li class="<%="#{'active' if controller_name == 'users'}" %>"><%= link_to '员工信息', users_path %></li>
                         <% end %>
                         <% if current_user.permission?("RolesController", "index")%>
-                            <li class="<%="#{'active' if controller_name == 'roles'}" %>"><%= link_to '权限管理', roles_path %></li>
+                            <li class="<%="#{'active' if controller_name == 'roles'}" %>"><%= link_to '角色权限', roles_path %></li>
                         <%end%>
                     </ul>
                 </li>
@@ -110,8 +110,8 @@
                     <i class="fa fa-truck"></i> 物流发货 <span class="caret pull-right"></span>
                 </a>
                 <ul>
-                    <li><a href="#">Login</a></li>
-                    <li><a href="#">Signup</a></li>
+                    <li><a href="#">待发货</a></li>
+                    <li><a href="#">已发货</a></li>
                 </ul>
             </li>
             <li class="submenu">
