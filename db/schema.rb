@@ -163,7 +163,6 @@ ActiveRecord::Schema.define(version: 20160528123838) do
   add_index "materials", ["supply_id"], name: "index_materials_on_supply_id", using: :btree
 
   create_table "offers", force: :cascade do |t|
-    t.integer  "order_id",   limit: 4
     t.integer  "display",    limit: 4
     t.integer  "item",       limit: 4
     t.string   "uom",        limit: 255
@@ -179,7 +178,6 @@ ActiveRecord::Schema.define(version: 20160528123838) do
   end
 
   add_index "offers", ["indent_id"], name: "index3", using: :btree
-  add_index "offers", ["order_id"], name: "index_offers_on_order_id", using: :btree
 
   create_table "order_categories", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false

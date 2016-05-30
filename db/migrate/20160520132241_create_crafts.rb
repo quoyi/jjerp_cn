@@ -3,7 +3,7 @@ class CreateCrafts < ActiveRecord::Migration
     # 工艺
     create_table :crafts do |t|
       t.references :order # 所属订单号
-      t.string :full_name, null: false, index: true, default: '' # 名称
+      t.string :full_name, index: true, default: '' # 名称
       t.string :uom # 单位
       t.decimail :price, precision: 8, scale: 2, null: false, default: 0 # 单价
       t.integer :number, null: false, default: 1 # 数量

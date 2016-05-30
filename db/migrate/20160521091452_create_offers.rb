@@ -3,7 +3,6 @@ class CreateOffers < ActiveRecord::Migration
     # 报价单
     create_table :offers do |t|
       t.references :indent, index: true
-      t.references :order, index: true # 订单号
       t.integer :display # 显示序号
       t.integer :item # 项目
       #t.string :item_name # 项目名称

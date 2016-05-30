@@ -57,6 +57,12 @@ class IndentsController < ApplicationController
     redirect_to indents_path, notice: '订单已删除。'
   end
 
+  def generate
+    binding.pry
+    # 查找订单的所有拆单信息，并生成报价单
+    redirect_to indents_path, notice: '生成报价单成功！'
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_indent

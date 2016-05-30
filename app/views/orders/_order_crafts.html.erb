@@ -1,8 +1,8 @@
 <!-- Modal -->
 <div class="modal fade" id="addOrderCrafts" tabindex="-1" role="dialog" aria-labelledby="addOrderCraftsLabel">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog" role="document" style="width:80%;">
     <div class="modal-content">
-      <%= nested_form_for @order, html: {class: 'form-horizontal'} do |f| %>
+      <%= nested_form_for @order, html: {class: 'form-horizontal',multipart: true} do |f| %>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="addOrderCraftsLabel"> 工艺 <small>编辑</small></h4>
@@ -10,34 +10,34 @@
       <div class="modal-body">
         <div id="orderCraftsForm">
           <%= f.fields_for :crafts, wrapper: false do |craft_form| %>
-          <div class="fields row">
-            <div class="col-sm-10">
-              <div class="row">
-                <div class="col-sm-7">
-                  <label>名称</label>
-                  <%= craft_form.text_field :full_name, required: true %>
-                </div>
-                <div class="col-sm-5">
-                  <label>单价</label>
-                  <%= craft_form.number_field :price, min: 0, required: true, style: 'width: 80%' %>
-                </div>
+          <div class="fields">
+            <div class="row">
+              <div class="col-sm-2">
+                <label>名称</label>
+                <%= craft_form.text_field :full_name, required: true %>
               </div>
-              <div class="row">
-                <div class="col-sm-7">
-                  <label>备注</label>
-                  <%= craft_form.text_field :note %>
-                </div>
-                <div class="col-sm-5">
-                  <label>数量</label>
-                  <%= craft_form.number_field :number, min: 1, required: true, style: 'width: 80%' %>
-                </div>
+              <div class="col-sm-2">
+                <label>单位</label>
+                <%= craft_form.text_field :uom %>
+              </div>
+              <div class="col-sm-2">
+                <label>单价</label>
+                <%= craft_form.number_field :price, min: 0, required: true %>
+              </div>
+              <div class="col-sm-2">
+                <label>数量</label>
+                <%= craft_form.number_field :number, min: 1, required: true %>
+              </div>
+              <div class="col-sm-2">
+                <label>备注</label>
+                <%= craft_form.text_field :note %>
+              </div>
+              <div class="col-sm-2 text-center">
+                <%= craft_form.link_to_remove '删除', class:'btn btn-info btn-sm' %>
               </div>
             </div>
-            <div class="col-sm-2 text-center" style='padding-top:14px;'>
-              <%= craft_form.link_to_remove '删除', class:'btn btn-info btn-sm' %>
-            </div>
+            <hr>
           </div>
-          <hr>
           <% end %>
         </div>
       </div>

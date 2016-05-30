@@ -37,7 +37,6 @@ class OrdersController < ApplicationController
   # POST /orders.json
   def create
     @order = Order.new(order_params)
-    binding.pry
     if @order.save
       redirect_to :back, notice: '子订单创建成功！'
     else
@@ -90,11 +89,12 @@ class OrdersController < ApplicationController
     params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture,
                                   :color, :length, :width, :height, :number, :price,
                                   :status, :note, :deleted, :file, :_destroy,
-                                  units_attributes: [:id, :full_name, :number, :ply, :length,
-                                  :width, :size, :uom, :price, :note, :_destroy],
-                                  parts_attributes: [:part_category_id, :order_id, :name, :buy,
-                                  :price, :store, :uom, :number, :brand, :supply_id, :deleted, 
-                                  :_destroy],
-                                  crafts_attributes: [:order_id, :_destroy])
+                                  units_attributes: [:id, :full_name, :number, :ply,
+                                  :length, :width, :size, :uom, :price, :note, :_destroy],
+                                  parts_attributes: [:id, :part_category_id, :order_id,
+                                  :name, :buy, :price, :store, :uom, :number, :brand,
+                                  :supply_id, :deleted, :_destroy],
+                                  crafts_attributes: [:id, :order_id, :full_name, :uom,
+                                  :price, :number, :note, :status, :deleted, :_destroy])
   end
 end

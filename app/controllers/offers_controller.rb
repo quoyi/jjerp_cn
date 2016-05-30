@@ -1,5 +1,4 @@
 class OffersController < ApplicationController
-  include OffersHelper
   before_action :set_offer, only: [:show, :edit, :update, :destroy]
 
   # GET /offers
@@ -59,19 +58,6 @@ class OffersController < ApplicationController
     redirect_to offers_url, notice: '拆单记录已删除。'
   end
 
-  def generate
-    binding.pry
-    # 通过页面传递的indent_id 查找对应的订单
-    @indent = Indent.find_by_id(params[:indent_id])
-    @offer = @indent.offers.new
-    # @units = @indent.orders.units
-    # @parts = @indent.orders.parts
-    # @crafts = @indent.orders.crafts
-    @offer.total = @indent.offers.map(&:total).sum
-    # 查找订单的所有拆单信息，并生成报价单
-    redirect_to indents_path, notice: '生成报价单成功！'
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_offer
@@ -80,7 +66,7 @@ class OffersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def offer_params
-      params.require(:offer).permit(:indent_id, :order_id, :display, :item, :item_name,
-                                    :uom, :number, :price, :sum, :total, :note, :deleted)
+      params.require(:offer).permit(:indent_id, :display, :item, :item_name, :uom, :number,
+                                    :price, :sum, :total, :note, :deleted)
     end
 end

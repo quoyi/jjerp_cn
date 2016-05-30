@@ -1,11 +1,7 @@
 Rails.application.routes.draw do
   resources :users, only: [:index, :edit, :update]
 
-  resources :offers do
-    collection do
-      get :generate
-    end
-  end
+  resources :offers
   resources :expends
   resources :incomes
   resources :crafts
@@ -27,7 +23,11 @@ Rails.application.routes.draw do
     end
   end
   resources :departments
-  resources :indents
+  resources :indents do
+    collection do
+      get :generate
+    end
+  end
   resources :permissions
   resources :roles
   devise_for :users, controllers: {

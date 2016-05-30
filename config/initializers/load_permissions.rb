@@ -68,7 +68,7 @@ Role.register_permission class: 'IndentsController',
   actions: {
     '列表' => :index,
     '修改' => [:edit, :update],
-    '删除' => [:destroy],
+    '生成报价' => [:generate],
     '详细' => [:show]
 }
 Role.register_permission class: 'OrdersController',

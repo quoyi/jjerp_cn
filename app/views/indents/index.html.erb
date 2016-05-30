@@ -49,8 +49,6 @@
               <% end %>
             </td>
             <td>
-              <%= link_to '生成报价', generate_offers_path(indent_id: i.id), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '生成总订单的报价单' %>
-              <%= link_to '报价信息', '#', class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '查看报价信息' %>
               <%= link_to '添加到款', '#', class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', indent: i.id}, id: 'addIncomesBtn' %>
               <%= link_to '到款信息', incomes_path(indent_id: i.id), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '查看到款记录' %>
             </td>
