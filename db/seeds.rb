@@ -4626,6 +4626,22 @@ UserCategory.create(id: 4, serial: 'UC0004', name: '供应商', nick: 'supply', 
 UserCategory.create(id: 5, serial: 'UC0005', name: '管理员', nick: 'admin', visible: true)
 UserCategory.create(id: 6, serial: 'UC0006', name: '超级管理员', nick: 'super', visible: false)
 puts 'created UserCategory success ! '
+####################################### 权限 #######################################
+Permission.find_or_create_by!(name: '用户', klass: 'UsersController', actions: 'index,edit,update')
+Permission.find_or_create_by!(name: '角色', klass: 'RolesController', actions: 'index,edit,update,:destroy,:show')
+Permission.find_or_create_by!(name: '订单', klass: 'IndentCategoriesController', actions: 'index,edit,update,:destroy,:show')
+Permission.find_or_create_by!(name: '子订单类型', klass: 'OrderCategoriesController', actions: 'index,edit,update,:destroy,:show')
+Permission.find_or_create_by!(name: '子订单', klass: 'OrdersController', actions: 'index,edit,update,:destroy,:show')
+Permission.find_or_create_by!(name: '板料类型', klass: 'MaterialCategoriesController', actions: 'index,edit,update,:destroy,:show')
+Permission.find_or_create_by!(name: '板料', klass: 'MaterialsController', actions: 'index,edit,update,:destroy,:show')
+Permission.find_or_create_by!(name: '部件类型', klass: 'UnitCategoriesController', actions: 'index,edit,update,:destroy,:show')
+Permission.find_or_create_by!(name: '部件', klass: 'UnitsController', actions: 'index,edit,update,:destroy,:show')
+Permission.find_or_create_by!(name: '配件类型', klass: 'PartCategoriesController', actions: 'index,edit,update,:destroy,:show')
+Permission.find_or_create_by!(name: '配件', klass: 'PartsController', actions: 'index,edit,update,:destroy,:show')
+Permission.find_or_create_by!(name: '工艺', klass: 'CraftsController', actions: 'index,edit,update,:destroy,:show')
+Permission.find_or_create_by!(name: '收入', klass: 'IncomesController', actions: 'index,edit,update,:destroy,:show')
+Permission.find_or_create_by!(name: '支出', klass: 'ExpendsController', actions: 'index,edit,update,:destroy,:show')
+puts 'created Role success ! '
 ####################################### 角色 #######################################
 Role.find_or_create_by!(name: '超级管理员', nick: 'super_admin')
 Role.find_or_create_by!(name: '管理员', nick: 'admin')
@@ -4640,8 +4656,8 @@ user = User.find_or_create_by!(email: Rails.application.secrets.admin_email) do 
   user.password_confirmation = Rails.application.secrets.admin_password
   super_admin = Role.find_or_create_by!(nick: 'super_admin', name: '超级管理员')
   financial = Role.find_or_create_by!(nick: 'financial', name: '财务会计')
-  user.add_role!("super_admin")
-  user.add_role!("financial")
+  user.append_role("super_admin")
+  user.append_role("financial")
 end
 puts 'created User success ! '
 ####################################### 配件种类 #######################################

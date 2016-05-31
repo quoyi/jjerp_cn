@@ -9,9 +9,9 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update(user_parsms)
+    if @user.update(user_params)
       @user.roles.delete(@user.roles.first) if @user.roles.any?
-      @user.add_role! change_role.nick if change_role
+      @user.append_role change_role.nick if change_role
       flash[:notice] = '用户修改成功.'
     else
       flash[:alert] = '修改过程中出现错误'
@@ -24,8 +24,8 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
     end
 
-    def user_parsms
-      params.require(:user).permit(:name, :email)
+    def user_params
+      params.require(:user).permit(:role_ids, :name, :email)
     end
 
     def change_role

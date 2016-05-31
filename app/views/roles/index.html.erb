@@ -20,7 +20,8 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-sm-10">
-        <% role.role_permissions.each do |permission| %>
+      <%= binding.pry %>
+        <% role.permissions.each do |permission| %>
         <div class="form-group">
           <label class="col-md-6 control-label">
             <%= "#{@controller_hash[permission.klass]}" %>

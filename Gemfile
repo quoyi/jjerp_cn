@@ -6,8 +6,8 @@ ruby '2.3.0'
 
 # 权限认证
 gem 'devise'
-gem 'cancancan'
-gem 'rolify'
+# gem 'cancancan'
+# gem 'rolify'
 
 # 前端样式 Bootstrap
 gem 'bootstrap-sass'

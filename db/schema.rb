@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160528123838) do
+ActiveRecord::Schema.define(version: 20160521091452) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",            limit: 255, default: "",    null: false
@@ -49,16 +49,18 @@ ActiveRecord::Schema.define(version: 20160528123838) do
 
   create_table "crafts", force: :cascade do |t|
     t.integer  "order_id",   limit: 4
-    t.string   "full_name",  limit: 255,                                         null: false
+    t.string   "full_name",  limit: 255,                         default: ""
+    t.string   "uom",        limit: 255
+    t.decimal  "price",                  precision: 8, scale: 2, default: 0.0,   null: false
+    t.integer  "number",     limit: 4,                           default: 1,     null: false
     t.string   "note",       limit: 255
     t.boolean  "status"
     t.boolean  "deleted",                                        default: false
     t.datetime "created_at",                                                     null: false
     t.datetime "updated_at",                                                     null: false
-    t.decimal  "price",                  precision: 8, scale: 2, default: 0.0
-    t.integer  "number",     limit: 4,                           default: 1
-    t.string   "uom",        limit: 255
   end
+
+  add_index "crafts", ["full_name"], name: "index_crafts_on_full_name", using: :btree
 
   create_table "departments", force: :cascade do |t|
     t.string   "name",       limit: 255,                   null: false
@@ -163,21 +165,21 @@ ActiveRecord::Schema.define(version: 20160528123838) do
   add_index "materials", ["supply_id"], name: "index_materials_on_supply_id", using: :btree
 
   create_table "offers", force: :cascade do |t|
+    t.integer  "indent_id",  limit: 4
     t.integer  "display",    limit: 4
     t.integer  "item",       limit: 4
     t.string   "uom",        limit: 255
-    t.integer  "number",     limit: 4
-    t.decimal  "price",                  precision: 10
-    t.decimal  "sum",                    precision: 10
-    t.decimal  "total",                  precision: 10
+    t.decimal  "number",                 precision: 10
+    t.decimal  "price",                  precision: 8,  scale: 2
+    t.decimal  "sum",                    precision: 8,  scale: 2
+    t.decimal  "total",                  precision: 8,  scale: 2
     t.string   "note",       limit: 255
-    t.boolean  "deleted",                               default: false
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
-    t.integer  "indent_id",  limit: 4
+    t.boolean  "deleted",                                         default: false
+    t.datetime "created_at",                                                      null: false
+    t.datetime "updated_at",                                                      null: false
   end
 
-  add_index "offers", ["indent_id"], name: "index3", using: :btree
+  add_index "offers", ["indent_id"], name: "index_offers_on_indent_id", using: :btree
 
   create_table "order_categories", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
@@ -261,10 +263,8 @@ ActiveRecord::Schema.define(version: 20160528123838) do
   create_table "role_permissions", force: :cascade do |t|
     t.integer  "role_id",       limit: 4
     t.integer  "permission_id", limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.string   "klass",         limit: 255, null: false
-    t.string   "actions",       limit: 255, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   add_index "role_permissions", ["permission_id"], name: "index_role_permissions_on_permission_id", using: :btree
