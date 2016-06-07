@@ -27,6 +27,14 @@ Rails.application.routes.draw do
     collection do
       get :generate
     end
+    member do
+      get :package
+      post :package
+    end
+    collection do
+      get :unpack
+    end
+    
   end
   resources :permissions
   resources :roles

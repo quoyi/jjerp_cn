@@ -82,7 +82,7 @@
             <% if current_user.permission?("IndentsController", "index") ||
                   current_user.permission?("OrdersController", "index")
             %>
-                <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name)%>">
+                <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name) && action_name != 'unpack' %>">
                     <a href="#">
                         <i class="fa fa-briefcase"></i> 订单管理 <span class="caret pull-right"></span>
                     </a>
@@ -96,13 +96,12 @@
                     </ul>
                 </li>
             <% end %>
-            <li  class="submenu">
+            <li  class="submenu <%= 'open' if ['indents'].include?(controller_name) && action_name == 'unpack' %>">
                 <a href="#">
                     <i class="fa fa-wrench"></i> 生产任务 <span class="caret pull-right"></span>
                 </a>
                 <ul>
-                    <li><a href="#">Login</a></li>
-                    <li><a href="#">Signup</a></li>
+                    <li class='<%="#{'active' if controller_name == 'indents' and action_name == 'unpack'}" %>'><a href="/indents/unpack">包装</a></li>
                 </ul>
             </li>
             <li  class="submenu">
