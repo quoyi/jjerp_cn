@@ -1,0 +1,31 @@
+<!-- Page title -->
+<div class="page-title">
+  <h2><i class="fa fa-desktop color"></i> 未包装订单管理 <small>列表</small>
+    <span class="pull-right">
+    </span>
+  </h2>
+  <hr />
+</div>
+<!-- Page title -->
+<div class="awidget full-width">
+  <table class="table table-hover table-striped table-bordered table-condensed text-center">
+      <thead>
+        <tr class="info">
+          <td>包装</td>
+          <td>客户单号</td>
+          <td>接单时间</td>
+          <td>经销商</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% @indents.each do |indent|%>
+        <tr>
+          <td><%= link_to '开始包装', package_indent_path(indent), class: 'detail-link' %></td>
+          <td><%= link_to indent.name, indent_path(indent), class: 'detail-link' %></td>
+          <td><%= indent.created_at.localtime.strftime("%Y-%m-%d")%></td>
+          <td><%= indent.agent.try(:name) %></td>
+        </tr>
+        <%end%>
+      </toby>
+  </table>
+</div>

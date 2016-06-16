@@ -9,4 +9,14 @@ class Unit < ActiveRecord::Base
   def generate_code
     # self.name = 
   end
+
+
+  def ply_name
+    MaterialCategory.find_by(id: self.ply).try(:name)
+  end
+
+  def color_name
+    MaterialCategory.find_by(id: self.color).try(:name)
+  end
+
 end

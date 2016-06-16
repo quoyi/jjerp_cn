@@ -49,6 +49,12 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Unicorn as the app server
 # gem 'unicorn'
 
+# 打印
+gem 'prawn'
+gem "prawnto_2", :require => "prawnto"
+gem 'prawn-table'
+gem 'prawn-print'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
