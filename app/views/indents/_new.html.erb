@@ -25,10 +25,10 @@
 							</div>
 						</div>
 						<div class="form-group indent-new">
-							<%= f.label '代理商', for: 'indent_agent_id', class: 'col-sm-1 control-label' %>
+							<%= f.label '经销商', for: 'indent_agent_id', class: 'col-sm-1 control-label' %>
 							<div class="col-sm-3">
 								<%= f.select :agent_id, Agent.all.map{|a|[a.full_name, a.id]}, class: 'form-control' %>
-								<%= link_to '新建代理商', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm' %>
+								<%= link_to '新建经销商', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm' %>
 							</div>
 							<%= f.label '下单时间', for: 'indent_verify_at', class: 'col-sm-1 control-label' %>
 							<div class="col-sm-3">

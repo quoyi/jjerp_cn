@@ -24,8 +24,8 @@ class IndentsController < ApplicationController
 
   # GET /indents/1/edit
   def edit
-    # @order = Order.new
-    # @orders = Order.where(indent:@indent)
+    @agent = Agent.new
+    @indent = Indent.find_by_id(params[:id])
   end
 
   # POST /indents

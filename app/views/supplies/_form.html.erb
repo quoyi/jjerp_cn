@@ -1,17 +1,56 @@
-<%= form_for(@supply) do |f| %>
-  <% if @supply.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@supply.errors.count, "error") %> prohibited this supply from being saved:</h2>
-
-      <ul>
-      <% @supply.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
+<%= form_for(@supply, url: @supply.new_record? ? supplies_path : supply_path(@supply)) do |f| %>
+<div class="modal-body">
+  <table class="table table-hover table-striped table-bordered table-condensed">
+    <tr>
+      <td>
+        <%= f.label '编号' %>
+      </td>
+      <td>
+        <%= f.text_field :full_name, required: true %>
+      </td>
+      <td>
+        <%= f.label '名称' %>
+      </td>
+      <td>
+        <%= f.text_field :full_name, required: true %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= f.label '电话' %>
+      </td>
+      <td>
+        <%= f.text_field :mobile, required: true %>
+      </td>
+      <td>
+        <%= f.label '账户' %>
+      </td>
+      <td>
+        <%= f.text_field :bank_account, required: true %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= f.label '地址' %>
+      </td>
+      <td colspan="3">
+        <%= f.text_field :address %>
+      </td>
+      </tr>
+      <tr>
+      <td>
+        <%= f.label '备注' %>
+      </td>
+      <td colspan="3">
+        <%= f.text_field :note %>
+      </td>
+    </tr>
+  </table>
+</div>
+<div class="modal-footer">
+  <% if @supply.new_record? %>
+  <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
   <% end %>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+  <%= f.submit '提交', class: 'btn btn-primary' %>
+</div>
 <% end %>

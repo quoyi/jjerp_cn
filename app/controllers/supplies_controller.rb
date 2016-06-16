@@ -4,6 +4,7 @@ class SuppliesController < ApplicationController
   # GET /supplies
   # GET /supplies.json
   def index
+    @supply = Supply.new
     @supplies = Supply.where(deleted: false)
   end
 

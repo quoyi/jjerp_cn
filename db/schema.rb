@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160521091452) do
+ActiveRecord::Schema.define(version: 20160531130158) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",            limit: 255, default: "",    null: false
@@ -210,6 +210,15 @@ ActiveRecord::Schema.define(version: 20160521091452) do
 
   add_index "orders", ["indent_id"], name: "index_orders_on_indent_id", using: :btree
 
+  create_table "packages", force: :cascade do |t|
+    t.integer "indent_id",  limit: 4,   null: false
+    t.string  "unit_ids",   limit: 255
+    t.string  "part_ids",   limit: 255
+    t.string  "print_size", limit: 255
+  end
+
+  add_index "packages", ["indent_id"], name: "index_packages_on_indent_id", using: :btree
+
   create_table "part_categories", force: :cascade do |t|
     t.integer  "parent_id",  limit: 4,                           default: 1
     t.string   "name",       limit: 255,                         default: "",    null: false
@@ -241,6 +250,7 @@ ActiveRecord::Schema.define(version: 20160521091452) do
     t.boolean  "deleted",                                              default: false
     t.datetime "created_at",                                                           null: false
     t.datetime "updated_at",                                                           null: false
+    t.boolean  "is_printed",                                           default: false
   end
 
   add_index "parts", ["part_category_id"], name: "index_parts_on_part_category_id", using: :btree
@@ -263,8 +273,10 @@ ActiveRecord::Schema.define(version: 20160521091452) do
   create_table "role_permissions", force: :cascade do |t|
     t.integer  "role_id",       limit: 4
     t.integer  "permission_id", limit: 4
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "klass",         limit: 255, null: false
+    t.string   "actions",       limit: 255, null: false
   end
 
   add_index "role_permissions", ["permission_id"], name: "index_role_permissions_on_permission_id", using: :btree
@@ -355,6 +367,7 @@ ActiveRecord::Schema.define(version: 20160521091452) do
     t.boolean  "deleted",                                              default: false
     t.datetime "created_at",                                                           null: false
     t.datetime "updated_at",                                                           null: false
+    t.boolean  "is_printed",                                           default: false
   end
 
   add_index "units", ["name"], name: "index_units_on_name", using: :btree
@@ -406,6 +419,7 @@ ActiveRecord::Schema.define(version: 20160521091452) do
     t.datetime "confirmation_sent_at"
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
+    t.string   "print_size",             limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

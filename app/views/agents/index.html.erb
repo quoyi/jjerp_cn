@@ -1,25 +1,51 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Agents</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @agents.each do |agent| %>
-      <tr>
-        <td><%= link_to 'Show', agent %></td>
-        <td><%= link_to 'Edit', edit_agent_path(agent) %></td>
-        <td><%= link_to 'Destroy', agent, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Agent', new_agent_path %>
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 经销商 <small>列表</small> </h2></div>
+    <div class="panel-options">
+      <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addAgent'} %>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>名称</th>
+            <th>电话</th>
+            <th>负责人</th>
+            <th>QQ</th>
+            <th>传真</th>
+            <th>邮箱</th>
+            <th>微信</th>
+            <th>物流</th>
+            <th>下单条件</th>
+            <th>发货条件</th>
+            <th>结账周期(天)</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @agents.each do |a| %>
+          <tr>
+            <td><%= a.name %></td>
+            <td><%= link_to a.full_name, edit_agent_path(a), data:{toggle: 'tooltip'}, title: '编辑经销商' %></td>
+            <td><%= a.mobile %></td>
+            <td><%= a.contacts %></td>
+            <td><%= a.e_account %></td>
+            <td><%= a.fax %></td>
+            <td><%= a.email %></td>
+            <td><%= a.wechar %></td>
+            <td><%= a.logistics %></td>
+            <td><%= a.order_condition %></td>
+            <td><%= a.send_condition %></td>
+            <td><%= a.cycle %></td>
+            <td><%= a.note %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<%= render 'new' %>

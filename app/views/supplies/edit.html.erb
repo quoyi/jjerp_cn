@@ -1,6 +1,11 @@
-<h1>Editing Supply</h1>
-
-<%= render 'form' %>
-
-<%= link_to 'Show', @supply %> |
-<%= link_to 'Back', supplies_path %>
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 供应商 <small>编辑</small> </h2></div>
+    <div class="panel-options">
+      <%= link_to '返回', supplies_path, class: 'btn btn-info', data: { toggle: 'tooltip', title: '返回到供应商列表'} %>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <%= render 'form' %>
+  </div>
+</div>

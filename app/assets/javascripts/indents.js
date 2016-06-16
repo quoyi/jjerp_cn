@@ -30,6 +30,9 @@ $(function() {
   // $("#indent_verify_at").val(now);
   // $("#indent_require_at").val(now.setDate(now.getDate() + 10));
 
-  
+  $("#addIncomes").on('show.bs.modal', function(e){
+    var indent_id = e.relatedTarget.dataset.indent;
+    $("#income_indent_id").val(indent_id);
+  });
 
 });

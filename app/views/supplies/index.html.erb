@@ -1,25 +1,37 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Supplies</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @supplies.each do |supply| %>
-      <tr>
-        <td><%= link_to 'Show', supply %></td>
-        <td><%= link_to 'Edit', edit_supply_path(supply) %></td>
-        <td><%= link_to 'Destroy', supply, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Supply', new_supply_path %>
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 供应商 <small>列表</small> </h2></div>
+    <div class="panel-options">
+      <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addSupply'} %>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>名称</th>
+            <th>电话</th>
+            <th>账户</th>
+            <th>地址</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @supplies.each do |s| %>
+          <tr>
+            <td><%= s.name %></td>
+            <td><%= link_to s.full_name, edit_supply_path(s), data:{toggle: 'tooltip'}, title: '编辑供应商' %></td>
+            <td><%= s.mobile %></td>
+            <td><%= s.bank_account %></td>
+            <td><%= s.address %></td>
+            <td><%= s.note %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<%= render 'new' %>

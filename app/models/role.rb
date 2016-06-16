@@ -3,8 +3,8 @@ class Role < ActiveRecord::Base
   ADMINISTRATOR = 'super_admin'.freeze
   has_and_belongs_to_many :users, join_table: :user_roles
   has_and_belongs_to_many :permissions, join_table: :role_permissions
-  # has_many :role_permissions
-  # accepts_nested_attributes_for :role_permissions, allow_destroy: true
+  has_many :role_permissions
+  accepts_nested_attributes_for :role_permissions, allow_destroy: true
   validates_presence_of :name
   validates_uniqueness_of :name
   validates_presence_of :nick
@@ -35,8 +35,8 @@ class Role < ActiveRecord::Base
     self.permissions.detect { |p| p.has_permission?(klass, action) }
   end
 
-  # def editable?
-  #   nick != ADMINISTRATOR
-  # end
+  def editable?
+    nick != ADMINISTRATOR
+  end
 
 end
