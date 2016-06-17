@@ -29,14 +29,14 @@ end
 #下单员角色: 增改查 客户、基础数据(板料、配件,含售价)、订单数据(订单、子订单、挂起单); 查看 生产任务(正在生产的订单)、物流发货
 order = Role.find_or_create_by!(name: '下单员', nick: 'order')
 permissions.each_pair do |k, v|
-  if ['AgentsController', 'PartCategoriesController', 'MaterialCategoriesController', 'IndentsController', 'OrdersController'].include?(k)
+  if ['AgentsController', 'PartCategoriesController', 'MaterialCategoriesController', 'IndentsController'].include?(k)
     order.role_permissions.create(klass: k, actions: 'index,update,edit,show')
   end
   if ['SentsController'].include?(k)
     order.role_permissions.create(klass: k, actions: 'index,show')
   end
   if k == 'OrdersController'
-    order.role_permissions.create(klass: k, actions: 'producing')
+    order.role_permissions.create(klass: k, actions: 'ndex,update,edit,show,producing')
   end
 end
 
@@ -55,13 +55,13 @@ end
 manager = Role.find_or_create_by!(name: '厂长', nick: 'manager')
 permissions.each_pair do |k, v|
   if k == 'IndentsController'
-    manager.role_permissions.create(klass: k, actions: 'unpack,package')
+    manager.role_permissions.create(klass: k, actions: 'index,show,unpack,package')
   end
-  if ['PartCategoriesController', 'MaterialCategoriesController', 'IndentsController', 'OrdersController', 'SentsController'].include?(k)
+  if ['PartCategoriesController', 'MaterialCategoriesController', 'SentsController'].include?(k)
     manager.role_permissions.create(klass: k, actions: 'index,show')
   end
   if k == 'OrdersController'
-    manager.role_permissions.create(klass: k, actions: 'producing')
+    manager.role_permissions.create(klass: k, actions: 'index,show,producing')
   end
 end
 
@@ -69,9 +69,9 @@ end
 delivery = Role.find_or_create_by!(name: '发货部', nick: 'delivery')
 permissions.each_pair do |k, v|
   if k == 'IndentsController'
-    delivery.role_permissions.create(klass: k, actions: 'unpack,package')
+    delivery.role_permissions.create(klass: k, actions: 'index,show,unpack,package')
   end
-  if ['AgentsController', 'IndentsController', 'OrdersController'].include?(k)
+  if k == 'AgentsController'
     delivery.role_permissions.create(klass: k, actions: 'index,show')
   end
   
@@ -80,7 +80,7 @@ permissions.each_pair do |k, v|
   end
 
   if k == 'OrdersController'
-    delivery.role_permissions.create(klass: k, actions: 'producing')
+    delivery.role_permissions.create(klass: k, actions: 'index,show,producing')
   end
 end
 
