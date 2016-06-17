@@ -49,9 +49,9 @@ class User < ActiveRecord::Base
     roles.exists?(nick: r)
   end
 
-  def add_role!(r)
-    return true if role?(r)
-    role = Role.find_by_nick(r)
+  def add_role!(role_nick)
+    return true if role?(role_nick)
+    role = Role.find_by_nick(role_nick)
     return false unless role
     roles << role
   end
