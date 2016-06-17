@@ -27,15 +27,16 @@
       <% v[:actions].each_pair do |kk, vv| %>
       <td>
         <label>
-          <input type="checkbox" value="<%= Array(vv).join(',') %>" <%= 'checked' if Array(vv).find{ |vvv| @role.permission?(k, vvv) } %> name="roles_permissions[<%=k%>][]"><%= kk %></label>
-        </td>
-        <% end %>
-      </tr>
+          <input type="checkbox" value="<%= Array(vv).join(',') %>" <%= 'checked' if Array(vv).find{ |vvv| @role.permission?(k, vvv) } %> name="roles_permissions[<%=k%>][]"><%= kk %>
+        </label>
+      </td>
       <% end %>
-    </table>
-    <div class="form-group text-center">
-      <%= f.submit value: "保存", class: "btn btn-sm btn-primary" %>
-      <%= link_to '返回', roles_path, class: 'btn btn-sm btn-default' %>
-    </div>
+    </tr>
     <% end %>
+  </table>
+  <div class="form-group text-center">
+    <%= f.submit value: "保存", class: "btn btn-sm btn-primary" %>
+    <%= link_to '返回', roles_path, class: 'btn btn-sm btn-default' %>
+  </div>
+  <% end %>
 </div>
