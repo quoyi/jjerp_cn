@@ -4729,9 +4729,9 @@ user = User.find_or_create_by!(email: Rails.application.secrets.admin_email) do 
   user.password = Rails.application.secrets.admin_password
   user.password_confirmation = Rails.application.secrets.admin_password
   super_admin = Role.find_or_create_by!(nick: 'super_admin', name: '超级管理员')
-  financial = Role.find_or_create_by!(nick: 'financial', name: '财务会计')
-  user.add_role!("super_admin")
-  user.add_role!("financial")
+  financial = Role.find_or_create_by!(nick: 'financial', name: '财务')
+  user.add_role!(super_admin)
+  user.add_role!(financial)
 end
 puts 'created User success ! '
 ####################################### 配件种类 #######################################

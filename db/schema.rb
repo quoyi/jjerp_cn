@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160531130158) do
+ActiveRecord::Schema.define(version: 20160617133111) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",            limit: 255, default: "",    null: false
@@ -115,12 +115,12 @@ ActiveRecord::Schema.define(version: 20160531130158) do
 
   create_table "indents", force: :cascade do |t|
     t.string   "name",          limit: 255,                                         null: false
-    t.integer  "offer_id",      limit: 4
     t.integer  "agent_id",      limit: 4,                                           null: false
     t.string   "customer",      limit: 255
     t.datetime "verify_at"
     t.datetime "require_at"
     t.string   "logistics",     limit: 255
+    t.integer  "status",        limit: 4,                           default: 0
     t.string   "note",          limit: 255
     t.decimal  "amount",                    precision: 8, scale: 2, default: 0.0
     t.decimal  "arrear",                    precision: 8, scale: 2, default: 0.0
@@ -166,8 +166,10 @@ ActiveRecord::Schema.define(version: 20160531130158) do
 
   create_table "offers", force: :cascade do |t|
     t.integer  "indent_id",  limit: 4
+    t.integer  "order_id",   limit: 4
     t.integer  "display",    limit: 4
-    t.integer  "item",       limit: 4
+    t.integer  "item_id",    limit: 4
+    t.string   "item_type",  limit: 255
     t.string   "uom",        limit: 255
     t.decimal  "number",                 precision: 10
     t.decimal  "price",                  precision: 8,  scale: 2
@@ -180,6 +182,7 @@ ActiveRecord::Schema.define(version: 20160531130158) do
   end
 
   add_index "offers", ["indent_id"], name: "index_offers_on_indent_id", using: :btree
+  add_index "offers", ["order_id"], name: "index_offers_on_order_id", using: :btree
 
   create_table "order_categories", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
@@ -273,10 +276,11 @@ ActiveRecord::Schema.define(version: 20160531130158) do
   create_table "role_permissions", force: :cascade do |t|
     t.integer  "role_id",       limit: 4
     t.integer  "permission_id", limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
     t.string   "klass",         limit: 255, null: false
     t.string   "actions",       limit: 255, null: false
+    t.string   "note",          limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   add_index "role_permissions", ["permission_id"], name: "index_role_permissions_on_permission_id", using: :btree
@@ -292,6 +296,26 @@ ActiveRecord::Schema.define(version: 20160531130158) do
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
+
+  create_table "sents", force: :cascade do |t|
+    t.integer  "indent_id",      limit: 4
+    t.string   "name",           limit: 255
+    t.datetime "sent_at"
+    t.string   "area",           limit: 255
+    t.string   "receiver",       limit: 255,                                       null: false
+    t.string   "contact",        limit: 255,                                       null: false
+    t.integer  "cupboard",       limit: 4,                           default: 0
+    t.integer  "robe",           limit: 4,                           default: 0
+    t.integer  "door",           limit: 4,                           default: 0
+    t.integer  "part",           limit: 4,                           default: 0
+    t.decimal  "collection",                 precision: 8, scale: 2, default: 0.0
+    t.string   "logistics",      limit: 255,                                       null: false
+    t.string   "logistics_code", limit: 255,                                       null: false
+    t.datetime "created_at",                                                       null: false
+    t.datetime "updated_at",                                                       null: false
+  end
+
+  add_index "sents", ["indent_id"], name: "index_sents_on_indent_id", using: :btree
 
   create_table "supplies", force: :cascade do |t|
     t.string   "name",         limit: 255,                 null: false
@@ -430,5 +454,6 @@ ActiveRecord::Schema.define(version: 20160531130158) do
   add_foreign_key "cities", "provinces"
   add_foreign_key "districts", "cities"
   add_foreign_key "materials", "supplies"
+  add_foreign_key "sents", "indents"
   add_foreign_key "tasks", "orders"
 end
