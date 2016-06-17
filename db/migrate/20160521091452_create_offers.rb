@@ -3,9 +3,10 @@ class CreateOffers < ActiveRecord::Migration
     # 报价单
     create_table :offers do |t|
       t.references :indent, index: true
+      t.references :order, index: true
       t.integer :display # 显示序号
-      t.integer :item # 项目
-      #t.string :item_name # 项目名称
+      t.integer :item_id # 项目
+      t.string :item_type # 项目类型
       t.string :uom # 单位
       t.decimal :number # 数量
       t.decimal :price, precision: 8, scale: 2 # 单价（默认为材料价格）

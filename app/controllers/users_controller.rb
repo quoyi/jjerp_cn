@@ -11,7 +11,7 @@ class UsersController < ApplicationController
   def update
     if @user.update(user_params)
       @user.roles.delete(@user.roles.first) if @user.roles.any?
-      @user.append_role change_role.nick if change_role
+      @user.add_role! change_role.nick if change_role
       flash[:notice] = '用户修改成功.'
     else
       flash[:alert] = '修改过程中出现错误'

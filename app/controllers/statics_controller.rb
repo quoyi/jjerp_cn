@@ -7,7 +7,7 @@ class StaticsController < ApplicationController
 
   def home
     # binding.pry
-    current_user.roles.map{|r|r.nick}.include?("admin")
-    # @indent = Indent.find(user_id: current_user)
+    # current_user.roles.map{|r|r.nick}.include?("admin")
+    @indents = Indent.where(agent_id: 1)
   end
 end
