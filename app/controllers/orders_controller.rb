@@ -9,7 +9,7 @@ class OrdersController < ApplicationController
     @part = Part.new
     @craft = Craft.new
     @order = Order.new
-    @orders = Order.all
+    @orders = Order.where.not(status: Order.statuses[:sent])
   end
 
   # GET /orders/1
@@ -59,6 +59,11 @@ class OrdersController < ApplicationController
   def destroy
     @order.destroy
     redirect_to orders_url, notice: '子订单已删除。'
+  end
+
+    #生产任务 
+  def producing
+    @orders = Order.producing 
   end
 
   # 导入文件，或手工输入

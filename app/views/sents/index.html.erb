@@ -1,0 +1,53 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Sents</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Indent</th>
+      <th>Name</th>
+      <th>Sent at</th>
+      <th>Area</th>
+      <th>Receiver</th>
+      <th>Contact</th>
+      <th>Cupboard</th>
+      <th>Robe</th>
+      <th>Door</th>
+      <th>Part</th>
+      <th>Collection</th>
+      <th>Collection</th>
+      <th>Logistics</th>
+      <th>Logistics code</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sents.each do |sent| %>
+      <tr>
+        <td><%= sent.indent %></td>
+        <td><%= sent.name %></td>
+        <td><%= sent.sent_at %></td>
+        <td><%= sent.area %></td>
+        <td><%= sent.receiver %></td>
+        <td><%= sent.contact %></td>
+        <td><%= sent.cupboard %></td>
+        <td><%= sent.robe %></td>
+        <td><%= sent.door %></td>
+        <td><%= sent.part %></td>
+        <td><%= sent.collection %></td>
+        <td><%= sent.collection %></td>
+        <td><%= sent.logistics %></td>
+        <td><%= sent.logistics_code %></td>
+        <td><%= link_to 'Show', sent %></td>
+        <td><%= link_to 'Edit', edit_sent_path(sent) %></td>
+        <td><%= link_to 'Destroy', sent, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sent', new_sent_path %>
