@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  indent_id: 
+  name: MyString
+  sent_at: 2016-06-17 21:31:11
+  area: MyString
+  receiver: MyString
+  contact: MyString
+  cupboard: 1
+  robe: 1
+  door: 1
+  part: 1
+  collection: 
+  collection: 
+  logistics: MyString
+  logistics_code: MyString
+
+two:
+  indent_id: 
+  name: MyString
+  sent_at: 2016-06-17 21:31:11
+  area: MyString
+  receiver: MyString
+  contact: MyString
+  cupboard: 1
+  robe: 1
+  door: 1
+  part: 1
+  collection: 
+  collection: 
+  logistics: MyString
+  logistics_code: MyString

@@ -1,0 +1,69 @@
+<%= form_for(@sent) do |f| %>
+  <% if @sent.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sent.errors.count, "error") %> prohibited this sent from being saved:</h2>
+
+      <ul>
+      <% @sent.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :indent_id %><br>
+    <%= f.text_field :indent_id, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :sent_at %><br>
+    <%= f.datetime_select :sent_at %>
+  </div>
+  <div class="field">
+    <%= f.label :area %><br>
+    <%= f.text_field :area %>
+  </div>
+  <div class="field">
+    <%= f.label :receiver %><br>
+    <%= f.text_field :receiver, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :contact %><br>
+    <%= f.text_field :contact, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :cupboard %><br>
+    <%= f.number_field :cupboard, min: 0, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :robe %><br>
+    <%= f.number_field :robe, min: 0, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :door %><br>
+    <%= f.number_field :door, min: 0, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :part %><br>
+    <%= f.number_field :part, min: 0, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :collection %><br>
+    <%= f.text_field :collection %>
+  </div>
+  <div class="field">
+    <%= f.label :logistics %><br>
+    <%= f.text_field :logistics, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :logistics_code %><br>
+    <%= f.text_field :logistics_code, required: true %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
