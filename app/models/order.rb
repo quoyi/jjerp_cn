@@ -11,15 +11,16 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for :parts, allow_destroy: true
   accepts_nested_attributes_for :crafts, allow_destroy: true
 
-  #订单状态：0.生产中 1.已发货 2.其他
-  enum status: [:producing, :sent, :other]
+  #订单状态：0. 已报价 1.生产中 2.已发货 3.其他
+  enum status: [:offered, :producing, :sent, :other]
 
   def self.status
-    [['生产中', 'producing'], ['已发货', 'sent'], ['其他', 'other']]
+    [['已报价', 'offered'], ['生产中', 'producing'], ['已发货', 'sent'], ['其他', 'other']]
   end
 
   def status_name
     case status
+      when 'offered' then '已报价'
       when 'producing' then '生产中'
       when 'sent' then '已发货'
       when 'other' then '其他'

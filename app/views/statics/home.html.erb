@@ -1,84 +1,94 @@
 <% if params[:message] %>
-  <div class="alert alert-danger%>">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <%= content_tag :div, params[:message], :id => "flash_danger" %>
-  </div>
+<div class="alert alert-danger%>">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <%= content_tag :div, params[:message], :id => "flash_danger" %>
+</div>
 <% end %>
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
     <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 个人首页 </h2></div>
     <div class="panel-options">
-      <%= link_to '刷新', '', class: 'btn btn-info' %>
+      <%= link_to '刷新', statics_home_path, class: 'btn btn-info' %>
     </div>
   </div>
   <div class="content-box-large box-with-header">
     <div class="row">
-      <div class="col-md-8">
+      <% if current_user.role?("super_admin") || current_user.role?("admin") %>
+      <div class="text-center"><h2>欢迎登陆，管理员！</h2></div>
+      <% else %>
+      <div class="col-md-8" style="padding: 0 5px;">
         <div class="content-box-header">
           我的订单
         </div>
         <div class="panel-options">
-          <table class="table">
+          <table class="table table-hover table-striped table-bordered table-condensed text-center">
             <tr>
-              <td>1</td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <th>序号</th>
+              <th>订单号</th>
+              <th>终端客户</th>
+              <th>金额</th>
+              <th>欠款</th>
+              <th>下单时间</th>
+              <th>要求发货时间</th>
+              <th>物流</th>
+              <th>备注</th>
             </tr>
+            <% unless @indents.empty? %>
+            <% @indents.each_with_index do |indent, index|  %>
             <tr>
-              <td>2</td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td><%= index + 1 %></td>
+              <td><%= indent.name %></td>
+              <td><%= indent.customer %></td>
+              <td><%= indent.amount %></td>
+              <td><%= indent.arrear %></td>
+              <td><%= indent.verify_at.strftime("%Y-%m-%d") if indent.verify_at %></td>
+              <td><%= indent.require_at.strftime("%Y-%m-%d") if indent.require_at %></td>
+              <td><%= indent.logistics %></td>
+              <td><%= indent.note %></td>
             </tr>
+            <% end %>
+            <% else %>
             <tr>
-              <td>3</td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td colspan="8">暂无订单数据</td>
             </tr>
-            <tr>
-              <td>4</td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+            <% end %>
           </table>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" style="padding: 0 5px;">
         <div class="content-box-header">
           个人信息
         </div>
         <div class="panel-options">
-          <table class="table">
+          <table class="table table-hover table-striped table-bordered table-condensed text-center">
             <tr>
-              <td>&nbsp;&nbsp;&nbsp;&nbsp;姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名&nbsp;&nbsp;&nbsp;&nbsp;</td>
+              <th>&nbsp;&nbsp;&nbsp;&nbsp;姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名&nbsp;&nbsp;&nbsp;&nbsp;</th>
               <td><%= current_user.name ||= "未知" %></td>
-              <td>&nbsp;&nbsp;&nbsp;&nbsp;电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话&nbsp;&nbsp;&nbsp;&nbsp;</td>
+              <th>&nbsp;&nbsp;&nbsp;&nbsp;电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话&nbsp;&nbsp;&nbsp;&nbsp;</th>
               <td><%= current_user.mobile ||= "未知" %></td>
             </tr>
             <tr>
-              <td>&nbsp;&nbsp;&nbsp;&nbsp;类&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型&nbsp;&nbsp;&nbsp;&nbsp;</td>
+              <th>&nbsp;&nbsp;&nbsp;&nbsp;类&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型&nbsp;&nbsp;&nbsp;&nbsp;</th>
               <td><%= current_user.user_category ||= "-" %></td>
-              <td>登&nbsp;&nbsp;陆&nbsp;&nbsp;&nbsp;次&nbsp;&nbsp;数</td>
+              <th>登&nbsp;&nbsp;陆&nbsp;&nbsp;&nbsp;次&nbsp;&nbsp;数</th>
               <td><%= current_user.sign_in_count ||= "未知" %></td>
             </tr>
             <tr>
-              <td>本次登陆时间</td>
-              <td><%= current_user.current_sign_in_at %></td>
-              <td>本次登陆地址</td>
+              <th>本次登陆时间</th>
+              <td><%= current_user.current_sign_in_at.strftime("%Y-%m-%d") %></td>
+              <th>本次登陆地址</th>
               <td><%= current_user.current_sign_in_ip %></td>
             </tr>
             <tr>
-              <td>上次登陆时间</td>
-              <td><%= current_user.last_sign_in_at %></td>
-              <td>上次登陆地址</td>
+              <th>上次登陆时间</th>
+              <td><%= current_user.last_sign_in_at.strftime("%Y-%m-%d") %></td>
+              <th>上次登陆地址</th>
               <td><%= current_user.last_sign_in_ip %>  </td>
             </tr>
           </table>
         </div>
       </div>
+      <% end %>
     </div>
   </div>
 </div>

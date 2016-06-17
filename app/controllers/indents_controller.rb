@@ -1,4 +1,5 @@
 class IndentsController < ApplicationController
+  include OffersHelper
   before_action :set_indent, only: [:show, :edit, :update, :destroy]
 
   # GET /indents
@@ -60,6 +61,8 @@ class IndentsController < ApplicationController
   def generate
     # binding.pry
     # 查找订单的所有拆单信息，并生成报价单
+    indent = Indent.find_by_id(params[:id])
+    create_offer(indent) if indent
     redirect_to indents_path, notice: '生成报价单成功！'
   end
 
@@ -145,7 +148,7 @@ class IndentsController < ApplicationController
     #   end
     # end
     params.require(:indent).permit(:id, :name, :offer_id, :agent_id, :customer, :verify_at, :require_at, :note,
-                                  :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted,
+                                  :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted, :status,
                                    orders_attributes: [:id, :order_category_id, :customer, :number, :ply,
                                                        :texture, :color, :length, :width, :height,
                                                        :note, :_destroy])

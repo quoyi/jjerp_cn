@@ -42,8 +42,8 @@
             <td><%= i.total_history %></td>
             <!-- 这里需要判断是否已生成报价单 -->
             <td>
-              <% if i.offer_id.present? %>
-              <%= link_to '报价单', offer_path(i.offer_id) %>
+              <% unless i.offers.empty? %>
+              <%= link_to '报价单', offer_path(indent_id: i.id) %>
               <% else %>
               未报价
               <% end %>

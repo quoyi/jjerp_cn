@@ -37,7 +37,7 @@
         %>
         <li  class="submenu <%= 'open' if ['agents', 'supplies', 'order_categories', 'unit_categories', 'units', 'part_categories', 'parts', 'material_categories', 'materials'].include?(controller_name)%>">
             <a href="#">
-                <i class="fa fa-cogs"></i> 基础信息 <span class="caret pull-right"></span>
+                <i class="fa fa-cogs"></i> 基础数据 <span class="caret pull-right"></span>
             </a>
             <ul>
                 <%if current_user.permission?("AgentsController", "index")%>

@@ -14,7 +14,7 @@
         </p>
         <p class="pull-right">
           <%= link_to '报价信息', '#', class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '查看报价信息' %>
-          <%= link_to '生成报价', generate_indents_path(@indent), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '生成总订单的报价单' %>
+          <%= link_to '生成报价', generate_indents_path(id: @indent.id), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '生成总订单的报价单' %>
         </p>
       </div>
       <table class="table table-hover table-striped table-bordered table-condensed">
