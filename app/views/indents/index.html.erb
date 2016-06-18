@@ -42,14 +42,14 @@
             <td><%= i.total_history %></td>
             <!-- 这里需要判断是否已生成报价单 -->
             <td>
-              <% unless i.offers.empty? %>
-              <%= link_to '报价单', offer_path(indent_id: i.id) %>
+              <% if Indent.statuses[i.status.to_sym] > Indent.statuses[:offering] && Indent.statuses[i.status.to_sym] <= Indent.statuses[:sent] %>
+              <%= link_to '报价单', offers_path(indent_id: i.id) %>
               <% else %>
               未报价
               <% end %>
             </td>
             <td>
-              <%= link_to '编辑', edit_indent_path(i), class: 'btn-primary btn-xs', data: {toggle: 'tooltip', title:'编辑总订单'} %>
+              <%= link_to '编辑', edit_indent_path(i), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title:'编辑总订单' %>
               <%= link_to '添加到款', '#', class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', indent: i.id}, id: 'addIncomesBtn' %>
               <%= link_to '到款信息', incomes_path(indent_id: i.id), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '查看到款记录' %>
             </td>

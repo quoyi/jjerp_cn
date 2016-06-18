@@ -1,25 +1,44 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Offers</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @offers.each do |offer| %>
-      <tr>
-        <td><%= link_to 'Show', offer %></td>
-        <td><%= link_to 'Edit', edit_offer_path(offer) %></td>
-        <td><%= link_to 'Destroy', offer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Offer', new_offer_path %>
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 报价单 <small>列表</small> </h2></div>
+    <div class="panel-options">
+      <%= link_to '返回', indents_path, class: 'btn btn-info', data: { toggle: 'tooltip'}, title: '返回到总订单列表' %>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr>
+            <th>总订单编号</th>
+            <th>子订单编号</th>
+            <th>项目类型</th>
+            <th>项目名称</th>
+            <th>单位</th>
+            <th>数量</th>
+            <th>单价</th>
+            <th>项目合计</th>
+            <th>订单合计</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @offers.each do |o| %>
+          <tr>
+            <td><%= link_to o.indent.try(:name), indent_path(o.indent), data:{toggle: 'tooltip'}, title: '总订单详细' %></td>
+            <td><%= link_to o.order.try(:name), order_path(o.order), data:{toggle: 'tooltip'}, title: '子订单详细' %></td>
+            <td><%= o.item_type_name %></td>
+            <td><%= o.item_name %></td>
+            <td><%= o.uom %></td>
+            <td><%= o.number %></td>
+            <td><%= o.price %></td>
+            <td><%= o.sum %></td>
+            <td><%= o.total %></td>
+            <td><%= o.note %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
