@@ -6,24 +6,26 @@
     </div>
   </div>
   <div class="content-box-large box-with-header">
-    <table class="table table-hover table-striped table-bordered table-condensed text-center">
-      <thead>
-        <tr class="info">
-          <th class="text-center">名称</th>
-          <th class="text-center">备注</th>
-          <th class="text-center">操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @unit_categories.each do |uc| %>
-        <tr>
-          <td><%= uc.name %></td>
-          <td><%= uc.note %></td>
-          <td><%= link_to '删除', uc, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
-        </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr class="info">
+            <th class="text-center">名称</th>
+            <th class="text-center">备注</th>
+            <th class="text-center">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @unit_categories.each do |uc| %>
+          <tr>
+            <td><%= uc.name %></td>
+            <td><%= uc.note %></td>
+            <td><%= link_to '删除', uc, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 <%= render 'new' %>

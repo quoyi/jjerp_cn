@@ -5,39 +5,41 @@
       <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addIndent'} %>
     </div>
   </div>
-<% @start_at = nil; @end_at = nil;%>
-<% if params[:start_at] || params[:end_at] || params[:agent_id]%>
+  <% @start_at = nil; @end_at = nil;%>
+  <% if params[:start_at] || params[:end_at] || params[:agent_id]%>
   <% @start_at = params[:start_at]%>
   <% @end_at = params[:end_at]%>
   <% @agent_search = Agent.find_by_id(params[:agent_id])%>
-<% end%>
+  <% end%>
   <div class="content-box-large box-with-header">
     <div class="row">
+      <div class="col-sm-12">
         <%= form_tag indents_path, class: 'form-inline', method: 'get' do %>
         <div class="panel panel-info">
-          <div class="panel-heading" style="line-height: 30px;">
+          <div class="panel-heading">
             <span>查询条件</span>
           </div>
           <div class="panel-body">
             <div class="col-sm-6">
               <label>下单时间：</label>
-              <%= date_field_tag :start_at, @start_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 40%;"%>
+              <%= date_field_tag :start_at, @start_at, data: {provide: 'datepicker'}, style: "width: 40%;", placeholder: '请选择起始日期' %>
               &nbsp;&nbsp;--&nbsp;&nbsp;
-              <%= date_field_tag :end_at,@end_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 40%;"%>
+              <%= date_field_tag :end_at, @end_at, data: {provide: 'datepicker'}, style: "width: 40%;", placeholder: '请选择终止日期' %>
             </div>
             <div class="col-sm-4">
               <label>经销商: </label>
               <input type="hidden" id="remoteDataAgent" name='agent_id' data-id="<%=@agent_search.try(:id)%>" data-name="<%=@agent_search.try(:full_name)%>" style="width: 80%" class="select2 ajax"/>
-            </div> 
-            <div class="col-sm-2"> 
+            </div>
+            <div class="col-sm-2">
               <%= submit_tag '查询', class: 'btn btn-primary btn-xs' %>
             </div>
           </div>
-        </div>  
-        <% end %>   
+        </div>
+        <% end %>
+      </div>
     </div>
     <div class="row">
-      <div class="col-sm-3">   
+      <div class="col-sm-3">
         <div class="panel panel-info">
           <div class="panel-heading">
             <span>订单统计信息</span>
@@ -64,11 +66,11 @@
               <th>总金额</th>
             </tr>
             <% @indents.group_by{|indent| indent.agent_id}.sort_by{|k,v| v.map(&:amount).sum }.reverse[0..10].to_h.each_pair do |k, v|%>
-              <tr>
-                <td><%= Agent.find(k).full_name %></td>
-                <td><%= v.size %></td>
-                <td><%= v.map(&:amount).sum() %></td>
-              </tr>
+            <tr>
+              <td><%= Agent.find(k).full_name %></td>
+              <td><%= v.size %></td>
+              <td><%= v.map(&:amount).sum() %></td>
+            </tr>
             <%end%>
           </table>
         </div>
@@ -83,11 +85,11 @@
               <th>总金额</th>
             </tr>
             <% @indents.group_by{|indent| indent.agent_id}.sort_by{|k,v| v.size }.reverse[0..10].to_h.each_pair do |k, v|%>
-              <tr>
-                <td><%= Agent.find(k).full_name %></td>
-                <td><%= v.size %></td>
-                <td><%= v.map(&:amount).sum() %></td>
-              </tr>
+            <tr>
+              <td><%= Agent.find(k).full_name %></td>
+              <td><%= v.size %></td>
+              <td><%= v.map(&:amount).sum() %></td>
+            </tr>
             <%end%>
           </table>
         </div>
@@ -142,6 +144,5 @@
     </div>
   </div>
 </div>
-
 <%= render 'new' %>
 <%= render '/incomes/new' %>
