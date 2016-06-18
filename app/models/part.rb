@@ -1,7 +1,7 @@
 class Part < ActiveRecord::Base
   belongs_to :part_category
   belongs_to :supply
-  belongs_to :order
+  # belongs_to :order
   validates_presence_of :part_category_id, :price, :supply_id
 
   # before_save :generate_name
