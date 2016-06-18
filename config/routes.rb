@@ -21,12 +21,14 @@ Rails.application.routes.draw do
   resources :orders do
     collection do
       post :import
+      get :producing
     end
   end
   resources :departments
   resources :indents do
     collection do
       get :generate
+      get :not_sent
     end
     member do
       get :package

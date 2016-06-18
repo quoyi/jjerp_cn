@@ -35,4 +35,40 @@ $(function() {
     $("#income_indent_id").val(indent_id);
   });
 
+  //ajax动态搜索组团社联系人
+  return $('#remoteDataAgent').each((function(_this) {
+    return function(i, e) {
+      var options, select;
+      select = $(e);
+      options = {
+        placeholder: "经销商名称",
+        minimumInputLength: 0
+      };
+      if (select.hasClass('ajax')) {
+        options.ajax = {
+          url: "/agents.json",
+          dataType: 'json',
+          data: function(term, page) {
+            return {
+              term: term,
+              page: page,
+              per: 25
+            };
+          },
+          results: function(data, page) {
+            return {
+              results: data.agents,
+              more: data.total > (page * 25)
+            };
+          }
+        };
+        options.dropdownCssClass = "bigdrop";
+      }
+      return select.select2(options).select2("data",
+     {"id": $("#remoteDataAgent").data("id"),"text":(isNaN($("#remoteDataAgent").data("name")) ? $("#remoteDataAgent").data("name") : "搜索经销商名称")}  //初始化数据
+    );;
+    };
+  })(this));
+
+
 });
