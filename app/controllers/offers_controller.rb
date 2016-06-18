@@ -4,7 +4,7 @@ class OffersController < ApplicationController
   # GET /offers
   # GET /offers.json
   def index
-    @offers = Offer.where(deleted: false)
+    @offers = params[:indent_id].present? ? Offer.where(indent_id: params[:indent_id], deleted: false) : Offer.where(deleted: false)
   end
 
   # GET /offers/1
@@ -59,14 +59,14 @@ class OffersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_offer
-      @offer = Offer.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_offer
+    @offer = Offer.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def offer_params
-      params.require(:offer).permit(:indent_id, :display, :item_id, :item_type, :uom,
-                                    :number, :price, :sum, :total, :note, :deleted)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def offer_params
+    params.require(:offer).permit(:indent_id, :display, :item_id, :item_type, :item_name,
+                                  :uom, :number, :price, :sum, :total, :note, :deleted)
+  end
 end

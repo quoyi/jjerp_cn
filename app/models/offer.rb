@@ -1,14 +1,16 @@
 class Offer < ActiveRecord::Base
+  belongs_to :indent
+  belongs_to :order
 
   #订单状态：0.部件 1.配件 2.工艺
-  enum item: [:unit, :part, :craft]
+  enum item_type: [:unit, :part, :craft]
 
-  def self.item
+  def self.item_type
     [['部件', 'unit'], ['配件', 'part'], ['工艺', 'craft']]
   end
 
-  def item_name
-    case item
+  def item_type_name
+    case item_type
       when 'unit' then '部件'
       when 'part' then '配件'
       when 'craft' then '工艺'

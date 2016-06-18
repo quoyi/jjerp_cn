@@ -6,7 +6,110 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="addAgentLabel"> 代理商 <small>新建</small></h4>
       </div>
-      <%= render 'form' %>
+      <%= form_for @agent do |f| %>
+      <div class="modal-body">
+        <table class="table table-hover table-striped table-bordered table-condensed">
+          <tr>
+            <td>
+              <%= f.label '编号' %>
+            </td>
+            <td>
+              <%= f.text_field :name, required: true %>
+            </td>
+            <td>
+              <%= f.label '名称' %>
+            </td>
+            <td>
+              <%= f.text_field :full_name, required: true %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <%= f.label '电话' %>
+            </td>
+            <td>
+              <%= f.text_field :mobile, required: true %>
+            </td>
+            <td>
+              <%= f.label '负责人' %>
+            </td>
+            <td>
+              <%= f.text_field :contacts, required: true %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <%= f.label 'QQ' %>
+            </td>
+            <td>
+              <%= f.text_field :e_account %>
+            </td>
+            <td>
+              <%= f.label '传真' %>
+            </td>
+            <td>
+              <%= f.text_field :fax %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <%= f.label '邮箱' %>
+            </td>
+            <td>
+              <%= f.text_field :email %>
+            </td>
+            <td>
+              <%= f.label '微信' %>
+            </td>
+            <td>
+              <%= f.text_field :wechar %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <%= f.label '物流' %>
+            </td>
+            <td>
+              <%= f.text_field :logistics %>
+            </td>
+            <td>
+              <%= f.label '结账周期(天)' %>
+            </td>
+            <td>
+              <%= f.text_field :cycle %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <%= f.label '下单条件' %>
+            </td>
+            <td>
+              <%= f.text_field :order_condition %>
+            </td>
+            <td>
+              <%= f.label '发货条件' %>
+            </td>
+            <td>
+              <%= f.text_field :send_condition %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <%= f.label '备注' %>
+            </td>
+            <td colspan="3">
+              <%= f.text_field :note, width: '100%' %>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <% if @agent.new_record? %>
+        <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
+        <% end %>
+        <%= f.submit '提交', class: 'btn btn-primary' %>
+      </div>
+      <% end %>
     </div>
   </div>
 </div>

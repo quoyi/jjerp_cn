@@ -22,32 +22,30 @@ module OrdersHelper
             last_units = units.last
             last_unit_index = last_units.present? ? (last_units.name.split(/-/).last.to_i + 1).to_s : '1'
             units.destroy_all
-            
-            binding.pry
             # 删除已存在的拆单记录
             Unit.where(order_id: order.id).destroy_all
             table.each do |row|
-              next if row[8].blank? || row[8].strip != name
-              ply = row[1].split(/板/).last
-              ply = ply.gsub(/厚/, 'mm')
-              unless MaterialCategory.all.map(&:name).include?(ply)
-                _return = "找不到板料: #{ply}"
+              # next if row[8].blank? || row[8].strip != name
+              # ply = row[1].split(/板/).last
+              # ply = ply.gsub(/厚/, 'mm')
+              unless MaterialCategory.all.map(&:name).include?(order.id)
+                _return = "找不到板料"
               end
-
-              ply_id = MaterialCategory.find_by(name: ply).id
               unit = Unit.new(
                 order_id: order.id,
                 name: "ESR" + order.name + "-" + (index + 1).to_s,
                 full_name: row[0],
-                ply: ply_id,
+                ply: order.id,
                 length: row[2],
                 width: row[3],
                 number: row[5],
+                price: Material.find_by(ply: order.id, texture: order.texture, color: order.color).try(:price).to_f,
                 size: row[6],
                 customer: row[10],
                 edge: row[11],
                 note: row[13]
               )
+              binding.pry
               unit.save!
               index += 1
             end

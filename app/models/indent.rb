@@ -28,16 +28,17 @@ class Indent < ActiveRecord::Base
   end
 
 
-  #状态：1.已报价 2.已下单 3.已入库 4.已发货
-  enum status: [:offered, :checked, :packaged, :sent]
+  #状态：0.报价中 1.已报价 2.生产中 3.已入库 4.已发货
+  enum status: [:offering, :offered, :producing, :packaged, :sent]
 
   def self.status
-    [['已报价', 'offered'], ["已下单","checked"], ["已入库", "packaged"], ["已发货", "sent"]]
+    [['报价中', 'offering'], ['已报价', 'offered'], ["生产中","producing"], ["已入库", "packaged"], ["已发货", "sent"]]
   end
   def status_name
     case status
+      when 'offering' then '报价中'
       when 'offered' then '已报价'
-      when 'checked' then '已下单'
+      when 'checked' then '生产中'
       when "packaged" then '已入库'
       when "sent" then '已发货'
     else
