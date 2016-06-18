@@ -38,11 +38,9 @@ class Order < ActiveRecord::Base
   end
 
   def generate_order_code
-    begin
-      last_order = Order.where(indent_id: self.indent.id).order('name ASC').last
-      order_index = last_order.present? ? (last_order.name.split(/-/).last.to_i + 1).to_s : 1
-      self.name = self.indent.name + "-" + order_index.to_s
-    end while self.class.exists?(:name => name)
+    last_order = Order.where(indent_id: self.indent.id).order('name ASC').last
+    order_index = last_order.present? ? (last_order.name.split(/-/).last.to_i + 1).to_s : 1
+    self.name = self.indent.name + "-" + order_index.to_s
   end
 
 end

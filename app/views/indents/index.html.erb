@@ -43,7 +43,7 @@
             <!-- 这里需要判断是否已生成报价单 -->
             <td>
               <% unless i.offers.empty? %>
-              <%= link_to '报价单', offer_path(indent_id: i.id) %>
+              <%= link_to '报价单', offers_path(indent_id: i.id) %>
               <% else %>
               未报价
               <% end %>

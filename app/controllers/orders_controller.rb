@@ -47,6 +47,7 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
+    binding.pry
     if @order.update!(order_params)
       redirect_to @order, notice: '子订单编辑成功！'
     else
