@@ -5,8 +5,8 @@ class CreateIndents < ActiveRecord::Migration
       t.string :name, null: false, index: true, unique: true # 编码
       t.references :agent, null: false, index: true # 经销商
       t.string :customer # 终端客户
-      t.datetime :verify_at # 回传确认时间
-      t.datetime :require_at # 要求发货时间
+      t.date :verify_at # 回传确认时间
+      t.date :require_at # 要求发货时间
       t.string :logistics # 物流
       t.integer :status, default: 0 # 状态
       t.string :note # 备注

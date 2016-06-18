@@ -1,64 +1,147 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
-    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 总订单 <small>列表</small> </h2></div>
+    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 订单 <small>列表</small> </h2></div>
     <div class="panel-options">
       <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addIndent'} %>
     </div>
   </div>
+<% @start_at = nil; @end_at = nil;%>
+<% if params[:start_at] || params[:end_at] || params[:agent_id]%>
+  <% @start_at = params[:start_at]%>
+  <% @end_at = params[:end_at]%>
+  <% @agent_search = Agent.find_by_id(params[:agent_id])%>
+<% end%>
   <div class="content-box-large box-with-header">
-    <!-- <div class="row content-title">
-      <div class="btn-group" role="group" aria-label="">
-        <% PartCategory.group(:name).map(&:name).push('所有').each do |k| %>
-        <%= link_to k, parts_path(name: k), class: "btn btn-default #{'btn-primary' if params[:name].presence == k}" %>
-        <% end %>
+    <div class="row">
+        <%= form_tag indents_path, class: 'form-inline', method: 'get' do %>
+        <div class="panel panel-info">
+          <div class="panel-heading" style="line-height: 30px;">
+            <span>查询条件</span>
+          </div>
+          <div class="panel-body">
+            <div class="col-sm-6">
+              <label>下单时间：</label>
+              <%= date_field_tag :start_at, @start_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 40%;"%>
+              &nbsp;&nbsp;--&nbsp;&nbsp;
+              <%= date_field_tag :end_at,@end_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 40%;"%>
+            </div>
+            <div class="col-sm-4">
+              <label>经销商: </label>
+              <input type="hidden" id="remoteDataAgent" name='agent_id' data-id="<%=@agent_search.try(:id)%>" data-name="<%=@agent_search.try(:full_name)%>" style="width: 80%" class="select2 ajax"/>
+            </div> 
+            <div class="col-sm-2"> 
+              <%= submit_tag '查询', class: 'btn btn-primary btn-xs' %>
+            </div>
+          </div>
+        </div>  
+        <% end %>   
+    </div>
+    <div class="row">
+      <div class="col-sm-3">   
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <span>订单统计信息</span>
+          </div>
+          <table class="table table-hover table-striped table-bordered table-condensed text-center order-show-table">
+            <tr>
+              <th>总金额</th>
+              <td><%= @indents.map(&:amount).sum() %></td>
+            </tr>
+            <tr>
+              <th>订单数</th>
+              <td><%= @indents.size %></td>
+            </tr>
+          </table>
+        </div>
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <span>总金额 Top10</span>
+          </div>
+          <table class="table table-hover table-striped table-bordered table-condensed text-center order-show-table">
+            <tr>
+              <th>经销商</th>
+              <th>订单数</th>
+              <th>总金额</th>
+            </tr>
+            <% @indents.group_by{|indent| indent.agent_id}.sort_by{|k,v| v.map(&:amount).sum }.reverse[0..10].to_h.each_pair do |k, v|%>
+              <tr>
+                <td><%= Agent.find(k).full_name %></td>
+                <td><%= v.size %></td>
+                <td><%= v.map(&:amount).sum() %></td>
+              </tr>
+            <%end%>
+          </table>
+        </div>
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <span>总单数 Top10</span>
+          </div>
+          <table class="table table-hover table-striped table-bordered table-condensed text-center order-show-table">
+            <tr>
+              <th>经销商</th>
+              <th>订单数</th>
+              <th>总金额</th>
+            </tr>
+            <% @indents.group_by{|indent| indent.agent_id}.sort_by{|k,v| v.size }.reverse[0..10].to_h.each_pair do |k, v|%>
+              <tr>
+                <td><%= Agent.find(k).full_name %></td>
+                <td><%= v.size %></td>
+                <td><%= v.map(&:amount).sum() %></td>
+              </tr>
+            <%end%>
+          </table>
+        </div>
       </div>
-    </div> -->
-    <div class="row content-table">
-      <table class="table table-hover table-striped table-bordered table-condensed text-center">
-        <thead>
-          <tr>
-            <th>总订单号</th>
-            <th>经销商</th>
-            <th>终端信息</th>
-            <th>下单时间</th>
-            <th>发货时间</th>
-            <th>订单金额</th>
-            <th>欠款合计</th>
-            <th>历史合计</th>
-            <th>报价单</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @indents.each do |i| %>
-          <tr>
-            <td><%= link_to i.name, i, data: {toggle:'tooltip'}, title: '总订单详细' %></td>
-            <td><%= i.agent.try(:full_name) %></td>
-            <td><%= i.customer %></td>
-            <td><%= i.verify_at.strftime('%Y-%m-%d') %></td>
-            <td><%= i.require_at.strftime('%Y-%m-%d') %></td>
-            <td><%= i.amount %></td>
-            <td class="danger"><%= i.total_arrear %></td>
-            <td><%= i.total_history %></td>
-            <!-- 这里需要判断是否已生成报价单 -->
-            <td>
-              <% if Indent.statuses[i.status.to_sym] > Indent.statuses[:offering] && Indent.statuses[i.status.to_sym] <= Indent.statuses[:sent] %>
-              <%= link_to '报价单', offers_path(indent_id: i.id) %>
-              <% else %>
-              未报价
+      <div class="col-sm-9">
+        <div class="panel panel-info">
+          <table class="table table-hover table-striped table-bordered table-condensed text-center">
+            <thead>
+              <tr>
+                <th>总订单号</th>
+                <th>经销商</th>
+                <th>终端信息</th>
+                <th>下单时间</th>
+                <th>发货时间</th>
+                <th>订单金额</th>
+                <th>欠款合计</th>
+                <th>历史合计</th>
+                <th>报价单</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @indents.each do |i| %>
+              <tr>
+                <td><%= link_to i.name, i, data: {toggle:'tooltip'}, title: '总订单详细' %></td>
+                <td><%= i.agent.try(:full_name) %></td>
+                <td><%= i.customer %></td>
+                <td><%= i.verify_at.strftime('%Y-%m-%d') %></td>
+                <td><%= i.require_at.strftime('%Y-%m-%d') %></td>
+                <td><%= i.amount %></td>
+                <td class="danger"><%= i.total_arrear %></td>
+                <td><%= i.total_history %></td>
+                <!-- 这里需要判断是否已生成报价单 -->
+                <td>
+                  <% if Indent.statuses[i.status.to_sym] > Indent.statuses[:offering] && Indent.statuses[i.status.to_sym] <= Indent.statuses[:sent] %>
+                  <%= link_to '报价单', offers_path(indent_id: i.id) %>
+                  <% else %>
+                  未报价
+                  <% end %>
+                </td>
+                <td>
+                  <%= link_to '编辑', edit_indent_path(i), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title:'编辑总订单' %>
+                  <%= link_to '添加到款', '#', class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', indent: i.id}, id: 'addIncomesBtn' %>
+                  <%= link_to '到款信息', incomes_path(indent_id: i.id), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '查看到款记录' %>
+                </td>
+              </tr>
               <% end %>
-            </td>
-            <td>
-              <%= link_to '编辑', edit_indent_path(i), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title:'编辑总订单' %>
-              <%= link_to '添加到款', '#', class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', indent: i.id}, id: 'addIncomesBtn' %>
-              <%= link_to '到款信息', incomes_path(indent_id: i.id), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '查看到款记录' %>
-            </td>
-          </tr>
-          <% end %>
-        </tbody>
-      </table>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
 <%= render 'new' %>
 <%= render '/incomes/new' %>

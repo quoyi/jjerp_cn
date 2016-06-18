@@ -12,7 +12,7 @@ class CreateSents < ActiveRecord::Migration
       t.integer :robe, default: 0 
       t.integer :door, default: 0 
       t.integer :part, default: 0 
-      t.decimal :collection, precision: 8, scale: 2, default: 0 
+      t.decimal :collection, precision: 8, scale: 2, default: 0
       t.string :logistics, null: false
       t.string :logistics_code, null: false
 

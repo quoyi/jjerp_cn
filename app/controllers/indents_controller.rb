@@ -9,6 +9,17 @@ class IndentsController < ApplicationController
     @indent = Indent.new
     @income = @indent.incomes.new
     @indents = Indent.all.order(created_at: :desc)
+    if params[:start_at].present? && params[:end_at].present?
+      @indents = @indents.where("verify_at between ? and ?", params[:start_at], params[:end_at])
+    elsif params[:start_at].present? || params[:end_at].present?
+      @indents = @indents.where("verify_at = ? ", params[:start_at].present? ? params[:start_at] : params[:end_at])
+    end
+
+    if params[:agent_id].present?
+      @indents = @indents.where(agent_id: params[:agent_id])
+    end
+
+
   end
 
   # GET /units/1
@@ -130,6 +141,10 @@ class IndentsController < ApplicationController
                               disposition: "inline"
       end
     end
+  end
+
+  def not_sent
+    @indents = Indent.packaged
   end
 
 
