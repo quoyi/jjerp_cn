@@ -50,6 +50,31 @@ class IncomesController < ApplicationController
     redirect_to incomes_path, notice: '收入记录已删除。'
   end
 
+
+  def stat
+    @incomes = Income.all
+    @expends = Expend.all
+
+    if params[:start_at].present? && params[:end_at].present?
+      @incomes = @incomes.where("income_at between ? and ?", params[:start_at], params[:end_at])
+      @expends = @expends.where("expend_at between ? and ?", params[:start_at], params[:end_at])
+    elsif params[:start_at].present? || params[:end_at].present?
+      @incomes = @incomes.where("income_at = ? ", params[:start_at].present? ? params[:start_at] : params[:end_at])
+      @expends = @expends.where("expend_at = ? ", params[:start_at].present? ? params[:start_at] : params[:end_at])
+    end
+
+    if params[:bank_id].present?
+      @incomes = @incomes.where(bank_id: params[:bank_id])
+      @expends = @expends.where(bank_id: params[:bank_id])
+    end
+
+    @incomes = @incomes.order(income_at: :desc)
+    @expends = @expends.order(expend_at: :desc)
+
+    @incomes_expends = @incomes.to_a + @expends.to_a
+
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_income

@@ -79,11 +79,14 @@
             </a>
             <ul>
                 <% if current_user.permission?("IncomesController", "index") %>
-                <li class='<%="#{'active' if controller_name == 'incomes'}" %>'><%= link_to '收入', incomes_path %></li>
+                    <li class='<%="#{'active' if controller_name == 'incomes' && action_name == 'index' }" %>'><%= link_to '收入', incomes_path %></li>
                 <% end %>
                 <% if current_user.permission?("ExpendsController", "index") %>
-                <li class='<%="#{'active' if controller_name == 'expends'}" %>'><%= link_to '支出', expends_path %></li>
-                <% end %>
+                    <li class='<%="#{'active' if controller_name == 'expends'}" %>'><%= link_to '支出', expends_path %></li>
+                 <% end %>
+                 <% if current_user.permission?("IncomesController", "stat") %>
+                    <li class='<%="#{'active' if controller_name == 'incomes' && action_name == 'stat'}" %>'><%= link_to '收支统计', stat_incomes_path %></li>
+                 <% end %>
             </ul>
         </li>
         <% end %>
