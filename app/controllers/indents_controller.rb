@@ -145,6 +145,7 @@ class IndentsController < ApplicationController
 
   def not_sent
     @indents = Indent.packaged
+    @sent = Sent.new()
   end
 
 

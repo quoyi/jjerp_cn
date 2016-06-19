@@ -35,6 +35,11 @@ $(function() {
     $("#income_indent_id").val(indent_id);
   });
 
+  $("#addSent").on('show.bs.modal', function(e){
+    var indent_id = e.relatedTarget.dataset.indent;
+    $("#sent_indent_id").val(indent_id);
+  });
+
   //ajax动态搜索组团社联系人
   return $('#remoteDataAgent').each((function(_this) {
     return function(i, e) {
