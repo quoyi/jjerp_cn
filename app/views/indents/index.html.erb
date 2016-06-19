@@ -1,8 +1,10 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
-    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 订单 <small>列表</small> </h2></div>
-    <div class="panel-options">
-      <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addIndent'} %>
+    <div class="panel-title">
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 订单 <small>列表</small> </h2>
+      <div class="pull-right panel-options">
+        <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addIndent'} %>
+      </div>
     </div>
   </div>
   <% @start_at = nil; @end_at = nil;%>
@@ -24,7 +26,7 @@
               <label>下单时间：</label>
               <%= date_field_tag :start_at, @start_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择起始日期' %>
               &nbsp;&nbsp;--&nbsp;&nbsp;
-              <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择终止日期' %>           
+              <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择终止日期' %>
             </div>
             <div class="col-sm-4">
               <label>经销商: </label>
@@ -39,7 +41,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-3">
+      <div class="col-sm-4">
         <div class="panel panel-info">
           <div class="panel-heading">
             <span>订单统计信息</span>
@@ -94,7 +96,7 @@
           </table>
         </div>
       </div>
-      <div class="col-sm-9">
+      <div class="col-sm-8">
         <div class="panel panel-info">
           <table class="table table-hover table-striped table-bordered table-condensed text-center">
             <thead>

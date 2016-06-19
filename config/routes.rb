@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     collection do
       get :generate
       get :not_sent
+      get :export_offer
     end
     member do
       get :package

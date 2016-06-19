@@ -1,6 +1,8 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
-    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 发货 <small>列表</small> </h2></div>
+    <div class="panel-title">
+    <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 已发货 <small>列表</small> </h2>
+    </div>
   </div>
   <div class="content-box-large box-with-header">
     <div class="row content-table">
@@ -24,22 +26,22 @@
         </thead>
         <tbody>
           <% @sents.each do |sent| %>
-            <tr>
-              <td><%= sent.indent.name %></td>
-              <td><%= sent.sent_at %></td>
-              <td><%= sent.area %></td>
-              <td><%= sent.receiver %></td>
-              <td><%= sent.contact %></td>
-              <td><%= sent.cupboard %></td>
-              <td><%= sent.robe %></td>
-              <td><%= sent.door %></td>
-              <td><%= sent.part %></td>
-              <td><%= sent.collection %></td>
-              <td><%= sent.logistics %></td>
-              <td><%= sent.logistics_code %></td>
-              <td><%= link_to '编辑', edit_sent_path(sent) %></td>
-              <td><%= link_to '删除', sent, method: :delete, data: { confirm: '你确定要删除吗?' } %></td>
-            </tr>
+          <tr>
+            <td><%= sent.indent.name %></td>
+            <td><%= sent.sent_at %></td>
+            <td><%= sent.area %></td>
+            <td><%= sent.receiver %></td>
+            <td><%= sent.contact %></td>
+            <td><%= sent.cupboard %></td>
+            <td><%= sent.robe %></td>
+            <td><%= sent.door %></td>
+            <td><%= sent.part %></td>
+            <td><%= sent.collection %></td>
+            <td><%= sent.logistics %></td>
+            <td><%= sent.logistics_code %></td>
+            <td><%= link_to '编辑', edit_sent_path(sent) %></td>
+            <td><%= link_to '删除', sent, method: :delete, data: { confirm: '你确定要删除吗?' } %></td>
+          </tr>
           <% end %>
         </tbody>
       </table>

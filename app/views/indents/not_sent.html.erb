@@ -1,14 +1,14 @@
-<!-- Page title -->
-<div class="page-title">
-  <h2><i class="fa fa-desktop color"></i> 待发货订单管理 <small>列表</small>
-    <span class="pull-right">
-    </span>
-  </h2>
-  <hr />
-</div>
-<!-- Page title -->
-<div class="awidget full-width">
-  <table class="table table-hover table-striped table-bordered table-condensed text-center">
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <!-- Page title -->
+    <div class="panel-title">
+      <h2 class="pull-left"><i class="fa fa-desktop color"></i> 待发货 <small>列表</small>
+      </h2>
+    </div>
+  </div>
+  <!-- Page title -->
+  <div class="content-box-large box-with-header">
+    <table class="table table-hover table-striped table-bordered table-condensed text-center">
       <thead>
         <tr class="info">
           <td>发货</td>
@@ -26,6 +26,7 @@
           <td><%= indent.agent.try(:name) %></td>
         </tr>
         <%end%>
-      </toby>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </div>
