@@ -59,6 +59,6 @@ class ExpendsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def expend_params
       params.require(:expend).permit(:name, :reason, :money, :username, :expend_at, :status,
-                                    :note, :deleted)
+                                    :note, :bank_id, :deleted)
     end
 end

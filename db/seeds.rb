@@ -4797,3 +4797,9 @@ UnitCategory.create(:name => "板料")
 UnitCategory.create(:name => "配件")
 UnitCategory.create(:name => "工艺")
 puts 'created UnitCategory success ! '
+####################################### 银行卡 #######################################
+Bank.create(name: '张三', bank_name: '中国银行', bank_card: '627001702381000001', balance: 500)
+Bank.create(name: '李四', bank_name: '工商银行', bank_card: '627001702381000002', balance: 600)
+Bank.create(name: '王五', bank_name: '招商银行', bank_card: '627001702381000003', balance: 700)
+Bank.create(name: '刘六', bank_name: '建设银行', bank_card: '627001702381000004', balance: 800)
+puts 'created Bank success ! '

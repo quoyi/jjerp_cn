@@ -3,6 +3,7 @@ class CreateExpends < ActiveRecord::Migration
     # 支出
     create_table :expends do |t|
       t.string :name
+      t.references :bank
       t.string :reason # 支出事由
       t.decimal :money, precision: 8, scale: 2 # 支出金额
       t.string :username # 经手人

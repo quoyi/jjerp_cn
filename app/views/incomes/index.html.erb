@@ -19,6 +19,7 @@
           <tr>
             <th>编号</th>
             <th>来源</th>
+            <th>卡号</th>
             <th>订单号</th>
             <th>收入时间</th>
             <th>收入金额</th>
@@ -32,6 +33,7 @@
           <tr>
             <td><%= i.id %></td>
             <td><%= i.reason %></td>
+            <td><%= i.bank.bank_card %></td>
             <td><%= i.indent.try(:name) %></td>
             <td><%= i.income_at.strftime('%Y-%m-%d') %></td>
             <td><%= i.money %></td>
