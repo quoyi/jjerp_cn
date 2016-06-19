@@ -104,7 +104,8 @@ Role.register_permission class: 'IncomesController',
     '列表' => :index,
     '修改' => [:edit, :update],
     '删除' => [:destroy],
-    '详细' => [:show]
+    '详细' => [:show],
+    '收支统计' => [:stat]
 }
 
 Role.register_permission class: 'ExpendsController',

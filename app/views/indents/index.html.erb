@@ -22,9 +22,9 @@
           <div class="panel-body">
             <div class="col-sm-6">
               <label>下单时间：</label>
-              <%= date_field_tag :start_at, @start_at, data: {provide: 'datepicker'}, style: "width: 40%;", placeholder: '请选择起始日期' %>
+              <%= date_field_tag :start_at, @start_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择起始日期' %>
               &nbsp;&nbsp;--&nbsp;&nbsp;
-              <%= date_field_tag :end_at, @end_at, data: {provide: 'datepicker'}, style: "width: 40%;", placeholder: '请选择终止日期' %>
+              <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择终止日期' %>           
             </div>
             <div class="col-sm-4">
               <label>经销商: </label>
