@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160617133111) do
+ActiveRecord::Schema.define(version: 20160619003924) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",            limit: 255, default: "",    null: false
@@ -38,6 +38,15 @@ ActiveRecord::Schema.define(version: 20160617133111) do
 
   add_index "agents", ["full_name"], name: "index_agents_on_full_name", using: :btree
   add_index "agents", ["name"], name: "index_agents_on_name", using: :btree
+
+  create_table "banks", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "bank_name",  limit: 255
+    t.string   "bank_card",  limit: 255
+    t.decimal  "balance",                precision: 8, scale: 2, default: 0.0
+    t.datetime "created_at",                                                   null: false
+    t.datetime "updated_at",                                                   null: false
+  end
 
   create_table "cities", force: :cascade do |t|
     t.integer "province_id", limit: 4
@@ -86,6 +95,7 @@ ActiveRecord::Schema.define(version: 20160617133111) do
 
   create_table "expends", force: :cascade do |t|
     t.string   "name",       limit: 255
+    t.integer  "bank_id",    limit: 4
     t.string   "reason",     limit: 255
     t.decimal  "money",                  precision: 8, scale: 2
     t.string   "username",   limit: 255
@@ -99,6 +109,7 @@ ActiveRecord::Schema.define(version: 20160617133111) do
 
   create_table "incomes", force: :cascade do |t|
     t.string   "name",       limit: 255
+    t.integer  "bank_id",    limit: 4
     t.string   "reason",     limit: 255
     t.integer  "indent_id",  limit: 4
     t.decimal  "money",                  precision: 8, scale: 2
@@ -117,8 +128,8 @@ ActiveRecord::Schema.define(version: 20160617133111) do
     t.string   "name",          limit: 255,                                         null: false
     t.integer  "agent_id",      limit: 4,                                           null: false
     t.string   "customer",      limit: 255
-    t.datetime "verify_at"
-    t.datetime "require_at"
+    t.date     "verify_at"
+    t.date     "require_at"
     t.string   "logistics",     limit: 255
     t.integer  "status",        limit: 4,                           default: 0
     t.string   "note",          limit: 255
@@ -169,12 +180,13 @@ ActiveRecord::Schema.define(version: 20160617133111) do
     t.integer  "order_id",   limit: 4
     t.integer  "display",    limit: 4
     t.integer  "item_id",    limit: 4
-    t.string   "item_type",  limit: 255
-    t.string   "uom",        limit: 255
-    t.decimal  "number",                 precision: 10
-    t.decimal  "price",                  precision: 8,  scale: 2
-    t.decimal  "sum",                    precision: 8,  scale: 2
-    t.decimal  "total",                  precision: 8,  scale: 2
+    t.integer  "item_type",  limit: 4,                            default: 0
+    t.string   "item_name",  limit: 255
+    t.string   "uom",        limit: 255,                          default: "平方"
+    t.decimal  "number",                 precision: 10,           default: 0
+    t.decimal  "price",                  precision: 8,  scale: 2, default: 0.0
+    t.decimal  "sum",                    precision: 8,  scale: 2, default: 0.0
+    t.decimal  "total",                  precision: 8,  scale: 2, default: 0.0
     t.string   "note",       limit: 255
     t.boolean  "deleted",                                         default: false
     t.datetime "created_at",                                                      null: false

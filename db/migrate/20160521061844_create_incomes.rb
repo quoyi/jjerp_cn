@@ -3,6 +3,7 @@ class CreateIncomes < ActiveRecord::Migration
     # 收入
     create_table :incomes do |t|
       t.string :name
+      t.references :bank # 银行卡
       t.string :reason # 收入来源
       t.references :indent, index: true # 订单号
       t.decimal :money, precision: 8, scale: 2 # 收入金额

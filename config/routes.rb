@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :banks
   resources :sents
   resources :users, only: [:index, :edit, :update]
 
