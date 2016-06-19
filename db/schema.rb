@@ -183,7 +183,7 @@ ActiveRecord::Schema.define(version: 20160619003924) do
     t.integer  "item_type",  limit: 4,                            default: 0
     t.string   "item_name",  limit: 255
     t.string   "uom",        limit: 255,                          default: "平方"
-    t.decimal  "number",                 precision: 10,           default: 0
+    t.decimal  "number",                 precision: 10, scale: 6, default: 0.0
     t.decimal  "price",                  precision: 8,  scale: 2, default: 0.0
     t.decimal  "sum",                    precision: 8,  scale: 2, default: 0.0
     t.decimal  "total",                  precision: 8,  scale: 2, default: 0.0

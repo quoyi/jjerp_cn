@@ -29,14 +29,30 @@ module OffersHelper
         end
         # 2.2 计算配件报价
         order.parts.each do |part|
+          offer = Offer.find_or_create_by(item_id: part.id, item_type: Offer.item_types[:part], indent_id: indent.id, order_id: order.id)
+          offer.price = part.price.to_f
+          offer.number = offer.number.to_f + part.number.to_f
+          offer.total = offer.price * offer.number
+          offer.item_name = part.part_category.try(:name)
+          offer.item_type = Offer.item_types[:part]
+          offer.uom = '个'
+          offer.save!
         end
         # 2.3 计算工艺报价
         order.crafts.each do |craft|
+          offer = Offer.find_or_create_by(item_id: craft.id, item_type: Offer.item_types[:craft], indent_id: indent.id, order_id: order.id)
+          offer.price = craft.price
+          offer.number = offer.number.to_f + craft.number.to_f
+          offer.total = offer.price * offer.number
+          offer.item_name = craft.full_name
+          offer.item_type = Offer.item_types[:craft]
+          offer.uom = '次'
+          offer.save!
         end
       end
     end
     indent.offered!
-    binding.pry
+    # binding.pry
     return '报价成功！'
   end
 end

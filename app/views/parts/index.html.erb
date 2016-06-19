@@ -32,7 +32,7 @@
           <% @parts.each do |p| %>
           <tr>
             <td><%= p.part_category.try(:name) %></td>
-            <td><%= p.order.try(:name) %></td>
+            <td><%= p.try(:name) %></td>
             <td><%= p.price %></td>
             <td><%= p.uom %></td>
             <td><%= p.number %></td>

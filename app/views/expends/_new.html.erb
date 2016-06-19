@@ -9,6 +9,12 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
+          <%= f.label '银行卡', for: 'expend_bank_id', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= select_tag 'expend[bank_id]', options_for_select(Bank.all.map{|i|[i.bank_card, i.id]}), class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
           <%= f.label '金额', for: 'expend_money', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
             <%= f.number_field :money, min: 0, class: 'form-control', required: true %>

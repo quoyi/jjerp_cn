@@ -9,7 +9,7 @@ class CreateOffers < ActiveRecord::Migration
       t.integer :item_type, default: 0 # 项目类型
       t.string :item_name # 项目名称
       t.string :uom, default: '平方' # 单位
-      t.decimal :number, default: 0 # 数量
+      t.decimal :number, precision: 10, scale: 6, default: 0 # 数量
       t.decimal :price, precision: 8, scale: 2, default: 0 # 单价（默认为材料价格）
       t.decimal :sum, precision: 8, scale: 2, default: 0 # 项目合计
       t.decimal :total, precision: 8, scale: 2, default: 0 # 订单合计

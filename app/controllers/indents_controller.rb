@@ -18,14 +18,13 @@ class IndentsController < ApplicationController
     if params[:agent_id].present?
       @indents = @indents.where(agent_id: params[:agent_id])
     end
-
-
   end
 
   # GET /units/1
   # GET /units/1.json
   def show
     @order = Order.new
+    @order_offers = @indent.offers
     @orders = Order.where(indent:@indent).order(created_at: :desc)
   end
 
@@ -74,7 +73,7 @@ class IndentsController < ApplicationController
     # 查找订单的所有拆单信息，并生成报价单
     indent = Indent.find_by_id(params[:id])
     create_offer(indent) if indent
-    redirect_to indents_path, notice: '生成报价单成功！'
+    redirect_to indent_path(indent), notice: '生成报价单成功！'
   end
 
 
@@ -147,6 +146,10 @@ class IndentsController < ApplicationController
     @indents = Indent.packaged
   end
 
+  # 导出报价单
+  def export_offer
+    binding.pry
+  end
 
   private
   # Use callbacks to share common setup or constraints between actions.

@@ -16,3 +16,15 @@
     margin-bottom: 0px;
   }
 }
+
+.offers-panel-heading {
+  padding: 2px 10px;
+  clear: both;
+  & p {
+    margin: 0;
+  }
+  & .panel-heading {
+    float: none !important;
+    clear: both;
+  }
+}
