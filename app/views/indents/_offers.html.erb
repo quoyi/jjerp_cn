@@ -2,19 +2,28 @@
   <div class="panel-heading offers-panel-heading">
     <span>报价单
       <p class="pull-right">
-        总价: <%= @order_offers.map(&:total).sum %>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;
-        <%= link_to '下载报价单', export_offer_indents_path(@indent,format: "csv"),class: "btn btn-xs btn-info"%>
+        总套数：<%= @indent.orders.map(&:number).sum() %>&nbsp;&nbsp;&nbsp;&nbsp;
+        总价： <%= @order_offers.map{|o| o.order.number * o.total}.sum() %>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;
+        <%= link_to '下载报价单', export_offer_indents_path(id: @indent,format: "csv"),class: "btn btn-xs btn-info"%>
       </p>
     </span>
   </div>
-  <div class="panel-body row">
+  <div class="">
     <% @order_offers.group_by(&:order_id).each_pair do |order_id, offers|%>
-    <div class="panel-group" id="accordion<%=order_id%>" role="tablist" aria-multiselectable="true">
+    <div class="panel-group" style="margin-bottom: 0 !important;" id="accordion<%=order_id%>" role="tablist" aria-multiselectable="true">
       <div class="panel panel-default">
         <div class="panel-heading" role="button" id="heading<%=order_id%>" style="background-color: #D9EDF7;" data-toggle="collapse" data-parent="#accordion<%=order_id %>" href="#collapse<%= order_id %>" aria-expanded="true" aria-controls="collapse<%= order_id %>">
           <div class="panel-title" role="button">
-            <label><%= offers.first.order.name %>&nbsp;&nbsp;汇总</label>
-            <span class="pull-right"><%= offers.map(&:total).sum %>元</span>
+            <label><%= offers.first.order.name %>&nbsp;&nbsp;</label>
+            <p class="pull-right">
+              <% 
+              order = offers.first.order
+              order_total = offers.map(&:total).sum()
+              orders_total = order_total * order.number
+              %>
+              单套￥：<%= order_total %>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              套数：<%= order.number %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            合计：<%= orders_total %>&nbsp;元</p>
           </div>
         </div>
         <div id="collapse<%=order_id%>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%=order_id%>">
@@ -22,20 +31,26 @@
             <table class="table table-border">
               <thead>
                 <tr>
-                  <td>计件项目</td>
-                  <td>数量</td>
+                  <td>序号</td>
+                  <td>类型</td>
+                  <td>名称</td>
                   <td>单价</td>
-                  <td>总额</td>
-                  <td>类别</td>
-                  <td>终端名称</td>
+                  <td>单位</td>
+                  <td>数量</td>
+                  <td>备注</td>
+                  <td>总价￥</td>
                 </tr>
               </thead>
               <tbody>
-                <% offers.each do |offer|%>
+                <% offers.each_with_index do |offer, index|%>
                 <tr>
+                  <td><%= index + 1 %></td>
+                  <td><%= offer.item_type_name %></td>
                   <td><%= offer.item_name %></td>
-                  <td><%= offer.number %></td>
                   <td><%= offer.price %></td>
+                  <td><%= offer.uom %></td>
+                  <td><%= offer.number %></td>
+                  <td><%= offer.note %></td>
                   <td><%= offer.total %></td>
                 </tr>
                 <% end %>
@@ -48,5 +63,3 @@
     <%end%>
   </div>
 </div>
-
-

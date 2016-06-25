@@ -13,7 +13,7 @@ module OffersHelper
           material = Material.find_by(ply: (order.ply || unit.ply), texture: (order.texture || unit.texture), color: (order.color || unit.color))
           if material
             offer = Offer.find_or_create_by(item_id: material.id, item_type: Offer.item_types[:unit], indent_id: indent.id, order_id: order.id)
-            offer.price = material.price.to_f
+            offer.price = unit.price.to_f || material.price.to_f
             size = unit.size.split(/[xX*]/).map(&:to_i)
             offer.number = offer.number.to_f + ((unit.number.to_f * size[0] * size[1])/(1000*1000))
             offer.total = offer.price * offer.number
@@ -51,7 +51,9 @@ module OffersHelper
         end
       end
     end
-    indent.offered!
+    indent.status = Indent.statuses[:offered]
+    indent.amount = indent.reload.offers.map{|o| o.order.number * o.total}.sum()
+    indent.save!
     # binding.pry
     return '报价成功！'
   end

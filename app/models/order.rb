@@ -1,4 +1,6 @@
 class Order < ActiveRecord::Base
+  include OffersHelper
+
   belongs_to :order_category
   belongs_to :indent
   has_many :units, dependent: :destroy
@@ -6,7 +8,8 @@ class Order < ActiveRecord::Base
   has_many :crafts, dependent: :destroy
   # 发货时间需在十天以后
   # validate :validate_require_time
-  before_save :generate_order_code
+  before_create :generate_order_code
+  after_save :generate_offers_after_save_or_update
   accepts_nested_attributes_for :units, allow_destroy: true
   accepts_nested_attributes_for :parts, allow_destroy: true
   accepts_nested_attributes_for :crafts, allow_destroy: true
@@ -42,6 +45,10 @@ class Order < ActiveRecord::Base
     last_order = Order.where(indent_id: self.indent.id).order('name ASC').last
     order_index = last_order.present? ? (last_order.name.split(/-/).last.to_i + 1).to_s : 1
     self.name = self.indent.name + "-" + order_index.to_s
+  end
+
+  def generate_offers_after_save_or_update
+    create_offer(self.indent)
   end
 
 end
