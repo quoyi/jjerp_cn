@@ -68,6 +68,7 @@ class IndentsController < ApplicationController
     redirect_to indents_path, notice: '订单已删除。'
   end
 
+  # 生成报价单
   def generate
     # binding.pry
     # 查找订单的所有拆单信息，并生成报价单
@@ -85,7 +86,7 @@ class IndentsController < ApplicationController
     @indent = Indent.find(params[:id])
     @order_units = @indent.orders.map(&:units).flatten
     @order_parts = @indent.orders.map(&:parts).flatten
-    
+
     # ids =>
     #    {"1"=>["order_unit_10", "order_unit_11", "order_unit_12", "order_unit_13"],
     # "2"=>["order_unit_14", "order_unit_15", "order_unit_16", "order_unit_17", "order_unit_18"],
@@ -94,24 +95,24 @@ class IndentsController < ApplicationController
     # 这些值需存在数据库表package中
     # 打印尺寸需存在users表的default_print_size
     if params[:order_unit_ids].present?
-       ids = ActiveSupport::JSON.decode(params[:order_unit_ids]) if params[:order_unit_ids].present?  
-       ids.each_pair do |key,values|
-         # package.print_size = 
-         unit_ids = values.map  do |v|
-           if v =~ /order_unit/ 
-             id = v.gsub(/order_unit_/,'')
-             id
-           end
-         end
-         part_ids = values.map do |v|
-           if v =~ /order_part/
-             id = v.gsub(/order_part_/,'')
-             id
-           end
-         end
-         package = @indent.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','))
-         package.save!
-       end
+      ids = ActiveSupport::JSON.decode(params[:order_unit_ids]) if params[:order_unit_ids].present?
+      ids.each_pair do |key,values|
+        # package.print_size =
+        unit_ids = values.map  do |v|
+          if v =~ /order_unit/
+            id = v.gsub(/order_unit_/,'')
+            id
+          end
+        end
+        part_ids = values.map do |v|
+          if v =~ /order_part/
+            id = v.gsub(/order_part_/,'')
+            id
+          end
+        end
+        package = @indent.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','))
+        package.save!
+      end
     end
 
     if params[:length].present? && params[:width].present?
@@ -136,8 +137,8 @@ class IndentsController < ApplicationController
         # 打印尺寸毫米（长宽）
         pdf = OrderPdf.new(@length, @width, ids, @indent.id)
         send_data pdf.render, filename: "order_#{@indent.id}.pdf",
-                              type: "application/pdf",
-                              disposition: "inline"
+          type: "application/pdf",
+          disposition: "inline"
       end
     end
   end
@@ -148,7 +149,16 @@ class IndentsController < ApplicationController
 
   # 导出报价单
   def export_offer
-    binding.pry
+    @indent = Indent.find_by_id(params[:id])
+    respond_to do |format|
+      format.html { redirect_to order_union_path(@indent), notice: '导出成功' }
+      format.json { head :no_content }
+      format.csv do
+        filename = "报价单－"+@indent.name
+        response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
+        render text: to_csv(@indent)
+      end
+    end
   end
 
   private
@@ -157,16 +167,55 @@ class IndentsController < ApplicationController
     @indent = Indent.find(params[:id])
   end
 
+  # 转换为csv
+  def to_csv(indent)
+    return [] if indent.nil?
+    offers = indent.offers
+    # make excel using utf8 to open csv file
+    head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
+    CSV.generate(head) do |csv|
+      # 获取字段名称
+      first_row = ['总订单号', indent.name, '经销商', indent.agent.full_name,
+                   '终端客户', indent.customer, '套数', indent.orders.map(&:number).sum()]
+      second_row = ['下单时间', indent.verify_at, '发货时间', indent.require_at, '状态', indent.status_name,
+                    '金额￥', offers.map{|o| o.order.number * o.total}.sum()]
+      csv << first_row
+      csv << second_row
+      header_column = ['序号', '类型', '名称', '单价￥', '单位', '数量', '备注', '总价￥']
+      csv << header_column
+      offers.group_by(&:order_id).each_pair do |order_id, offers|
+        offers.each_with_index do |offer, index|
+          values = []
+          values << index + 1
+          values << offer.item_type_name
+          values << offer.item_name
+          values << offer.price
+          values << offer.uom
+          values << offer.number
+          values << offer.note
+          values << offer.total
+          csv << values
+        end
+        order = offers.first.order
+        order_total = offers.map(&:total).sum()
+        orders_total = order_total * order.number
+        csv << ['子订单号', order.name, '单套合计￥', order_total, '单项套数', order.number,
+                '项目合计￥', orders_total]
+        csv << ['', '', '', '', '', '', '', '']
+      end
+    end
+  end
+
   # Never trust parameters from the scary internet, only allow the white list through.
   def indent_params
     # if params[:indent][:orders_attributes].present?
     #   params[:indent][:orders_attributes].each_pair do |k, v|
-    #   	# v[:name] = params[:indent][:name].to_s
+    #     # v[:name] = params[:indent][:name].to_s
     #     v[:status] = Order.statuses[v[:status]]
     #   end
     # end
     params.require(:indent).permit(:id, :name, :offer_id, :agent_id, :customer, :verify_at, :require_at, :note,
-                                  :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted, :status,
+                                   :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted, :status,
                                    orders_attributes: [:id, :order_category_id, :customer, :number, :ply,
                                                        :texture, :color, :length, :width, :height,
                                                        :note, :_destroy])

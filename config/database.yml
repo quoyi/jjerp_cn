@@ -50,5 +50,5 @@ test:
 production:
   <<: *default
   database: jjerp_pro
-  username: jjerp
-  password: <%= ENV['JJERP_DATABASE_PASSWORD'] %>
+  username: root
+  password: 123abc..
