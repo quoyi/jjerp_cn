@@ -172,7 +172,7 @@ ActiveRecord::Schema.define(version: 20160619003924) do
     t.datetime "updated_at",                                                     null: false
   end
 
-  add_index "materials", ["full_name", "ply", "texture", "color"], name: "index_materials_on_full_name_and_ply_and_texture_and_color", unique: true, using: :btree
+  add_index "materials", ["ply", "texture", "color"], name: "index_materials_on_ply_and_texture_and_color", unique: true, using: :btree
   add_index "materials", ["supply_id"], name: "index_materials_on_supply_id", using: :btree
 
   create_table "offers", force: :cascade do |t|
