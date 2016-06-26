@@ -14,6 +14,12 @@ module OrdersHelper
       _return = "文件导入错误！"
       if headers == template
         order = Order.find_by(name: name)
+        # 子订单的板料信息
+        # order_material = MaterialCategory.find_by_id(order.color).try(:name) + 
+        #                  MaterialCategory.find_by_id(order.texture).try(:name) + 
+        #                  MaterialCategory.find_by_id(order.ply).try(:name)
+        order_material = MaterialCategory.where("id in (#{order.color},#{order.texture}, #{order.ply})").order(oftype: :desc).map(&:name).join()
+        return "未找到板料#{order_material}" unless Material.find_by(full_name: order_material)
         if order
           # 开启事务
           ActiveRecord::Base.transaction do
@@ -23,14 +29,16 @@ module OrdersHelper
             last_unit_index = last_units.present? ? (last_units.name.split(/-/).last.to_i + 1).to_s : '1'
             units.destroy_all
             # 删除已存在的拆单记录
-            Unit.where(order_id: order.id).destroy_all
+            # Unit.where(order_id: order.id).destroy_all
+            # 部件（板料）价格，避免查询多次
+            unit_price = Material.find_by(ply: order.ply, texture: order.texture, color: order.color).try(:price).to_f
             table.each do |row|
               # next if row[8].blank? || row[8].strip != name
               # ply = row[1].split(/板/).last
               # ply = ply.gsub(/厚/, 'mm')
-              unless MaterialCategory.all.map(&:name).include?(order.id)
-                _return = "找不到板料"
-              end
+              # unless Material.all.map(&:full_name).include?(order_material)
+              #   _return = "未找到板料#{order_material}"
+              # end
               unit = Unit.new(
                 order_id: order.id,
                 name: "ESR" + order.name + "-" + (index + 1).to_s,
@@ -39,7 +47,7 @@ module OrdersHelper
                 length: row[2],
                 width: row[3],
                 number: row[5],
-                price: Material.find_by(ply: order.id, texture: order.texture, color: order.color).try(:price).to_f,
+                price: unit_price,
                 size: row[6],
                 customer: row[10],
                 edge: row[11],
