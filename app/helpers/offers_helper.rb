@@ -53,10 +53,10 @@ module OffersHelper
         end
       end
     end
+    indent = indent.reload
     indent.status = Indent.statuses[:offered]
-    indent.amount = indent.reload.offers.map{|o| o.order.number * o.total}.sum()
+    indent.amount = indent.offers.map{|o| o.order.number * o.total}.sum()
     indent.save!
-    # binding.pry
     return '报价成功！'
   end
 end

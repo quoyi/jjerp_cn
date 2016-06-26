@@ -193,8 +193,8 @@ ActiveRecord::Schema.define(version: 20160619003924) do
     t.datetime "updated_at",                                                      null: false
   end
 
-  add_index "offers", ["indent_id", "order_id", "price"], name: "index_offers_on_indent_id_and_order_id_and_price", unique: true, using: :btree
   add_index "offers", ["indent_id"], name: "index_offers_on_indent_id", using: :btree
+  add_index "offers", ["item_id", "item_type", "order_id", "price"], name: "index_offers_on_item_id_and_item_type_and_order_id_and_price", unique: true, using: :btree
   add_index "offers", ["order_id"], name: "index_offers_on_order_id", using: :btree
 
   create_table "order_categories", force: :cascade do |t|

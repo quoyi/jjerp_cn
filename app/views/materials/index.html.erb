@@ -44,7 +44,7 @@
             <td><%= m.buy %></td>
             <td><%= m.price %></td>
             <td><%= m.uom %></td>
-            <td><%= m.supply.try(:name) %></td>
+            <td><%= m.supply.try(:full_name) %></td>
             <td><%= link_to '删除', m, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
           </tr>
           <% end %>

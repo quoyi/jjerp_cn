@@ -12,9 +12,10 @@
     <div>
       <p class="pull-left">总订单号：
         <code><%= @indent.name %></code>&nbsp;&nbsp;&nbsp;&nbsp;
-        <small class="indent-add-order-btn"><%= link_to '管理子订单', '#', data: { toggle: 'modal', target: '#addOrders'}, class: 'btn-primary btn-xs' %></small>
+        <small class="indent-add-order-btn"><%= @indent.status_name %></small>
       </p>
       <p class="pull-right">
+        <%= link_to '管理子订单', '#', data: { toggle: 'modal', target: '#addOrders'}, class: 'btn-primary btn-xs' %>
         <%= link_to '生成报价', generate_indents_path(id: @indent.id), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '生成总订单的报价单' %>
       </p>
     </div>

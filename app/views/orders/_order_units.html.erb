@@ -13,43 +13,44 @@
           <div class="fields">
             <div class="row">
               <div class="col-sm-12">
+                <% uf = unit_form.object %>
                 <div class="form-group">
                   <label>名称</label>
-                  <%= unit_form.text_field :full_name %>
+                  <%= unit_form.text_field :full_name, value: uf.new_record? ? '' : uf.full_name %>
                 </div>
                 <div class="form-group">
                   <label class="control-label">&nbsp;&nbsp;长&nbsp;&nbsp;</label>
-                  <%= unit_form.number_field :length, value: 1, min: 1 %>
+                  <%= unit_form.number_field :length, min: 1, value: uf.new_record? ? 1 : uf.length %>
                 </div>
                 <div class="form-group">
                   <label>&nbsp;&nbsp;宽&nbsp;&nbsp;</label>
-                  <%= unit_form.number_field :width, value: 1, min: 1 %>
+                  <%= unit_form.number_field :width, min: 1, value: uf.new_record? ? 1 : uf.width %>
                 </div>
                 <div class="form-group">
                   <label>尺寸</label>
-                  <%= unit_form.text_field :size, value: '100x100' %>
+                  <%= unit_form.text_field :size, value: uf.new_record? ? '100x100' : uf.size %>
                 </div>
                 <div class="form-group">
                   <label>厚度</label>
-                  <%= unit_form.collection_select :ply, MaterialCategory.where(oftype: 0).order("oftype"), :id, :name %>
+                  <%= unit_form.collection_select :ply, MaterialCategory.where(oftype: 0).order("oftype"), :id, :name, value: uf.new_record? ? 0 : uf.ply %>
                 </div>
               </div>
               <div class="col-sm-12">
                 <div class="form-group">
                   <label>单位</label>
-                  <%= unit_form.text_field :uom, value: '平方' %>
+                  <%= unit_form.text_field :uom, value: uf.new_record? ? '平方' : uf.uom %>
                 </div>
                 <div class="form-group">
                   <label>单价</label>
-                  <%= unit_form.number_field :price, value: Material.find_by(ply: @order.ply, texture: @order.texture, color: @order.color).try(:price), min: 0, required: true %>
+                  <%= unit_form.number_field :price, min: 0, value: uf.new_record? ? Material.find_by(ply: @order.ply, texture: @order.texture, color: @order.color).try(:price) : uf.price %>
                 </div>
                 <div class="form-group">
                   <label>数量</label>
-                  <%= unit_form.number_field :number, value: 1, min: 1 %>
+                  <%= unit_form.number_field :number, min: 1, value: uf.new_record? ? 1 : uf.number %>
                 </div>
                 <div class="form-group">
                   <label>备注</label>
-                  <%= unit_form.text_field :note %>
+                  <%= unit_form.text_field :note, value: uf.new_record? ? '' : uf.note %>
                 </div>
                 <div class="form-group">
                   <%= unit_form.link_to_remove '删除', class:'btn btn-info btn-sm' %>

@@ -12,25 +12,26 @@
           <%= f.fields_for :crafts, wrapper: false do |craft_form| %>
           <div class="fields">
             <div class="row">
+              <% cf = craft_form.object %>
               <div class="col-sm-2">
                 <label>名称</label>
-                <%= craft_form.text_field :full_name %>
+                <%= craft_form.text_field :full_name, value: cf.new_record? ? '' : cf.full_name %>
               </div>
               <div class="col-sm-2">
                 <label>单位</label>
-                <%= craft_form.text_field :uom, value: '次' %>
+                <%= craft_form.text_field :uom, value: cf.new_record? ? '次' : cf.uom %>
               </div>
               <div class="col-sm-2">
                 <label>单价</label>
-                <%= craft_form.number_field :price, value: 0, min: 0 %>
+                <%= craft_form.number_field :price, min: 0, value: cf.new_record? ? 0 : cf.price %>
               </div>
               <div class="col-sm-2">
                 <label>数量</label>
-                <%= craft_form.number_field :number, value: 1, min: 1 %>
+                <%= craft_form.number_field :number, min: 1, value: cf.new_record? ? 1 : cf.number %>
               </div>
               <div class="col-sm-2">
                 <label>备注</label>
-                <%= craft_form.text_field :note %>
+                <%= craft_form.text_field :note, value: cf.new_record? ? '' : cf.note %>
               </div>
               <div class="col-sm-2 text-center">
                 <%= craft_form.link_to_remove '删除', class:'btn btn-info btn-sm' %>

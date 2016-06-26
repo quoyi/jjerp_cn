@@ -18,6 +18,6 @@ class CreateOffers < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    add_index :offers, [:indent_id, :order_id, :price], unique: true
+    add_index :offers, [:item_id, :item_type, :order_id, :price], unique: true
   end
 end
