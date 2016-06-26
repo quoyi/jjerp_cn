@@ -1,6 +1,4 @@
 class Craft < ActiveRecord::Base
-  include OrdersHelper
-
   belongs_to :order
 
   after_save :update_order_or_indent

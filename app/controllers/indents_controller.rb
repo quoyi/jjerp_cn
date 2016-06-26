@@ -167,7 +167,7 @@ class IndentsController < ApplicationController
     @indent = Indent.find(params[:id])
   end
 
-  # 转换为csv
+  # 下载报价单并转换为csv
   def to_csv(indent)
     return [] if indent.nil?
     offers = indent.offers
