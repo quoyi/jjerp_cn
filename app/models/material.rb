@@ -5,7 +5,7 @@ class Material < ActiveRecord::Base
   before_create :generate_code
   validates_presence_of :ply, :texture, :color, :buy, :price, :supply_id
   # 联合唯一
-  validates_uniqueness_of :full_name, scope: [:ply, :texture, :color]
+  validates_uniqueness_of :ply, scope: [:texture, :color]
   
   # 生成编码
   def generate_code
