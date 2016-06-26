@@ -12,8 +12,10 @@ module OffersHelper
         order.units.each do |unit|
           material = Material.find_by(ply: order.ply, texture: order.texture, color: order.color)
           if material
-            offer = Offer.find_or_create_by(item_id: material.id, item_type: Offer.item_types[:unit], indent_id: indent.id, order_id: order.id)
-            offer.price = unit.price.to_f || material.price.to_f
+            offer = Offer.find_or_create_by(item_id: material.id, item_type: Offer.item_types[:unit],
+                                            indent_id: indent.id, order_id: order.id, price: unit.price.to_f)
+            # 如果 unit 价格 与标准价格不同，则新建一条 offer 记录
+            offer.price = unit.price.to_f
             size = unit.size.split(/[xX*]/).map(&:to_i)
             offer.number = offer.number.to_f + ((unit.number.to_f * size[0] * size[1])/(1000*1000))
             offer.total = offer.price * offer.number

@@ -17,5 +17,7 @@ class CreateOffers < ActiveRecord::Migration
       t.boolean :deleted, default: false # 标记删除
       t.timestamps null: false
     end
+
+    add_index :offers, [:indent_id, :order_id, :price], unique: true
   end
 end
