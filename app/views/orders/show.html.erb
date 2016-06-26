@@ -120,7 +120,7 @@
               <th>数量</th>
               <td><%= @order.number %></td>
               <th>金额</th>
-              <td><%= @indent.amount %></td>
+              <td><%= @order.price %></td>
               <th>要求出厂</th>
               <td><%= @indent.require_at.strftime('%Y-%m-%d') if @indent.require_at.present? %></td>
               <th>要求物流</th>
@@ -177,7 +177,7 @@
               <td><%= u.uom %></td>
               <td><%= u.price %></td>
               <td><%= u.number %></td>
-              <td><%= u.price * u.number %></td>
+              <td><%= u.price * u.size.split(/[xX*]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number %></td>
               <td><%= u.note %></td>
             </tr>
             <% end %>

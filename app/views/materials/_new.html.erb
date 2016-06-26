@@ -29,19 +29,25 @@
         <div class="form-group">
           <%= f.label '进价', for: 'material_buy', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
-            <%= f.number_field :buy, class: 'form-control', min: 1, required: true %>
+            <%= f.number_field :buy, class: 'form-control', value: 1, min: 1, required: true %>
           </div>
         </div>
         <div class="form-group">
           <%= f.label '售价', for: 'material_sell', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
-            <%= f.number_field :price, class: 'form-control', min: 1, required: true %>
+            <%= f.number_field :price, class: 'form-control', value: 1, min: 1, required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '单位', for: 'material_uom', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :uom, class: 'form-control', value: '平方', required: true %>
           </div>
         </div>
         <div class="form-group">
           <%= f.label '库存', for: 'material_store', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
-            <%= f.number_field :store, class: 'form-control', min: 1, required: true %>
+            <%= f.number_field :store, class: 'form-control', value: 1, min: 1, required: true %>
           </div>
         </div>
         <div class="form-group">
