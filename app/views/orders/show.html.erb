@@ -177,7 +177,7 @@
               <td><%= u.uom %></td>
               <td><%= u.price %></td>
               <td><%= u.number %></td>
-              <td><%= u.price * u.size.split(/[xX*]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number %></td>
+              <td><%= u.price * u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number %></td>
               <td><%= u.note %></td>
             </tr>
             <% end %>

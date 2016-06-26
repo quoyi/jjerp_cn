@@ -51,13 +51,14 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
-    if @order.update!(order_params)
+    return redirect_to @order, error: '请求无效！请检查数据是否有效。' unless params[:order]
+    if @order.update(order_params)
       # 订单更新后，更新订单、子订单的价格合计
       update_order_and_indent(@order)
       create_offer(@order.indent)
       redirect_to @order, notice: '子订单编辑成功！'
     else
-      redirect_to @order, error: '子订单编辑失败！'
+      redirect_to @order, error: '子订单编辑失败！请仔细检查后再提交。'
     end
   end
 

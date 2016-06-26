@@ -16,7 +16,7 @@ module OffersHelper
                                             indent_id: indent.id, order_id: order.id, price: unit.price.to_f)
             # 如果 unit 价格 与标准价格不同，则新建一条 offer 记录
             offer.price = unit.price.to_f
-            size = unit.size.split(/[xX*]/).map(&:to_i)
+            size = unit.size.split(/[xX*×]/).map(&:to_i)
             offer.number = offer.number.to_f + ((unit.number.to_f * size[0] * size[1])/(1000*1000))
             offer.total = offer.price * offer.number
             # mc_ids = [material.ply, material.texture, material.face, material.color]
