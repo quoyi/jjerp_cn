@@ -83,7 +83,7 @@ module OrdersHelper
     indent = order.indent
     # 获取上级子订单所有的 部件、配件、工艺，并计算总价
     # 部件 总价 = 面积 * 数量 * 单价
-    total_units = order.units.map{|u| u.size.split(/[xX*]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum()
+    total_units = order.units.map{|u| u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum()
     total_parts = order.parts.map{|p| p.number * p.price}.sum()
     total_crafts = order.crafts.map{|c| c.number * c.price}.sum()
     indent.amount = order.price = total_units + total_parts + total_crafts

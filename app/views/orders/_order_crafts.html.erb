@@ -14,7 +14,7 @@
             <div class="row">
               <div class="col-sm-2">
                 <label>名称</label>
-                <%= craft_form.text_field :full_name, required: true %>
+                <%= craft_form.text_field :full_name %>
               </div>
               <div class="col-sm-2">
                 <label>单位</label>
@@ -22,11 +22,11 @@
               </div>
               <div class="col-sm-2">
                 <label>单价</label>
-                <%= craft_form.number_field :price, min: 0, required: true %>
+                <%= craft_form.number_field :price, value: 0, min: 0 %>
               </div>
               <div class="col-sm-2">
                 <label>数量</label>
-                <%= craft_form.number_field :number, min: 1, required: true %>
+                <%= craft_form.number_field :number, value: 1, min: 1 %>
               </div>
               <div class="col-sm-2">
                 <label>备注</label>

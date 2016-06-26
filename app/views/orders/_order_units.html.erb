@@ -19,15 +19,15 @@
                 </div>
                 <div class="form-group">
                   <label class="control-label">&nbsp;&nbsp;长&nbsp;&nbsp;</label>
-                  <%= unit_form.number_field :length, min: 1, required: true %>
+                  <%= unit_form.number_field :length, value: 1, min: 1 %>
                 </div>
                 <div class="form-group">
                   <label>&nbsp;&nbsp;宽&nbsp;&nbsp;</label>
-                  <%= unit_form.number_field :width, min: 1, required: true %>
+                  <%= unit_form.number_field :width, value: 1, min: 1 %>
                 </div>
                 <div class="form-group">
                   <label>尺寸</label>
-                  <%= unit_form.text_field :size, required: true %>
+                  <%= unit_form.text_field :size, value: '100x100' %>
                 </div>
                 <div class="form-group">
                   <label>厚度</label>
@@ -37,7 +37,7 @@
               <div class="col-sm-12">
                 <div class="form-group">
                   <label>单位</label>
-                  <%= unit_form.text_field :uom, required: true %>
+                  <%= unit_form.text_field :uom, value: '平方' %>
                 </div>
                 <div class="form-group">
                   <label>单价</label>
@@ -45,7 +45,7 @@
                 </div>
                 <div class="form-group">
                   <label>数量</label>
-                  <%= unit_form.number_field :number, min: 1, required: true %>
+                  <%= unit_form.number_field :number, value: 1, min: 1 %>
                 </div>
                 <div class="form-group">
                   <label>备注</label>
