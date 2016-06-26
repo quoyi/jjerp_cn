@@ -1,7 +1,7 @@
 class Offer < ActiveRecord::Base
   belongs_to :indent
   belongs_to :order
-  validates_uniqueness_of :order_id, scope: :price
+  validates_uniqueness_of :order_id, scope: [:item_id, :item_type, :price]
 
   #订单状态：0.部件 1.配件 2.工艺
   enum item_type: [:unit, :part, :craft]

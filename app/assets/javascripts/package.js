@@ -135,3 +135,10 @@ function set_ids(pack, current_index){
   $("#order_unit_ids").val(JSON.stringify(values));
 }
 
+
+
+// 修改后的js
+
+$(function(){
+  
+});

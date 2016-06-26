@@ -26,7 +26,7 @@
             <th>厚度</th>
             <th>尺寸</th>
             <th>终端客户</th>
-            <th>供应商</th>
+            <th>经销商</th>
             <th>备注</th>
             <th>操作</th>
           </tr>
@@ -42,8 +42,8 @@
             <td><%= u.price %></td>
             <td><%= MaterialCategory.find_by_id(u.ply).try(:name) %></td>
             <td><%= u.size %></td>
-            <td><%= u.customer %></td>
-            <td><%= u.supply.try(:name) %></td>
+            <td><%= u.order.indent.customer %></td>
+            <td><%= u.order.indent.agent.try(:full_name) %></td>
             <td><%= u.note %></td>
             <td><%= link_to '删除', u, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
           </tr>

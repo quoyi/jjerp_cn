@@ -54,6 +54,11 @@ class IndentsController < ApplicationController
   # PATCH/PUT /indents/1.json
   def update
     if @indent.update(indent_params)
+      if @indent.status == 'producing'
+        @indent.orders.each do |o|
+          o.producing!
+        end
+      end
       redirect_to @indent, notice: "订单编辑成功！"
     else
       redirect_to indents_path, error: "订单编辑失败！"
@@ -86,7 +91,7 @@ class IndentsController < ApplicationController
     @indent = Indent.find(params[:id])
     @order_units = @indent.orders.map(&:units).flatten
     @order_parts = @indent.orders.map(&:parts).flatten
-
+    @packages = Indent.find(params[:id]).packages
     # ids =>
     #    {"1"=>["order_unit_10", "order_unit_11", "order_unit_12", "order_unit_13"],
     # "2"=>["order_unit_14", "order_unit_15", "order_unit_16", "order_unit_17", "order_unit_18"],
@@ -94,8 +99,9 @@ class IndentsController < ApplicationController
     # "4"=>["order_unit_25", "order_part_7", "order_part_8"]}
     # 这些值需存在数据库表package中
     # 打印尺寸需存在users表的default_print_size
+    # binding.pry
     if params[:order_unit_ids].present?
-      ids = ActiveSupport::JSON.decode(params[:order_unit_ids]) if params[:order_unit_ids].present?
+      ids = ActiveSupport::JSON.decode(params[:order_unit_ids])
       ids.each_pair do |key,values|
         # package.print_size =
         unit_ids = values.map  do |v|
@@ -113,34 +119,33 @@ class IndentsController < ApplicationController
         package = @indent.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','))
         package.save!
       end
-    end
-
-    if params[:length].present? && params[:width].present?
-      @length = params[:length].to_i
-      @width = params[:width].to_i
-      current_user.print_size = @length.to_s + '*'+ @width.to_s
-      current_user.save! if current_user.changed?
-    elsif current_user.print_size
-      @length = current_user.print_size.split('*').first.to_i
-      @width = current_user.print_size.split('*').last.to_i
-    else
-      @length = 80
-      @width = 50
-    end
-
-    @packages = Indent.find(params[:id]).packages
+      if params[:length].present? && params[:width].present?
+        @length = params[:length].to_i
+        @width = params[:width].to_i
+        current_user.print_size = @length.to_s + '*'+ @width.to_s
+        current_user.save! if current_user.changed?
+      elsif current_user.print_size
+        @length = current_user.print_size.split('*').first.to_i
+        @width = current_user.print_size.split('*').last.to_i
+      else
+        @length = 80
+        @width = 50
+      end
 
 
-    respond_to do |format|
-      format.html {render :layout => false}
-      format.pdf do
-        # 打印尺寸毫米（长宽）
-        pdf = OrderPdf.new(@length, @width, ids, @indent.id)
-        send_data pdf.render, filename: "order_#{@indent.id}.pdf",
-          type: "application/pdf",
-          disposition: "inline"
+      respond_to do |format|
+        format.html {render :layout => false}
+        format.pdf do
+          # 打印尺寸毫米（长宽）
+          pdf = OrderPdf.new(@length, @width, ids, @indent.id)
+          send_data pdf.render, filename: "order_#{@indent.id}.pdf",
+            type: "application/pdf",
+            disposition: "inline"
+        end
       end
     end
+
+
   end
 
   def not_sent
