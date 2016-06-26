@@ -39,7 +39,6 @@ class OrdersController < ApplicationController
   def create
     @order = Order.new(order_params)
     if @order.save
-      binding.pry
       # 订单保存后，更新订单、子订单的价格合计
       update_order_and_indent(@order)
       create_offer(@order.indent)
@@ -53,7 +52,6 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1.json
   def update
     if @order.update!(order_params)
-      binding.pry
       # 订单更新后，更新订单、子订单的价格合计
       update_order_and_indent(@order)
       create_offer(@order.indent)
