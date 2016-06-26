@@ -54,7 +54,7 @@ module OrdersHelper
               # order.separated!
               _return = "导入成功！本次导入 #{index} 条记录"
             else
-              # 当导入的记录条数没有变化时，回滚事务（找回删除掉的拆单记录）!!注意:必须在回滚之前做处理!! 
+              # 当导入的记录条数没有变化时，回滚事务（找回删除掉的拆单记录）!!注意:必须在回滚之前做处理!!
               _return = "所选文件中未找到订单号 #{name} 对应的记录！"
               raise ActiveRecord::Rollback
             end
@@ -67,5 +67,19 @@ module OrdersHelper
       end
     end
     return _return
+  end
+
+
+  # 修改子订单和总订单
+  def update_order_and_indent(order)
+    indent = order.indent
+    # 获取上级子订单所有的 部件、配件、工艺，并计算总价
+    # 部件 总价 = 面积 * 数量 * 单价
+    total_units = order.units.map{|u| u.size.split(/[xX*]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum()
+    total_parts = order.parts.map{|p| p.number * p.price}.sum()
+    total_crafts = order.crafts.map{|c| c.number * c.price}.sum()
+    indent.amount = order.price = total_units + total_parts + total_crafts
+    order.save!
+    indent.save!
   end
 end
