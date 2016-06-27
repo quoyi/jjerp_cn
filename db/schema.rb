@@ -172,7 +172,7 @@ ActiveRecord::Schema.define(version: 20160619003924) do
     t.datetime "updated_at",                                                     null: false
   end
 
-  add_index "materials", ["full_name", "ply", "texture", "color"], name: "index_materials_on_full_name_and_ply_and_texture_and_color", unique: true, using: :btree
+  add_index "materials", ["ply", "texture", "color"], name: "index_materials_on_ply_and_texture_and_color", unique: true, using: :btree
   add_index "materials", ["supply_id"], name: "index_materials_on_supply_id", using: :btree
 
   create_table "offers", force: :cascade do |t|
@@ -183,7 +183,7 @@ ActiveRecord::Schema.define(version: 20160619003924) do
     t.integer  "item_type",  limit: 4,                            default: 0
     t.string   "item_name",  limit: 255
     t.string   "uom",        limit: 255,                          default: "平方"
-    t.decimal  "number",                 precision: 10,           default: 0
+    t.decimal  "number",                 precision: 10, scale: 6, default: 0.0
     t.decimal  "price",                  precision: 8,  scale: 2, default: 0.0
     t.decimal  "sum",                    precision: 8,  scale: 2, default: 0.0
     t.decimal  "total",                  precision: 8,  scale: 2, default: 0.0
@@ -194,6 +194,7 @@ ActiveRecord::Schema.define(version: 20160619003924) do
   end
 
   add_index "offers", ["indent_id"], name: "index_offers_on_indent_id", using: :btree
+  add_index "offers", ["item_id", "item_type", "order_id", "price"], name: "index_offers_on_item_id_and_item_type_and_order_id_and_price", unique: true, using: :btree
   add_index "offers", ["order_id"], name: "index_offers_on_order_id", using: :btree
 
   create_table "order_categories", force: :cascade do |t|

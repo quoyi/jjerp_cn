@@ -1,6 +1,8 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
-    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 收支统计 <small>信息</small> </h2></div>
+    <div class="panel-title">
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 收支统计 <small>信息</small> </h2>
+    </div>
   </div>
   <% @start_at = nil; @end_at = nil;%>
   <% if params[:start_at] || params[:end_at] || params[:bank_id]%>
@@ -36,7 +38,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-4">
         <div class="panel panel-info">
           <div class="panel-heading">
             <span>收支统计信息</span>
@@ -46,14 +48,14 @@
               <th>总收入</th>
               <td><%= sum_incomes =  @incomes.map(&:money).sum %></td>
             </tr>
-             <tr>
+            <tr>
               <th>总支出</th>
               <td><%= sum_expends =  @expends.map(&:money).sum %></td>
             </tr>
             <tr>
               <th>总金额</th>
               <td><%= sum_incomes - sum_expends %></td>
-            </tr>            
+            </tr>
           </table>
         </div>
         <div class="panel panel-info">
@@ -71,27 +73,26 @@
             </thead>
             <tbody>
               <% if @incomes_expends.size > 0  %>
-                <% Bank.all.each do |b| %>
-                  <% next if @bank_id.present? && @bank_id.to_i != b.id  %>
-                  <% b_incomes = 0; b_expands = 0; %>
-                  <tr>
-                    <td><%= b.bank_card %></td>
-                    <td><%= b_incomes =  @incomes.where(bank_id: b.id).map(&:money).sum %></td>
-                    <td><%= b_expands = @expends.where(bank_id: b.id).map(&:money).sum %></td>
-                    <td><%= b_incomes - b_expands %></td>
-                  </tr>
-                <% end %>
+              <% Bank.all.each do |b| %>
+              <% next if @bank_id.present? && @bank_id.to_i != b.id  %>
+              <% b_incomes = 0; b_expands = 0; %>
+              <tr>
+                <td><%= b.bank_card %></td>
+                <td><%= b_incomes =  @incomes.where(bank_id: b.id).map(&:money).sum %></td>
+                <td><%= b_expands = @expends.where(bank_id: b.id).map(&:money).sum %></td>
+                <td><%= b_incomes - b_expands %></td>
+              </tr>
+              <% end %>
               <% end %>
             </tbody>
           </table>
         </div>
       </div>
-      <div class="col-sm-6">
+      <div class="col-sm-8">
         <div class="panel panel-info">
           <table class="table table-hover table-striped table-bordered table-condensed text-center">
             <thead>
               <tr>
-                <th>编号</th>
                 <th>来源</th>
                 <th>卡号</th>
                 <th>订单号</th>
@@ -105,7 +106,6 @@
             <tbody>
               <% @incomes_expends.each do |i| %>
               <tr>
-                <td><%= i.id %></td>
                 <td><%= i.reason %></td>
                 <td><%= i.try(:bank).try(:bank_card) %></td>
                 <td><%= i.try(:indent).try(:name) %></td>
@@ -118,7 +118,6 @@
               <% end %>
             </tbody>
           </table>
-
         </div>
       </div>
     </div>

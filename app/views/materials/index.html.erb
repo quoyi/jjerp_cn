@@ -1,8 +1,10 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
-    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 板料 <small>列表</small> </h2></div>
-    <div class="panel-options">
-      <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addPart'} %>
+    <div class="panel-title">
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 板料 <small>列表</small> </h2>
+      <div class="pull-right panel-options">
+        <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addPart'} %>
+      </div>
     </div>
   </div>
   <div class="content-box-large box-with-header">
@@ -42,7 +44,7 @@
             <td><%= m.buy %></td>
             <td><%= m.price %></td>
             <td><%= m.uom %></td>
-            <td><%= m.supply.try(:name) %></td>
+            <td><%= m.supply.try(:full_name) %></td>
             <td><%= link_to '删除', m, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
           </tr>
           <% end %>

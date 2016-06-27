@@ -16,6 +16,6 @@ class CreateMaterials < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    add_index :materials, [:full_name, :ply, :texture, :color], :unique => true
+    add_index :materials, [:ply, :texture, :color], :unique => true
   end
 end

@@ -93,7 +93,7 @@
         <% if current_user.permission?("IndentsController", "index") ||
         current_user.permission?("OrdersController", "index")
         %>
-        <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name) && action_name == 'index' %>">
+        <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name) && ['index', 'show', 'edit'].include?(action_name) %>">
             <a href="#">
                 <i class="fa fa-briefcase"></i> 订单管理 <span class="caret pull-right"></span>
             </a>
@@ -102,7 +102,7 @@
                 <li class='<%="#{'active' if controller_name == 'indents'}" %>'><%= link_to '订单', indents_path %></li>
                 <% end %>
                 <% if current_user.permission?("OrdersController", "index")%>
-                <li class='<%="#{'active' if controller_name == 'orders' and action_name == 'index'}" %>'><%= link_to '子订单', orders_path %></li>
+                <li class='<%="#{'active' if controller_name == 'orders'}" %>'><%= link_to '子订单', orders_path %></li>
                 <% end %>
             </ul>
         </li>

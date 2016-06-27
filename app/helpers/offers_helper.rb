@@ -10,11 +10,13 @@ module OffersHelper
       orders.each do |order|
         # 2.1 计算部件报价
         order.units.each do |unit|
-          material = Material.find_by(ply: (order.ply || unit.ply), texture: (order.texture || unit.texture), color: (order.color || unit.color))
+          material = Material.find_by(ply: order.ply, texture: order.texture, color: order.color)
           if material
-            offer = Offer.find_or_create_by(item_id: material.id, item_type: Offer.item_types[:unit], indent_id: indent.id, order_id: order.id)
-            offer.price = material.price.to_f
-            size = unit.size.split(/[xX*]/).map(&:to_i)
+            offer = Offer.find_or_create_by(item_id: material.id, item_type: Offer.item_types[:unit],
+                                            indent_id: indent.id, order_id: order.id, price: unit.price.to_f)
+            # 如果 unit 价格 与标准价格不同，则新建一条 offer 记录
+            offer.price = unit.price.to_f
+            size = unit.size.split(/[xX*×]/).map(&:to_i)
             offer.number = offer.number.to_f + ((unit.number.to_f * size[0] * size[1])/(1000*1000))
             offer.total = offer.price * offer.number
             # mc_ids = [material.ply, material.texture, material.face, material.color]
@@ -29,14 +31,32 @@ module OffersHelper
         end
         # 2.2 计算配件报价
         order.parts.each do |part|
+          offer = Offer.find_or_create_by(item_id: part.id, item_type: Offer.item_types[:part], indent_id: indent.id, order_id: order.id)
+          offer.price = part.price.to_f
+          offer.number = offer.number.to_f + part.number.to_f
+          offer.total = offer.price * offer.number
+          offer.item_name = part.part_category.try(:name)
+          offer.item_type = Offer.item_types[:part]
+          offer.uom = '个'
+          offer.save!
         end
         # 2.3 计算工艺报价
         order.crafts.each do |craft|
+          offer = Offer.find_or_create_by(item_id: craft.id, item_type: Offer.item_types[:craft], indent_id: indent.id, order_id: order.id)
+          offer.price = craft.price
+          offer.number = offer.number.to_f + craft.number.to_f
+          offer.total = offer.price * offer.number
+          offer.item_name = craft.full_name
+          offer.item_type = Offer.item_types[:craft]
+          offer.uom = '次'
+          offer.save!
         end
       end
     end
-    indent.offered!
-    binding.pry
+    indent = indent.reload
+    indent.status = Indent.statuses[:offered]
+    indent.amount = indent.offers.map{|o| o.order.number * o.total}.sum()
+    indent.save!
     return '报价成功！'
   end
 end

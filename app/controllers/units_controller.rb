@@ -26,7 +26,6 @@ class UnitsController < ApplicationController
   # POST /units.json
   def create
     @unit = Unit.new(unit_params)
-    binding.pry
     if @unit.save!
       redirect_to units_path, notice: '部件创建成功！'
     else

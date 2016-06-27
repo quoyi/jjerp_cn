@@ -68,23 +68,36 @@ function previous(){
   return false;
 }
 
-function print_pages(){
+function print_pages(obj){
+  var order_units_size = $(obj).data("units");
+  if(order_units_size == "" || order_units_size == 0){
+    alert("没有打包数据，请确认！");
+    return false;
+  }
   var old_table = $("#old_table").find("tbody").html().trim();
-
   if(old_table != ''){
     alert('您还没有拆分完所有包装，请继续选择完再进行批量打印');
     return false;
   }else{
-    var pack = JSON.parse(localStorage.getItem("pack"));
+    // 弹出模态框，获取输入的数据
+    // $("#packageInputNumber").modal('show');
+    var number = prompt("请输入标签总数：", "");
+    $("#order_label_size").val(number);
+    var pack = {};
+    if(localStorage.getItem("pack")){
+      pack = JSON.parse(localStorage.getItem("pack"));
+    }
     var current_index = parseInt(localStorage.getItem("index"));
     var val = $("#new_table").find("tbody").html();
     if(!pack[current_index]){
       pack[current_index] = val;
       localStorage.setItem("pack", JSON.stringify(pack));
-      set_ids(pack, current_index)
+      
     }
     // print
+    set_ids(pack, current_index);
   }
+  // return false;
 }
 
 function print_current_page(){
@@ -134,4 +147,3 @@ function set_ids(pack, current_index){
   }
   $("#order_unit_ids").val(JSON.stringify(values));
 }
-

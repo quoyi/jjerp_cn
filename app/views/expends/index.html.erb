@@ -1,8 +1,10 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
-    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 支出记录 <small>列表</small> </h2></div>
-    <div class="panel-options">
-      <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addExpends'} %>
+    <div class="panel-title">
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 支出记录 <small>列表</small> </h2>
+      <div class="pull-right panel-options">
+        <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addExpends'} %>
+      </div>
     </div>
   </div>
   <div class="content-box-large box-with-header">
@@ -11,6 +13,7 @@
         <thead>
           <tr>
             <th>编号</th>
+            <th>银行卡</th>
             <th>支出事由</th>
             <th>支出时间</th>
             <th>支出金额</th>
@@ -23,6 +26,7 @@
           <% @expends.each do |e| %>
           <tr>
             <td><%= e.id %></td>
+            <td><%= e.bank.bank_card %></td>
             <td><%= e.reason %></td>
             <td><%= e.expend_at.strftime('%Y-%m-%d') %></td>
             <td><%= e.money %></td>

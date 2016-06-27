@@ -1,8 +1,10 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
-    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 订单 <small>列表</small> </h2></div>
-    <div class="panel-options">
-      <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addIndent'} %>
+    <div class="panel-title">
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 订单 <small>列表</small> </h2>
+      <div class="pull-right panel-options">
+        <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addIndent'} %>
+      </div>
     </div>
   </div>
   <% @start_at = nil; @end_at = nil;%>
@@ -24,7 +26,7 @@
               <label>下单时间：</label>
               <%= date_field_tag :start_at, @start_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择起始日期' %>
               &nbsp;&nbsp;--&nbsp;&nbsp;
-              <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择终止日期' %>           
+              <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择终止日期' %>
             </div>
             <div class="col-sm-4">
               <label>经销商: </label>
@@ -39,7 +41,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-3">
+      <div class="col-sm-4">
         <div class="panel panel-info">
           <div class="panel-heading">
             <span>订单统计信息</span>
@@ -94,21 +96,21 @@
           </table>
         </div>
       </div>
-      <div class="col-sm-9">
+      <div class="col-sm-8">
         <div class="panel panel-info">
           <table class="table table-hover table-striped table-bordered table-condensed text-center">
             <thead>
               <tr>
-                <th>总订单号</th>
-                <th>经销商</th>
-                <th>终端信息</th>
-                <th>下单时间</th>
-                <th>发货时间</th>
-                <th>订单金额</th>
-                <th>欠款合计</th>
-                <th>历史合计</th>
-                <th>报价单</th>
-                <th>操作</th>
+                <th class="col-sm-1">总订单号</th>
+                <th class="col-xs-1">经销商</th>
+                <th class="col-xs-2">终端信息</th>
+                <th class="col-xs-1">下单时间</th>
+                <th class="col-xs-1">发货时间</th>
+                <th class="col-xs-1">订单金额</th>
+                <th class="col-xs-1">欠款合计</th>
+                <th class="col-xs-1">历史合计</th>
+                <th class="col-xs-1">报价单</th>
+                <th class="col-xs-2">操作</th>
               </tr>
             </thead>
             <tbody>
@@ -132,8 +134,8 @@
                 </td>
                 <td>
                   <%= link_to '编辑', edit_indent_path(i), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title:'编辑总订单' %>
-                  <%= link_to '添加到款', '#', class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', indent: i.id}, id: 'addIncomesBtn' %>
-                  <%= link_to '到款信息', incomes_path(indent_id: i.id), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '查看到款记录' %>
+                  <%= link_to '到款', '#', class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', indent: i.id, amount: i.amount, arrear: i.arrear}, id: 'addIncomesBtn' %>
+                  <%= link_to '生产', indent_path(id: i.id, indent: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
                 </td>
               </tr>
               <% end %>

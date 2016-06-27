@@ -6,14 +6,6 @@ $(function() {
   }).on('changeDate', function(e) {
     var targetId = $(this).attr('id');
     
-    // 下单时间默认值
-    // if(targetId == 'indent_verify_at'){
-    //   var d = e.date;
-    //   var indent_at = d.setDate(d.getDate() + 10);
-    //   alert(indent_at);
-    //   $('#indent_require_at').val(e.date);
-    // }
-
     // 发货时间默认值、选定值必须大于当前时间
     if (targetId == 'indent_require_at') {
       // 获取当前时间，并加10天
@@ -26,13 +18,17 @@ $(function() {
     }
   });
 
-  // var now = new Date();
-  // $("#indent_verify_at").val(now);
-  // $("#indent_require_at").val(now.setDate(now.getDate() + 10));
-
+  // 获取所点击表单行，对应的订单ID，并赋值给弹出框中对应的项
   $("#addIncomes").on('show.bs.modal', function(e){
+    // 获取 订单号、应收金额、已收金额
     var indent_id = e.relatedTarget.dataset.indent;
-    $("#income_indent_id").val(indent_id);
+    if(indent_id != null && indent_id != ""){
+      var amount = e.relatedTarget.dataset.amount;
+      var arrear = e.relatedTarget.dataset.arrear;
+      $("#income_indent_id").val(indent_id);
+      $("#income_should").val(amount);
+      $("#income_yet").val(arrear);
+    }
   });
 
   $("#addSent").on('show.bs.modal', function(e){
@@ -74,6 +70,4 @@ $(function() {
     );;
     };
   })(this));
-
-
 });

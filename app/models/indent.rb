@@ -38,7 +38,7 @@ class Indent < ActiveRecord::Base
     case status
       when 'offering' then '报价中'
       when 'offered' then '已报价'
-      when 'checked' then '生产中'
+      when 'producing' then '生产中'
       when "packaged" then '已入库'
       when "sent" then '已发货'
     else

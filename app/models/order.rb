@@ -1,4 +1,6 @@
 class Order < ActiveRecord::Base
+  include OffersHelper
+
   belongs_to :order_category
   belongs_to :indent
   has_many :units, dependent: :destroy
@@ -6,7 +8,7 @@ class Order < ActiveRecord::Base
   has_many :crafts, dependent: :destroy
   # 发货时间需在十天以后
   # validate :validate_require_time
-  before_save :generate_order_code
+  before_create :generate_order_code
   accepts_nested_attributes_for :units, allow_destroy: true
   accepts_nested_attributes_for :parts, allow_destroy: true
   accepts_nested_attributes_for :crafts, allow_destroy: true

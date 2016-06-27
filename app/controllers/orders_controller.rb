@@ -1,5 +1,6 @@
 class OrdersController < ApplicationController
   include OrdersHelper
+  include OffersHelper
   before_action :set_order, only: [:show, :edit, :update, :destroy, :import]
 
   # GET /orders
@@ -38,6 +39,9 @@ class OrdersController < ApplicationController
   def create
     @order = Order.new(order_params)
     if @order.save
+      # 订单保存后，更新订单、子订单的价格合计
+      update_order_and_indent(@order)
+      create_offer(@order.indent)
       redirect_to :back, notice: '子订单创建成功！'
     else
       redirect_to :back, error: '子订单创建失败！'
@@ -47,11 +51,14 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
-    binding.pry
-    if @order.update!(order_params)
+    return redirect_to @order, error: '请求无效！请检查数据是否有效。' unless params[:order]
+    if @order.update(order_params)
+      # 订单更新后，更新订单、子订单的价格合计
+      update_order_and_indent(@order)
+      create_offer(@order.indent)
       redirect_to @order, notice: '子订单编辑成功！'
     else
-      redirect_to @order, error: '子订单编辑失败！'
+      redirect_to @order, error: '子订单编辑失败！请仔细检查后再提交。'
     end
   end
 
@@ -62,14 +69,17 @@ class OrdersController < ApplicationController
     redirect_to orders_url, notice: '子订单已删除。'
   end
 
-    #生产任务 
+  #生产任务
   def producing
-    @orders = Order.producing 
+    @orders = Order.producing
   end
 
   # 导入文件，或手工输入
   def import
     msg = import_order_units(params[:file], @order.name)
+    # 订单修改后，更新订单、子订单的价格合计
+    update_order_and_indent(@order)
+    create_offer(@order.indent)
     return redirect_to order_path(@order), notice: msg
     # 有上传文件时
     # if params[:file].original_filename !~ /.csv$/
@@ -96,11 +106,11 @@ class OrdersController < ApplicationController
                                   :color, :length, :width, :height, :number, :price,
                                   :status, :note, :deleted, :file, :_destroy,
                                   units_attributes: [:id, :full_name, :number, :ply,
-                                  :length, :width, :size, :uom, :price, :note, :_destroy],
+                                                     :length, :width, :size, :uom, :price, :note, :_destroy],
                                   parts_attributes: [:id, :part_category_id, :order_id,
-                                  :name, :buy, :price, :store, :uom, :number, :brand,
-                                  :supply_id, :deleted, :_destroy],
+                                                     :name, :buy, :price, :store, :uom, :number, :brand,
+                                                     :supply_id, :deleted, :_destroy],
                                   crafts_attributes: [:id, :order_id, :full_name, :uom,
-                                  :price, :number, :note, :status, :deleted, :_destroy])
+                                                      :price, :number, :note, :status, :deleted, :_destroy])
   end
 end

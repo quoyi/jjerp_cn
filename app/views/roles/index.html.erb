@@ -1,8 +1,10 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
-    <div class="panel-title"><h2><i class="fa fa-lg fa-desktop"></i> 角色权限 <small>列表</small> </h2></div>
-    <div class="panel-options">
-      <%= link_to '新建', new_role_path, class: 'btn btn-info'%>
+    <div class="panel-title">
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 角色权限 <small>列表</small> </h2>
+      <div class="pull-right panel-options">
+        <%= link_to '新建', new_role_path, class: 'btn btn-info'%>
+      </div>
     </div>
   </div>
 </div>
@@ -16,7 +18,7 @@
       <div class="col-sm-4 text-center">
         <%= link_to '编辑', edit_role_path(role), class: 'btn btn-xs btn-warning' %>
         <%= link_to '删除', role, method: :delete, data: { confirm: '你确定要删除该角色吗？' }, class: 'btn btn-xs btn-danger' %>
-        </div>
+      </div>
     </div>
   </div>
   <div class="panel-body">
@@ -27,15 +29,15 @@
           <%= "#{@controller_hash[permission.klass]}" %>
         </th>
         <td width="70%">
-          <% 
+          <%
           show_action = []
           current_action = permission.actions.split(/\s*,\s*/)
           if Role.permissions[permission.klass]
-            Role.permissions[permission.klass][:actions].each_pair do |k, v|
-              if (Array(v).join('，').split(/,/) - current_action).size == 0
-                show_action << k
-              end
-            end
+          Role.permissions[permission.klass][:actions].each_pair do |k, v|
+          if (Array(v).join('，').split(/,/) - current_action).size == 0
+          show_action << k
+          end
+          end
           end
           %>
           <%= show_action.join(' \ ')  %>
