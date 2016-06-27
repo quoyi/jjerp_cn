@@ -119,6 +119,15 @@ class IndentsController < ApplicationController
         end
         package = @indent.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','))
         package.save!
+        Unit.where(id: unit_ids.compact.uniq).update_all(is_printed: true)
+        Part.where(id: part_ids.compact.uniq).update_all(is_printed: true)
+        packaged_unit_ids = @indent.packages.map(&:unit_ids).join(',').split(',').uniq.map(&:to_i)
+        packaged_part_ids = @indent.packages.map(&:part_ids).join(',').split(',').uniq.map(&:to_i)
+        unit_ids = @order_units.map(&:id)
+        part_ids = @order_parts.map(&:id)
+        if (unit_ids - packaged_unit_ids).empty? && (part_ids-packaged_part_ids).empty?
+          @indent.packaged!
+        end
       end
       if params[:length].present? && params[:width].present?
         @length = params[:length].to_i

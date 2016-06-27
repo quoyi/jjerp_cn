@@ -8,35 +8,37 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
     <div class="panel-title">
-      <h2><i class="fa fa-desktop color"></i> 包装管理 <small>
-      客户单号：<%= link_to @indent.name, indent_path(@indent), class: 'detail-link' %>&nbsp;&nbsp;&nbsp;&nbsp;
-      下单客户：<%=link_to @indent.agent.name, agent_path(@indent.agent), class: 'detail-link' %>&nbsp;&nbsp;&nbsp;&nbsp;
-      <span>一旦选择打印，已打包的部件／配件将无法改变</span>
+      <h2><i class="fa fa-lg fa-desktop"></i> 包装管理
+      <small>
+        客户单号：<%= link_to @indent.name, indent_path(@indent), class: 'detail-link' %>&nbsp;&nbsp;&nbsp;&nbsp;
+        下单客户：<%=link_to @indent.agent.name, agent_path(@indent.agent), class: 'detail-link' %>&nbsp;&nbsp;&nbsp;&nbsp;一旦选择打印，已打包的部件／配件将无法改变
       </small>
-      <span class="pull-right">
-        <%= link_to '返回', :back, class: 'btn btn-lg btn-info' %>
-      </span>
+      <div class="pull-right panel-options">
+        <%= link_to '返回', :back, class: 'btn btn-info' %>
+      </div>
       </h2>
-      <hr />
     </div>
   </div>
   <div class="content-box-large box-with-header">
     <div class="awidget full-width">
       <div class="awidget-head">
         <div class="row">
-          <div class="col-md-12 col-sm-12">
+          <div class="col-sm-3">
+          <label style="font-size: 18px;">条码号：</label>
+          <%= text_field_tag :unit_part_craft_name, '', style: 'font-size: 18px; font-weight: bold;' %>
+          </div>
+          <div class="col-md-9 col-sm-9">
             <%= form_tag("/indents/#{@indent.id}/package.pdf", method: :post, class: 'form-inline') do |f| %>
             <%= hidden_field_tag 'order_unit_ids', '' %>
             <%= hidden_field_tag 'order_label_size', 0 %>
-            <label>打印尺寸：长度（毫米）</label>
-            <%= number_field_tag 'length', @length, min: "80", class: "form-control", style: "width: 10%"%>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <label>打印尺寸：宽度（毫米）</label>
-            <%= number_field_tag 'width', @width, min: "60", class: "form-control", style: "width: 10%"%>
-            <button class="btn btn-info btn-lg" style="margin-left: 20px;" onclick="return print_pages(this);" data-units="<%= @order_units.size %>">批量打印标签</button>
-            <button class="btn btn-info btn-lg" style="margin-left: 20px;" onclick="return print_current_page();">打印当前标签</button>
-            <button class="btn btn-info btn-lg" style="margin-left: 20px;" onclick="return previous();">上一包</button>
-            <button class="btn btn-info btn-lg" style="margin-left: 20px;" onclick="return next();">下一包</button>
+            <button class="btn btn-info" style="margin-left: 20px;" onclick="return previous();">上一包</button>
+            <button class="btn btn-info" style="margin-left: 20px;" onclick="return next();">下一包</button>
+            <button class="btn btn-info" style="margin-left: 20px;" onclick="return print_current_page();">打印当前标签</button>
+            <button class="btn btn-info" style="margin-left: 20px;" onclick="return print_pages(this);" data-units="<%= @order_units.size %>">批量打印标签</button>
+            <label>&nbsp;&nbsp;&nbsp;&nbsp;标签尺寸：</label>
+            <%= number_field_tag 'length', @length, value: "80", class: "form-control", style: "width: 10%", readOnly: true %>
+            &nbsp;&nbsp;×&nbsp;&nbsp;
+            <%= number_field_tag 'width', @width, value: "60", class: "form-control", style: "width: 10%", readOnly: true %>
             <% end %>
           </div>
         </div>
@@ -57,6 +59,7 @@
                 <th class="col-xs-1">尺寸</th>
               </tr>
             </thead>
+            <tbody>
             <% @order_units.each do |order_unit|%>
             <% next if order_unit.is_printed %>
             <tr onclick="remove_order(this)" id="order_unit_<%=order_unit.id%>">
@@ -83,6 +86,7 @@
               <td></td>
             </tr>
             <%end%>
+            </tbody>
           </table>
         </div>
         <div class="col-md-6 col-sm-6">
@@ -100,6 +104,8 @@
                 <th class="col-xs-1">尺寸</th>
               </tr>
             </thead>
+            <tbody>
+            </tbody>
           </table>
         </div>
       </div>

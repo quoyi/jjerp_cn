@@ -61,8 +61,8 @@
         <tbody>
           <% @sents.each do |sent| %>
           <tr>
-            <td><%= sent.indent.name %></td>
-            <td><%= sent.sent_at %></td>
+            <td><%= link_to sent.indent.name, sent.indent, data: {toggle: 'tooltip'}, title: '查看订单详细信息' %></td>
+            <td><%= sent.sent_at.strftime("%Y-%m-%d") %></td>
             <td><%= sent.area %></td>
             <td><%= sent.receiver %></td>
             <td><%= sent.contact %></td>
@@ -73,8 +73,8 @@
             <td><%= sent.collection %></td>
             <td><%= sent.logistics %></td>
             <td><%= sent.logistics_code %></td>
-            <td><%= link_to '编辑', edit_sent_path(sent) %></td>
-            <td><%= link_to '删除', sent, method: :delete, data: { confirm: '你确定要删除吗?' } %></td>
+            <!-- <td><%= link_to '编辑', edit_sent_path(sent) %></td> -->
+            <!-- <td><%= link_to '删除', sent, method: :delete, data: { confirm: '你确定要删除吗?' } %></td> -->
           </tr>
           <% end %>
         </tbody>
