@@ -164,7 +164,7 @@ class IndentsController < ApplicationController
   end
 
   def not_sent
-    @indents = Indent.packaged
+    @indents = Indent.where(status:Indent.statuses[:producing])
     @sent = Sent.new()
   end
 
