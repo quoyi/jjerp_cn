@@ -5,6 +5,21 @@ class SentsController < ApplicationController
   # GET /sents.json
   def index
     @sents = Sent.all
+
+    if params[:start_at].present? && params[:end_at].present?
+      @sents = @sents.where("sent_at between ? and ?", params[:start_at], params[:end_at])
+    elsif params[:start_at].present? || params[:end_at].present?
+      @sents = @sents.where("sent_at = ? ", params[:start_at].present? ? params[:start_at] : params[:end_at])
+    end
+
+    if params[:agent_id].present?
+      @sents = @sents.joins(:indent).where("indents.agent_id = ?", params[:agent_id])
+    end
+
+    if params[:indent_name].present?
+      @sents = @sents.joins(:indent).where("indents.name = ?", params[:indent_name].to_s)
+    end
+
   end
 
   # GET /sents/1
@@ -28,7 +43,9 @@ class SentsController < ApplicationController
 
     respond_to do |format|
       if @sent.save
-        format.html { redirect_to @sent, notice: 'Sent was successfully created.' }
+        indent = Indent.find(@sent.indent_id)
+        indent.sent!
+        format.html { redirect_to sents_path, notice: '发货创建成功！' }
         format.json { render :show, status: :created, location: @sent }
       else
         format.html { render :new }

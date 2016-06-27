@@ -156,6 +156,7 @@ class IndentsController < ApplicationController
 
   def not_sent
     @indents = Indent.packaged
+    @sent = Sent.new()
   end
 
   # 导出报价单
