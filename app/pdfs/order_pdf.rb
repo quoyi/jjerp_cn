@@ -16,19 +16,17 @@ class OrderPdf < Prawn::Document
 
   def print_content
 
-    @ids.each_pair do |key, values|
-      if key != "1"
+    @ids.downto(1).each_with_index do |key, i|
+      if i != 0
         start_new_page
       end
       text "高档定橱柜衣柜", :align => :center, :size => 20
-      text "订单编号:#{@order.name}", :size => 15
-      text "经销商:#{@order.agent.full_name}", :size => 15
-      text "用户地址: #{@order.customer}", :size => 15
-      text "产品名称:家具", :size => 15
-      move_down(10)
-      text "共#{@ids.size}件", :size => 15
-      text "第#{key}件", :size => 15
-      move_down(10)
+      text "编号:#{@order.name}", :size => 14
+      text "经销商:#{@order.agent.full_name}", :size => 14
+      text "地址: #{@order.customer}", :size => 14
+      text "产品:家具", :size => 14
+      text "共#{@ids}件", :size => 14
+      text "第#{@ids}-#{i+1}件", :size => 14
       text "货到：#{@order.agent.address}", :size => 18
     end
   end
