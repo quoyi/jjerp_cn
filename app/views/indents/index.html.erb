@@ -101,16 +101,16 @@
           <table class="table table-hover table-striped table-bordered table-condensed text-center">
             <thead>
               <tr>
-                <th>总订单号</th>
-                <th>经销商</th>
-                <th>终端信息</th>
-                <th>下单时间</th>
-                <th>发货时间</th>
-                <th>订单金额</th>
-                <th>欠款合计</th>
-                <th>历史合计</th>
-                <th>报价单</th>
-                <th>操作</th>
+                <th class="col-sm-1">总订单号</th>
+                <th class="col-xs-1">经销商</th>
+                <th class="col-xs-2">终端信息</th>
+                <th class="col-xs-1">下单时间</th>
+                <th class="col-xs-1">发货时间</th>
+                <th class="col-xs-1">订单金额</th>
+                <th class="col-xs-1">欠款合计</th>
+                <th class="col-xs-1">历史合计</th>
+                <th class="col-xs-1">报价单</th>
+                <th class="col-xs-2">操作</th>
               </tr>
             </thead>
             <tbody>
@@ -134,11 +134,8 @@
                 </td>
                 <td>
                   <%= link_to '编辑', edit_indent_path(i), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title:'编辑总订单' %>
-                  <%= link_to '添加到款', '#', class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', indent: i.id, amount: i.amount, arrear: i.arrear}, id: 'addIncomesBtn' %>
-                  <%= form_for(i) do |ff| %>
-                  <%= ff.hidden_field :status, value: 'producing' %>
-                  <%= ff.submit '开始生产', class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
-                  <% end %>
+                  <%= link_to '到款', '#', class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', indent: i.id, amount: i.amount, arrear: i.arrear}, id: 'addIncomesBtn' %>
+                  <%= link_to '生产', indent_path(id: i.id, indent: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
                 </td>
               </tr>
               <% end %>

@@ -99,9 +99,10 @@ class IndentsController < ApplicationController
     # "4"=>["order_unit_25", "order_part_7", "order_part_8"]}
     # 这些值需存在数据库表package中
     # 打印尺寸需存在users表的default_print_size
-    # binding.pry
     if params[:order_unit_ids].present?
+      label_size = params[:order_label_size].to_i if params[:order_label_size]
       ids = ActiveSupport::JSON.decode(params[:order_unit_ids])
+
       ids.each_pair do |key,values|
         # package.print_size =
         unit_ids = values.map  do |v|
@@ -129,19 +130,24 @@ class IndentsController < ApplicationController
         @width = current_user.print_size.split('*').last.to_i
       else
         @length = 80
-        @width = 50
+        @width = 60
       end
-
 
       respond_to do |format|
         format.html {render :layout => false}
         format.pdf do
           # 打印尺寸毫米（长宽）
-          pdf = OrderPdf.new(@length, @width, ids, @indent.id)
+          pdf = OrderPdf.new(@length, @width, label_size, @indent.id)
           send_data pdf.render, filename: "order_#{@indent.id}.pdf",
             type: "application/pdf",
             disposition: "inline"
         end
+      end
+    elsif params[:format] == 'pdf'
+      redirect_to package_indent_path(@indent)
+    else
+      respond_to do |format|
+        format.html
       end
     end
 
