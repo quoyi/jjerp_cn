@@ -16,7 +16,7 @@ function next() {
     pack = JSON.parse(localStorage.getItem("pack"));
   }
 
-  if (val) {
+  if (val.trim() != '') {
     pack[current_index] = val;
     localStorage.setItem("pack", JSON.stringify(pack));
     set_ids(pack, current_index);
@@ -53,6 +53,10 @@ function previous() {
   var current_index = parseInt(localStorage.getItem("index"));
   var val = $("#new_table").find("tbody").html();
   var pack = JSON.parse(localStorage.getItem("pack"));
+  if(val.trim() == ''){
+    alert('当前包没有数据。');
+    return false;
+  }
   if (pack && pack[current_index - 1]) {
     pack[current_index] = val;
     localStorage.setItem("pack", JSON.stringify(pack));
@@ -108,6 +112,11 @@ function print_current_page() {
   if (localStorage.getItem("pack")) {
     pack = JSON.parse(localStorage.getItem("pack"));
   }
+  if(val.trim() == ''){
+    alert('当前包没有数据。');
+    return false;
+  }
+
   if (val) {
     if (pack[current_index - 1]) {
       alert('上一包还没打印呢，请先打印上一包！');
@@ -138,12 +147,13 @@ function set_ids(pack, current_index) {
   } else {
     values = JSON.parse(values)
   }
-  if (r != null && r != '') {
-    values[current_index] = new Array();
-    for (var i = 0; i < r.length; i++) {
-      var id = r[i].replace(/<tr.*?id=\"/, '').replace(/\">/, '');
-      values[current_index].push(id);
-    }
+
+  values[current_index] = new Array();
+  for (var i = 0; i < r.length; i++) {
+    var id = r[i].replace(/<tr.*?id=\"/, '').replace(/\">/, '');
+    values[current_index].push(id);
   }
+  
+
   $("#order_unit_ids").val(JSON.stringify(values));
 }

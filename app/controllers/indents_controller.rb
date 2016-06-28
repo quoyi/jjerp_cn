@@ -99,7 +99,7 @@ class IndentsController < ApplicationController
     # "4"=>["order_unit_25", "order_part_7", "order_part_8"]}
     # 这些值需存在数据库表package中
     # 打印尺寸需存在users表的default_print_size
-    if params[:order_unit_ids].present?
+    if params[:order_unit_ids].present? &&  params[:order_unit_ids] != "{}"
       label_size = params[:order_label_size].to_i if params[:order_label_size]
       ids = ActiveSupport::JSON.decode(params[:order_unit_ids])
 
