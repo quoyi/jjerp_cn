@@ -92,7 +92,6 @@ module OrdersHelper
     indent.arrear = indent.amount - total_incomes
     indent.total_history += (new_total - old_total)
     indent.total_arrear += (new_total - old_total)
-    binding.pry
     order.save!
     indent.save!
   end
