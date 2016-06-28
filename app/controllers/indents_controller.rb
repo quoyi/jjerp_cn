@@ -176,15 +176,15 @@ class IndentsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to order_union_path(@indent), notice: '导出成功' }
       format.json { head :no_content }
-      # format.csv do
-      #   filename = "报价单－"+@indent.name
-      #   response.headers['Content-Type'] = "application/vnd.ms-excel"
-      #   response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
-      #   # render text: to_csv(@indent)
-      # end
-      format.xls do
-        send_data to_csv(@indent)
+      format.csv do
+        filename = "报价单－" + @indent.name
+        response.headers['Content-Type'] = "application/vnd.ms-excel"
+        response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
+        render text: to_csv(@indent)
       end
+      # format.xls do
+      #   send_data to_csv(@indent)
+      # end
     end
   end
 
@@ -205,9 +205,9 @@ class IndentsController < ApplicationController
     CSV.generate do |csv|
       # 获取字段名称
       csv << ["总订单号", indent.name, '经销商', indent.agent.full_name,
-                   '终端客户', indent.customer, '套数', indent.orders.map(&:number).sum()]
+              '终端客户', indent.customer, '套数', indent.orders.map(&:number).sum()]
       csv << ['下单时间', indent.verify_at, '发货时间', indent.require_at, '状态', indent.status_name,
-                    '金额￥', offers.map{|o| o.order.number * o.total}.sum()]
+              '金额￥', offers.map{|o| o.order.number * o.total}.sum()]
       csv << ['序号', '类型', '名称', '单价￥', '单位', '数量', '备注', '总价￥']
       offers.group_by(&:order_id).each_pair do |order_id, offers|
         offers.each_with_index do |offer, index|
