@@ -182,7 +182,9 @@ class IndentsController < ApplicationController
       #   response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
       #   # render text: to_csv(@indent)
       # end
-      format.xls { send_data to_csv(@indent) }
+      format.xls do
+        send_data to_csv(@indent)
+      end
     end
   end
 
@@ -200,7 +202,7 @@ class IndentsController < ApplicationController
     # head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
     # head = '\xEF\xBB\xBF'.split(' ').map{|a|a.hex.chr}.join()
     # head = ""
-    result = CSV.generate do |csv|
+    CSV.generate do |csv|
       # 获取字段名称
       csv << ["总订单号", indent.name, '经销商', indent.agent.full_name,
                    '终端客户', indent.customer, '套数', indent.orders.map(&:number).sum()]
@@ -227,9 +229,7 @@ class IndentsController < ApplicationController
                 '项目合计￥', orders_total]
         csv << ['', '', '', '', '', '', '', '']
       end
-    end
-    # binding.pry
-    # Iconv.iconv("ASCII//IGNORE", "UTF-8//IGNORE", result)
+    end.encode('gb2312', :invalid => :replace, :undef => :replace, :replace => "?")
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
