@@ -13,7 +13,6 @@ class PartCategoriesController < ApplicationController
   # POST /part_categories.json
   def create
     @part_category = PartCategory.new(part_category_params)
-    # binding.pry
     if @part_category.save
       redirect_to part_categories_path, notice: '配件类型创建成功！'
     else

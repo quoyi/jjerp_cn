@@ -12,7 +12,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def create
   #   super
   #   # flash = resource.errors
-  #   binding.pry
   # end
 
   # GET /resource/edit

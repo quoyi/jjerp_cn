@@ -53,7 +53,6 @@ module OrdersHelper
                 edge: row[11],
                 note: row[13]
               )
-              # binding.pry
               unit.save!
               index += 1
             end
