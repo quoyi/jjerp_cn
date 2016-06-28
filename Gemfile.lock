@@ -72,6 +72,7 @@ GEM
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     i18n (0.7.0)
+    iconv (1.0.4)
     jbuilder (2.4.1)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
@@ -195,6 +196,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   devise
   font-awesome-sass (~> 4.2.0)
+  iconv (~> 1.0, >= 1.0.4)
   jbuilder (~> 2.0)
   jquery-rails
   jquery-turbolinks
