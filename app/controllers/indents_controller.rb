@@ -197,17 +197,16 @@ class IndentsController < ApplicationController
     return [] if indent.nil?
     offers = indent.offers
     # make excel using utf8 to open csv file
-    head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
-    CSV.generate(head) do |csv|
+    # head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
+    # head = '\xEF\xBB\xBF'.split(' ').map{|a|a.hex.chr}.join()
+    # head = ""
+    result = CSV.generate do |csv|
       # 获取字段名称
-      first_row = ['总订单号', indent.name, '经销商', indent.agent.full_name,
+      csv << ["总订单号", indent.name, '经销商', indent.agent.full_name,
                    '终端客户', indent.customer, '套数', indent.orders.map(&:number).sum()]
-      second_row = ['下单时间', indent.verify_at, '发货时间', indent.require_at, '状态', indent.status_name,
+      csv << ['下单时间', indent.verify_at, '发货时间', indent.require_at, '状态', indent.status_name,
                     '金额￥', offers.map{|o| o.order.number * o.total}.sum()]
-      csv << first_row
-      csv << second_row
-      header_column = ['序号', '类型', '名称', '单价￥', '单位', '数量', '备注', '总价￥']
-      csv << header_column
+      csv << ['序号', '类型', '名称', '单价￥', '单位', '数量', '备注', '总价￥']
       offers.group_by(&:order_id).each_pair do |order_id, offers|
         offers.each_with_index do |offer, index|
           values = []
@@ -229,7 +228,8 @@ class IndentsController < ApplicationController
         csv << ['', '', '', '', '', '', '', '']
       end
     end
-    # Iconv.iconv("GBK", "UTF-8", result)
+    # binding.pry
+    # Iconv.iconv("ASCII//IGNORE", "UTF-8//IGNORE", result)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
