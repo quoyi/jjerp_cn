@@ -34,7 +34,7 @@
             <button class="btn btn-info" style="margin-left: 20px;" onclick="return previous();">上一包</button>
             <button class="btn btn-info" style="margin-left: 20px;" onclick="return next();">下一包</button>
             <button class="btn btn-info" style="margin-left: 20px;" onclick="return print_current_page();">打印当前标签</button>
-            <button class="btn btn-info" style="margin-left: 20px;" onclick="return print_pages(this);" data-units="<%= @order_units.size %>">批量打印标签</button>
+            <button class="btn btn-info" style="margin-left: 20px;" onclick="return print_pages(this);" data-units="<%= @order_units.map(&:is_printed).uniq.select { |e| !e  }.size %>">批量打印标签</button>
             <label>&nbsp;&nbsp;&nbsp;&nbsp;标签尺寸：</label>
             <%= number_field_tag 'length', @length, value: "80", class: "form-control", style: "width: 10%", readOnly: true %>
             &nbsp;&nbsp;×&nbsp;&nbsp;
