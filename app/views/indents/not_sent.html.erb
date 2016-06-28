@@ -2,38 +2,41 @@
   <div class="content-box-header panel-heading">
     <!-- Page title -->
     <div class="panel-title">
-      <h2 class="pull-left"><i class="fa fa-desktop color"></i> 待发货 <small>列表</small>
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 待发货 <small>列表</small>
       </h2>
     </div>
   </div>
   <!-- Page title -->
   <div class="content-box-large box-with-header">
-    <table class="table table-hover table-striped table-bordered table-condensed text-center">
-      <thead>
-        <tr class="info">
-          <td>客户单号</td>
-          <td>经销商</td>
-          <td>联系人</td>
-          <td>联系电话</td>
-          <td>要求发货时间</td>
-          <td>发货</td>
-        </tr>
-      </thead>
-      <tbody>
-        <% @indents.each do |indent|%>
-        <tr>
-          <td><%= link_to indent.name, indent_path(indent), class: 'detail-link' %></td>
-          <td> <%= indent.agent.full_name %></td>
-          <td> <%= indent.agent.contacts %></td>
-          <td><%= indent.agent.mobile %></td>
-          <td><%= indent.require_at %></td>
-          <td><%= link_to '发货', '#', class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addSent', indent: indent.id}, id: 'addSentsBtn'  %></td>
-        </tr>
-        <%end%>
-      </toby>
-  </table>
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr class="info">
+            <td>客户单号</td>
+            <td>经销商</td>
+            <td>联系人</td>
+            <td>联系电话</td>
+            <td>要求发货时间</td>
+            <td>发货</td>
+          </tr>
+        </thead>
+        <tbody>
+          <% @indents.each do |indent|%>
+          <tr>
+            <td><%= link_to indent.name, indent_path(indent), class: 'detail-link' %></td>
+            <td> <%= indent.agent.full_name %></td>
+            <td> <%= indent.agent.contacts %></td>
+            <td><%= indent.agent.mobile %></td>
+            <td><%= indent.require_at %></td>
+            <td><%= link_to '发货', '#', class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addSent', indent: indent.id}, id: 'addSentsBtn'  %></td>
+          </tr>
+          <%end%>
+        </tbody>
+        
+      </table>
+    </div>
+  </div>
 </div>
-
 <!-- Modal -->
 <div class="modal fade" id="addSent" tabindex="-1" role="dialog" aria-labelledby="addSent">
   <div class="modal-dialog" role="document" style="width: 55%;">
@@ -44,78 +47,77 @@
       </div>
       <div class="modal-body">
         <%= form_for(@sent, html: {class: "form-inline"}) do |f| %>
-          <div class="form-group" style="margin-top: 20px;">
-            <div class="row">
-              <div class="col-sm-3">
-                <%= f.label '订单号' %>
-                <%= select_tag 'sent[indent_id]', options_for_select(Indent.all.map{|i|[i.name, i.id]}), class: 'form-control', required: true, style: 'width:50%;' %>
-              </div>
-              <div class="col-sm-3">
-                <label>名&nbsp;&nbsp;&nbsp;&nbsp;称</label>
-                <%= f.text_field :name, class: 'form-control', style: 'width:50%;' %>
-              </div>
-              <div class="col-sm-6">
-                <label>发货时间</label>
-                <%= f.date_field :sent_at, class: 'form-control', data: {provide: 'datepicker'}, required: true, style: 'width:70%;' %>
-              </div>
+        <div class="form-group" style="margin-top: 20px;">
+          <div class="row">
+            <div class="col-sm-3">
+              <%= f.label '订单号' %>
+              <%= select_tag 'sent[indent_id]', options_for_select(Indent.all.map{|i|[i.name, i.id]}), class: 'form-control', required: true, style: 'width:50%;' %>
+            </div>
+            <div class="col-sm-3">
+              <label>名&nbsp;&nbsp;&nbsp;&nbsp;称</label>
+              <%= f.text_field :name, class: 'form-control', style: 'width:50%;' %>
+            </div>
+            <div class="col-sm-6">
+              <label>发货时间</label>
+              <%= f.date_field :sent_at, class: 'form-control', data: {provide: 'datepicker'}, required: true, style: 'width:70%;' %>
             </div>
           </div>
-          
-          <div class="form-group" style="margin-top: 20px;">
-            <div class="row">
-              <div class="col-sm-4">
-                <label>地&nbsp;&nbsp;&nbsp;&nbsp;区</label>
-                <%= f.text_field :area, class: 'form-control', style: 'width:70%;' %>
-              </div>
-              <div class="col-sm-4">
-                <%= f.label '收货人' %>
-                <%= f.text_field :receiver, class: 'form-control', required: true, style: 'width:70%;' %>
-              </div>
-              <div class="col-sm-4">
-                <%= f.label '联系人' %>
-                <%= f.text_field :contact, class: 'form-control', required: true, style: 'width:70%;' %>
-              </div>
+        </div>
+        <div class="form-group" style="margin-top: 20px;">
+          <div class="row">
+            <div class="col-sm-4">
+              <label>地&nbsp;&nbsp;&nbsp;&nbsp;区</label>
+              <%= f.text_field :area, class: 'form-control', style: 'width:70%;' %>
+            </div>
+            <div class="col-sm-4">
+              <%= f.label '收货人' %>
+              <%= f.text_field :receiver, class: 'form-control', required: true, style: 'width:70%;' %>
+            </div>
+            <div class="col-sm-4">
+              <%= f.label '联系人' %>
+              <%= f.text_field :contact, class: 'form-control', required: true, style: 'width:70%;' %>
             </div>
           </div>
-          <div class="form-group" style="margin-top: 20px;">
-            <div class="row">
-              <div class="col-sm-4">
-                <label>代&nbsp;&nbsp;&nbsp;&nbsp;收</label>
-                <%= f.text_field :collection, class: 'form-control', style: 'width:70%;' %>
-              </div>
-              <div class="col-sm-4">
-                <label>物&nbsp;&nbsp;&nbsp;&nbsp;流</label>
-                <%= f.text_field :logistics, class: 'form-control', style: 'width:70%;' %>
-              </div>
-              <div class="col-sm-4">
-                <%= f.label '物流号' %>
-                <%= f.text_field :logistics_code, class: 'form-control', required: true, style: 'width:70%;' %>
-              </div>
+        </div>
+        <div class="form-group" style="margin-top: 20px;">
+          <div class="row">
+            <div class="col-sm-4">
+              <label>代&nbsp;&nbsp;&nbsp;&nbsp;收</label>
+              <%= f.text_field :collection, class: 'form-control', style: 'width:70%;' %>
+            </div>
+            <div class="col-sm-4">
+              <label>物&nbsp;&nbsp;&nbsp;&nbsp;流</label>
+              <%= f.text_field :logistics, class: 'form-control', style: 'width:70%;' %>
+            </div>
+            <div class="col-sm-4">
+              <%= f.label '物流号' %>
+              <%= f.text_field :logistics_code, class: 'form-control', required: true, style: 'width:70%;' %>
             </div>
           </div>
-          <div class="form-group" style="margin-top: 20px;">
-            <div class="row">
-              <div class="col-sm-3">
-                <%= f.label '橱柜' %>
-                <%= f.number_field :cupboard, class: 'form-control', min: 0, required: true, style: 'width:50%;' %>
-              </div>
-              <div class="col-sm-3">
-                <%= f.label '衣柜' %>
-                <%= f.number_field :robe, class: 'form-control', min: 0, required: true, style: 'width:50%;' %>
-              </div>
-              <div class="col-sm-3">
-                <%= f.label '门' %>
-                <%= f.number_field :door, class: 'form-control', min: 0, required: true, style: 'width:50%;' %>
-              </div>
-              <div class="col-sm-3">
-                <%= f.label '配件' %>
-                <%= f.number_field :part, class: 'form-control', min: 0, required: true, style: 'width:50%;' %>
-              </div>
+        </div>
+        <div class="form-group" style="margin-top: 20px;">
+          <div class="row">
+            <div class="col-sm-3">
+              <%= f.label '橱柜' %>
+              <%= f.number_field :cupboard, class: 'form-control', min: 0, required: true, style: 'width:50%;' %>
+            </div>
+            <div class="col-sm-3">
+              <%= f.label '衣柜' %>
+              <%= f.number_field :robe, class: 'form-control', min: 0, required: true, style: 'width:50%;' %>
+            </div>
+            <div class="col-sm-3">
+              <%= f.label '门' %>
+              <%= f.number_field :door, class: 'form-control', min: 0, required: true, style: 'width:50%;' %>
+            </div>
+            <div class="col-sm-3">
+              <%= f.label '配件' %>
+              <%= f.number_field :part, class: 'form-control', min: 0, required: true, style: 'width:50%;' %>
             </div>
           </div>
-          <div class="form-group" style="margin-top: 20px;">
-            <%= f.submit '提交', class: 'btn btn-primary' %>
-          </div>
+        </div>
+        <div class="form-group" style="margin-top: 20px;">
+          <%= f.submit '提交', class: 'btn btn-primary' %>
+        </div>
         <% end %>
       </div>
     </div>

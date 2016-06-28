@@ -58,10 +58,13 @@ class IndentsController < ApplicationController
         @indent.orders.each do |o|
           o.producing!
         end
+        msg = "订单: #{@indent.name} 开始生产！"
+      else
+        msg = "订单编辑成功！"
       end
-      redirect_to @indent, notice: "订单编辑成功！"
+      redirect_to :back, notice: msg
     else
-      redirect_to indents_path, error: "订单编辑失败！"
+      redirect_to :back, error: "订单编辑失败！"
     end
   end
 
@@ -163,7 +166,7 @@ class IndentsController < ApplicationController
   end
 
   def not_sent
-    @indents = Indent.where(status:Indent.statuses[:producing])
+    @indents = Indent.where(status:Indent.statuses[:packaged])
     @sent = Sent.new()
   end
 

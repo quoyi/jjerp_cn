@@ -256,6 +256,7 @@ ActiveRecord::Schema.define(version: 20160619003924) do
   create_table "parts", force: :cascade do |t|
     t.integer  "part_category_id", limit: 4,                                           null: false
     t.integer  "order_id",         limit: 4,                                           null: false
+    t.string   "name",             limit: 255
     t.decimal  "buy",                          precision: 8, scale: 2
     t.decimal  "price",                        precision: 8, scale: 2
     t.integer  "store",            limit: 4,                           default: 1,     null: false
@@ -269,6 +270,7 @@ ActiveRecord::Schema.define(version: 20160619003924) do
     t.boolean  "is_printed",                                           default: false
   end
 
+  add_index "parts", ["name"], name: "index_parts_on_name", using: :btree
   add_index "parts", ["part_category_id"], name: "index_parts_on_part_category_id", using: :btree
   add_index "parts", ["supply_id"], name: "index_parts_on_supply_id", using: :btree
 

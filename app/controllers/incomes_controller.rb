@@ -27,9 +27,12 @@ class IncomesController < ApplicationController
   def create
     @income = Income.new(income_params)
     if @income.save
-      redirect_to incomes_path, notice: '收入记录创建成功！'
+      binding.pry
+      indent = @income.indent
+      indent.update(arrear: indent.arrear, total_arrear: indent.total_arrear)
+      redirect_to :back, notice: '收入记录创建成功！'
     else
-      redirect_to incomes_path, error: '收入记录创建失败！'
+      redirect_to :back, error: '收入记录创建失败！'
     end
   end
 

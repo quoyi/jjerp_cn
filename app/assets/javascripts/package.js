@@ -53,7 +53,7 @@ function previous() {
   var current_index = parseInt(localStorage.getItem("index"));
   var val = $("#new_table").find("tbody").html();
   var pack = JSON.parse(localStorage.getItem("pack"));
-  if(val.trim() == ''){
+  if (val.trim() == '') {
     alert('当前包没有数据。');
     return false;
   }
@@ -112,7 +112,7 @@ function print_current_page() {
   if (localStorage.getItem("pack")) {
     pack = JSON.parse(localStorage.getItem("pack"));
   }
-  if(val.trim() == ''){
+  if (val.trim() == '') {
     alert('当前包没有数据。');
     return false;
   }
@@ -138,7 +138,6 @@ function print_current_page() {
 }
 
 function set_ids(pack, current_index) {
-
   var r = pack[current_index].match(/<tr.*?id=(.*?)>/g);
   values = $("#order_unit_ids").val();
 
@@ -153,7 +152,34 @@ function set_ids(pack, current_index) {
     var id = r[i].replace(/<tr.*?id=\"/, '').replace(/\">/, '');
     values[current_index].push(id);
   }
-  
 
   $("#order_unit_ids").val(JSON.stringify(values));
 }
+
+$(function() {
+  // 设置输入框自动获得焦点
+  $("#unit_part_craft_name").focus();
+  // 输入框获得焦点后，点击enter（keyCode=13）后的处理逻辑
+  $("#unit_part_craft_name").on('keydown', function(e) {
+    var value = $("#unit_part_craft_name").val();
+    var enter = window.event || e;
+    if (enter.keyCode == 13) {
+      var trs = $("#old_table").find("tbody").children();
+      var not_package_ids = new Array();
+      for (var i = 0; i < trs.length; i++) {
+        var name = $("#" + trs[i].id).children().first().text();
+        if (name != null && name != "" && name == value) {
+          $("#" + trs[i].id).click();
+          break;
+        }
+      }
+    }
+  })
+});
+
+// function add_to_packaged(e) {
+//   var enter = window.event || e;
+//   if (enter.keyCode == 13) {
+//     alert("点击确定按钮");
+//   }
+// }

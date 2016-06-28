@@ -14,8 +14,7 @@
   <% @agent_search = Agent.find_by_id(params[:agent_id])%>
   <% end%>
   <div class="content-box-large box-with-header">
-    <div class="row">
-      <div class="col-sm-12">
+    <div class="row content-table">
         <%= form_tag indents_path, class: 'form-inline', method: 'get' do %>
         <div class="panel panel-info">
           <div class="panel-heading">
@@ -38,10 +37,9 @@
           </div>
         </div>
         <% end %>
-      </div>
     </div>
-    <div class="row">
-      <div class="col-sm-4">
+    <div class="row content-table">
+      <div class="col-sm-4" style="padding: 0 0;">
         <div class="panel panel-info">
           <div class="panel-heading">
             <span>订单统计信息</span>
@@ -96,7 +94,7 @@
           </table>
         </div>
       </div>
-      <div class="col-sm-8">
+      <div class="col-sm-8" style="padding: 0 0 0 5px;">
         <div class="panel panel-info">
           <table class="table table-hover table-striped table-bordered table-condensed text-center">
             <thead>
@@ -122,7 +120,7 @@
                 <td><%= i.verify_at.strftime('%Y-%m-%d') %></td>
                 <td><%= i.require_at.strftime('%Y-%m-%d') %></td>
                 <td><%= i.amount %></td>
-                <td class="danger"><%= i.total_arrear %></td>
+                <td class="danger" data-toggle="tooltip" title="负数表示经销商预付款或押金"><%= i.total_arrear %></td>
                 <td><%= i.total_history %></td>
                 <!-- 这里需要判断是否已生成报价单 -->
                 <td>

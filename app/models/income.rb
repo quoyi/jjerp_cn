@@ -6,9 +6,10 @@ class Income < ActiveRecord::Base
   # 应收、已收
   attr_accessor :should, :yet
 
-  # 添加收入记录后，需要修改订单的“已收”
+  # 添加收入记录后，需要修改订单的“已收”、"欠款"
   def update_indent_money
-    self.indent.arrear += self.money
+    self.indent.arrear -= self.money
+    self.indent.total_arrear -= self.money
     self.indent.save!
   end
 end
