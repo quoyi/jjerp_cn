@@ -105,8 +105,7 @@
                 <th class="col-xs-1">下单时间</th>
                 <th class="col-xs-1">发货时间</th>
                 <th class="col-xs-1">订单金额</th>
-                <th class="col-xs-1">欠款合计</th>
-                <th class="col-xs-1">历史合计</th>
+                <th class="col-xs-1">欠款</th>
                 <th class="col-xs-1">报价单</th>
                 <th class="col-xs-2">操作</th>
               </tr>
@@ -120,8 +119,7 @@
                 <td><%= i.verify_at.strftime('%Y-%m-%d') %></td>
                 <td><%= i.require_at.strftime('%Y-%m-%d') %></td>
                 <td><%= i.amount %></td>
-                <td class="danger" data-toggle="tooltip" title="负数表示经销商预付款或押金"><%= i.total_arrear %></td>
-                <td><%= i.total_history %></td>
+                <td class="danger" data-toggle="tooltip" title="负数表示经销商预付款或押金"><%= i.arrear %></td>
                 <!-- 这里需要判断是否已生成报价单 -->
                 <td>
                   <% if Indent.statuses[i.status.to_sym] > Indent.statuses[:offering] && Indent.statuses[i.status.to_sym] <= Indent.statuses[:sent] %>
