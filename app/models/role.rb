@@ -16,8 +16,6 @@ class Role < ActiveRecord::Base
 
   def self.register_permission(hash)
     klass = hash.delete(:class)
-    # require 'pry'
-    # binding.pry
     klass.constantize.rescue_from Account::PermissionDenied do |exception|
       redirect_to root_path, notice: '没有访问权限'
     end

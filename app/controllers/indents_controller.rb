@@ -1,4 +1,5 @@
 class IndentsController < ApplicationController
+  include IndentsHelper
   include OffersHelper
   before_action :set_indent, only: [:show, :edit, :update, :destroy]
 
@@ -78,7 +79,6 @@ class IndentsController < ApplicationController
 
   # 生成报价单
   def generate
-    # binding.pry
     # 查找订单的所有拆单信息，并生成报价单
     indent = Indent.find_by_id(params[:id])
     create_offer(indent) if indent
@@ -176,11 +176,13 @@ class IndentsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to order_union_path(@indent), notice: '导出成功' }
       format.json { head :no_content }
-      format.csv do
-        filename = "报价单－"+@indent.name
-        response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
-        render text: to_csv(@indent)
-      end
+      # format.csv do
+      #   filename = "报价单－"+@indent.name
+      #   response.headers['Content-Type'] = "application/vnd.ms-excel"
+      #   response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
+      #   # render text: to_csv(@indent)
+      # end
+      format.xls { send_data to_csv(@indent) }
     end
   end
 
@@ -195,8 +197,7 @@ class IndentsController < ApplicationController
     return [] if indent.nil?
     offers = indent.offers
     # make excel using utf8 to open csv file
-    # head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
-    head = ""
+    head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
     CSV.generate(head) do |csv|
       # 获取字段名称
       first_row = ['总订单号', indent.name, '经销商', indent.agent.full_name,
