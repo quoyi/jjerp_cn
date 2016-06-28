@@ -1,0 +1,16 @@
+---
+zh-CN:
+  activerecord:
+    models:
+      unit: 部件
+    attributes:
+      unit:
+        name: 编码
+    errors:
+      models:
+        unit:
+          attributes:
+            size:
+              invalid: 尺寸的格式不正确，例如100x100
+  helpers:
+    agent:

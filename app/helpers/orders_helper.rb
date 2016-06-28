@@ -22,49 +22,54 @@ module OrdersHelper
         return "未找到板料#{order_material}" unless Material.find_by(full_name: order_material)
         if order
           # 开启事务
-          ActiveRecord::Base.transaction do
-            units = Unit.where(order_id: order.id).order("name ASC")
-            # 其实这里可以不用提取出来（性能上一样，都是计算两次）
-            last_units = units.last
-            last_unit_index = last_units.present? ? (last_units.name.split(/-/).last.to_i + 1).to_s : '1'
-            units.destroy_all
-            # 删除已存在的拆单记录
-            # Unit.where(order_id: order.id).destroy_all
-            # 部件（板料）价格，避免查询多次
-            unit_price = Material.find_by(ply: order.ply, texture: order.texture, color: order.color).try(:price).to_f
-            table.each do |row|
-              # next if row[8].blank? || row[8].strip != name
-              # ply = row[1].split(/板/).last
-              # ply = ply.gsub(/厚/, 'mm')
-              # unless Material.all.map(&:full_name).include?(order_material)
-              #   _return = "未找到板料#{order_material}"
-              # end
-              unit = Unit.new(
-                order_id: order.id,
-                name: order.name + "-b-" + (index + 1).to_s,
-                full_name: row[0],
-                ply: order.id,
-                length: row[2],
-                width: row[3],
-                number: row[5],
-                price: unit_price,
-                size: row[6],
-                customer: row[10],
-                edge: row[11],
-                note: row[13]
-              )
-              unit.save!
-              index += 1
+          begin
+            ActiveRecord::Base.transaction do
+              units = Unit.where(order_id: order.id).order("name ASC")
+              # 其实这里可以不用提取出来（性能上一样，都是计算两次）
+              last_units = units.last
+              last_unit_index = last_units.present? ? (last_units.name.split(/-/).last.to_i + 1).to_s : '1'
+              units.destroy_all
+              # 删除已存在的拆单记录
+              # Unit.where(order_id: order.id).destroy_all
+              # 部件（板料）价格，避免查询多次
+              unit_price = Material.find_by(ply: order.ply, texture: order.texture, color: order.color).try(:price).to_f
+              table.each do |row|
+                next if row[0].blank?
+                # next if row[8].blank? || row[8].strip != name
+                # ply = row[1].split(/板/).last
+                # ply = ply.gsub(/厚/, 'mm')
+                # unless Material.all.map(&:full_name).include?(order_material)
+                #   _return = "未找到板料#{order_material}"
+                # end
+                unit = Unit.new(
+                  order_id: order.id,
+                  name: order.name + "-b-" + (index + 1).to_s,
+                  full_name: row[0],
+                  ply: order.id,
+                  length: row[2],
+                  width: row[3],
+                  number: row[5],
+                  price: unit_price,
+                  size: row[6],
+                  customer: row[10],
+                  edge: row[11],
+                  note: row[13]
+                )
+                unit.save!
+                index += 1
+              end
+              if index > 0
+                # 导入成功后的其他逻辑
+                # order.separated!
+                _return = "导入成功！本次导入 #{index} 条记录"
+              else
+                # 当导入的记录条数没有变化时，回滚事务（找回删除掉的拆单记录）!!注意:必须在回滚之前做处理!!
+                _return = "所选文件中未找到订单号 #{name} 对应的记录！"
+                raise ActiveRecord::Rollback
+              end
             end
-            if index > 0
-              # 导入成功后的其他逻辑
-              # order.separated!
-              _return = "导入成功！本次导入 #{index} 条记录"
-            else
-              # 当导入的记录条数没有变化时，回滚事务（找回删除掉的拆单记录）!!注意:必须在回滚之前做处理!!
-              _return = "所选文件中未找到订单号 #{name} 对应的记录！"
-              raise ActiveRecord::Rollback
-            end
+          rescue ActiveRecord::RecordInvalid => exception
+            _return = "数据格式不正确，请检查！"
           end
         else
           _return = "未找到编号为 #{name} 的订单，请检查订单号是否正确！"
