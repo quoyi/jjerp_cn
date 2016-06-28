@@ -4782,6 +4782,9 @@ Material.create(id: 13, ply: 3, texture: 9, color: 14, store: 50, buy: 100.00, p
 Material.create(id: 14, ply: 3, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6n', full_name: '一帘幽梦颗粒板15mm', uom: '平方', supply_id: 1);
 Material.create(id: 15, ply: 4, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6o', full_name: '国色天香颗粒板16mm', uom: '平方', supply_id: 1);
 Material.create(id: 16, ply: 4, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6p', full_name: '一帘幽梦颗粒板16mm', uom: '平方', supply_id: 1);
+Material.create(id: 17, ply: 6, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6q', full_name: '国色天香颗粒板18mm', uom: '平方', supply_id: 1);
+Material.create(id: 18, ply: 6, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6r', full_name: '一帘幽梦颗粒板18mm', uom: '平方', supply_id: 1);
+Material.create(id: 19, ply: 6, texture: 10, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6s', full_name: '国色天香密度板18mm', uom: '平方', supply_id: 1);
 puts 'created Material success ! '
 ####################################### 订单类型 #######################################
 OrderCategory.create(:name => "橱柜体")

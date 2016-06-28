@@ -27,7 +27,7 @@ $(function() {
       var arrear = e.relatedTarget.dataset.arrear;
       $("#income_indent_id").val(indent_id);
       $("#income_should").val(amount);
-      $("#income_yet").val(arrear);
+      $("#income_yet").val(amount-arrear);
     }
   });
 

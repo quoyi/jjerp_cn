@@ -41,7 +41,7 @@ module OrdersHelper
               # end
               unit = Unit.new(
                 order_id: order.id,
-                name: "ESR" + order.name + "-" + (index + 1).to_s,
+                name: order.name + "-b-" + (index + 1).to_s,
                 full_name: row[0],
                 ply: order.id,
                 length: row[2],
@@ -81,12 +81,18 @@ module OrdersHelper
   # 修改子订单和总订单
   def update_order_and_indent(order)
     indent = order.indent
+    old_total = indent.amount
     # 获取上级子订单所有的 部件、配件、工艺，并计算总价
     # 部件 总价 = 面积 * 数量 * 单价
     total_units = order.units.map{|u| u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum()
     total_parts = order.parts.map{|p| p.number * p.price}.sum()
     total_crafts = order.crafts.map{|c| c.number * c.price}.sum()
-    indent.amount = order.price = total_units + total_parts + total_crafts
+    total_incomes = indent.incomes.map(&:money).sum
+    new_total = indent.amount = order.price = total_units + total_parts + total_crafts
+    indent.arrear = indent.amount - total_incomes
+    indent.total_history += (new_total - old_total)
+    indent.total_arrear += (new_total - old_total)
+    binding.pry
     order.save!
     indent.save!
   end
