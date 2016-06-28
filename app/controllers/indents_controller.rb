@@ -195,7 +195,8 @@ class IndentsController < ApplicationController
     return [] if indent.nil?
     offers = indent.offers
     # make excel using utf8 to open csv file
-    head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
+    # head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
+    head = ""
     CSV.generate(head) do |csv|
       # 获取字段名称
       first_row = ['总订单号', indent.name, '经销商', indent.agent.full_name,
@@ -227,6 +228,7 @@ class IndentsController < ApplicationController
         csv << ['', '', '', '', '', '', '', '']
       end
     end
+    # Iconv.iconv("GBK", "UTF-8", result)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
