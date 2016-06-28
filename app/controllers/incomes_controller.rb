@@ -27,7 +27,6 @@ class IncomesController < ApplicationController
   def create
     @income = Income.new(income_params)
     if @income.save
-      binding.pry
       indent = @income.indent
       indent.update(arrear: indent.arrear, total_arrear: indent.total_arrear)
       redirect_to :back, notice: '收入记录创建成功！'
