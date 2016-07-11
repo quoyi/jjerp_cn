@@ -5,6 +5,7 @@ class BanksController < ApplicationController
   # GET /banks.json
   def index
     @banks = Bank.all
+    @bank = Bank.new
   end
 
   # GET /banks/1
@@ -26,28 +27,20 @@ class BanksController < ApplicationController
   def create
     @bank = Bank.new(bank_params)
 
-    respond_to do |format|
-      if @bank.save
-        format.html { redirect_to @bank, notice: 'Bank was successfully created.' }
-        format.json { render :show, status: :created, location: @bank }
-      else
-        format.html { render :new }
-        format.json { render json: @bank.errors, status: :unprocessable_entity }
-      end
+    if @bank.save
+      redirect_to banks_path, notice: '银行卡新建成功！'
+    else
+      redirect_to banks_path, error: '银行卡新建失败！'
     end
   end
 
   # PATCH/PUT /banks/1
   # PATCH/PUT /banks/1.json
   def update
-    respond_to do |format|
-      if @bank.update(bank_params)
-        format.html { redirect_to @bank, notice: 'Bank was successfully updated.' }
-        format.json { render :show, status: :ok, location: @bank }
-      else
-        format.html { render :edit }
-        format.json { render json: @bank.errors, status: :unprocessable_entity }
-      end
+    if @bank.update(bank_params)
+      redirect_to banks_path, notice: '银行卡编辑成功！'
+    else
+      redirect_to banks_path, error: '银行卡编辑失败！'
     end
   end
 
@@ -55,20 +48,17 @@ class BanksController < ApplicationController
   # DELETE /banks/1.json
   def destroy
     @bank.destroy
-    respond_to do |format|
-      format.html { redirect_to banks_url, notice: 'Bank was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to banks_path, notice: '银行卡已删除！'
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_bank
-      @bank = Bank.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_bank
+    @bank = Bank.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def bank_params
-      params.require(:bank).permit(:name, :bank_name, :bank_card, :balance)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def bank_params
+    params.require(:bank).permit(:name, :bank_name, :bank_card, :balance)
+  end
 end

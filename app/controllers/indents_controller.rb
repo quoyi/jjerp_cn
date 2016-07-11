@@ -7,7 +7,7 @@ class IndentsController < ApplicationController
   # GET /indents.json
   def index
     @agent = Agent.new
-    @indent = Indent.new
+    @indent = Indent.new(name: Time.now.strftime("%Y%m%d"))
     @income = @indent.incomes.new
     @indents = Indent.all.order(created_at: :desc)
     if params[:start_at].present? && params[:end_at].present?

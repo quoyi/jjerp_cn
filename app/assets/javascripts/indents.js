@@ -26,9 +26,11 @@ $(function() {
       if (indent_id != null && indent_id != "") {
         var amount = e.relatedTarget.dataset.amount;
         var arrear = e.relatedTarget.dataset.arrear;
+        var username = e.relatedTarget.dataset.username;
         $("#income_indent_id").val(indent_id);
         $("#income_should").val(amount);
         $("#income_yet").val(amount - arrear);
+        $("#income_username").val(username);
       }
     }
   });

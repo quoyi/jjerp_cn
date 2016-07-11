@@ -23,15 +23,15 @@
               </div>
               <div class="col-sm-2">
                 <label>单位</label>
-                <%= part_form.text_field :uom, value: pf.new_record? ? '个' : pf.uom %>
+                <%= part_form.text_field :uom, value: pf.new_record? ? '个' : pf.uom, required: true  %>
               </div>
               <div class="col-sm-2">
                 <label>售价</label>
-                <%= part_form.number_field :price, min: 0, value: pf.new_record? ? 0 : pf.price %>
+                <%= part_form.number_field :price, min: 0, value: pf.new_record? ? 0 : pf.price, required: true  %>
               </div>
               <div class="col-sm-2">
                 <label>数量</label>
-                <%= part_form.number_field :number, min: 1, value: pf.new_record? ? 1 : pf.number %>
+                <%= part_form.number_field :number, min: 1, value: pf.new_record? ? 1 : pf.number, required: true  %>
               </div>
               <div class="col-sm-2 text-center">
                 <%= part_form.link_to_remove '删除', class:'btn btn-info btn-sm' %>

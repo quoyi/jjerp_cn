@@ -40,7 +40,7 @@ class AgentsController < ApplicationController
     if @agent.save
       redirect_to agents_path, notice: '经销商创建成功！'
     else
-      render agents_path, error: '经销商创建失败！'
+      redirect_to agents_path, error: '经销商创建失败！'
     end
   end
 
@@ -50,7 +50,7 @@ class AgentsController < ApplicationController
     if @agent.update(agent_params)
       redirect_to agents_path, notice: '经销商编辑成功！'
     else
-      render agents_path, error: '经销商编辑失败！'
+      redirect_to agents_path, error: '经销商编辑失败！'
     end
   end
 

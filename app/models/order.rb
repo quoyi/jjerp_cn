@@ -3,6 +3,7 @@ class Order < ActiveRecord::Base
 
   belongs_to :order_category
   belongs_to :indent
+  has_many :offers, dependent: :destroy
   has_many :units, dependent: :destroy
   has_many :parts, dependent: :destroy
   has_many :crafts, dependent: :destroy
@@ -43,7 +44,14 @@ class Order < ActiveRecord::Base
   def generate_order_code
     last_order = Order.where(indent_id: self.indent.id).order('name ASC').last
     order_index = last_order.present? ? (last_order.name.split(/-/).last.to_i + 1).to_s : 1
-    self.name = self.indent.name + "-" + order_index.to_s
+    category = case self.order_category_id.to_s
+      when "1" then "W"
+      when "4" then "Y"
+      when "8" then "补W"
+      when "9" then "补Y"
+      else "特"
+    end
+    self.name = self.indent.name + "-" + category + "-" + order_index.to_s
   end
 
 end

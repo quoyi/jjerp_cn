@@ -26,29 +26,21 @@ class SuppliesController < ApplicationController
   # POST /supplies.json
   def create
     @supply = Supply.new(supply_params)
-
-    respond_to do |format|
-      if @supply.save
-        format.html { redirect_to @supply, notice: 'Supply was successfully created.' }
-        format.json { render :show, status: :created, location: @supply }
-      else
-        format.html { render :new }
-        format.json { render json: @supply.errors, status: :unprocessable_entity }
-      end
+    if @supply.save
+      redirect_to supplies_path, notice: '供应商创建成功！'
+    else
+      redirect_to supplies_path, error: '供应商创建失败！'
     end
   end
 
   # PATCH/PUT /supplies/1
   # PATCH/PUT /supplies/1.json
   def update
-    respond_to do |format|
-      if @supply.update(supply_params)
-        format.html { redirect_to @supply, notice: 'Supply was successfully updated.' }
-        format.json { render :show, status: :ok, location: @supply }
-      else
-        format.html { render :edit }
-        format.json { render json: @supply.errors, status: :unprocessable_entity }
-      end
+    @supply = Supply.new(supply_params)
+    if @supply.update(supply_params)
+      redirect_to supplies_path, notice: '供应商编辑成功！'
+    else
+      redirect_to supplies_path, notice: '供应商编辑失败！'
     end
   end
 
@@ -60,14 +52,14 @@ class SuppliesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_supply
-      @supply = Supply.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_supply
+    @supply = Supply.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def supply_params
-      params.require(:supply).permit(:name, :full_name, :mobile, :bank_account, :address,
-                                    :note, :deleted)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def supply_params
+    params.require(:supply).permit(:name, :full_name, :mobile, :bank_account, :address,
+                                   :note, :deleted)
+  end
 end

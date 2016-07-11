@@ -9,6 +9,9 @@ class Indent < ActiveRecord::Base
   validates_presence_of :name, :agent_id, :customer, :verify_at, :require_at
 
   accepts_nested_attributes_for :orders, allow_destroy: true
+  # before_create :generate_indent_code
+
+
   #下单条件：1.正常单  2.补单  3.加急单 4.批量单
   enum oftype: [:normal, :repair, :instancy, :batch]
 
@@ -45,5 +48,10 @@ class Indent < ActiveRecord::Base
       "未知状态"
     end
   end
+
+  # def generate_indent_code
+  #   return unless self.name.present?
+  #   self.name = Time.now.strftime("%Y%m%d")
+  # end
 
 end
