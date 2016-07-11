@@ -7,7 +7,7 @@ class IndentsController < ApplicationController
   # GET /indents.json
   def index
     @agent = Agent.new
-    @indent = Indent.new(name: Time.now.strftime("%Y%m%d"))
+    @indent = Indent.new(name: Time.now.strftime("%Y%m%d") + SecureRandom.hex(1).upcase)
     @income = @indent.incomes.new
     @indents = Indent.all.order(created_at: :desc)
     if params[:start_at].present? && params[:end_at].present?
@@ -79,6 +79,7 @@ class IndentsController < ApplicationController
 
   # 生成报价单
   def generate
+    binding.pry
     # 查找订单的所有拆单信息，并生成报价单
     indent = Indent.find_by_id(params[:id])
     create_offer(indent) if indent
@@ -244,6 +245,8 @@ class IndentsController < ApplicationController
                                    :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted, :status,
                                    orders_attributes: [:id, :order_category_id, :customer, :number, :ply,
                                                        :texture, :color, :length, :width, :height,
-                                                       :note, :_destroy])
+                                                       :note, :_destroy],
+                                   offers_attributes: [:id, :order_id, :item_id, :item_type, :item_name,
+                                                       :uom, :number, :price, :note, :_destroy])
   end
 end

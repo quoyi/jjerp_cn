@@ -9,6 +9,7 @@ class Indent < ActiveRecord::Base
   validates_presence_of :name, :agent_id, :customer, :verify_at, :require_at
 
   accepts_nested_attributes_for :orders, allow_destroy: true
+  accepts_nested_attributes_for :offers, allow_destroy: true
   # before_create :generate_indent_code
 
 

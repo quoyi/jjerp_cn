@@ -84,7 +84,6 @@ module OrdersHelper
 
   # 修改子订单和总订单
   def update_order_and_indent(order)
-    order.reload
     indent = order.indent
     old_total = indent.amount
     # 获取上级子订单所有的 部件、配件、工艺，并计算总价
