@@ -15,19 +15,19 @@
               <% cf = craft_form.object %>
               <div class="col-sm-2">
                 <label>名称</label>
-                <%= craft_form.text_field :full_name, value: cf.new_record? ? '' : cf.full_name %>
+                <%= craft_form.text_field :full_name, value: cf.new_record? ? '' : cf.full_name, required: true %>
               </div>
               <div class="col-sm-2">
                 <label>单位</label>
-                <%= craft_form.text_field :uom, value: cf.new_record? ? '次' : cf.uom %>
+                <%= craft_form.text_field :uom, value: cf.new_record? ? '次' : cf.uom , required: true %>
               </div>
               <div class="col-sm-2">
                 <label>单价</label>
-                <%= craft_form.number_field :price, min: 0, value: cf.new_record? ? 0 : cf.price %>
+                <%= craft_form.number_field :price, min: 0, value: cf.new_record? ? 0 : cf.price, required: true %>
               </div>
               <div class="col-sm-2">
                 <label>数量</label>
-                <%= craft_form.number_field :number, min: 1, value: cf.new_record? ? 1 : cf.number %>
+                <%= craft_form.number_field :number, min: 1, value: cf.new_record? ? 1 : cf.number, required: true %>
               </div>
               <div class="col-sm-2">
                 <label>备注</label>

@@ -71,9 +71,10 @@
         </li>
         <%end%>
         <% if current_user.permission?("IncomesController", "index") ||
-        current_user.permission?("ExpendsController", "index")
+        current_user.permission?("ExpendsController", "index") || 
+        current_user.permission?("BanksController", "index")
         %>
-        <li  class="submenu <%= 'open' if ['incomes', 'expends'].include?(controller_name)%>">
+        <li  class="submenu <%= 'open' if ['banks', 'incomes', 'expends'].include?(controller_name)%>">
             <a href="#">
                 <i class="fa fa-calculator"></i> 财务数据 <span class="caret pull-right"></span>
             </a>
@@ -87,6 +88,9 @@
                  <% if current_user.permission?("IncomesController", "stat") %>
                     <li class='<%="#{'active' if controller_name == 'incomes' && action_name == 'stat'}" %>'><%= link_to '收支统计', stat_incomes_path %></li>
                  <% end %>
+                 <% if current_user.permission?("BanksController", "index") %>
+                    <li class='<%="#{'active' if controller_name == 'banks' && action_name == 'index' }" %>'><%= link_to '银行账户', banks_path %></li>
+                <% end %>
             </ul>
         </li>
         <% end %>

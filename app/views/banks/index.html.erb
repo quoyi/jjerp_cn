@@ -1,33 +1,35 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Banks</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Bank name</th>
-      <th>Bank card</th>
-      <th>Balance</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @banks.each do |bank| %>
-      <tr>
-        <td><%= bank.name %></td>
-        <td><%= bank.bank_name %></td>
-        <td><%= bank.bank_card %></td>
-        <td><%= bank.balance %></td>
-        <td><%= link_to 'Show', bank %></td>
-        <td><%= link_to 'Edit', edit_bank_path(bank) %></td>
-        <td><%= link_to 'Destroy', bank, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Bank', new_bank_path %>
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title">
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 银行账户 <small>列表</small> </h2>
+      <div class="pull-right panel-options">
+        <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addBank'} %>
+      </div>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>银行</th>
+            <th>卡号</th>
+            <th>余额</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @banks.each do |b| %>
+          <tr>
+            <td><%= b.name %></td>
+            <td><%= b.bank_name %></td>
+            <td><%= b.bank_card %></td>
+            <td><%= b.balance %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<%= render 'new' %>

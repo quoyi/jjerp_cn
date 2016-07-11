@@ -15,7 +15,7 @@
           <div class="form-group indent-new">
             <%= f.label '订单编号', for: 'indent_name', class: 'col-sm-1 control-label' %>
             <div class="col-sm-3">
-              <%= f.text_field :name, class: 'form-control', required: true %>
+              <%= f.text_field :name, class: 'form-control', required: true, readOnly: true %>
             </div>
             <%= f.label '终端客户', for: 'indent_customer', class: 'col-sm-1 control-label' %>
             <div class="col-sm-3">
