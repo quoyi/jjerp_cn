@@ -1,4 +1,5 @@
 class IncomesController < ApplicationController
+  include BanksHelper
   before_action :set_income, only: [:show, :edit, :update, :destroy]
 
   # GET /incomes
@@ -27,6 +28,8 @@ class IncomesController < ApplicationController
   def create
     @income = Income.new(income_params)
     if @income.save
+      # 修改银行卡的收入信息
+      updateIncomeExpend(income_params, 0)
       redirect_to :back, notice: '收入记录创建成功！'
     else
       redirect_to :back, error: '收入记录创建失败！'
@@ -37,6 +40,8 @@ class IncomesController < ApplicationController
   # PATCH/PUT /incomes/1.json
   def update
     if @income.update(income_params)
+      # 修改银行卡的收入信息
+      updateIncomeExpend(income_params, 0)
       redirect_to incomes_path, notice: '收入记录编辑成功！'
     else
       redirect_to incomes_path, error: '收入记录编辑失败！'

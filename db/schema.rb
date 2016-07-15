@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160619003924) do
+ActiveRecord::Schema.define(version: 20160715040825) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",            limit: 255, default: "",    null: false
@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(version: 20160619003924) do
     t.decimal  "balance",                precision: 8, scale: 2, default: 0.0
     t.datetime "created_at",                                                   null: false
     t.datetime "updated_at",                                                   null: false
+    t.decimal  "incomes",                precision: 8, scale: 2, default: 0.0
+    t.decimal  "expends",                precision: 8, scale: 2, default: 0.0
   end
 
   create_table "cities", force: :cascade do |t|

@@ -13,8 +13,10 @@
         <thead>
           <tr>
             <th>编号</th>
-            <th>银行</th>
+            <th>开户银行</th>
             <th>卡号</th>
+            <th>收入</th>
+            <th>支出</th>
             <th>余额</th>
           </tr>
         </thead>
@@ -24,6 +26,8 @@
             <td><%= b.name %></td>
             <td><%= b.bank_name %></td>
             <td><%= b.bank_card %></td>
+            <td><%= b.incomes %></td>
+            <td><%= b.expends %></td>
             <td><%= b.balance %></td>
           </tr>
           <% end %>

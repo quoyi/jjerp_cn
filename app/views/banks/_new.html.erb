@@ -17,7 +17,7 @@
               <%= f.text_field :name, required: true %>
             </td>
             <td>
-              <%= f.label '银行' %>
+              <%= f.label '开户银行' %>
             </td>
             <td>
               <%= f.text_field :bank_name, required: true %>
@@ -34,7 +34,7 @@
               <%= f.label '余额' %>
             </td>
             <td>
-              <%= f.number_field :balance, required: true %>
+              <%= f.number_field :balance, default: 0, required: true %>
             </td>
           </tr>
         </table>

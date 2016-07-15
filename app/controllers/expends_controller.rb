@@ -1,4 +1,5 @@
 class ExpendsController < ApplicationController
+  include BanksHelper
   before_action :set_expend, only: [:show, :edit, :update, :destroy]
 
   # GET /expends
@@ -27,6 +28,8 @@ class ExpendsController < ApplicationController
   def create
     @expend = Expend.new(expend_params)
     if @expend.save
+      # 修改银行卡的收入信息
+      updateIncomeExpend(expend_params, 1)
       redirect_to expends_path, notice: '支出记录创建成功！'
     else
       redirect_to expends_path, error: '支出记录创建失败！'
@@ -37,6 +40,8 @@ class ExpendsController < ApplicationController
   # PATCH/PUT /expends/1.json
   def update
     if @expend.update(expend_params)
+      # 修改银行卡的收入信息
+      updateIncomeExpend(expend_params, 1)
       redirect_to expends_path, notice: '支出记录编辑成功！'
     else
       redirect_to expends_path, error: '支出记录编辑失败！'
