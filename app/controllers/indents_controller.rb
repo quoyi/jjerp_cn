@@ -79,7 +79,6 @@ class IndentsController < ApplicationController
 
   # 生成报价单
   def generate
-    binding.pry
     # 查找订单的所有拆单信息，并生成报价单
     indent = Indent.find_by_id(params[:id])
     create_offer(indent) if indent
