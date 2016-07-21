@@ -14,7 +14,7 @@
               <%= f.label '编号' %>
             </td>
             <td>
-              <%= f.text_field :name, required: true %>
+              <%= f.text_field :name, value: @agent.name, required: true, readOnly: true %>
             </td>
             <td>
               <%= f.label '名称' %>

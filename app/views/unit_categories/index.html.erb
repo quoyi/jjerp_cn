@@ -21,7 +21,7 @@
           <% @unit_categories.each do |uc| %>
           <tr>
             <td><%= uc.name %></td>
-            <td><%= uc.note %></td>
+            <td style="max-width:500px;"><%= uc.note %></td>
             <td><%= link_to '删除', uc, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
           </tr>
           <% end %>

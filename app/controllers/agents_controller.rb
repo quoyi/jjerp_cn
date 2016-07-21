@@ -4,7 +4,7 @@ class AgentsController < ApplicationController
   # GET /agents
   # GET /agents.json
   def index
-    @agent = Agent.new
+    @agent = Agent.new(name: "DL".upcase() + Agent.count.to_s.rjust(4, "0"))
     @agents = Agent.where(deleted: false)
 
     if params[:term]
@@ -22,6 +22,10 @@ class AgentsController < ApplicationController
   # GET /agents/1
   # GET /agents/1.json
   def show
+    respond_to do |format|
+      format.html
+      format.json { render json: @agent }
+    end
   end
 
   # GET /agents/new
@@ -38,9 +42,9 @@ class AgentsController < ApplicationController
   def create
     @agent = Agent.new(agent_params)
     if @agent.save
-      redirect_to agents_path, notice: '经销商创建成功！'
+      redirect_to :back, notice: '代理商创建成功！'
     else
-      redirect_to agents_path, error: '经销商创建失败！'
+      redirect_to :back, error: '代理商创建失败！'
     end
   end
 
@@ -48,9 +52,9 @@ class AgentsController < ApplicationController
   # PATCH/PUT /agents/1.json
   def update
     if @agent.update(agent_params)
-      redirect_to agents_path, notice: '经销商编辑成功！'
+      redirect_to agents_path, notice: '代理商编辑成功！'
     else
-      redirect_to agents_path, error: '经销商编辑失败！'
+      redirect_to agents_path, error: '代理商编辑失败！'
     end
   end
 
@@ -58,7 +62,7 @@ class AgentsController < ApplicationController
   # DELETE /agents/1.json
   def destroy
     @agent.update_attributes(deleted: true)
-    redirect_to agents_url, notice: '经销商已删除。'
+    redirect_to agents_url, notice: '代理商已删除。'
   end
 
   private

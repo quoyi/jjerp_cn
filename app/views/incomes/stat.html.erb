@@ -110,7 +110,7 @@
                 <td><%= i.class.to_s == "Income" ? i.income_at.strftime('%Y-%m-%d') : i.expend_at.strftime('%Y-%m-%d') %></td>
                 <td><%= i.money %></td>
                 <td><%= i.username %></td>
-                <td><%= i.note %></td>
+                <td style="max-width:250px;"><%= i.note %></td>
                 <td><%= i.class.to_s == "Income" ? '收入' : '支出' %></td>
               </tr>
               <% end %>

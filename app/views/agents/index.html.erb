@@ -1,7 +1,7 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
     <div class="panel-title">
-      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 经销商 <small>列表</small> </h2>
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 代理商 <small>列表</small> </h2>
       <div class="pull-right panel-options">
         <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addAgent'} %>
       </div>
@@ -31,7 +31,7 @@
           <% @agents.each do |a| %>
           <tr>
             <td><%= a.name %></td>
-            <td><%= link_to a.full_name, edit_agent_path(a), data:{toggle: 'tooltip'}, title: '编辑经销商' %></td>
+            <td><%= link_to a.full_name, edit_agent_path(a), data:{toggle: 'tooltip'}, title: '编辑代理商' %></td>
             <td><%= a.mobile %></td>
             <td><%= a.contacts %></td>
             <td><%= a.e_account %></td>
@@ -42,7 +42,7 @@
             <td><%= a.order_condition %></td>
             <td><%= a.send_condition %></td>
             <td><%= a.cycle %></td>
-            <td><%= a.note %></td>
+            <td style="max-width: 200px;"><%= a.note %></td>
           </tr>
           <% end %>
         </tbody>

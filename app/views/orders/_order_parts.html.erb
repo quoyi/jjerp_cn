@@ -45,6 +45,7 @@
       <div class="modal-footer">
         <div class="pull-left">
           <%= f.link_to_add '添加配件', :parts, data: {target: '#orderPartsForm'}, class: 'btn btn-info' %>
+          <%= link_to '新建配件', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addPartCategories'} %>
         </div>
         <%= f.button '取消', class:'btn btn-default', data: {dismiss: 'modal'} %>
         <%= f.submit '提交', class: 'btn btn-primary' %>
@@ -53,3 +54,4 @@
     </div>
   </div>
 </div>
+<%= render '/part_categories/new' %>

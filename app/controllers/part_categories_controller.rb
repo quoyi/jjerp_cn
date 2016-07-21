@@ -5,8 +5,8 @@ class PartCategoriesController < ApplicationController
   # GET /part_categories.json
   def index
     @part_category = PartCategory.new
-    @part_categories = PartCategory.where(deleted: false)
-    @part_categories = PartCategory.where(parent_id: params[:id]) if params[:id].present?
+    @part_categories = PartCategory.where(deleted: false).order(parent_id: :asc)
+    @part_categories = PartCategory.where(parent_id: params[:id]).order(created_at: :desc) if params[:id].present?
   end
 
   # POST /part_categories
@@ -14,9 +14,9 @@ class PartCategoriesController < ApplicationController
   def create
     @part_category = PartCategory.new(part_category_params)
     if @part_category.save
-      redirect_to part_categories_path, notice: '配件类型创建成功！'
+      redirect_to :back, notice: '配件类型创建成功！'
     else
-      redirect_to part_categories_path, error: '请检查配件类型名称，创建失败！'
+      redirect_to :back, error: '请检查配件类型名称，创建失败！'
     end
   end
 
@@ -35,6 +35,7 @@ class PartCategoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def part_category_params
-      params.require(:part_category).permit(:id, :parent_id, :name, :note, :deleted)
+      params.require(:part_category).permit(:id, :parent_id, :name, :buy, :price, :store,
+                                            :uom, :brand, :supply_id, :note, :deleted)
     end
 end

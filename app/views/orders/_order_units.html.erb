@@ -7,57 +7,46 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="addOrderUnitsLabel"> 部件 <small>编辑</small></h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="padding-bottom: 0px;">
         <div id="orderUnitsForm">
+          
           <%= f.fields_for :units, wrapper: false do |unit_form| %>
           <div class="fields">
-            <div class="row">
-              <div class="col-sm-12">
-                <% uf = unit_form.object %>
-                <div class="form-group">
-                  <label>名称</label>
-                  <%= unit_form.text_field :full_name, value: uf.new_record? ? '' : uf.full_name, required: true %>
-                </div>
-                <div class="form-group">
-                  <label class="control-label">&nbsp;&nbsp;长&nbsp;&nbsp;</label>
-                  <%= unit_form.number_field :length, min: 1, value: uf.new_record? ? 1 : uf.length, required: true  %>
-                </div>
-                <div class="form-group">
-                  <label>&nbsp;&nbsp;宽&nbsp;&nbsp;</label>
-                  <%= unit_form.number_field :width, min: 1, value: uf.new_record? ? 1 : uf.width, required: true  %>
-                </div>
-                <div class="form-group">
-                  <label>尺寸</label>
-                  <%= unit_form.text_field :size, value: uf.new_record? ? '100x100' : uf.size, required: true  %>
-                </div>
-                <div class="form-group">
-                  <label>厚度</label>
-                  <%= unit_form.collection_select :ply, MaterialCategory.where(oftype: 0).order("oftype"), :id, :name, value: uf.new_record? ? 0 : uf.ply, required: true  %>
-                </div>
-              </div>
-              <div class="col-sm-12">
-                <div class="form-group">
-                  <label>单位</label>
-                  <%= unit_form.text_field :uom, value: uf.new_record? ? '平方' : uf.uom, required: true  %>
-                </div>
-                <div class="form-group">
-                  <label>单价</label>
-                  <%= unit_form.number_field :price, min: 0, value: uf.new_record? ? Material.find_by(ply: @order.ply, texture: @order.texture, color: @order.color).try(:price) : uf.price, required: true  %>
-                </div>
-                <div class="form-group">
-                  <label>数量</label>
-                  <%= unit_form.number_field :number, min: 1, value: uf.new_record? ? 1 : uf.number, required: true  %>
-                </div>
-                <div class="form-group">
-                  <label>备注</label>
-                  <%= unit_form.text_field :note, value: uf.new_record? ? '' : uf.note %>
-                </div>
-                <div class="form-group">
-                  <%= unit_form.link_to_remove '删除', class:'btn btn-info btn-sm' %>
-                </div>
-              </div>
-            </div>
-            <hr>
+            <table>
+              <% uf = unit_form.object %>
+              <tr>
+                <td><label>名称</label></td>
+                <td><%= unit_form.text_field :full_name, value: uf.new_record? ? '' : uf.full_name, required: true %></td>
+                <td><label>长</label></td>
+                <td><%= unit_form.number_field :length, min: 1, value: uf.new_record? ? 1 : uf.length, required: true  %></td>
+                <td><label>宽</label></td>
+                <td><%= unit_form.number_field :width, min: 1, value: uf.new_record? ? 1 : uf.width, required: true  %></td>
+                <td><label>尺寸</label></td>
+                <td><%= unit_form.text_field :size, value: uf.new_record? ? '请输入成型尺寸' : uf.size %></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td><label>单位</label></td>
+                <td><%= unit_form.text_field :uom, value: uf.new_record? ? '平方' : uf.uom, required: true  %></td>
+                <td><label>厚度</label></td>
+                <td><%= unit_form.collection_select :ply, MaterialCategory.where(oftype: 0).order("oftype"), :id, :name, value: uf.new_record? ? 0 : uf.ply, required: true  %></td>
+                <td><label>材质</label></td>
+                <td><%= unit_form.collection_select :texture, MaterialCategory.where(oftype: 1).order("oftype"), :id, :name, value: uf.new_record? ? 0 : uf.texture, required: true  %></td>
+                <td><label>颜色</label></td>
+                <td><%= unit_form.collection_select :color, MaterialCategory.where(oftype: 2).order("oftype"), :id, :name, value: uf.new_record? ? 0 : uf.color, required: true  %></td>
+                <td style="padding-left: 20px;"><%= unit_form.link_to_remove '删除', class:'btn btn-info btn-lg' %></td>
+              </tr>
+              <tr>
+                <td><label>单价</label></td>
+                <td><%= unit_form.number_field :price, min: 0, value: uf.new_record? ? Material.find_by(ply: @order.ply, texture: @order.texture, color: @order.color).try(:price) : uf.price, required: true  %></td>
+                <td><label>数量</label></td>
+                <td><%= unit_form.text_field :number, value: uf.new_record? ? 1 : uf.number, required: true  %></td>
+                <td><label>备注</label></td>
+                <td colspan="3"><%= unit_form.text_field :note, value: uf.new_record? ? '' : uf.note, style: 'width: 100%;' %></td>
+                <td></td>
+              </tr>
+            </table>
+            <hr style="margin-bottom: 5px;" />
           </div>
           <% end %>
         </div>
@@ -65,6 +54,7 @@
       <div class="modal-footer">
         <div class="pull-left">
           <%= f.link_to_add '添加部件', :units, data: {target: '#orderUnitsForm'}, class: 'btn btn-info' %>
+          <%= link_to '新建板料', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addMaterials'} %>
         </div>
         <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
         <%= f.submit '提交', class: 'btn btn-primary' %>
@@ -73,3 +63,4 @@
     </div>
   </div>
 </div>
+<%= render '/materials/new' %>

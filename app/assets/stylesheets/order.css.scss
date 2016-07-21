@@ -1,3 +1,16 @@
-.order-show-table th {
-  width: 30%;
+.table {
+  & td {
+    vertical-align: middle !important;
+  }
+  & .order-show-table {
+    & th {
+      width: 30%;
+      vertical-align: middle !important;
+    }
+  }
+  & .order-show-table-units {
+    & th {
+      vertical-align: middle !important;
+    }
+  }
 }

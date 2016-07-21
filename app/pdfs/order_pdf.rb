@@ -22,7 +22,7 @@ class OrderPdf < Prawn::Document
       end
       text "高档定橱柜衣柜", :align => :center, :size => 20
       text "编号:#{@order.name}", :size => 14
-      text "经销商:#{@order.agent.full_name}", :size => 14
+      text "代理商:#{@order.agent.full_name}", :size => 14
       text "地址: #{@order.customer}", :size => 14
       text "产品:家具", :size => 14
       text "共#{@ids}件", :size => 14

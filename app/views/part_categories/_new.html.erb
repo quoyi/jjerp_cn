@@ -1,11 +1,11 @@
 <!-- Modal -->
-<div class="modal fade" id="addPartCategory" tabindex="-1" role="dialog" aria-labelledby="addPartCategoryLabel">
+<div class="modal fade" id="addPartCategories" tabindex="-1" role="dialog" aria-labelledby="addPartCategoriesLabel">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <%= form_for @part_category, html: {class: 'form-horizontal'} do |f| %>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="addPartCategoryLabel"> 配件类型 <small>新建</small></h4>
+        <h4 class="modal-title" id="addPartCategoriesLabel"> 配件类型 <small>新建</small></h4>
       </div>
       <div class="modal-body">
         <div class="form-group">
@@ -18,6 +18,42 @@
           <%= f.label '名称', for: 'part_category_name', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
             <%= f.text_field :name, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '进价', for: 'part_buy', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :buy, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '售价', for: 'part_sell', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :price, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '库存', for: 'part_store', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :store, value: 1, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '单位', for: 'part_store', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :uom, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '供应商', for: 'part_supply_id', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= select_tag 'part_category[supply_id]', options_for_select(Supply.all.map{|s|[s.full_name,s.id]}), class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '品牌', for: 'part_brand', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :brand, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">

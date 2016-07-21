@@ -15,7 +15,7 @@ Role.register_permission class: 'UsersController',
     '详细' => [:show]
 }
 Role.register_permission class: 'AgentsController',
-  name: '经销商',
+  name: '代理商',
   actions: {
     '列表' => :index,
     '修改' => [:edit, :update],

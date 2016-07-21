@@ -220,6 +220,7 @@ ActiveRecord::Schema.define(version: 20160715040825) do
     t.integer  "number",            limit: 4,                           default: 1,     null: false
     t.decimal  "price",                         precision: 8, scale: 2, default: 0.0
     t.integer  "status",            limit: 4,                           default: 0,     null: false
+    t.integer  "oftype",            limit: 4,                           default: 0,     null: false
     t.string   "note",              limit: 255
     t.boolean  "deleted",                                               default: false, null: false
     t.datetime "created_at",                                                            null: false
@@ -240,8 +241,8 @@ ActiveRecord::Schema.define(version: 20160715040825) do
   create_table "part_categories", force: :cascade do |t|
     t.integer  "parent_id",  limit: 4,                           default: 1
     t.string   "name",       limit: 255,                         default: "",    null: false
-    t.decimal  "buy",                    precision: 8, scale: 2
-    t.decimal  "price",                  precision: 8, scale: 2
+    t.decimal  "buy",                    precision: 8, scale: 2, default: 0.0
+    t.decimal  "price",                  precision: 8, scale: 2, default: 0.0
     t.integer  "store",      limit: 4,                           default: 0,     null: false
     t.string   "uom",        limit: 255,                         default: "平方"
     t.string   "brand",      limit: 255
@@ -387,7 +388,7 @@ ActiveRecord::Schema.define(version: 20160715040825) do
     t.integer  "color",            limit: 4
     t.integer  "length",           limit: 4,                           default: 1,     null: false
     t.integer  "width",            limit: 4,                           default: 1,     null: false
-    t.integer  "number",           limit: 4,                           default: 1,     null: false
+    t.decimal  "number",                       precision: 8, scale: 2, default: 0.0,   null: false
     t.string   "uom",              limit: 255,                         default: "平方",  null: false
     t.decimal  "price",                        precision: 8, scale: 2, default: 0.0
     t.string   "size",             limit: 255,                         default: ""

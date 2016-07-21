@@ -30,7 +30,7 @@
           <tr>
             <td><%= mc.oftype_name %></td>
             <td><%= mc.name %></td>
-            <td><%= mc.note %></td>
+            <td style="max-width:400px;"><%= mc.note %></td>
             <td><%= link_to '删除', mc, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
           </tr>
           <% end %>

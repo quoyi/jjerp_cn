@@ -18,6 +18,36 @@ $(function() {
     }
   });
 
+  /**
+   * 通过 Ajax 获取指定 agent_id 的 agent 对象，并设置indent.logistics
+   */
+  function getAgentLogistics(agent_id){
+    $.ajax({
+      url: "/agents/" + agent_id,
+      dataType: 'json',
+      type: 'GET',
+      success: function(data){
+        $("#indent_logistics").val(data.logistics);
+      },
+      error: function(data){
+        alert("Error");
+      }
+    });
+  }
+
+  $("#addIndent").on('shown.bs.modal', function(){
+    var agent_id = $("#indent_agent_id").val();
+    getAgentLogistics(agent_id);
+  });
+
+  /**
+   * 监听选择代理商事件，级联改变indent.logistics值
+   */
+  $("#indent_agent_id").change(function(){
+    var agent_id = $(this).val();
+    getAgentLogistics(agent_id);
+  });
+
   // 获取所点击表单行，对应的订单ID，并赋值给弹出框中对应的项
   $("#addIncomes").on('show.bs.modal', function(e) {
     if (e != null && e.relatedTarget != null) {
@@ -48,7 +78,7 @@ $(function() {
       var options, select;
       select = $(e);
       options = {
-        placeholder: "经销商名称",
+        placeholder: "代理商名称",
         minimumInputLength: 0
       };
       if (select.hasClass('ajax')) {
@@ -73,7 +103,7 @@ $(function() {
       }
       return select.select2(options).select2("data", {
           "id": $("#remoteDataAgent").data("id"),
-          "text": (isNaN($("#remoteDataAgent").data("name")) ? $("#remoteDataAgent").data("name") : "搜索经销商名称")
+          "text": (isNaN($("#remoteDataAgent").data("name")) ? $("#remoteDataAgent").data("name") : "搜索代理商名称")
         } //初始化数据
       );;
     };

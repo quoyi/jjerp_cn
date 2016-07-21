@@ -8,7 +8,7 @@ module IndentsHelper
   #   # 语法 write(row, column, text)
   #   ws.write(0, 0, "总订单号")
   #   ws.write(0, 1, indent.name)
-  #   ws.write(0, 2, "经销商")
+  #   ws.write(0, 2, "代理商")
   #   ws.write(0, 3, indent.agent.full_name)
   #   ws.write(0, 4, "终端客户")
   #   ws.write(0, 5, indent.customer)

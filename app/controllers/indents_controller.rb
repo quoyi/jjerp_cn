@@ -6,8 +6,9 @@ class IndentsController < ApplicationController
   # GET /indents
   # GET /indents.json
   def index
-    @agent = Agent.new
-    @indent = Indent.new(name: Time.now.strftime("%Y%m%d") + SecureRandom.hex(1).upcase)
+    @agent = Agent.new(name: "DL".upcase() + Agent.count.to_s.rjust(4, "0"))
+    @agents = Agent.all
+    @indent = Indent.new(name: Time.now.strftime("%y%m%d") + SecureRandom.hex(1).upcase)
     @income = @indent.incomes.new
     @indents = Indent.all.order(created_at: :desc)
     if params[:start_at].present? && params[:end_at].present?
@@ -204,7 +205,7 @@ class IndentsController < ApplicationController
     # head = ""
     CSV.generate do |csv|
       # 获取字段名称
-      csv << ["总订单号", indent.name, '经销商', indent.agent.full_name,
+      csv << ["总订单号", indent.name, '代理商', indent.agent.full_name,
               '终端客户', indent.customer, '套数', indent.orders.map(&:number).sum()]
       csv << ['下单时间', indent.verify_at, '发货时间', indent.require_at, '状态', indent.status_name,
               '金额￥', offers.map{|o| o.order.number * o.total}.sum()]
@@ -243,9 +244,11 @@ class IndentsController < ApplicationController
     params.require(:indent).permit(:id, :name, :offer_id, :agent_id, :customer, :verify_at, :require_at, :note,
                                    :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted, :status,
                                    orders_attributes: [:id, :order_category_id, :customer, :number, :ply,
-                                                       :texture, :color, :length, :width, :height,
+                                                       :texture, :color, :length, :width, :height, :oftype,
                                                        :note, :_destroy],
                                    offers_attributes: [:id, :order_id, :item_id, :item_type, :item_name,
                                                        :uom, :number, :price, :note, :_destroy])
+     # _return[:orders_attributes].each_pair{|k,v| v[:type] = Order.types[v[:type]] }
+     # return _return
   end
 end

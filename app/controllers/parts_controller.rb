@@ -23,9 +23,9 @@ class PartsController < ApplicationController
   def create
     @part = Part.new(part_params)
     if @part.save
-      redirect_to parts_path, notice: '配件创建成功！'
+      redirect_to :back, notice: '配件创建成功！'
     else
-      redirect_to parts_path, error: '请检查配件名称，创建失败！'
+      redirect_to :back, error: '请检查配件名称，创建失败！'
     end
   end
 

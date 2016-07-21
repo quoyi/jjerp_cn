@@ -41,7 +41,7 @@
             </a>
             <ul>
                 <%if current_user.permission?("AgentsController", "index")%>
-                <li class="<%="#{'active' if controller_name == 'agents'}" %>"><%= link_to '经销商', agents_path %></li>
+                <li class="<%="#{'active' if controller_name == 'agents'}" %>"><%= link_to '代理商', agents_path %></li>
                 <%end%>
                 <%if current_user.permission?("SuppliesController", "index")%>
                 <li class="<%="#{'active' if controller_name == 'supplies'}" %>"><%= link_to '供应商', supplies_path %></li>

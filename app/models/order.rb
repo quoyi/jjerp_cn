@@ -1,6 +1,5 @@
 class Order < ActiveRecord::Base
   include OffersHelper
-
   belongs_to :order_category
   belongs_to :indent
   has_many :offers, dependent: :destroy
@@ -33,6 +32,24 @@ class Order < ActiveRecord::Base
     end
   end
 
+  #类型：0.正常单 1.补单 3.加急单  4.批量单
+  enum oftype: [:normal, :add, :fast, :batch]
+
+  def self.oftype
+    [['正常单', 'normal'], ['补单', 'add'], ['加急单', 'fast'], ["批量单", "batch"]]
+  end
+
+  def oftype_name
+    case oftype
+      when 'normal' then '正常单'
+      when 'add' then '补单'
+      when 'fast' then '加急单'
+      when 'batch' then '批量单'
+    else
+      "未知类型"
+    end
+  end
+
   def validate_require_time
     # (Time.now.to_i - updated_at.to_i)/86400 <= 3
     time =  self.created_at || Time.now
@@ -42,16 +59,23 @@ class Order < ActiveRecord::Base
   end
 
   def generate_order_code
-    last_order = Order.where(indent_id: self.indent.id).order('name ASC').last
+    last_order = Order.where(indent_id: self.indent.id).order('id ASC').last
     order_index = last_order.present? ? (last_order.name.split(/-/).last.to_i + 1).to_s : 1
-    category = case self.order_category_id.to_s
-      when "1" then "W"
-      when "4" then "Y"
-      when "8" then "补W"
-      when "9" then "补Y"
-      else "特"
-    end
-    self.name = self.indent.name + "-" + category + "-" + order_index.to_s
+    temp_hash = {'1': 'w', '2': '', '3': '', '4': 'y', '5': '', '6': '', '7': ''}
+
+    tmp = case Order.oftypes[oftype]
+          when 1 then "补#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
+          when 2 then "急#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
+          when 3 then "批#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
+          else
+            "#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
+          end
+
+    self.name = self.indent.name + "-" + tmp + "-" + order_index.to_s
+  end
+
+  def caseType(type, str)
+
   end
 
 end
