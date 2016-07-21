@@ -3,7 +3,7 @@
     <div class="panel-title">
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 配件类型 <small>列表</small> </h2>
       <div class="pull-right panel-options">
-        <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addPartCategory'} %>
+        <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addPartCategories'} %>
       </div>
     </div>
   </div>
@@ -21,6 +21,12 @@
           <tr>
             <th>父类型</th>
             <th>名称</th>
+            <th>进价</th>
+            <th>售价</th>
+            <th>库存</th>
+            <th>单位</th>
+            <th>供应商</th>
+            <th>品牌</th>
             <th>备注</th>
             <th>操作</th>
           </tr>
@@ -30,7 +36,13 @@
           <tr>
             <td><%= pc.parent_id? ? PartCategory.find_by_id(pc.parent_id).try(:name) : '基本类型'  %></td>
             <td><%= pc.name %></td>
-            <td><%= pc.note %></td>
+            <td><%= pc.buy %></td>
+            <td><%= pc.price %></td>
+            <td><%= pc.store %></td>
+            <td><%= pc.uom %></td>
+            <td><%= pc.supply.try(:full_name) %></td>
+            <td><%= pc.brand %></td>
+            <td style="max-width:400px;"><%= pc.note %></td>
             <td><%= link_to '删除', pc, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
           </tr>
           <% end %>

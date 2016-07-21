@@ -40,7 +40,7 @@
             <td><%= i.income_at.strftime('%Y-%m-%d') %></td>
             <td><%= i.money %></td>
             <td><%= i.username %></td>
-            <td><%= i.note %></td>
+            <td style="max-width:300px;"><%= i.note %></td>
             <td><%= link_to '删除', i, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
           </tr>
           <% end %>

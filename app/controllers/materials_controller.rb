@@ -28,9 +28,9 @@ class MaterialsController < ApplicationController
   def create
     @material = Material.new(material_params)
     if @material.save
-      redirect_to materials_path, notice: '板料创建成功！'
+      redirect_to :back, notice: '板料创建成功！'
     else
-      redirect_to materials_path, error: '板料创建失败！'
+      redirect_to :back, error: '板料创建失败！'
     end
   end
 

@@ -31,7 +31,7 @@
             <td><%= e.expend_at.strftime('%Y-%m-%d') %></td>
             <td><%= e.money %></td>
             <td><%= e.username %></td>
-            <td><%= e.note %></td>
+            <td style="max-width:300px;"><%= e.note %></td>
             <td><%= link_to '删除', e, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
           </tr>
           <% end %>

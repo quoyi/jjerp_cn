@@ -28,3 +28,10 @@
     clear: both;
   }
 }
+
+.indent-show-table {
+  // table-layout: fixed;
+  & td {
+    vertical-align: middle !important;
+  }
+}

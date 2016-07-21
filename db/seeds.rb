@@ -4690,7 +4690,7 @@ Supply.create(id: 1,name: 'GY0001', full_name: '小胡供应', mobile: '15215211
 Supply.create(id: 2,name: 'GY0002', full_name: '小李供应', mobile: '18618611861', bank_account: '627402709342020582', address: '成都市', note: '一级代理商')
 Supply.create(id: 3,name: 'GY0003', full_name: '小杨供应', mobile: '18318311831', bank_account: '600807920384014023', address: '贵阳市', note: '普通代理商')
 puts 'created Supplier success ! '
-####################################### 代理商、经销商 #######################################
+####################################### 代理商 #######################################
 Agent.create(id: 1,name: 'DL0001',address: '湖北武汉', full_name: '小秦代理', contacts: '王xx', mobile: '18610086121')
 Agent.create(id: 2,name: 'DL0002',address: '贵州贵阳', full_name: '傣家代理', contacts: '岳xx', mobile: '18610086122')
 Agent.create(id: 3,name: 'DL0003',address: '河南郑州', full_name: '小孙代理', contacts: '孙x', mobile: '18610086123')
@@ -4698,7 +4698,7 @@ puts 'created Agent success ! '
 ####################################### 供应商 #######################################
 UserCategory.create(id: 1, serial: 'UC0001', name: '普通用户', nick: 'normal', visible: true)
 UserCategory.create(id: 2, serial: 'UC0002', name: '企业用户', nick: 'employe', visible: true)
-UserCategory.create(id: 3, serial: 'UC0003', name: '经销商', nick: 'agent', visible: true)
+UserCategory.create(id: 3, serial: 'UC0003', name: '代理商', nick: 'agent', visible: true)
 UserCategory.create(id: 4, serial: 'UC0004', name: '供应商', nick: 'supply', visible: true)
 UserCategory.create(id: 5, serial: 'UC0005', name: '管理员', nick: 'admin', visible: true)
 UserCategory.create(id: 6, serial: 'UC0006', name: '超级管理员', nick: 'super', visible: false)

@@ -10,13 +10,15 @@ class OrdersController < ApplicationController
     @part = Part.new
     @craft = Craft.new
     @order = Order.new
-    @orders = Order.where.not(status: Order.statuses[:sent])
+    @orders = Order.where.not(status: Order.statuses[:sent]).order(created_at: :desc)
   end
 
   # GET /orders/1
   # GET /orders/1.json
   def show
     @unit = Unit.new
+    @material = Material.new
+    @part_category = PartCategory.new
     # 这里可能需要修改, 应查找unit_category并获取ID值，再查找对应的material；而不是写固定值“1”
     @units = Unit.where(order_id: @order.id)
     @parts = Part.where(order_id: @order.id)
@@ -104,7 +106,7 @@ class OrdersController < ApplicationController
   def order_params
     params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture,
                                   :color, :length, :width, :height, :number, :price,
-                                  :status, :note, :deleted, :file, :_destroy,
+                                  :status, :oftype, :note, :deleted, :file, :_destroy,
                                   units_attributes: [:id, :full_name, :number, :ply,
                                                      :length, :width, :size, :uom, :price, :note, :_destroy],
                                   parts_attributes: [:id, :part_category_id, :order_id,

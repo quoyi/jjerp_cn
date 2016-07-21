@@ -13,12 +13,10 @@
       </div>
     </div> -->
     <div class="row content-table">
-      <table class="table table-hover table-striped table-bordered table-condensed text-center">
-        <thead>
+      <table class="table table-hover table-striped table-bordered table-condensed text-center order-index-table">
           <tr>
             <th>订单号</th>
-            <th>子订单号</th>
-            <th>子订单类型</th>
+            <th>类型</th>
             <th>长</th>
             <th>宽</th>
             <th>高</th>
@@ -27,11 +25,8 @@
             <th>状态</th>
             <th>备注</th>
           </tr>
-        </thead>
-        <tbody>
           <% @orders.each do |o| %>
           <tr>
-            <td><%= o.indent.try(:name) %></td>
             <td><%= link_to o.name, o, data: {toggle: 'tooltip'}, title: '查看子订单详细信息' %></td>
             <td><%= o.order_category.try(:name) %></td>
             <td><%= o.length %></td>
@@ -40,10 +35,9 @@
             <td><%= o.price %></td>
             <td><%= o.number %></td>
             <td><%= o.status_name %></td>
-            <td><%= o.note %></td>
+            <td style="max-width:300px;"><%= o.note %></td>
           </tr>
           <% end %>
-        </tbody>
       </table>
     </div>
   </div>

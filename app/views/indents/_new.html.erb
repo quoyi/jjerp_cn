@@ -7,8 +7,8 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="addIndentLabel"> 订单 <small>新建</small></h4>
 			</div>
-			<div class="modal-body">
-				<div class="panel panel-default">
+			<div class="modal-body" style="padding-bottom: 0px;">
+				<div class="panel panel-default" style="margin-bottom: 0px;">
 					<div class="panel-heading">
 						<div class="form-group">
 							<%= f.label '订单编号', for: 'indent_name', class: 'col-sm-1 control-label' %>
@@ -25,10 +25,10 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<%= f.label '经销商', for: 'indent_agent_id', class: 'col-sm-1 control-label' %>
+							<%= f.label '代理商', for: 'indent_agent_id', class: 'col-sm-1 control-label' %>
 							<div class="col-sm-3">
-								<%= f.select :agent_id, Agent.all.map{|a|[a.full_name, a.id]}, class: 'form-control' %>
-								<%= link_to '新建经销商', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm' %>
+								<%= f.select :agent_id, @agents.map{|a|[a.full_name, a.id]}, class: 'form-control' %>
+								<%= link_to '新建代理商', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm' %>
 							</div>
 							<%= f.label '下单时间', for: 'indent_verify_at', class: 'col-sm-1 control-label' %>
 							<div class="col-sm-3">
@@ -50,9 +50,10 @@
 									</div>
 									<div class="col-sm-10">
 										<div class="row">
-											<div class="col-sm-2">
+											<div class="col-sm-3">
 												<label>类型</label>
 												<%= order_form.select :order_category_id, OrderCategory.all.map{|oc| [oc.name, oc.id]}, class: 'form-control', required: true %>
+												<%= order_form.select :oftype, Order.oftype %>
 											</div>
 											<div class="col-sm-2">
 												<label>数量</label>
@@ -62,7 +63,7 @@
 												<label>厚度</label>
 												<%= order_form.select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]).map{|mc|[mc.name, mc.id]}, selected: 6 %>
 											</div>
-											<div class="col-sm-3">
+											<div class="col-sm-2">
 												<label>材质</label>
 												<%= order_form.select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]).map{|mc|[mc.name, mc.id]} %>
 											</div>
@@ -70,10 +71,6 @@
 												<label>颜色</label>
 												<%= order_form.select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]).map{|mc|[mc.name, mc.id]} %>
 											</div>
-											<!-- <div class="col-sm-4">
-															<label>状态</label>
-															<%= order_form.select :status, Order.status %>
-											</div> -->
 										</div>
 										<div class="row">
 											<!-- <div class="col-sm-2">
@@ -88,9 +85,9 @@
 													<label>高度</label>
 													<%= order_form.number_field :height, value: 1, min: 1, style: "width: 50%;" %>
 											</div> -->
-											<div class="col-sm-10">
+											<div class="col-sm-12">
 												<label>备注</label>
-												<%= order_form.text_field :note, style: "width: 96%;" %>
+												<%= order_form.text_field :note, style: "width:90%;" %>
 											</div>
 										</div>
 									</div>
@@ -99,7 +96,7 @@
 										<%= order_form.link_to_remove '删除', class: 'btn btn-info btn-lg' %>
 									</div>
 								</div>
-								<hr>
+								<hr style="margin-bottom: 5px;">
 							</div>
 							<% end %>
 						</div>

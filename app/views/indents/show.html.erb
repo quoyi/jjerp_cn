@@ -16,11 +16,10 @@
         </p>
         <p class="pull-right">
           <%= link_to '管理子订单', '#', data: { toggle: 'modal', target: '#addOrders'}, class: 'btn-primary btn-xs' %>
-          <%= link_to '自定报价', '#', class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#addOffers'} %>
           <%= link_to '生成报价', generate_indents_path(id: @indent.id), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '生成总订单的报价单' %>
         </p>
       </div>
-      <table class="table table-hover table-striped table-bordered table-condensed">
+      <table class="table table-hover table-striped table-bordered table-condensed indent-show-table">
         <tr>
           <th>子订单号</th>
           <th>子订单类型</th>
@@ -33,6 +32,7 @@
           <th>高度</th>
           <!-- <th>状态</th> -->
           <th>备注</th>
+          <th>报价</th>
         </tr>
         <% @orders.each do |o| %>
         <tr>
@@ -46,7 +46,8 @@
           <td><%= o.width %></td>
           <td><%= o.height %></td>
           <!-- <td><%= o.status_name %></td> -->
-          <td><%= o.note %></td>
+          <td style="max-width: 300px;word-break:break-all;word-wrap:break-word;"><%= o.note %></td>
+          <td><%= link_to '自定报价', '#', class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '自定义报价' %></td>
         </tr>
         <% end %>
       </table>

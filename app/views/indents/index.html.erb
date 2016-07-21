@@ -28,7 +28,7 @@
               <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择终止日期' %>
             </div>
             <div class="col-sm-4">
-              <label>经销商: </label>
+              <label>代理商: </label>
               <input type="hidden" id="remoteDataAgent" name='agent_id' data-id="<%=@agent_search.try(:id)%>" data-name="<%=@agent_search.try(:full_name)%>" style="width: 80%" class="select2 ajax"/>
             </div>
             <div class="col-sm-2">
@@ -61,7 +61,7 @@
           </div>
           <table class="table table-hover table-striped table-bordered table-condensed text-center order-show-table">
             <tr>
-              <th>经销商</th>
+              <th>代理商</th>
               <th>订单数</th>
               <th>总金额</th>
             </tr>
@@ -80,7 +80,7 @@
           </div>
           <table class="table table-hover table-striped table-bordered table-condensed text-center order-show-table">
             <tr>
-              <th>经销商</th>
+              <th>代理商</th>
               <th>订单数</th>
               <th>总金额</th>
             </tr>
@@ -100,7 +100,7 @@
             <thead>
               <tr>
                 <th class="col-sm-1">总订单号</th>
-                <th class="col-xs-1">经销商</th>
+                <th class="col-xs-1">代理商</th>
                 <th class="col-xs-2">终端信息</th>
                 <th class="col-xs-1">下单时间</th>
                 <th class="col-xs-1">发货时间</th>
@@ -119,7 +119,7 @@
                 <td><%= i.verify_at.strftime('%Y-%m-%d') %></td>
                 <td><%= i.require_at.strftime('%Y-%m-%d') %></td>
                 <td><%= i.amount %></td>
-                <td class="danger" data-toggle="tooltip" title="负数表示经销商预付款或押金"><%= i.arrear %></td>
+                <td class="danger" data-toggle="tooltip" title="负数表示代理商预付款或押金"><%= i.arrear %></td>
                 <!-- 这里需要判断是否已生成报价单 -->
                 <td>
                   <% if Indent.statuses[i.status.to_sym] > Indent.statuses[:offering] && Indent.statuses[i.status.to_sym] <= Indent.statuses[:sent] %>
