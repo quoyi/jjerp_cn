@@ -22,7 +22,7 @@
                 <td><label>宽</label></td>
                 <td><%= unit_form.number_field :width, min: 1, value: uf.new_record? ? 1 : uf.width, required: true  %></td>
                 <td><label>尺寸</label></td>
-                <td><%= unit_form.text_field :size, value: uf.new_record? ? '请输入成型尺寸' : uf.size %></td>
+                <td><%= unit_form.text_field :size, value: uf.new_record? ? '' : uf.size, placeholder: '请输入成型尺寸' %></td>
                 <td></td>
               </tr>
               <tr>
