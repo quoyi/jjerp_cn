@@ -6,7 +6,7 @@ class IndentsController < ApplicationController
   # GET /indents
   # GET /indents.json
   def index
-    @agent = Agent.new(name: "DL".upcase() + Agent.count.to_s.rjust(4, "0"))
+    @agent = Agent.new(name: "DL".upcase() + (Agent.count+1).to_s.rjust(4, "0"))
     @agents = Agent.all
     @indent = Indent.new(name: Time.now.strftime("%y%m%d") + SecureRandom.hex(1).upcase)
     @income = @indent.incomes.new

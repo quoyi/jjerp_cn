@@ -4,7 +4,7 @@ class AgentsController < ApplicationController
   # GET /agents
   # GET /agents.json
   def index
-    @agent = Agent.new(name: "DL".upcase() + Agent.count.to_s.rjust(4, "0"))
+    @agent = Agent.new(name: "DL".upcase() + (Agent.count+1).to_s.rjust(4, "0"))
     @agents = Agent.where(deleted: false)
 
     if params[:term]
