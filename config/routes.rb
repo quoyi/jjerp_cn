@@ -28,6 +28,9 @@ Rails.application.routes.draw do
       post :import
       get :producing
     end
+    member  do
+      get :custom_offer
+    end
   end
   resources :departments
   resources :indents do
