@@ -1,7 +1,7 @@
 class OrdersController < ApplicationController
   include OrdersHelper
   include OffersHelper
-  before_action :set_order, only: [:show, :edit, :update, :destroy, :import]
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :import, :custom_offer]
 
   # GET /orders
   # GET /orders.json
@@ -58,7 +58,7 @@ class OrdersController < ApplicationController
       # 订单更新后，更新订单、子订单的价格合计
       update_order_and_indent(@order)
       create_offer(@order.indent)
-      redirect_to @order, notice: '子订单编辑成功！'
+      redirect_to @order.indent, notice: '子订单编辑成功！'
     else
       redirect_to @order, error: '子订单编辑失败！请仔细检查后再提交。'
     end
@@ -96,6 +96,13 @@ class OrdersController < ApplicationController
     # end
   end
 
+  def custom_offer
+    @indent = @order.indent
+    @unit = Unit.new
+    @material = Material.new
+    @part_category = PartCategory.new   
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_order
@@ -107,7 +114,7 @@ class OrdersController < ApplicationController
     params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture,
                                   :color, :length, :width, :height, :number, :price,
                                   :status, :oftype, :note, :deleted, :file, :_destroy,
-                                  units_attributes: [:id, :full_name, :number, :ply,
+                                  units_attributes: [:id, :full_name, :number, :ply,:texture,:color,
                                                      :length, :width, :size, :uom, :price, :note, :_destroy],
                                   parts_attributes: [:id, :part_category_id, :order_id,
                                                      :name, :buy, :price, :store, :uom, :number, :brand,

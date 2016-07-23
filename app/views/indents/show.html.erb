@@ -47,7 +47,8 @@
           <td><%= o.height %></td>
           <!-- <td><%= o.status_name %></td> -->
           <td style="max-width: 300px;word-break:break-all;word-wrap:break-word;"><%= o.note %></td>
-          <td><%= link_to '自定报价', '#', class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '自定义报价' %></td>
+          <td><%= link_to '自定报价', custom_offer_order_path(o), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '自定义报价' %>
+          </td>
         </tr>
         <% end %>
       </table>
