@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     collection do
       post :import
       get :producing
+      get :export
     end
     member  do
       get :custom_offer

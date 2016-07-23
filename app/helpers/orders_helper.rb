@@ -81,6 +81,107 @@ module OrdersHelper
     return _return
   end
 
+  # 导出Excel格式 orders
+  def export_orders(orders, start_at, end_at)
+    # 全局变量，当前行数
+    row_num = "5"
+    indents = orders.group(:indent_id).map{|o| o.indent }
+    total = indents.map(&:amount).sum
+    wb  = WriteExcel.new("#{Rails.root}/public/excels/orders.xls")
+    ws = wb.add_worksheet
+
+    # 第一行
+    title_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 28) # 水平居中、垂直居中、加粗、字号28
+    title_format.set_bold # 
+    ws.merge_range('A1:H1', '伊思尔对账单', title_format) # 合并单元格，写入数据，修改样式为 title_format
+    ws.set_row(0, 34)
+
+    # 空一行
+    ws.write_blank(1 , 0)
+
+    # 第3行：公共信息
+    info_format = wb.add_format(align: 'left', valign: 'vcenter', bold: 1, size: 16)
+    ws.write('A3', '起止时间：', info_format)
+    ws.write('B3', start_at.to_s + ' 到 ' + end_at.to_s, info_format)
+    ws.write('C3', '订单总数：', info_format)
+    ws.write('D3', indents.count, info_format)
+    ws.write('E3', '子订单数：', info_format)
+    ws.write('F3', orders.count, info_format)
+    ws.write('G3', '总金额：', info_format)
+    ws.write('H3', total, info_format)
+    ws.set_row(2, 28)
+
+    # 空一行
+    ws.write_blank(3 , 0)
+
+    # 第5行：订单信息
+    myorange = wb.set_custom_color(12, 255, 201, 0)
+    myyellow = wb.set_custom_color(13, 255, 255, 153)
+    myblue = wb.set_custom_color(14, 0, 204, 255)
+    mybluewhite = wb.set_custom_color(15, 204, 204, 255)
+    indents.each_with_index do |indent, ii|
+      indent_format = ii % 2 == 0 ? wb.add_format(align: 'left', valign: 'vcenter', bold: 1, size: 16, bg_color: myorange, border: 1) 
+                                  : wb.add_format(align: 'left', valign: 'vcenter', bold: 1, size: 16, bg_color: myblue, border: 1)
+      # 总订单信息一
+      ws.write('A' + row_num, '总订单号', indent_format)
+      ws.write('B' + row_num, indent.name, indent_format)
+      ws.write('C' + row_num, '经销商', indent_format)
+      ws.write('D' + row_num, indent.agent.full_name, indent_format)
+      ws.write('E' + row_num, '终端客户', indent_format)
+      ws.write('F' + row_num, indent.customer, indent_format)
+      ws.write('G' + row_num, '套数', indent_format)
+      ws.write('H' + row_num, indent.orders.count, indent_format)
+      row_num = (row_num.to_i + 1).to_s
+      # 总订单信息二
+      ws.write('A' + row_num, '下单时间', indent_format)
+      ws.write('B' + row_num, indent.verify_at, indent_format)
+      ws.write('C' + row_num, '发货时间', indent_format)
+      ws.write('D' + row_num, indent.require_at, indent_format)
+      ws.write('E' + row_num, '状态', indent_format)
+      ws.write('F' + row_num, indent.status_name, indent_format)
+      ws.write('G' + row_num, '金额￥', indent_format)
+      ws.write('H' + row_num, indent.amount, indent_format)
+
+      order_format = ii % 2 == 0 ? wb.add_format(align: 'left', valign: 'vcenter', bold: 0, size: 12, bg_color: myyellow, border: 1)
+                                 : wb.add_format(align: 'left', valign: 'vcenter', bold: 0, size: 12, bg_color: mybluewhite, border: 1)
+      row_num = (row_num.to_i + 1).to_s
+      # # 子订单信息表头
+      ws.write('A' + row_num, '序号', order_format)
+      ws.write('B' + row_num, '类型', order_format)
+      ws.write('C' + row_num, '名称', order_format)
+      ws.write('D' + row_num, '单价￥', order_format)
+      ws.write('E' + row_num, '单位', order_format)
+      ws.write('F' + row_num, '数量', order_format)
+      ws.write('G' + row_num, '备注', order_format)
+      ws.write('H' + row_num, '总价￥', order_format)
+      #子订单信息
+      indent.orders.each_with_index do |order, oi|
+        # 子订单信息一
+        row_num = (row_num.to_i + 1).to_s
+        ws.write('A' + row_num, '子订单号', order_format)
+        ws.write('B' + row_num, order.name, order_format)
+        ws.write('C' + row_num, order.order_category.name, order_format)
+        ws.write_blank('D' + row_num + ':' + 'F' + row_num, order_format)
+        ws.write('G' + row_num, '项目合计￥', order_format)
+        ws.write('H' + row_num, order.price * order.number, order_format)
+
+        order.offers.each_with_index do |offer, ooi|
+          row_num = (row_num.to_i + 1).to_s
+          ws.write('A' + row_num, ooi + 1, order_format)
+          ws.write('B' + row_num, offer.item_type_name, order_format)
+          ws.write('C' + row_num, offer.item_name, order_format)
+          ws.write('D' + row_num, offer.price, order_format)
+          ws.write('E' + row_num, offer.uom, order_format)
+          ws.write('F' + row_num, offer.number, order_format)
+          ws.write('G' + row_num, offer.note, order_format)
+          ws.write('H' + row_num, offer.total, order_format)
+        end
+      end
+      row_num = (row_num.to_i + 1).to_s
+    end
+    wb.close
+  end
+
 
   # 修改子订单和总订单
   def update_order_and_indent(order)

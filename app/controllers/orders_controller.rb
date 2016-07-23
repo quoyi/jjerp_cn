@@ -11,6 +11,22 @@ class OrdersController < ApplicationController
     @craft = Craft.new
     @order = Order.new
     @orders = Order.where.not(status: Order.statuses[:sent]).order(created_at: :desc)
+    # 判断搜索条件 起始时间 -- 结束时间
+    if params[:start_at].present? && params[:end_at].present?
+      @orders = @orders.joins(:indent).where("indents.verify_at between ? and ?", params[:start_at], params[:end_at])
+    elsif params[:start_at].present? || params[:end_at].present?
+      @orders = @orders.joins(:indent).where("indents.verify_at = ? ", params[:start_at].present? ? params[:start_at] : params[:end_at])
+    end
+    # 搜索条件 代理商ID
+    @orders = @orders.joins(:indent).where("indents.agent_id = ?",params[:agent_id]) if params[:agent_id].present?
+
+    respond_to do |format|
+      format.html 
+      format.xls do
+        export_orders(@orders, params[:start_at], params[:end_at])
+        send_file "#{Rails.root}/public/excels/orders.xls", type: 'text/xls; charset=utf-8'
+      end
+    end
   end
 
   # GET /orders/1
