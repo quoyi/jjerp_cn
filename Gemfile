@@ -34,7 +34,7 @@ gem 'coffee-rails', '~> 4.1.0'
 # gem 'therubyracer', platforms: :ruby
 
 # 读写excel
-# gem 'writeexcel', '~> 1.0', '>= 1.0.5'
+gem 'writeexcel', '~> 1.0', '>= 1.0.5'
 # 字符转换（解决乱码）
 # gem 'iconv', '~> 1.0', '>= 1.0.4'
 
