@@ -5,8 +5,15 @@ class MaterialsController < ApplicationController
   # GET /materials.json
   def index
     @material = Material.new
-    @materials = Material.where(deleted: false)
-    # @materials = Material.where(ply: params[:ply]) if params[:ply].present?
+    if params[:ply].present? && params[:texture].present? && params[:color].present?
+      @materials = Material.where(ply: params[:ply], texture: params[:texture], color: params[:color]) 
+    else
+      @materials = Material.where(deleted: false)
+    end
+    respond_to do |format|
+      format.html 
+      format.json {render json: {flag: @materials.empty? ? "false" : "true"} }
+    end
   end
 
   # GET /materials/1

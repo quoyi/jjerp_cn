@@ -56,6 +56,7 @@ class OrdersController < ApplicationController
   # POST /orders.json
   def create
     @order = Order.new(order_params)
+    binding.pry
     if @order.save
       # 订单保存后，更新订单、子订单的价格合计
       update_order_and_indent(@order)
