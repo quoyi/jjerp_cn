@@ -11,6 +11,7 @@ module OffersHelper
         # 2.1 计算部件报价
         order.units.each do |unit|
           material = Material.find_by(ply: unit.ply, texture: unit.texture, color: unit.color)
+          # binding.pry
           if material
             offer = Offer.find_or_create_by(item_id: material.id, item_type: Offer.item_types[:unit],
                                             indent_id: indent.id, order_id: order.id, price: unit.price.to_f)
