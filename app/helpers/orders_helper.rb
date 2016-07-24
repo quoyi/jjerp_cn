@@ -82,12 +82,11 @@ module OrdersHelper
   end
 
   # 导出Excel格式 orders
-  def export_orders(orders, start_at, end_at)
+  def export_orders(filename, orders, start_at, end_at)
     # 全局变量，当前行数
     row_num = "5"
     indents = orders.group(:indent_id).map{|o| o.indent }
     total = indents.map(&:amount).sum
-    filename = Time.now.strftime("%Y%m%d%H%M%S%L") + ".xls"
     wb  = WriteExcel.new("#{Rails.root}/public/excels/" + filename)
     ws = wb.add_worksheet
     ws.set_column('A:H', 28)

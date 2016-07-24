@@ -22,8 +22,9 @@ class OrdersController < ApplicationController
     respond_to do |format|
       format.html 
       format.xls do
-        export_orders(@orders, params[:start_at], params[:end_at])
-        send_file "#{Rails.root}/public/excels/orders.xls", type: 'text/xls; charset=utf-8'
+        filename = Time.now.strftime("%Y%m%d%H%M%S%L") + ".xls"
+        export_orders(filename, @orders, params[:start_at], params[:end_at])
+        send_file "#{Rails.root}/public/excels/" + filename, type: 'text/xls; charset=utf-8'
       end
     end
   end
