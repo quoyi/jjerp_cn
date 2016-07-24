@@ -87,23 +87,26 @@ module OrdersHelper
     row_num = "5"
     indents = orders.group(:indent_id).map{|o| o.indent }
     total = indents.map(&:amount).sum
-    wb  = WriteExcel.new("#{Rails.root}/public/excels/orders.xls")
+    filename = Time.now.strftime("%Y%m%d%H%M%S%L") + ".xls"
+    wb  = WriteExcel.new("#{Rails.root}/public/excels/" + filename)
     ws = wb.add_worksheet
+    ws.set_column('A:H', 28)
 
     # 第一行
     title_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 28) # 水平居中、垂直居中、加粗、字号28
-    title_format.set_bold # 
+    info_format = wb.add_format(align: 'left', valign: 'vcenter', bold: 1, size: 16)
     ws.merge_range('A1:H1', '伊思尔对账单', title_format) # 合并单元格，写入数据，修改样式为 title_format
     ws.set_row(0, 34)
 
     # 空一行
     ws.write_blank(1 , 0)
+    ws.merge_range('A2:H2', '', info_format)
 
     # 第3行：公共信息
-    info_format = wb.add_format(align: 'left', valign: 'vcenter', bold: 1, size: 16)
+    
     ws.write('A3', '起止时间：', info_format)
     ws.write('B3', start_at.to_s + ' 到 ' + end_at.to_s, info_format)
-    ws.write('C3', '订单总数：', info_format)
+    ws.write('C3', '总订单数：', info_format)
     ws.write('D3', indents.count, info_format)
     ws.write('E3', '子订单数：', info_format)
     ws.write('F3', orders.count, info_format)
@@ -113,16 +116,18 @@ module OrdersHelper
 
     # 空一行
     ws.write_blank(3 , 0)
+    ws.merge_range('A4:H4', '', info_format)
 
     # 第5行：订单信息
     myorange = wb.set_custom_color(12, 255, 201, 0)
     myyellow = wb.set_custom_color(13, 255, 255, 153)
     myblue = wb.set_custom_color(14, 0, 204, 255)
-    mybluewhite = wb.set_custom_color(15, 204, 204, 255)
+    mybluewhite = wb.set_custom_color(15, 204, 255, 255)
     indents.each_with_index do |indent, ii|
       indent_format = ii % 2 == 0 ? wb.add_format(align: 'left', valign: 'vcenter', bold: 1, size: 16, bg_color: myorange, border: 1) 
                                   : wb.add_format(align: 'left', valign: 'vcenter', bold: 1, size: 16, bg_color: myblue, border: 1)
       # 总订单信息一
+      ws.set_row(row_num.to_i - 1, 28) # 设置第5行行高
       ws.write('A' + row_num, '总订单号', indent_format)
       ws.write('B' + row_num, indent.name, indent_format)
       ws.write('C' + row_num, '经销商', indent_format)
@@ -131,7 +136,8 @@ module OrdersHelper
       ws.write('F' + row_num, indent.customer, indent_format)
       ws.write('G' + row_num, '套数', indent_format)
       ws.write('H' + row_num, indent.orders.count, indent_format)
-      row_num = (row_num.to_i + 1).to_s
+      ws.set_row(row_num.to_i, 28) # 设置第6行行高
+      row_num = (row_num.to_i + 1).to_s # 行数自加
       # 总订单信息二
       ws.write('A' + row_num, '下单时间', indent_format)
       ws.write('B' + row_num, indent.verify_at, indent_format)
@@ -144,8 +150,9 @@ module OrdersHelper
 
       order_format = ii % 2 == 0 ? wb.add_format(align: 'left', valign: 'vcenter', bold: 0, size: 12, bg_color: myyellow, border: 1)
                                  : wb.add_format(align: 'left', valign: 'vcenter', bold: 0, size: 12, bg_color: mybluewhite, border: 1)
+      ws.set_row(row_num.to_i, 20) # 设置第7行行高
       row_num = (row_num.to_i + 1).to_s
-      # # 子订单信息表头
+      # 子订单信息表头
       ws.write('A' + row_num, '序号', order_format)
       ws.write('B' + row_num, '类型', order_format)
       ws.write('C' + row_num, '名称', order_format)
@@ -157,15 +164,19 @@ module OrdersHelper
       #子订单信息
       indent.orders.each_with_index do |order, oi|
         # 子订单信息一
+        ws.set_row(row_num.to_i, 20)
         row_num = (row_num.to_i + 1).to_s
         ws.write('A' + row_num, '子订单号', order_format)
         ws.write('B' + row_num, order.name, order_format)
         ws.write('C' + row_num, order.order_category.name, order_format)
-        ws.write_blank('D' + row_num + ':' + 'F' + row_num, order_format)
+        ws.write('D' + row_num, '', order_format)
+        ws.write('E' + row_num, '', order_format)
+        ws.write('F' + row_num, '', order_format)
         ws.write('G' + row_num, '项目合计￥', order_format)
         ws.write('H' + row_num, order.price * order.number, order_format)
 
         order.offers.each_with_index do |offer, ooi|
+          ws.set_row(row_num.to_i, 20)
           row_num = (row_num.to_i + 1).to_s
           ws.write('A' + row_num, ooi + 1, order_format)
           ws.write('B' + row_num, offer.item_type_name, order_format)
@@ -177,6 +188,10 @@ module OrdersHelper
           ws.write('H' + row_num, offer.total, order_format)
         end
       end
+      ws.set_row(row_num.to_i, 20)
+      row_num = (row_num.to_i + 1).to_s
+      ws.merge_range('A' + row_num   + ':H' + row_num, '', info_format) # 空一行
+
       row_num = (row_num.to_i + 1).to_s
     end
     wb.close

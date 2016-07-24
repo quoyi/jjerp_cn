@@ -31,7 +31,7 @@
             </div>
             <div class="col-sm-2">
               <%= submit_tag '查询', class: 'btn btn-primary btn-xs' %>
-              <%= link_to '导出结果', orders_path(format: "xls"), class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '将查询结果导出到Excel文件' %>
+              <%= link_to '导出结果', orders_path(format: "xls", start_at: params[:start_at], end_at: params[:end_at], agent_id: params[:agent_id]), class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '将查询结果导出到Excel文件' %>
             </div>
           </div>
         </div>
@@ -54,17 +54,17 @@
           </tr>
           <% @orders.each do |o| %>
           <tr>
-            <td><%= link_to o.name, o, data: {toggle: 'tooltip'}, title: '查看子订单详细信息' %></td>
-            <td><%= o.order_category.try(:name) %></td>
-            <td><%= o.indent.agent.try(:full_name) %></td>
-            <td><%= o.indent.customer %></td>
-            <td><%= o.length %></td>
-            <td><%= o.width %></td>
-            <td><%= o.height %></td>
-            <td><%= o.price %></td>
-            <td><%= o.number %></td>
-            <td><%= o.status_name %></td>
-            <td style="max-width:300px;"><%= o.note %></td>
+            <td class="text-left" class="col-sm-1"><%= link_to o.name, o, data: {toggle: 'tooltip'}, title: '查看子订单详细信息' %></td>
+            <td class="col-sm-1"><%= o.order_category.try(:name) %></td>
+            <td class="col-sm-1"><%= o.indent.agent.try(:full_name) %></td>
+            <td class="col-sm-1"><%= o.indent.customer %></td>
+            <td class="col-sm-1"><%= o.length %></td>
+            <td class="col-sm-1"><%= o.width %></td>
+            <td class="col-sm-1"><%= o.height %></td>
+            <td class="col-sm-1"><%= o.price %></td>
+            <td class="col-sm-1"><%= o.number %></td>
+            <td  class="col-sm-1"><%= o.status_name %></td>
+            <td  class="col-sm-2"><%= o.note %></td>
           </tr>
           <% end %>
       </table>

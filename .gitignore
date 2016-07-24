@@ -1,5 +1,6 @@
 log/*
 tmp/*
+public/excels/*
 config/database.yml
 *.lock
 !.gitignore
