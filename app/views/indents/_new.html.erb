@@ -11,15 +11,15 @@
 				<div class="panel panel-default" style="margin-bottom: 0px;">
 					<div class="panel-heading">
 						<div class="form-group">
-							<%= f.label '订单编号', for: 'indent_name', class: 'col-sm-1 control-label' %>
+							<label for="indent_name" class="col-sm-1 control-label"><span class="require">*</span>订单编号</label>
 							<div class="col-sm-3">
 								<%= f.text_field :name, value: @indent.name, class: 'form-control', required: true, readOnly: true %>
 							</div>
-							<%= f.label '终端客户', for: 'indent_customer', class: 'col-sm-1 control-label' %>
+							<label for="indent_customer" class="col-sm-1 control-label"><span class="require">*</span>终端客户</label>
 							<div class="col-sm-3">
 								<%= f.text_field :customer, class: 'form-control', required: true %>
 							</div>
-							<%= f.label '要求物流', for: 'indent_logistics', class: 'col-sm-1 control-label' %>
+							<label for="indent_logistics" class="col-sm-1 control-label"><span class="require">*</span>要求物流</label>
 							<div class="col-sm-3">
 								<%= f.text_field :logistics, class: 'form-control', required: true %>
 							</div>
@@ -30,11 +30,11 @@
 								<%= f.select :agent_id, @agents.map{|a|[a.full_name, a.id]}, class: 'form-control' %>
 								<%= link_to '新建代理商', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm' %>
 							</div>
-							<%= f.label '下单时间', for: 'indent_verify_at', class: 'col-sm-1 control-label' %>
+							<label for="indent_verify_at" class="col-sm-1 control-label"><span class="require">*</span>下单时间</label>
 							<div class="col-sm-3">
 								<%= f.date_field :verify_at, class: 'form-control', data: {provide: 'datepicker'}, required: true %>
 							</div>
-							<%= f.label '要求时间', for: 'indent_require_at', class: 'col-sm-1 control-label' %>
+							<label for="indent_require_at" class="col-sm-1 control-label"><span class="require">*</span>要求时间</label>
 							<div class="col-sm-3">
 								<%= f.date_field :require_at, class: 'form-control', data: {provide: 'datepicker'}, required: true %>
 							</div>
@@ -51,13 +51,13 @@
 									<div class="col-sm-10">
 										<div class="row">
 											<div class="col-sm-3">
-												<label>类型</label>
+												<label><span class="require">*</span>类型</label>
 												<%= order_form.select :order_category_id, OrderCategory.all.map{|oc| [oc.name, oc.id]}, class: 'form-control', required: true %>
 												<%= order_form.select :oftype, Order.oftype %>
 											</div>
 											<div class="col-sm-2">
-												<label>数量</label>
-												<%= order_form.number_field :number, value: 1, min: 1, style: "width: 50%;", readOnly: true, data: {toggle: 'tooltip'}, title: '数量不可编辑' %>
+												<label data-toggle="tooltip" title="暂不可用"><span class="require">*</span>数量</label>
+												<%= order_form.number_field :number, value: 1, min: 1, style: "width: 50%;", readOnly: true, data: {toggle: 'tooltip'}, title: '暂不可用' %>
 											</div>
 											<div class="col-sm-2">
 												<label>厚度</label>
@@ -74,16 +74,16 @@
 										</div>
 										<div class="row">
 											<!-- <div class="col-sm-2">
-													<label>长度</label>
-													<%= order_form.number_field :length, value: 1, min: 1, style: "width: 50%;" %>
+														<label>长度</label>
+														<%= order_form.number_field :length, value: 1, min: 1, style: "width: 50%;" %>
 											</div>
 											<div class="col-sm-2">
-													<label>宽度</label>
-													<%= order_form.number_field :width, value: 1, min: 1, style: "width: 50%;" %>
+														<label>宽度</label>
+														<%= order_form.number_field :width, value: 1, min: 1, style: "width: 50%;" %>
 											</div>
 											<div class="col-sm-2">
-													<label>高度</label>
-													<%= order_form.number_field :height, value: 1, min: 1, style: "width: 50%;" %>
+														<label>高度</label>
+														<%= order_form.number_field :height, value: 1, min: 1, style: "width: 50%;" %>
 											</div> -->
 											<div class="col-sm-12">
 												<label>备注</label>
