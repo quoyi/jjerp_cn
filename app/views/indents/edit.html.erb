@@ -11,98 +11,102 @@
     <div class="row">
       <%= nested_form_for @indent, html: {class: 'form-horizontal', multipart: true} do |f| %>
       <div class="panel panel-default">
-        <div class="panel-heading">
+        <div class="panel-heading" style="padding: 10px;">
+          <!-- 总订单信息开始 -->
           <div class="form-group indent-new">
-            <%= f.label '订单编号', for: 'indent_name', class: 'col-sm-1 control-label' %>
+            <label for="indent_name" class="col-sm-1 control-label"><span class="require">*</span>订单编号</label>
             <div class="col-sm-3">
               <%= f.text_field :name, class: 'form-control', required: true, readOnly: true %>
             </div>
-            <%= f.label '终端客户', for: 'indent_customer', class: 'col-sm-1 control-label' %>
+            <label for="indent_customer" class="col-sm-1 control-label"><span class="require">*</span>终端客户</label>
             <div class="col-sm-3">
               <%= f.text_field :customer, class: 'form-control', required: true %>
             </div>
-            <%= f.label '要求物流', for: 'indent_logistics', class: 'col-sm-1 control-label' %>
+            <label for="indent_logistics" class="col-sm-1 control-label"><span class="require">*</span>要求物流</label>
             <div class="col-sm-3">
               <%= f.text_field :logistics, class: 'form-control', required: true %>
             </div>
           </div>
           <div class="form-group indent-new">
-            <%= f.label '金额', for: 'indent_amount', class: 'col-sm-1 control-label' %>
+            <!-- <label for="indent_amount" class="col-sm-1 control-label"><span class="require">*</span>金额</label>
             <div class="col-sm-3">
               <%= f.number_field :amount, class: 'form-control', min: 0, required: true %>
-            </div>
-            <%= f.label '下单时间', for: 'indent_verify_at', class: 'col-sm-1 control-label' %>
-            <div class="col-sm-3">
-              <%= f.date_field :verify_at, class: 'form-control', data: {provide: 'datepicker'}, required: true %>
-            </div>
-            <%= f.label '下单时间', for: 'indent_require_at', class: 'col-sm-1 control-label' %>
-            <div class="col-sm-3">
-              <%= f.date_field :require_at, class: 'form-control', data: {provide: 'datepicker'}, required: true %>
-            </div>
-          </div>
-          <div class="form-group indent-new">
+            </div> -->
             <%= f.label '代理商', for: 'indent_agent_id', class: 'col-sm-1 control-label' %>
             <div class="col-sm-3">
               <%= f.select :agent_id, Agent.all.map{|a|[a.full_name, a.id]}, class: 'form-control' %>
               <%= link_to '新建代理商', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm' %>
             </div>
+            
+            <label for="indent_verify_at" class="col-sm-1 control-label"><span class="require">*</span>下单时间</label>
+            <div class="col-sm-3">
+              <%= f.date_field :verify_at, class: 'form-control', data: {provide: 'datepicker'}, required: true %>
+            </div>
+            <label for="indent_require_at" class="col-sm-1 control-label"><span class="require">*</span>要求时间</label>
+            <div class="col-sm-3">
+              <%= f.date_field :require_at, class: 'form-control', data: {provide: 'datepicker'}, required: true %>
+            </div>
           </div>
+          <!-- 总订单信息结束 -->
+          <!-- 子订单信息 -->
           <div id="indentOrders">
             <%= f.fields_for :orders, wrapper: false do |order_form| %>
-            <hr>
-            <div class="fields row">
-              <div class="col-sm-1 text-center indent-orders-title">
-                <h4>子订单</h4>
-              </div>
-              <div class="col-sm-10">
-                <div class="row">
-                  <div class="col-sm-2">
-                    <label>类型</label>
-                    <%= order_form.select :order_category_id, OrderCategory.all.map{|oc| [oc.name, oc.id]}, class: 'form-control', required: true %>
-                  </div>
-                  <div class="col-sm-2">
-                    <label>数量</label>
-                    <%= order_form.number_field :number, value: 1, min: 1, style: "width: 50%;", readOnly: true, data: {toggle: 'tooltip'}, title: '数量不可编辑' %>
-                  </div>
-                  <div class="col-sm-2">
-                    <label>厚度</label>
-                    <%= order_form.select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]).map{|mc|[mc.name, mc.id]}, selected: 6 %>
-                  </div>
-                  <div class="col-sm-2">
-                    <label>材质</label>
-                    <%= order_form.select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]).map{|mc|[mc.name, mc.id]} %>
-                  </div>
-                  <div class="col-sm-2">
-                    <label>颜色</label>
-                    <%= order_form.select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]).map{|mc|[mc.name, mc.id]} %>
-                  </div>
-                  <!-- <div class="col-sm-4">
-                    <label>状态</label>
-                    <%= order_form.select :status, Order.status %>
-                  </div> -->
+            <div class="fields">
+              <hr style="border-color: gray;"/>
+              <div class="row">
+                <div class="col-sm-1 text-center indent-orders-title">
+                  <h4>子订单</h4>
                 </div>
-                <div class="row">
-                  <!-- <div class="col-sm-2">
-                    <label>长度</label>
-                    <%= order_form.number_field :length, value: 1, min: 1, style: "width: 50%;" %>
+                <div class="col-sm-10">
+                  <div class="row">
+                    <div class="col-sm-2">
+                      <label>类型</label>
+                      <%= order_form.select :order_category_id, OrderCategory.all.map{|oc| [oc.name, oc.id]}, class: 'form-control', required: true %>
+                    </div>
+                    <div class="col-sm-2">
+                      <label>数量</label>
+                      <%= order_form.number_field :number, value: 1, min: 1, style: "width: 50%;", readOnly: true, data: {toggle: 'tooltip'}, title: '数量不可编辑' %>
+                    </div>
+                    <div class="col-sm-2">
+                      <label>厚度</label>
+                      <%= order_form.select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]).map{|mc|[mc.name, mc.id]}, selected: 6 %>
+                    </div>
+                    <div class="col-sm-2">
+                      <label>材质</label>
+                      <%= order_form.select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]).map{|mc|[mc.name, mc.id]} %>
+                    </div>
+                    <div class="col-sm-3">
+                      <label>颜色</label>
+                      <%= order_form.select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]).map{|mc|[mc.name, mc.id]} %>
+                    </div>
+                    <!-- <div class="col-sm-4">
+                      <label>状态</label>
+                      <%= order_form.select :status, Order.status %>
+                    </div> -->
                   </div>
-                  <div class="col-sm-2">
-                    <label>宽度</label>
-                    <%= order_form.number_field :width, value: 1, min: 1, style: "width: 50%;" %>
-                  </div>
-                  <div class="col-sm-2">
-                    <label>高度</label>
-                    <%= order_form.number_field :height, value: 1, min: 1, style: "width: 50%;" %>
-                  </div> -->
-                  <div class="col-sm-10">
-                    <label>备注</label>
-                    <%= order_form.text_field :note, style: "width: 91%;" %>
+                  <div class="row">
+                    <!-- <div class="col-sm-2">
+                      <label>长度</label>
+                      <%= order_form.number_field :length, value: 1, min: 1, style: "width: 50%;" %>
+                    </div>
+                    <div class="col-sm-2">
+                      <label>宽度</label>
+                      <%= order_form.number_field :width, value: 1, min: 1, style: "width: 50%;" %>
+                    </div>
+                    <div class="col-sm-2">
+                      <label>高度</label>
+                      <%= order_form.number_field :height, value: 1, min: 1, style: "width: 50%;" %>
+                    </div> -->
+                    <div class="col-sm-12">
+                      <label>备注</label>
+                      <%= order_form.text_field :note, style: "width: 91%;" %>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-sm-1 text-center indent-orders-delete">
-                <!-- 位置不对 -->
-                <%= order_form.link_to_remove '删除', class: 'btn btn-info btn-lg' %>
+                <div class="col-sm-1 text-center indent-orders-delete">
+                  <!-- 位置不对 -->
+                  <%= order_form.link_to_remove '删除', class: 'btn btn-info btn-lg' %>
+                </div>
               </div>
             </div>
             <% end %>
@@ -113,9 +117,9 @@
         <%= f.link_to_add '添加子订单', :orders, data: { target: '#indentOrders'}, class: 'btn btn-info' %>
       </div>
       <div class="pull-right">
-      <%= link_to '返回', indents_path, class: 'btn btn-default' %>
-      <%= f.submit '提交', class: 'btn btn-primary' %>
-      <% end %>
+        <%= link_to '返回', indents_path, class: 'btn btn-default' %>
+        <%= f.submit '提交', class: 'btn btn-primary' %>
+        <% end %>
       </div>
     </div>
   </div>

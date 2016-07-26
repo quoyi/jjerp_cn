@@ -2,28 +2,28 @@
 <div class="modal-body">
   <table class="table table-hover table-striped table-bordered table-condensed">
     <tr>
-      <td>
-        <%= f.label '编号' %>
+      <td data-toggle="tooltip" title="必填项">
+        <label><span class="require">*</span>编号</label>
       </td>
       <td>
         <%= f.text_field :name, readOnly: true, required: true %>
       </td>
-      <td>
-        <%= f.label '名称' %>
+      <td data-toggle="tooltip" title="必填项">
+        <label><span class="require">*</span>名称</label>
       </td>
       <td>
         <%= f.text_field :full_name, required: true %>
       </td>
     </tr>
     <tr>
-      <td>
-        <%= f.label '电话' %>
+      <td data-toggle="tooltip" title="必填项">
+        <label><span class="require">*</span>电话</label>
       </td>
       <td>
         <%= f.text_field :mobile, required: true %>
       </td>
-      <td>
-        <%= f.label '负责人' %>
+      <td data-toggle="tooltip" title="必填项">
+        <label><span class="require">*</span>负责人</label>
       </td>
       <td>
         <%= f.text_field :contacts, required: true %>

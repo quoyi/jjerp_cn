@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="addExpends" tabindex="-1" role="dialog" aria-labelledby="addExpendsLabel">
-  <div class="modal-dialog modal-sm" role="document">
+  <div class="modal-dialog modal-sm" role="document" style="width: 400px;">
     <div class="modal-content">
       <%= form_for @expend, html: {class: 'form-horizontal'} do |f| %>
       <div class="modal-header">
@@ -9,25 +9,25 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <%= f.label '银行卡', for: 'expend_bank_id', class: 'control-label col-sm-3' %>
+          <label for="expend_bank_id" class="control-label col-sm-3"><span class="require">*</span>支出方式</label>
           <div class="col-sm-9">
             <%= select_tag 'expend[bank_id]', options_for_select(Bank.all.map{|i|[i.bank_card, i.id]}), class: 'form-control', required: true %>
           </div>
         </div>
         <div class="form-group">
-          <%= f.label '金额', for: 'expend_money', class: 'control-label col-sm-3' %>
+          <label for="expend_money" class="control-label col-sm-3"><span class="require">*</span>金额</label>
           <div class="col-sm-9">
             <%= f.number_field :money, min: 0, class: 'form-control', required: true %>
           </div>
         </div>
         <div class="form-group">
-          <%= f.label '经手人', for: 'expend_username', class: 'control-label col-sm-3' %>
+          <label for="expend_username" class="control-label col-sm-3"><span class="require">*</span>经手人</label>
           <div class="col-sm-9">
             <%= f.text_field :username, class: 'form-control col-sm-9', required: true %>
           </div>
         </div>
         <div class="form-group">
-          <%= f.label '时间', for: 'expend_expend_at', class: 'control-label col-sm-3' %>
+          <label for="expend_expend_at" class="control-label col-sm-3"><span class="require">*</span>时间</label>
           <div class="col-sm-9">
             <%= f.date_field :expend_at, class: 'form-control col-sm-9', data: {provide: 'datepicker'}, required: true %>
           </div>

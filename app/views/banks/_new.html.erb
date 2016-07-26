@@ -10,31 +10,31 @@
       <div class="modal-body">
         <table class="table table-hover table-striped table-bordered table-condensed">
           <tr>
-            <td>
-              <%= f.label '编号' %>
+            <td data-toggle="tooltip" title="必填项">
+              <label><span class="require">*</span>编号</label>
             </td>
             <td>
               <%= f.text_field :name, required: true %>
             </td>
-            <td>
-              <%= f.label '开户银行' %>
+            <td data-toggle="tooltip" title="必填项">
+              <label><span class="require">*</span>开户银行</label>
             </td>
             <td>
               <%= f.text_field :bank_name, required: true %>
             </td>
           </tr>
           <tr>
-            <td>
-              <%= f.label '卡号' %>
+            <td data-toggle="tooltip" title="必填项">
+              <label><span class="require">*</span>卡号</label>
             </td>
             <td>
               <%= f.text_field :bank_card, required: true %>
             </td>
-            <td>
-              <%= f.label '余额' %>
+            <td data-toggle="tooltip" title="必填项">
+              <label><span class="require">*</span>余额</label>
             </td>
             <td>
-              <%= f.number_field :balance, default: 0, required: true %>
+              <%= f.number_field :balance, min: 0, step: 0.01, default: 0, required: true %>
             </td>
           </tr>
         </table>

@@ -27,16 +27,16 @@
                 <%= unit_form.collection_select :ply, MaterialCategory.where(oftype: 0).order("oftype"), :id, :name, {},{:class => 'form-control order-custom-offer-ply', onchange: "checkMaterial(this)", :value => uf.new_record? ? 0 : uf.ply}  %>
               </div>
               <div class="col-sm-2">
-                <label>单位</label>
+                <label><span class="require">*</span>单位</label>
                 <%= unit_form.text_field :uom, value: uf.new_record? ? '平方' : uf.uom,class: 'form-control',style: 'width: 60%', required: true  %>
               </div>
               <div class="col-sm-2">
-                <label>单价</label>
-                <%= unit_form.number_field :price, min: 0, value: uf.new_record? ? Material.find_by(ply: @order.ply, texture: @order.texture, color: @order.color).try(:price) : uf.price,class: 'form-control',style: 'width: 60%', required: true  %>
+                <label><span class="require">*</span>单价</label>
+                <%= unit_form.number_field :price, min: 0, step: 0.01, value: uf.new_record? ? Material.find_by(ply: @order.ply, texture: @order.texture, color: @order.color).try(:price) : uf.price,class: 'form-control',style: 'width: 60%', required: true  %>
               </div>
               <div class="col-sm-2">
-                <label>数量</label>
-                <%= unit_form.text_field :number, value: uf.new_record? ? 1 : uf.number, class: 'form-control',style: 'width: 60%',required: true  %>
+                <label><span class="require">*</span>数量</label>
+                <%= unit_form.text_field :number, min: 0, step: 0.01, value: uf.new_record? ? 1 : uf.number, class: 'form-control',style: 'width: 60%',required: true  %>
               </div>
             </div>
             <div class="row" style="padding-top: 5px;">
@@ -79,16 +79,16 @@
                   <%= part_form.collection_select :part_category_id, PartCategory.where.not(parent_id:0), :id, :name,{},{:class => 'form-control'}%>
                 </div>
                 <div class="col-sm-2">
-                  <label>单位</label>
+                  <label><span class="require">*</span>单位</label>
                   <%= part_form.text_field :uom, value: pf.new_record? ? '个' : pf.uom,class: 'form-control',style: 'width: 60%', required: true  %>
                 </div>
                 <div class="col-sm-2">
-                  <label>单价</label>
+                  <label><span class="require">*</span>单价</label>
                   <%= part_form.number_field :price, min: 0.01, step: 0.01, value: pf.new_record? ? 0 : pf.price,class: 'form-control', style: 'width: 60%',required: true  %>
                 </div>
                 <div class="col-sm-2">
-                  <label>数量</label>
-                  <%= part_form.number_field :number, min: 1, value: pf.new_record? ? 1 : pf.number,class: 'form-control',style: 'width: 60%', required: true  %>
+                  <label><span class="require">*</span>数量</label>
+                  <%= part_form.number_field :number, min: 1, step: 0.01, value: pf.new_record? ? 1 : pf.number,class: 'form-control',style: 'width: 60%', required: true  %>
                 </div>
                 <div class="col-sm-3">
                   <label>供应商</label>
@@ -118,20 +118,20 @@
               <div class="row">
                 <% cf = craft_form.object %>
                 <div class="col-sm-2">
-                  <label>名称</label>
+                  <label><span class="require">*</span>名称</label>
                   <%= craft_form.text_field :full_name, value: cf.new_record? ? '' : cf.full_name,class: 'form-control',style: 'width: 60%', required: true %>
                 </div>
                 <div class="col-sm-2">
-                  <label>单位</label>
+                  <label><span class="require">*</span>单位</label>
                   <%= craft_form.text_field :uom, value: cf.new_record? ? '次' : cf.uom ,class: 'form-control',style: 'width: 60%', required: true %>
                 </div>
                 <div class="col-sm-2">
-                  <label>单价</label>
-                  <%= craft_form.number_field :price, min: 0, value: cf.new_record? ? 0 : cf.price,class: 'form-control',style: 'width: 60%', required: true %>
+                  <label><span class="require">*</span>单价</label>
+                  <%= craft_form.number_field :price, min: 0, step: 0.01, value: cf.new_record? ? 0 : cf.price,class: 'form-control',style: 'width: 60%', required: true %>
                 </div>
                 <div class="col-sm-2">
-                  <label>数量</label>
-                  <%= craft_form.number_field :number, min: 1, value: cf.new_record? ? 1 : cf.number,class: 'form-control',style: 'width: 60%', required: true %>
+                  <label><span class="require">*</span>数量</label>
+                  <%= craft_form.number_field :number, min: 1, step: 0.01, value: cf.new_record? ? 1 : cf.number,class: 'form-control',style: 'width: 60%', required: true %>
                 </div>
                 <div class="col-sm-3">
                   <label>备注</label>

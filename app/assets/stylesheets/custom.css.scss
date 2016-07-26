@@ -1,54 +1,57 @@
-body{
+body {
   font-size: 12px !important;
+
   & .container-fluid {
     min-height: 768px;
+
     & .static-index-page .row {
       margin-right: 0px;
-      margin-left: 0px;
+      margin-left: 0px
     }
   }
   // 头部导航样式
   & .header {
     & .row {
       margin-right: 0px;
-      margin-left: 0px;
+      margin-left: 0px
     }
     & nav a {
-      color: #fff;
+      color: #fff
     }
     & nav a:hover {
       border-radius: 1px;
-      color: #000;
+      color: #000
     }
   }
   // 左边导航菜单样式
-  & .sidebar .nav li  {
+  & .sidebar .nav li {
     border-bottom: none !important;
+
     &.open > a {
       border-radius: 3px;
       border-bottom: none !important;
       background: #5881A8 !important;
-      color:#fff !important;
+      color: #fff !important
     }
     & > a:hover {
       border-radius: 3px;
       background: #CDE1F4 !important;
-      color:#000 !important;
-      border-bottom: 0px;
+      color: #000 !important;
+      border-bottom: 0px
     }
     & li.active > a {
       border-radius: 3px;
       background: #659BCF !important;
-      color:#fff !important;
+      color: #fff !important
     }
   }
   // 页脚版权样式
-  & footer{
+  & footer {
     & .copy {
-      margin: 0 !important;
+      margin: 0 !important
     }
     & a {
-      color: #428bca !important;
+      color: #428bca !important
     }
   }
   // 内容标题样式
@@ -57,19 +60,18 @@ body{
       & .panel-heading {
         & span {
           font-size: 17px;
-          font-weight: bold;
+          font-weight: bold
         }
         & small {
           color: #000;
           font-size: 11px;
-          padding-left: 5px;
+          padding-left: 5px
         }
         & a:hover, a:focus {
-          text-decoration: none;
+          text-decoration: none
         }
       }
     }
-
     & .panel-warning {
       & .panel-heading {
         padding-top: 0px;
@@ -79,14 +81,14 @@ body{
 
         & .panel-title {
           margin-top: 2px;
+
           & .fa {
-            padding-right: 10px;
+            padding-right: 10px
           }
         }
-
         & .panel-options {
           & .btn {
-            margin-top: 1px;
+            margin-top: 1px
           }
         }
       }
@@ -95,7 +97,7 @@ body{
         & .content-box-header {
           border-left: solid 1px #DADADA;
           border-right: solid 1px #DADADA;
-          border-top: solid 1px #DADADA;
+          border-top: solid 1px #DADADA
         }
         & .panel-options {
           border-left: solid 1px #DADADA;
@@ -103,12 +105,13 @@ body{
           border-bottom: solid 1px #DADADA;
           border-bottom-left-radius: 5px;
           border-bottom-right-radius: 5px;
+
           & .table {
-            margin-bottom: 0px;
+            margin-bottom: 0px
           }
         }
         & .content-title {
-          margin-bottom: 20px;
+          margin-bottom: 20px
         }
       }
     }
@@ -117,32 +120,30 @@ body{
 // table 统一样式
 .table {
   text-align: center;
+
   & th {
     text-align: center;
-    background-color: #d9edf7;
+    background-color: #d9edf7
   }
   & .btn-xs.btn-primary {
-    text-decoration: none;
+    text-decoration: none
   }
 }
-
 // 去掉所有a标签的外虚线框
 a {
-  outline: none !important;
+  outline: none !important
 }
-
 // 模态框样式
 .modal .modal-dialog.modal-sm {
   & .modal-body {
-    padding-bottom: 0px;
+    padding-bottom: 0px
   }
   & .modal-footer {
     padding-right: 15px;
     padding-top: 5px;
-    padding-bottom: 5px;
+    padding-bottom: 5px
   }
 }
-
 // 调整首页轮播图片大小
 #carousel-example-generic {
   width: 1000px;
@@ -150,62 +151,63 @@ a {
   vertical-align: middle;
   margin-left: auto;
   margin-right: auto;
-  & img{
+
+  & img {
     height: 600px;
-    width: 100%;
+    width: 100%
   }
 }
-
-.login-wrapper{
+.login-wrapper {
   margin-top: 50px;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
-  & hr{
-    margin-bottom: 40px;
+
+  & hr {
+    margin-bottom: 40px
   }
-  & label{
+  & label {
     font-size: 18px;
     padding-top: 7px;
-    padding-bottom: 7px;
+    padding-bottom: 7px
   }
   & .remember_me {
-    text-align: left;
+    text-align: left
   }
   & a {
-    margin-right: 10px;
+    margin-right: 10px
   }
 }
-
-
-/*flash*/
-.alert{
-  margin: 0px !important;
+.alert {
+  margin: 0px !important
 }
 .alert-error {
-    background-color: #f2dede;
-    border-color: #eed3d7;
-    color: #b94a48;
-    text-align: left;
- }
-
+  background-color: #f2dede;
+  border-color: #eed3d7;
+  color: #b94a48;
+  text-align: left
+}
 .alert-alert {
-    background-color: #f2dede;
-    border-color: #eed3d7;
-    color: #b94a48;
-    text-align: left;
- }
-
+  background-color: #f2dede;
+  border-color: #eed3d7;
+  color: #b94a48;
+  text-align: left
+}
 .alert-success {
-    background-color: #dff0d8;
-    border-color: #d6e9c6;
-    color: #468847;
-    text-align: left;
- }
-
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #468847;
+  text-align: left
+}
 .alert-notice {
-    background-color: #dff0d8;
-    border-color: #d6e9c6;
-    color: #468847;
-    text-align: left;
- }
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #468847;
+  text-align: left
+}
+label > span {
+  &.require {
+    color: red;
+    padding: 0 3px;
+  }
+}
