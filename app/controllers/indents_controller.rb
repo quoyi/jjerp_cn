@@ -20,6 +20,7 @@ class IndentsController < ApplicationController
     if params[:agent_id].present?
       @indents = @indents.where(agent_id: params[:agent_id])
     end
+    update_indent_status(@indents)
   end
 
   # GET /units/1

@@ -120,14 +120,15 @@
                 <td><%= i.require_at.strftime('%Y-%m-%d') %></td>
                 <td><%= i.amount %></td>
                 <td class="danger" data-toggle="tooltip" title="负数表示代理商预付款或押金"><%= i.arrear %></td>
+                <td><%= i.status_name %></td>
                 <!-- 这里需要判断是否已生成报价单 -->
-                <td>
-                  <% if Indent.statuses[i.status.to_sym] > Indent.statuses[:offering] && Indent.statuses[i.status.to_sym] <= Indent.statuses[:sent] %>
-                  <%= link_to '报价单', offers_path(indent_id: i.id) %>
-                  <% else %>
+                <!-- <td>
+                  <%# if Indent.statuses[i.status.to_sym] > Indent.statuses[:offering] && Indent.statuses[i.status.to_sym] <= Indent.statuses[:sent] %>
+                  <%#= link_to '报价单', offers_path(indent_id: i.id) %>
+                  <%# else %>
                   未报价
-                  <% end %>
-                </td>
+                  <%# end %>
+                </td> -->
                 <td>
                   <%= link_to '编辑', edit_indent_path(i), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title:'编辑总订单' %>
                   <%= link_to '到款', '#', class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', indent: i.id, amount: i.amount, arrear: i.arrear, username: current_user.name}, id: 'addIncomesBtn' %>
