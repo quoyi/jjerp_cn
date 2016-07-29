@@ -1,28 +1,29 @@
 module OrdersHelper
-  def update_order_status(order_or_orders, flag)
-    if flag
-      order_or_orders.each do |order|
-        offers = order.offers
-        order_status = Order.statuses[order.status.to_sym]
-        if offers.empty?
-          order.offering!
-          order.indent.offering!
-        elsif order_status == 0
-          order.offered!
-        end
-      end
-    else
-      offers = order_or_orders.offers
-      order_status = Order.statuses[order_or_orders.status.to_sym]
-      # 订单状态为报价中，且报价单不为空时，改为已报价
-      if order_status == 0 && !offers.empty?
-        order_or_orders.offered!
-      # 订单状态为已报价，且报价单为空时，改为报价中
-      elsif order_status == 1 && offers.empty?
-        order_or_orders.offering!
-        order_or_orders.indent.offering!
-      end
+  def update_order_status(order)
+    offers = order.offers.reload
+    order_status = Order.statuses[order.status.to_sym]
+    if offers.empty?
+      order.offering!
+      order.indent.offering!
+    elsif order_status <= 1
+      order.offered!
     end
+
+    # # 订单状态为报价中，且报价单不为空时，改为已报价
+    # if order_status == 0 && !offers.empty?
+    #   order.offered!
+    # # 订单状态为已报价，且报价单为空时，改为报价中
+    # elsif order_status == 1 && offers.empty?
+    #   order.offering!
+    #   order.indent.offering!
+    # end
+  end
+
+  def update_order_status_by_indent(indent)
+    binding.pry
+    # indent.orders.each do |order|
+    #  order.status = indent.status
+    # end
   end
 
   # 从CSV文件导入拆单信息（部件、配件）

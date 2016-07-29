@@ -1,5 +1,6 @@
 class IndentsController < ApplicationController
   include IndentsHelper
+  include OrdersHelper
   include OffersHelper
   before_action :set_indent, only: [:show, :edit, :update, :destroy]
 
@@ -20,7 +21,6 @@ class IndentsController < ApplicationController
     if params[:agent_id].present?
       @indents = @indents.where(agent_id: params[:agent_id])
     end
-    update_indent_status(@indents, true)
   end
 
   # GET /units/1
@@ -58,9 +58,10 @@ class IndentsController < ApplicationController
   def update
     if @indent.update(indent_params)
       if @indent.status == 'producing'
-        @indent.orders.each do |o|
-          o.producing!
-        end
+        # @indent.orders.each do |o|
+        #   o.producing!
+        # end
+        update_order_status_by_indent(@indent)
         msg = "订单: #{@indent.name} 开始生产！"
       else
         msg = "订单编辑成功！"
@@ -83,8 +84,10 @@ class IndentsController < ApplicationController
   def generate
     # 查找订单的所有拆单信息，并生成报价单
     indent = Indent.find_by_id(params[:id])
-    create_offer(indent) if indent
-    update_indent_status(indent, false)
+    indent.orders.each do |order|
+      create_offer(order)
+    end
+    update_indent_status(indent)
     redirect_to indent_path(indent), notice: '生成报价单成功！'
   end
 
