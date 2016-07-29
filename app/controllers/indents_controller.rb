@@ -20,7 +20,7 @@ class IndentsController < ApplicationController
     if params[:agent_id].present?
       @indents = @indents.where(agent_id: params[:agent_id])
     end
-    update_indent_status(@indents)
+    update_indent_status(@indents, true)
   end
 
   # GET /units/1
@@ -84,6 +84,7 @@ class IndentsController < ApplicationController
     # 查找订单的所有拆单信息，并生成报价单
     indent = Indent.find_by_id(params[:id])
     create_offer(indent) if indent
+    update_indent_status(indent, false)
     redirect_to indent_path(indent), notice: '生成报价单成功！'
   end
 
