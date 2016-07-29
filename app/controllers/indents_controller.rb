@@ -66,7 +66,7 @@ class IndentsController < ApplicationController
       else
         msg = "订单编辑成功！"
       end
-      redirect_to :back, notice: msg
+      redirect_to indents_path, notice: msg
     else
       redirect_to :back, error: "订单编辑失败！"
     end
