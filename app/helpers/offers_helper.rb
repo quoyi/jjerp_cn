@@ -77,8 +77,10 @@ module OffersHelper
           offer.uom = '次'
           offer.save!
         end
-        if !order.units.empty? && !order.parts.empty? && !order.crafts.empty?
+        if order.offers.size > 0
           order.offered!
+        else
+          order.offering!
         end
       end
     end
