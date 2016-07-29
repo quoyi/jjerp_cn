@@ -27,6 +27,7 @@ class OrdersController < ApplicationController
         send_file "#{Rails.root}/public/excels/" + filename, type: 'text/xls; charset=utf-8'
       end
     end
+    update_order_status(@orders, true)
   end
 
   # GET /orders/1
@@ -56,7 +57,6 @@ class OrdersController < ApplicationController
   # POST /orders.json
   def create
     @order = Order.new(order_params)
-    binding.pry
     if @order.save
       # 订单保存后，更新订单、子订单的价格合计
       update_order_and_indent(@order)
@@ -75,9 +75,12 @@ class OrdersController < ApplicationController
       # 订单更新后，更新订单、子订单的价格合计
       update_order_and_indent(@order)
       create_offer(@order.indent)
-      redirect_to @order.indent, notice: '子订单编辑成功！'
+      # change order status
+      #@order.offered!
+      update_order_status(@order, false)
+      redirect_to :back, notice: '子订单编辑成功！'
     else
-      redirect_to @order, error: '子订单编辑失败！请仔细检查后再提交。'
+      redirect_to :back, error: '子订单编辑失败！请仔细检查后再提交。'
     end
   end
 
@@ -99,7 +102,7 @@ class OrdersController < ApplicationController
     # 订单修改后，更新订单、子订单的价格合计
     update_order_and_indent(@order)
     create_offer(@order.indent)
-    return redirect_to order_path(@order), notice: msg
+    redirect_to :back, notice: msg
     # 有上传文件时
     # if params[:file].original_filename !~ /.csv$/
     #   return redirect_to order_path(@order), error: '文件格式不正确！'
@@ -117,7 +120,7 @@ class OrdersController < ApplicationController
     @indent = @order.indent
     @unit = Unit.new
     @material = Material.new
-    @part_category = PartCategory.new   
+    @part_category = PartCategory.new
   end
 
   private

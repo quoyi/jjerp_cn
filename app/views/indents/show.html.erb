@@ -12,7 +12,11 @@
       <div>
         <p class="pull-left">总订单号：
           <code><%= @indent.name %></code>&nbsp;&nbsp;&nbsp;&nbsp;
-          <small class="indent-add-order-btn"><%= @indent.status_name %></small>
+          <small class="indent-add-order-btn">
+            代理商:&nbsp;&nbsp;<code><%= @indent.agent.try(:full_name) %></code>&nbsp;&nbsp;&nbsp;&nbsp;
+            终端客户:&nbsp;&nbsp;<code><%= @indent.customer %></code>&nbsp;&nbsp;&nbsp;&nbsp;
+            状态:&nbsp;&nbsp;<code><%= @indent.status_name %></code>
+          </small>
         </p>
         <p class="pull-right">
           <%= link_to '管理子订单', '#', data: { toggle: 'modal', target: '#addOrders'}, class: 'btn-primary btn-xs' %>
@@ -29,8 +33,8 @@
           <th>颜色</th>
           <!-- <th>长度</th>
           <th>宽度</th>
-          <th>高度</th>
-          <th>状态</th> -->
+          <th>高度</th>-->
+          <th>状态</th> 
           <th>备注</th>
           <th>报价</th>
         </tr>
@@ -44,8 +48,8 @@
           <td><%= MaterialCategory.find(o.color).try(:name) %></td>
           <!-- <td><%= o.length %></td>
           <td><%= o.width %></td>
-          <td><%= o.height %></td>
-          <td><%= o.status_name %></td> -->
+          <td><%= o.height %></td>-->
+          <td><%= o.status_name %></td> 
           <td style="max-width: 300px;word-break:break-all;word-wrap:break-word;"><%= o.note %></td>
           <td><%= link_to '自定报价', custom_offer_order_path(o), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '自定义报价' %>
           </td>
