@@ -77,7 +77,9 @@ module OffersHelper
           offer.uom = '次'
           offer.save!
         end
-        order.offered!
+        if !order.units.empty? && !order.parts.empty? && !order.crafts.empty?
+          order.offered!
+        end
       end
     end
     indent = indent.reload
