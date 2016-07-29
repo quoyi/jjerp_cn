@@ -1,4 +1,5 @@
 class OrdersController < ApplicationController
+  include IndentsHelper
   include OrdersHelper
   include OffersHelper
   before_action :set_order, only: [:show, :edit, :update, :destroy, :import, :custom_offer]
@@ -27,7 +28,6 @@ class OrdersController < ApplicationController
         send_file "#{Rails.root}/public/excels/" + filename, type: 'text/xls; charset=utf-8'
       end
     end
-    update_order_status(@orders, true)
   end
 
   # GET /orders/1
@@ -60,7 +60,7 @@ class OrdersController < ApplicationController
     if @order.save
       # 订单保存后，更新订单、子订单的价格合计
       update_order_and_indent(@order)
-      create_offer(@order.indent)
+      create_offer(@order)
       redirect_to :back, notice: '子订单创建成功！'
     else
       redirect_to :back, error: '子订单创建失败！'
@@ -74,11 +74,12 @@ class OrdersController < ApplicationController
     if @order.update(order_params)
       # 订单更新后，更新订单、子订单的价格合计
       update_order_and_indent(@order)
-      create_offer(@order.indent)
+      create_offer(@order)
       # change order status
       #@order.offered!
-      update_order_status(@order, false)
-      redirect_to :back, notice: '子订单编辑成功！'
+      update_order_status(@order.reload)
+      update_indent_status(@order.indent)
+      redirect_to indent_path(@order.indent), notice: '子订单编辑成功！'
     else
       redirect_to :back, error: '子订单编辑失败！请仔细检查后再提交。'
     end
@@ -101,7 +102,9 @@ class OrdersController < ApplicationController
     msg = import_order_units(params[:file], @order.name)
     # 订单修改后，更新订单、子订单的价格合计
     update_order_and_indent(@order)
-    create_offer(@order.indent)
+    create_offer(@order)
+    update_order_status(@order.reload)
+    update_indent_status(@order.indent)
     redirect_to :back, notice: msg
     # 有上传文件时
     # if params[:file].original_filename !~ /.csv$/

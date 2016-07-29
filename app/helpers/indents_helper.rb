@@ -1,47 +1,23 @@
 module IndentsHelper
-  def update_indent_status(indent_or_indents, flag)
-    if flag
-      indent_or_indents.each do |indent|
-        orders = indent.orders
-        count_order = orders.size
-        sum_order_status = 0
-        orders.each do |order|
-          sum_order_status += Order.statuses[order.status.to_sym]
-        end
-        # indent.status: 0,1,2,3,4
-        # order.status: 0,1,2,3,4
-        if sum_order_status >= count_order * 1
-          indent.offered!
-        elsif sum_order_status >= count_order * 2
-          indent.producing!
-        elsif sum_order_status >= count_order * 3
-          indent.packaged!
-        elsif sum_order_status >= count_order * 4
-          indent.sent!
-        else
-          indent.offering!
-        end
-      end
+  def update_indent_status(indent)
+    orders = indent.orders
+    count_order = orders.size
+    sum_order_status = 0
+    orders.each do |order|
+      sum_order_status += Order.statuses[order.status.to_sym]
+    end
+    # indent.status: 0,1,2,3,4
+    # order.status: 0,1,2,3,4
+    if sum_order_status >= count_order * 1
+      indent.offered!
+    elsif sum_order_status >= count_order * 2
+      indent.producing!
+    elsif sum_order_status >= count_order * 3
+      indent.packaged!
+    elsif sum_order_status >= count_order * 4
+      indent.sent!
     else
-      orders = indent_or_indents.orders
-      count_order = orders.size
-      sum_order_status = 0
-      orders.each do |order|
-        sum_order_status += Order.statuses[order.status.to_sym]
-      end
-      # indent.status: 0,1,2,3,4
-      # order.status: 0,1,2,3,4
-      if sum_order_status >= count_order * 1
-        indent_or_indents.offered!
-      elsif sum_order_status >= count_order * 2
-        indent_or_indents.producing!
-      elsif sum_order_status >= count_order * 3
-        indent_or_indents.packaged!
-      elsif sum_order_status >= count_order * 4
-        indent_or_indents.sent!
-      else
-        indent_or_indents.offering!
-      end
+      indent.offering!
     end
   end
   # def export_execl(indent)
