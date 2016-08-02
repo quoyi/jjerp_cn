@@ -14,4 +14,7 @@ class Unit < ActiveRecord::Base
     MaterialCategory.find_by(id: self.color).try(:name)
   end
 
+  def texture_name
+    MaterialCategory.find_by(id: self.texture).try(:name) 
+  end
 end

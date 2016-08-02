@@ -85,7 +85,8 @@
 														<label>高度</label>
 														<%= order_form.number_field :height, value: 1, min: 1, style: "width: 50%;" %>
 											</div> -->
-											<div class="col-sm-12">
+                                                                                        <div class="col-sm-3"><label>价格</label><%= order_form.number_field :price, step: 0.01, min: 0.01, style: 'width: 50%;'%></div>
+											<div class="col-sm-9">
 												<label>备注</label>
 												<%= order_form.text_field :note, style: "width:90%;" %>
 											</div>
