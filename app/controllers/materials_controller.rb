@@ -46,7 +46,7 @@ class MaterialsController < ApplicationController
   def update
     respond_to do |format|
       if @material.update(material_params)
-        format.html { redirect_to @material, notice: 'Material was successfully updated.' }
+        format.html { redirect_to materials_path, notice: "板料#{@material.name}更新成功！" }
         format.json { render :show, status: :ok, location: @material }
       else
         format.html { render :edit }

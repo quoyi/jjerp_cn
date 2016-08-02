@@ -9,6 +9,7 @@ $(function() {
   });
 });
 
+/**
 function checkMaterial(selector) {
   var ply = $(selector).parents(".fields").find(".order-custom-offer-ply").val();
   var texture = $(selector).parents(".fields").find(".order-custom-offer-texture").val();
@@ -32,3 +33,4 @@ function checkMaterial(selector) {
     }
   });
 }
+**/

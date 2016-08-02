@@ -249,7 +249,7 @@ class IndentsController < ApplicationController
     params.require(:indent).permit(:id, :name, :offer_id, :agent_id, :customer, :verify_at, :require_at, :note,
                                    :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted, :status,
                                    orders_attributes: [:id, :order_category_id, :customer, :number, :ply,
-                                                       :texture, :color, :length, :width, :height, :oftype,
+                                                       :texture, :color, :price, :length, :width, :height, :oftype,
                                                        :note, :_destroy],
                                    offers_attributes: [:id, :order_id, :item_id, :item_type, :item_name,
                                                        :uom, :number, :price, :note, :_destroy])

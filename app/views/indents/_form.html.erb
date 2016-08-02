@@ -13,7 +13,8 @@
         <hr>
         <div class="row" id="order-fields">
           <div class="col-sm-1 text-center indent-orders-title">
-            <h4>子订单</h4>
+            <p>子订单</p>
+	    <p><%=order_form.object.name unless order_form.object.new_record?%></p>
           </div>
           <div class="col-sm-10">
             <div class="row">

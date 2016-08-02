@@ -73,6 +73,11 @@ class OrdersController < ApplicationController
     return redirect_to @order, error: '请求无效！请检查数据是否有效。' unless params[:order]
     if @order.update(order_params)
       # 订单更新后，更新订单、子订单的价格合计
+      if params[:is_custom] == 'true'
+        @order.units.each do |unit|
+          Material.find_or_create_by(ply: unit.ply, texture: unit.texture, color: unit.color, full_name: "#{unit.ply_name}-#{unit.texture_name}-#{unit.color_name}", buy: 0, price: 0)
+        end
+      end
       update_order_and_indent(@order)
       create_offer(@order)
       # change order status
@@ -125,6 +130,7 @@ class OrdersController < ApplicationController
     @material = Material.new
     @part_category = PartCategory.new
   end
+
 
   private
   # Use callbacks to share common setup or constraints between actions.

@@ -29,7 +29,7 @@
             <th  class="text-center">售价</th>
             <th  class="text-center">单位</th>
             <th  class="text-center">供应商</th>
-            <!-- <th  class="text-center">操作</th> -->
+            <th  class="text-center">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -45,7 +45,7 @@
             <td><%= m.price %></td>
             <td><%= m.uom %></td>
             <td><%= m.supply.try(:full_name) %></td>
-            <!-- <td><%= link_to '编辑', m, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td> -->
+            <td><%= link_to '编辑', edit_material_path(m)%></td>
           </tr>
           <% end %>
         </tbody>
