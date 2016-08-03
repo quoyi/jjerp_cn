@@ -51,6 +51,7 @@
             <th>数量</th>
             <th>状态</th>
             <th>备注</th>
+            <th>生产</th>
           </tr>
           <% @orders.each do |o| %>
           <tr>
@@ -65,6 +66,13 @@
             <td class="col-sm-1"><%= o.number %></td>
             <td  class="col-sm-1"><%= o.status_name %></td>
             <td  class="col-sm-2"><%= o.note %></td>
+<td class="col-sm-2">
+<% if Order.statuses[o.status] >= 2 %>
+  生产中
+<% else %>
+  <%= link_to '生产', order_path(id: o.id, order: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
+<% end %>
+</td>
           </tr>
           <% end %>
       </table>

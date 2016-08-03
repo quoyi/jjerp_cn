@@ -20,7 +20,6 @@ module OrdersHelper
   end
 
   def update_order_status_by_indent(indent)
-    binding.pry
     # indent.orders.each do |order|
     #  order.status = indent.status
     # end
@@ -72,7 +71,9 @@ module OrdersHelper
                   order_id: order.id,
                   name: order.name + "-b-" + (index + 1).to_s,
                   full_name: row[0],
-                  ply: order.id,
+                  ply: order.ply,
+                  texture: order.texture,
+                  color: order.color,
                   length: row[2],
                   width: row[3],
                   number: row[5],
