@@ -75,7 +75,7 @@ class OrdersController < ApplicationController
       # 订单更新后，更新订单、子订单的价格合计
       if params[:is_custom] == 'true'
         @order.units.each do |unit|
-          Material.find_or_create_by(ply: unit.ply, texture: unit.texture, color: unit.color, full_name: "#{unit.ply_name}-#{unit.texture_name}-#{unit.color_name}", buy: 0, price: 0)
+          Material.find_or_create_by(ply: unit.ply, texture: unit.texture, color: unit.color, full_name: "#{unit.ply_name}-#{unit.texture_name}-#{unit.color_name}", buy: 0, price: unit.price)
         end
       end
       update_order_and_indent(@order)
