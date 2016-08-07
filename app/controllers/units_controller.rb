@@ -58,7 +58,7 @@ class UnitsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def unit_params
-    params.require(:unit).permit(:id, :unit_category_id, :order_id, :name, :full_name,
+    params.require(:unit).permit(:id, :unit_category_id, :order_id, :name, :full_name, :is_custom,
                                 :material_id,:ply, :texture, :color, :length, :width, :supply_id,
                                 :number, :uom, :price, :size, :note, :edge, :customer, :out_edge_thick,
                                 :in_edge_thick, :back_texture, :door_type, :door_mould, :door_handle_type,

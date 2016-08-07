@@ -9,7 +9,7 @@
   </div>
   <div class="content-box-large box-with-header" style="padding: 0px;">
     <%= nested_form_for @order, html: {class: 'form-inline', multipart: true} do |f| %>
-    <%= hidden_field_tag :is_custom, true%>
+    <%#= hidden_field_tag :is_custom, true%>
     <div class="modal-body" style="padding: 5px;">
       <div class="panel panel-default" id="orderUnitsForm">
         <div class="panel-heading order-panel-header">
@@ -22,6 +22,11 @@
           <%= f.fields_for :units, wrapper: false do |unit_form| %>
           <div class="fields">
             <% uf = unit_form.object %>
+            <% if uf.new_record? %><!-- 自定义报价才填写这些字段 -->
+              <%= unit_form.hidden_field :full_name, value: '自定义' %>
+              <%= unit_form.hidden_field :size, value: '自定义' %>
+              <%= unit_form.hidden_field :is_custom, value: true %>
+            <% end %>
             <div class="row">
               <div class="col-sm-2">
                 <label>厚度</label>

@@ -182,7 +182,7 @@
               <td><%= u.uom %></td>
               <td><%= u.price %></td>
               <td><%= u.number %></td>
-              <td><%= u.price * u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number %></td>
+              <td><%= u.is_custom ? u.price * u.number : u.price * u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number %></td>
               <td style="max-width:200px;word-break:break-all;word-wrap:break-word;"><%= u.note %></td>
             </tr>
             <% end %>
