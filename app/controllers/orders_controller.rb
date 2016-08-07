@@ -73,10 +73,8 @@ class OrdersController < ApplicationController
     return redirect_to @order, error: '请求无效！请检查数据是否有效。' unless params[:order]
     if @order.update(order_params)
       # 订单更新后，更新订单、子订单的价格合计
-      if params[:is_custom] == 'true'
-        @order.units.each do |unit|
-          Material.find_or_create_by(ply: unit.ply, texture: unit.texture, color: unit.color, full_name: "#{unit.ply_name}-#{unit.texture_name}-#{unit.color_name}", buy: 0, price: unit.price)
-        end
+      @order.units.where(is_custom: true).each do |unit|
+        Material.find_or_create_by(ply: unit.ply, texture: unit.texture, color: unit.color, full_name: "#{unit.ply_name}-#{unit.texture_name}-#{unit.color_name}", buy: 0, price: unit.price)
       end
       update_order_and_indent(@order)
       create_offer(@order)
@@ -143,7 +141,7 @@ class OrdersController < ApplicationController
     params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture,
                                   :color, :length, :width, :height, :number, :price,
                                   :status, :oftype, :note, :deleted, :file, :_destroy,
-                                  units_attributes: [:id, :full_name, :number, :ply,:texture,:color,
+                                  units_attributes: [:id, :full_name, :number, :ply, :texture, :color, :is_custom,
                                                      :length, :width, :size, :uom, :price, :note, :_destroy],
                                   parts_attributes: [:id, :part_category_id, :order_id,
                                                      :name, :buy, :price, :store, :uom, :number, :brand,

@@ -228,18 +228,37 @@ module OrdersHelper
   # 修改子订单和总订单
   def update_order_and_indent(order)
     indent = order.indent
-    old_total = indent.amount
-    # 获取上级子订单所有的 部件、配件、工艺，并计算总价
-    # 部件 总价 = 面积 * 数量 * 单价
-    total_units = order.units.map{|u| u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum()
-    total_parts = order.parts.map{|p| p.number * p.price}.sum()
-    total_crafts = order.crafts.map{|c| c.number * c.price}.sum()
-    total_incomes = indent.incomes.map(&:money).sum
-    new_total = indent.amount = order.price = total_units + total_parts + total_crafts
-    indent.arrear = indent.amount - total_incomes
-    indent.total_history += (new_total - old_total)
-    indent.total_arrear += (new_total - old_total)
-    order.save!
+    indent_sum = 0
+    indent.orders.each do |o|
+      sum_units = 0
+      # 自定义报价不计算尺寸
+      group_units = o.units.group_by{|u| u.is_custom}
+      sum_units += group_units[true].map{|u| u.number * u.price}.sum() if group_units[true]
+      sum_units += group_units[false].map{|u| u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum() if group_units[false]
+      sum_parts = o.parts.map{|p| p.number * p.price}.sum()
+      sum_crafts = o.crafts.map{|c| c.number * c.price}.sum()
+      o.price = sum_units + sum_parts + sum_crafts  # 子订单金额 = 子订单部件合计 + 子订单配件合计 + 子订单工艺费合计
+      indent_sum += o.price
+      o.save!
+    end
+    indent.amount = indent_sum  # 总订单金额 = 所有子订单金额合计
     indent.save!
+
+    # old_total = indent.amount
+    # # 获取上级子订单所有的 部件、配件、工艺，并计算总价
+    # # 部件 总价 = 面积 * 数量 * 单价
+    # total_units = order.units.map{|u| u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum()
+    # total_parts = order.parts.map{|p| p.number * p.price}.sum()
+    # total_crafts = order.crafts.map{|c| c.number * c.price}.sum()
+
+
+
+    # total_incomes = indent.incomes.map(&:money).sum
+    # new_total = indent.amount = order.price = total_units + total_parts + total_crafts
+    # indent.arrear = indent.amount - total_incomes
+    # indent.total_history += (new_total - old_total)
+    # indent.total_arrear += (new_total - old_total)
+    # order.save!
+    # indent.save!
   end
 end
