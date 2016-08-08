@@ -10,19 +10,23 @@
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
           <tr class="info">
-            <td>包装</td>
-            <td>客户单号</td>
-            <td>接单时间</td>
-            <td>代理商</td>
+            <th>总订单号</th>
+            <th>终端客户</th>
+            <th>代理商</th>
+            <th>接单时间</th>
+            <th>状态</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
           <% @indents.each do |indent|%>
           <tr>
-            <td><%= link_to '开始包装', package_indent_path(indent), class: 'detail-link' %></td>
             <td><%= link_to indent.name, indent_path(indent), class: 'detail-link' %></td>
+            <td><%= indent.customer %></td>
+            <td><%= indent.agent.try(:full_name) %></td>
             <td><%= indent.created_at.localtime.strftime("%Y-%m-%d")%></td>
-            <td><%= indent.agent.try(:name) %></td>
+            <td><%= indent.status_name %></td>
+            <td><%= link_to '开始包装', package_indent_path(indent), class: 'detail-link' %></td>
           </tr>
           <%end%>
         </tbody>

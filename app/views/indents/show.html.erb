@@ -13,9 +13,9 @@
         <p class="pull-left">总订单号：
           <code><%= @indent.name %></code>&nbsp;&nbsp;&nbsp;&nbsp;
           <small class="indent-add-order-btn">
-            代理商:&nbsp;&nbsp;<code><%= @indent.agent.try(:full_name) %></code>&nbsp;&nbsp;&nbsp;&nbsp;
-            终端客户:&nbsp;&nbsp;<code><%= @indent.customer %></code>&nbsp;&nbsp;&nbsp;&nbsp;
-            状态:&nbsp;&nbsp;<code><%= @indent.status_name %></code>
+          代理商:&nbsp;&nbsp;<code><%= @indent.agent.try(:full_name) %></code>&nbsp;&nbsp;&nbsp;&nbsp;
+          终端客户:&nbsp;&nbsp;<code><%= @indent.customer %></code>&nbsp;&nbsp;&nbsp;&nbsp;
+          状态:&nbsp;&nbsp;<code><%= @indent.status_name %></code>
           </small>
         </p>
         <p class="pull-right">
@@ -34,7 +34,7 @@
           <!-- <th>长度</th>
           <th>宽度</th>
           <th>高度</th>-->
-          <th>状态</th> 
+          <th>状态</th>
           <th>备注</th>
           <th>报价</th>
           <th>生产</th>
@@ -50,17 +50,19 @@
           <!-- <td><%= o.length %></td>
           <td><%= o.width %></td>
           <td><%= o.height %></td>-->
-          <td><%= o.status_name %></td> 
+          <td><%= o.status_name %></td>
           <td style="max-width: 300px;word-break:break-all;word-wrap:break-word;"><%= o.note %></td>
           <td><%= link_to '自定报价', custom_offer_order_path(o), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '自定义报价' %>
           </td>
           <td>
-<% if Order.statuses[o.status] >= 2 %>
-  生产中
-<% else %>
-  <%= link_to '生产', order_path(id: o.id, order: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
-<% end %>
-</td>
+            <% if Order.statuses[o.status] < 1 %>
+              <%= link_to '生产', '#', class: 'btn-primary btn-xs', data: {toggle: 'tooltip', confirm: '订单报价中，无法生产!'}, title: '订单报价中，无法生产!' %>
+            <% elsif Order.statuses[o.status] == 1 %>
+            <%= link_to '生产', order_path(id: o.id, order: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
+            <% else %>
+              生产中
+            <% end %>
+          </td>
         </tr>
         <% end %>
       </table>

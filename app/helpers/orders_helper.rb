@@ -1,30 +1,4 @@
 module OrdersHelper
-  def update_order_status(order)
-    offers = order.offers.reload
-    order_status = Order.statuses[order.status.to_sym]
-    if offers.empty?
-      order.offering!
-      order.indent.offering!
-    elsif order_status <= 1
-      order.offered!
-    end
-
-    # # 订单状态为报价中，且报价单不为空时，改为已报价
-    # if order_status == 0 && !offers.empty?
-    #   order.offered!
-    # # 订单状态为已报价，且报价单为空时，改为报价中
-    # elsif order_status == 1 && offers.empty?
-    #   order.offering!
-    #   order.indent.offering!
-    # end
-  end
-
-  def update_order_status_by_indent(indent)
-    # indent.orders.each do |order|
-    #  order.status = indent.status
-    # end
-  end
-
   # 从CSV文件导入拆单信息（部件、配件）
   # file: 导入的文件
   # name: 子订单编号
@@ -241,24 +215,42 @@ module OrdersHelper
       indent_sum += o.price
       o.save!
     end
+    arrear_sum = indent.incomes.map(&:money).sum.to_f
     indent.amount = indent_sum  # 总订单金额 = 所有子订单金额合计
+    # 欠款 = 金额 - 收入 
+    indent.arrear = indent_sum - arrear_sum
     indent.save!
-
-    # old_total = indent.amount
-    # # 获取上级子订单所有的 部件、配件、工艺，并计算总价
-    # # 部件 总价 = 面积 * 数量 * 单价
-    # total_units = order.units.map{|u| u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum()
-    # total_parts = order.parts.map{|p| p.number * p.price}.sum()
-    # total_crafts = order.crafts.map{|c| c.number * c.price}.sum()
-
-
-
     # total_incomes = indent.incomes.map(&:money).sum
     # new_total = indent.amount = order.price = total_units + total_parts + total_crafts
     # indent.arrear = indent.amount - total_incomes
     # indent.total_history += (new_total - old_total)
     # indent.total_arrear += (new_total - old_total)
-    # order.save!
-    # indent.save!
+  end
+
+
+  # 修改子订单状态
+  def update_order_status(order)
+    indent = order.indent
+    offers = order.reload.offers
+    status = Order.statuses[order.status]
+    if status == 0 && !offers.empty?
+      order.offered!
+    end
+    if status == 1 && offers.empty?
+      order.offering!
+    end
+
+    # 子订单状态为 1.已报价 ，且删除所有报价信息后，修改状态为 0.报价中
+    # if order.offers.empty?
+    #   order.offering!
+    #   indent.offering!
+    # else
+    #   order.offered! if Order.statuses[order.status] <= 1
+    # end
+    
+    # 所有子订单中，最小状态值作为总订单的状态
+    min_status = indent.orders.map{|o|Order.statuses[o.status]}.min
+    indent.status = min_status
+    indent.save!
   end
 end
