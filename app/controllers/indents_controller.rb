@@ -57,11 +57,11 @@ class IndentsController < ApplicationController
   # PATCH/PUT /indents/1.json
   def update
     if @indent.update(indent_params)
+      @indent.orders.each do |o|
+        update_order_and_indent(o)
+        update_order_status(o)
+      end
       if @indent.status == 'producing'
-        # @indent.orders.each do |o|
-        #   o.producing!
-        # end
-        update_order_status_by_indent(@indent)
         msg = "订单: #{@indent.name} 开始生产！"
       else
         msg = "订单编辑成功！"
@@ -86,6 +86,7 @@ class IndentsController < ApplicationController
     indent = Indent.find_by_id(params[:id])
     indent.orders.each do |order|
       create_offer(order)
+      update_order_status(order)
     end
     update_indent_status(indent)
     redirect_to indent_path(indent), notice: '生成报价单成功！'
@@ -250,7 +251,7 @@ class IndentsController < ApplicationController
                                    :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted, :status,
                                    orders_attributes: [:id, :order_category_id, :customer, :number, :ply,
                                                        :texture, :color, :price, :length, :width, :height, :oftype,
-                                                       :note, :_destroy],
+                                                       :note, :is_use_order_material, :_destroy],
                                    offers_attributes: [:id, :order_id, :item_id, :item_type, :item_name,
                                                        :uom, :number, :price, :note, :_destroy])
      # _return[:orders_attributes].each_pair{|k,v| v[:type] = Order.types[v[:type]] }

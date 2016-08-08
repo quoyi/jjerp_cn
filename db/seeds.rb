@@ -4691,9 +4691,9 @@ Supply.create(id: 2,name: 'GY0002', full_name: '小李供应', mobile: '18618611
 Supply.create(id: 3,name: 'GY0003', full_name: '小杨供应', mobile: '18318311831', bank_account: '600807920384014023', address: '贵阳市', note: '普通代理商')
 puts 'created Supplier success ! '
 ####################################### 代理商 #######################################
-Agent.create(id: 1,name: 'DL0001',address: '湖北武汉', full_name: '小秦代理', contacts: '王xx', mobile: '18610086121')
-Agent.create(id: 2,name: 'DL0002',address: '贵州贵阳', full_name: '傣家代理', contacts: '岳xx', mobile: '18610086122')
-Agent.create(id: 3,name: 'DL0003',address: '河南郑州', full_name: '小孙代理', contacts: '孙x', mobile: '18610086123')
+Agent.create(id: 1,name: 'JX0001',address: '湖北武汉', full_name: '小秦代理', contacts: '王xx', mobile: '18610086121', logistics: '顺丰')
+Agent.create(id: 2,name: 'JX0002',address: '贵州贵阳', full_name: '傣家代理', contacts: '岳xx', mobile: '18610086122', logistics: '圆通')
+Agent.create(id: 3,name: 'JX0003',address: '河南郑州', full_name: '小孙代理', contacts: '孙x', mobile: '18610086123', logistics: '韵达')
 puts 'created Agent success ! '
 ####################################### 供应商 #######################################
 UserCategory.create(id: 1, serial: 'UC0001', name: '普通用户', nick: 'normal', visible: true)

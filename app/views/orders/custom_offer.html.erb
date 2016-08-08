@@ -21,7 +21,9 @@
         <div class="panel-body" style="padding: 5px 0;">
           <%= f.fields_for :units, wrapper: false do |unit_form| %>
           <div class="fields">
-            <% uf = unit_form.object %>
+          <% uf = unit_form.object %>
+          <% if !uf.new_record?  && !uf.is_custom %>
+          <% else %>
             <% if uf.new_record? %><!-- 自定义报价才填写这些字段 -->
               <%= unit_form.hidden_field :full_name, value: '自定义' %>
               <%= unit_form.hidden_field :size, value: '自定义' %>
@@ -63,6 +65,7 @@
               </div>
             </div>
             <hr style="margin: 5px 0;" />
+            <% end %>
           </div>
           <% end %>
         </div>

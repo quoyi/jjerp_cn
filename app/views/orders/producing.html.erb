@@ -16,16 +16,18 @@
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
           <tr>
-            <th>订单号</th>
-            <th>子订单号</th>
-            <th>子订单类型</th>
-            <th>长</th>
+            <th class="col-sm-1">总订单号</th>
+            <th class="col-sm-1">子订单号</th>
+            <th class="col-sm-1">子订单类型</th>
+            <th class="col-sm-1">代理商</th>
+            <th class="col-sm-2">终端客户</th>
+            <!-- <th>长</th>
             <th>宽</th>
-            <th>高</th>
-            <th>价格</th>
-            <th>数量</th>
-            <th>状态</th>
-            <th>备注</th>
+            <th>高</th> 
+            <th class="col-sm-1">价格</th>
+            <th class="col-sm-1">数量</th>-->
+            <th class="col-sm-1">状态</th>
+            <th class="col-sm-2">备注</th>
           </tr>
         </thead>
         <tbody>
@@ -34,11 +36,13 @@
             <td><%= o.indent.try(:name) %></td>
             <td><%= link_to o.name, o, data: {toggle: 'tooltip'}, title: '查看子订单详细信息' %></td>
             <td><%= o.order_category.try(:name) %></td>
-            <td><%= o.length %></td>
+            <td><%= o.indent.agent.try(:full_name) %></td>
+            <td><%= o.indent.customer %></td>
+            <!-- <td><%= o.length %></td>
             <td><%= o.width %></td>
-            <td><%= o.height %></td>
+            <td><%= o.height %></td> 
             <td><%= o.price %></td>
-            <td><%= o.number %></td>
+            <td><%= o.number %></td>-->
             <td><%= o.status_name %></td>
             <td style="max-width:300px;"><%= o.note %></td>
           </tr>

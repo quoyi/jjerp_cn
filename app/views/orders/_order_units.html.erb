@@ -14,6 +14,9 @@
           <div class="fields">
             <table>
               <% uf = unit_form.object %>
+              <% if uf.new_record? %>
+                <%= unit_form.hidden_field :is_custom, value: false %>
+              <% end %>
               <tr>
                 <td><label>名称</label></td>
                 <td><%= unit_form.text_field :full_name, value: uf.new_record? ? '' : uf.full_name, required: true %></td>

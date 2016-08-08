@@ -58,9 +58,13 @@ class OrdersController < ApplicationController
   def create
     @order = Order.new(order_params)
     if @order.save
-      # 订单保存后，更新订单、子订单的价格合计
+      # 子订单保存后，更新订单、子订单的价格合计
       update_order_and_indent(@order)
+      # 生成报价单，更新总订单、子订单状态
       create_offer(@order)
+      update_order_status(@order.reload)
+      update_indent_status(@order.indent)
+      
       redirect_to :back, notice: '子订单创建成功！'
     else
       redirect_to :back, error: '子订单创建失败！'
@@ -72,14 +76,14 @@ class OrdersController < ApplicationController
   def update
     return redirect_to @order, error: '请求无效！请检查数据是否有效。' unless params[:order]
     if @order.update(order_params)
-      # 订单更新后，更新订单、子订单的价格合计
+      # 自定义报价时，查找或创建板料，防止找不到板料
       @order.units.where(is_custom: true).each do |unit|
         Material.find_or_create_by(ply: unit.ply, texture: unit.texture, color: unit.color, full_name: "#{unit.ply_name}-#{unit.texture_name}-#{unit.color_name}", buy: 0, price: unit.price)
       end
+      # 子订单更新后，更新总订单、子订单的价格合计
       update_order_and_indent(@order)
+      # 生成报价单，更新总订单、子订单状态
       create_offer(@order)
-      # change order status
-      #@order.offered!
       update_order_status(@order.reload)
       update_indent_status(@order.indent)
       redirect_to indent_path(@order.indent), notice: '子订单编辑成功！'
@@ -140,7 +144,7 @@ class OrdersController < ApplicationController
   def order_params
     params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture,
                                   :color, :length, :width, :height, :number, :price,
-                                  :status, :oftype, :note, :deleted, :file, :_destroy,
+                                  :status, :oftype, :note, :deleted, :file, :_destroy, :is_use_order_material,
                                   units_attributes: [:id, :full_name, :number, :ply, :texture, :color, :is_custom,
                                                      :length, :width, :size, :uom, :price, :note, :_destroy],
                                   parts_attributes: [:id, :part_category_id, :order_id,

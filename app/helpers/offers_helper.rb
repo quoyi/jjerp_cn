@@ -19,11 +19,16 @@ module OffersHelper
                                           indent_id: order.indent.id, order_id: order.id, price: unit.price.to_f)
         # 如果 unit 价格 与标准价格不同，则新建一条 offer 记录
         offer.price = unit.price.to_f
-        size = unit.size.split(/[xX*×]/).map(&:to_i)
-        if size.present? && size.size == 2
-          offer.number = offer.number.to_f + ((unit.number.to_f * size[0] * size[1])/(1000*1000))
-        else
+        # 部件是自定义报价添加时，不需要计算尺寸
+        if unit.is_custom
           offer.number = offer.number.to_f + unit.number.to_f
+        else # 部件不是自定义报价添加时，需要计算尺寸
+          size = unit.size.split(/[xX*×]/).map(&:to_i)
+          if size.present? && size.size == 2 # 填写尺寸时，按照切割后的数字计算
+            offer.number = offer.number.to_f + ((unit.number.to_f * size[0] * size[1])/(1000*1000))
+          else # 未填写尺寸时，默认使用 1 / (1000*1000) 计算
+            offer.number = offer.number.to_f + unit.number.to_f / (1000*1000)
+          end
         end
         offer.total = offer.price * offer.number
         # mc_ids = [material.ply, material.texture, material.face, material.color]
