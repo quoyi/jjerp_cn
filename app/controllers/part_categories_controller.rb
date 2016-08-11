@@ -29,6 +29,15 @@ class PartCategoriesController < ApplicationController
     end
   end
 
+  # POST /part_categories/find.json
+  def find
+    @part_categories = PartCategory.where(parent_id: params[:parent_id]) if params[:parent_id].present?
+    @part_categories = PartCategory.where(id: params[:id]) if params[:id].present?
+    respond_to do |format|
+      format.json { render json: @part_categories}
+    end
+  end
+
   # PATCH/PUT /part_categories/1
   # PATCH/PUT /part_categories/1.json
   def update
@@ -41,6 +50,8 @@ class PartCategoriesController < ApplicationController
   # DELETE /part_categories/1.json
   def destroy
     @part_category.update_attributes(deleted: true)
+    # 当配件类型为“基本类型”时，需要将它的所有子类型都标记删除
+    PartCategory.where(parent_id: @part_category.id).update_all(deleted: true) if @part_category.parent_id == 0
     redirect_to part_categories_path, notice: '配件类型已删除！'
   end
 

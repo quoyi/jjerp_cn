@@ -1,4 +1,5 @@
 $(function() {
+  /****** 总订单 新建 --- 时间选择逻辑  开始 ******/
   $("[data-provide=datepicker]").datepicker({
     format: 'yyyy-mm-dd',
     language: 'zh-CN',
@@ -17,9 +18,12 @@ $(function() {
       }
     }
   });
+  /****** 总订单 新建 --- 时间选择逻辑  结束 ******/
 
+
+  /****** 总订单 新建 --- 代理商 与 物流 的联动逻辑  开始 ******/
   /**
-   * 通过 Ajax 获取指定 agent_id 的 agent 对象，并设置indent.logistics
+   * Ajax 获取指定 agent_id 的 agent 对象，并设置indent.logistics
    */
   function getAgentLogistics(agent_id){
     $.ajax({
@@ -35,6 +39,9 @@ $(function() {
     });
   }
 
+  /**
+   * 模态框显示时，初始化物流输入框
+   */
   $("#addIndent").on('shown.bs.modal', function(){
     var agent_id = $("#indent_agent_id").val();
     getAgentLogistics(agent_id);
@@ -47,7 +54,10 @@ $(function() {
     var agent_id = $(this).val();
     getAgentLogistics(agent_id);
   });
+  /****** 总订单 新建 --- 代理商 与 物流 的联动逻辑  结束 ******/
 
+
+  /****** 总订单 列表 添加收入 --- 订单价格、收支信息的计算逻辑  开始 ******/
   // 获取所点击表单行，对应的订单ID，并赋值给弹出框中对应的项
   $("#addIncomes").on('show.bs.modal', function(e) {
     if (e != null && e.relatedTarget != null) {
@@ -64,6 +74,8 @@ $(function() {
       }
     }
   });
+  /****** 总订单 列表 添加收入 --- 订单价格、收支信息的计算逻辑  开始 ******/
+
 
   $("#addSent").on('show.bs.modal', function(e) {
     if (e != null && e.relatedTarget != null) {
@@ -109,3 +121,38 @@ $(function() {
     };
   })(this));
 });
+
+
+
+
+
+/****** 总订单 新建 子订单 --- 价格 与 板料厚度、材质、颜色 的联动逻辑  开始 ******/
+  /**
+   * Ajax 获取指定 板料价格
+   */
+function getMaterialPrice(obj){
+  var fields = $(obj).parents(".fields");
+  var ply = fields.find(".material-ply").val();
+  var texture = fields.find(".material-texture").val();
+  var color = fields.find(".material-color").val();
+  //alert("ply: " + ply + " texture: " + texture + " color: " + color);
+  $.ajax({
+    url: "/materials/find/",
+    dataType: 'json',
+    data: {ply: ply, texture: texture, color: color},
+    type: 'POST',
+    success: function(data){
+      if(data != null){
+        fields.find(".material-price").val(data.price);
+        fields.find(".material-uom").val(data.uom);
+      }
+      else{
+        fields.find(".material-price").val(0);
+      }
+    },
+    error: function(data){
+      alert("网络错误！");
+    }
+  });
+}
+/****** 总订单 新建 子订单 --- 价格 与 板料厚度、材质、颜色 的联动逻辑  结束 ******/

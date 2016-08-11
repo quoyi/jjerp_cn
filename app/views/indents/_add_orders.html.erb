@@ -13,7 +13,10 @@
           <div class="row" id="order-fields">
             <div class="col-sm-1 text-center indent-orders-title">
               <p>子订单</p>
-              <p><%= order_form.object.name unless order_form.object.new_record?%></p>
+              <p>
+                <% of = order_form.object %>
+                <%= order_form.object.name unless of.new_record?%>
+              </p>
             </div>
             <div class="col-sm-10">
               <div class="row">
@@ -27,15 +30,15 @@
                 </div>
                 <div class="col-sm-2">
                   <label>厚度</label>
-                  <%= order_form.select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]).map{|mc|[mc.name, mc.id]}, selected: 6 %>
+                  <%= order_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]), :id, :name, {}, {class: 'material-ply', onchange: 'getMaterialPrice(this)'} %>
                 </div>
                 <div class="col-sm-2">
                   <label>材质</label>
-                  <%= order_form.select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]).map{|mc|[mc.name, mc.id]} %>
+                  <%= order_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]), :id, :name, {}, {class: 'material-texture', onchange: 'getMaterialPrice(this)'} %>
                 </div>
                 <div class="col-sm-2">
                   <label>颜色</label>
-                  <%= order_form.select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]).map{|mc|[mc.name, mc.id]} %>
+                  <%= order_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]), :id, :name, {}, {class: 'material-color', onchange: 'getMaterialPrice(this)'} %>
                 </div>
               </div>
               <div class="row">
@@ -51,6 +54,10 @@
                   <label>高度</label>
                   <%#= order_form.number_field :height, min: 0, step: 0.01, style: "width: 50%;", required: true %>
                 </div> -->
+                <div class="col-sm-2">
+                  <label>价格</label>
+                  <%= order_form.number_field :price, min: 0, step: 0.01, value: of.new_record? ? Material.first.price : of.price, style: 'width: 50%;', class: 'material-price' %>
+                </div>
                 <div class="col-sm-10">
                   <label>备注</label>
                   <%= order_form.text_field :note, style: "width: 91%;" %>

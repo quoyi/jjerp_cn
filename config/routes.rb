@@ -18,11 +18,19 @@ Rails.application.routes.draw do
   resources :unit_categories
   resources :user_categories
   resources :order_categories
-  resources :part_categories
+  resources :part_categories do
+    collection do
+      post :find
+    end
+  end
   resources :material_categories
   resources :products
   resources :parts
-  resources :materials
+  resources :materials do
+    collection do
+      post :find
+    end
+  end
   resources :orders do
     collection do
       post :import

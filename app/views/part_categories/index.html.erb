@@ -10,7 +10,7 @@
   <div class="content-box-large box-with-header">
     <div class="row content-title">
       <div class="btn-group" role="group" aria-label="">
-        <% PartCategory.where(parent_id:0).map{|pc|[pc.name, pc.id]}.push(['所有', nil]).each do |k, p| %>
+        <% PartCategory.where(parent_id:0, deleted: false).map{|pc|[pc.name, pc.id]}.push(['所有', nil]).each do |k, p| %>
         <%= link_to k, part_categories_path(id: p), class: "btn btn-default #{'btn-primary' if params[:id] == p.to_s || params[:id].presence == p}" %>
         <% end %>
       </div>
