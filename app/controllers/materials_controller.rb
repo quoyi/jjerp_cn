@@ -5,11 +5,11 @@ class MaterialsController < ApplicationController
   # GET /materials.json
   def index
     @material = Material.new
-    if params[:ply].present? && params[:texture].present? && params[:color].present?
-      @materials = Material.where(ply: params[:ply], texture: params[:texture], color: params[:color]) 
-    else
-      @materials = Material.where(deleted: false)
-    end
+    # if params[:ply].present? && params[:texture].present? && params[:color].present?
+    #   @materials = Material.where(ply: params[:ply], texture: params[:texture], color: params[:color]) 
+    # else
+    @materials = Material.where(deleted: false)
+    # end
     respond_to do |format|
       format.html 
       format.json {render json: {flag: @materials.empty? ? "false" : "true"} }
@@ -19,6 +19,21 @@ class MaterialsController < ApplicationController
   # GET /materials/1
   # GET /materials/1.json
   def show
+  end
+
+  # POST /materials/condition
+  # POST /materials.json
+  def find
+    @material = Material.where(ply: params[:ply], texture: params[:texture], color: params[:color]).first
+    @material = Material.where(ply: params[:ply], texture: params[:texture]).first unless @material.present?
+    @material = Material.where(ply: params[:ply], color: params[:color]).first unless @material.present?
+    @material = Material.where(texture: params[:texture], color: params[:color]).first unless @material.present?
+    @material = Material.where(ply: params[:ply]) unless @material.present?
+    @material = Material.where(texture: params[:texture]) unless @material.present?
+    @material = Material.where(color: params[:color]) unless @material.present?
+    respond_to do |format|
+      format.json { render json: @material }
+    end
   end
 
   # GET /materials/new

@@ -9,6 +9,15 @@ class PartCategoriesController < ApplicationController
     @part_categories = PartCategory.where(parent_id: params[:id]).order(created_at: :desc) if params[:id].present?
   end
 
+  # POST /part_categories/find.json
+  def find
+    @part_categories = PartCategory.where(parent_id: params[:parent_id]) if params[:parent_id].present?
+    @part_categories = PartCategory.where(id: params[:id]) if params[:id].present?
+    respond_to do |format|
+      format.json { render json: @part_categories}
+    end
+  end
+
   # POST /part_categories
   # POST /part_categories.json
   def create
@@ -29,18 +38,29 @@ class PartCategoriesController < ApplicationController
     end
   end
 
+  # GET /part_categories/1
+  # GET /part_categories/1.json
+  def edit
+  end
+
   # PATCH/PUT /part_categories/1
   # PATCH/PUT /part_categories/1.json
   def update
     pc = PartCategory.find_by_id(params[:id])
     pc.update_attributes(deleted: false) if params[:reset].present? && params[:reset]
-    redirect_to part_categories_path, notice: '配件类型编辑成功！'
+    pc.update_attributes(name: params[:name]) if params[:name].present?
+    respond_to do |format|
+      format.html { redirect_to part_categories_path, notice: '配件类型编辑成功！' }
+      format.json { render json: pc}
+    end
   end
 
   # DELETE /part_categories/1
   # DELETE /part_categories/1.json
   def destroy
     @part_category.update_attributes(deleted: true)
+    # 当配件类型为“基本类型”时，需要将它的所有子类型都标记删除
+    PartCategory.where(parent_id: @part_category.id).update_all(deleted: true) if @part_category.parent_id == 0
     redirect_to part_categories_path, notice: '配件类型已删除！'
   end
 

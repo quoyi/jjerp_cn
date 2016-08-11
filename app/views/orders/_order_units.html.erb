@@ -30,18 +30,18 @@
               </tr>
               <tr>
                 <td><label>单位</label></td>
-                <td><%= unit_form.text_field :uom, value: uf.new_record? ? '平方' : uf.uom, required: true  %></td>
+                <td><%= unit_form.text_field :uom, value: uf.new_record? ? '平方' : uf.uom, required: true, class: 'material-uom'  %></td>
                 <td><label>厚度</label></td>
-                <td><%= unit_form.collection_select :ply, MaterialCategory.where(oftype: 0).order("oftype"), :id, :name, value: uf.new_record? ? 0 : uf.ply, required: true  %></td>
+                <td><%= unit_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {}, {class: 'material-ply', onchange: 'getMaterialPrice(this)'} %></td>
                 <td><label>材质</label></td>
-                <td><%= unit_form.collection_select :texture, MaterialCategory.where(oftype: 1).order("oftype"), :id, :name, value: uf.new_record? ? 0 : uf.texture, required: true  %></td>
+                <td><%= unit_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]),:id, :name, {}, {class: 'material-texture', onchange: 'getMaterialPrice(this)'} %></td>
                 <td><label>颜色</label></td>
-                <td><%= unit_form.collection_select :color, MaterialCategory.where(oftype: 2).order("oftype"), :id, :name, value: uf.new_record? ? 0 : uf.color, required: true  %></td>
+                <td><%= unit_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]),:id, :name, {}, {class: 'material-color', onchange: 'getMaterialPrice(this)'} %></td>
                 <td style="padding-left: 20px;"><%= unit_form.link_to_remove '删除', class:'btn btn-info btn-lg' %></td>
               </tr>
               <tr>
                 <td><label>单价</label></td>
-                <td><%= unit_form.number_field :price, min: 0, step: 0.01, value: uf.new_record? ? Material.find_by(ply: @order.ply, texture: @order.texture, color: @order.color).try(:price) : uf.price, required: true  %></td>
+                <td><%= unit_form.number_field :price, min: 0, step: 0.01, value: uf.new_record? ? Material.find_by(ply: @order.ply, texture: @order.texture, color: @order.color).try(:price) : uf.price, required: true, class: 'material-price'  %></td>
                 <td><label>数量</label></td>
                 <td><%= unit_form.text_field :number, value: uf.new_record? ? 1 : uf.number, required: true  %></td>
                 <td><label>备注</label></td>

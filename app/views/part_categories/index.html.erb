@@ -10,7 +10,7 @@
   <div class="content-box-large box-with-header">
     <div class="row content-title">
       <div class="btn-group" role="group" aria-label="">
-        <% PartCategory.where(parent_id:0).map{|pc|[pc.name, pc.id]}.push(['所有', nil]).each do |k, p| %>
+        <% PartCategory.where(parent_id:0, deleted: false).map{|pc|[pc.name, pc.id]}.push(['所有', nil]).each do |k, p| %>
         <%= link_to k, part_categories_path(id: p), class: "btn btn-default #{'btn-primary' if params[:id] == p.to_s || params[:id].presence == p}" %>
         <% end %>
       </div>
@@ -34,8 +34,8 @@
         <tbody>
           <% @part_categories.each do |pc| %>
           <tr>
-            <td><%= pc.parent_id? ? PartCategory.find_by_id(pc.parent_id).try(:name) : '基本类型'  %></td>
-            <td><%= pc.name %></td>
+            <td><%= pc.parent_id? ? PartCategory.find_by_id(pc.parent_id).try(:name) : '基本类型' %></td>
+            <td><%= link_to pc.name, '#', data: { toggle: 'modal', target: '#editPartCategory', id: pc.id, name: pc.name }, title: '编辑配件类型名称' %></td>
             <td><%= pc.buy %></td>
             <td><%= pc.price %></td>
             <td><%= pc.store %></td>
@@ -58,3 +58,4 @@
   </div>
 </div>
 <%= render 'new' %>
+<%= render 'edit' %>

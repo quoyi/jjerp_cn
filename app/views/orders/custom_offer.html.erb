@@ -1,3 +1,8 @@
+<script type="text/javascript">
+  
+
+</script>
+
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
     <div class="panel-title">
@@ -32,15 +37,15 @@
             <div class="row">
               <div class="col-sm-2">
                 <label>厚度</label>
-                <%= unit_form.collection_select :ply, MaterialCategory.where(oftype: 0).order("oftype"), :id, :name, {},{:class => 'form-control order-custom-offer-ply', onchange: "checkMaterial(this)", :value => uf.new_record? ? 0 : uf.ply}  %>
+                <%= unit_form.collection_select :ply, MaterialCategory.where(oftype: MaterialCategory.oftypes[:ply]).order("oftype"), :id, :name, {}, {class: 'form-control material-ply', onchange: "getMaterialPrice(this)", value: uf.new_record? ? 0 : uf.ply}  %>
               </div>
               <div class="col-sm-2">
                 <label><span class="require">*</span>单位</label>
-                <%= unit_form.text_field :uom, value: uf.new_record? ? '平方' : uf.uom,class: 'form-control',style: 'width: 60%', required: true  %>
+                <%= unit_form.text_field :uom, value: uf.new_record? ? '平方' : uf.uom, class: 'form-control material-uom',style: 'width: 60%', required: true  %>
               </div>
               <div class="col-sm-2">
                 <label><span class="require">*</span>单价</label>
-                <%= unit_form.number_field :price, min: 0, step: 0.01, value: uf.new_record? ? Material.find_by(ply: @order.ply, texture: @order.texture, color: @order.color).try(:price) : uf.price,class: 'form-control',style: 'width: 60%', required: true  %>
+                <%= unit_form.number_field :price, min: 0, step: 0.01, value: uf.new_record? ? Material.first.price : uf.price, class: 'form-control material-price',style: 'width: 60%', required: true  %>
               </div>
               <div class="col-sm-2">
                 <label><span class="require">*</span>数量</label>
@@ -50,11 +55,11 @@
             <div class="row" style="padding-top: 5px;">
               <div class="col-sm-2">
                 <label>材质</label>
-                <%= unit_form.collection_select :texture, MaterialCategory.where(oftype: 1).order("oftype"), :id, :name,{},{:class => 'form-control order-custom-offer-texture', onchange: "checkMaterial(this)", :value => uf.new_record? ? 0 : uf.texture}  %>
+                <%= unit_form.collection_select :texture, MaterialCategory.where(oftype: MaterialCategory.oftypes[:texture]).order("oftype"), :id, :name,{},{class: 'form-control material-texture', onchange: "getMaterialPrice(this)", value: uf.new_record? ? 0 : uf.texture}  %>
               </div>
               <div class="col-sm-2">
                 <label>颜色</label>
-                <%= unit_form.collection_select :color, MaterialCategory.where(oftype: 2).order("oftype"), :id, :name,{},{:class => 'form-control order-custom-offer-color', onchange: "checkMaterial(this)", :value => uf.new_record? ? 0 : uf.color} %>
+                <%= unit_form.collection_select :color, MaterialCategory.where(oftype: MaterialCategory.oftypes[:color]).order("oftype"), :id, :name,{},{class: 'form-control material-color', onchange: "getMaterialPrice(this)", value: uf.new_record? ? 0 : uf.color} %>
               </div>
               <div class="col-sm-5">
                 <label>备注</label>
@@ -84,24 +89,28 @@
               <div class="row">
                 <% pf = part_form.object %>
                 <div class="col-sm-2">
-                  <label>类型</label>
-                  <%= part_form.collection_select :part_category_id, PartCategory.where.not(parent_id:0), :id, :name,{},{:class => 'form-control'}%>
+                  <label>基本类型</label>
+                  <%= part_form.collection_select :part_category_id, PartCategory.where(parent_id: 0), :id, :name, {}, {class: 'form-control parent-part-category', onchange: 'setChildPartCategory(this)'}%>
                 </div>
                 <div class="col-sm-2">
+                  <label>类型</label>
+                  <%= part_form.collection_select :part_category_id, PartCategory.where(parent_id: 1), :id, :name,{},{class: 'form-control child-part-category', onchange: 'setPartCategoryPrice(this)'}%>
+                </div>
+                <div class="col-sm-1">
                   <label><span class="require">*</span>单位</label>
-                  <%= part_form.text_field :uom, value: pf.new_record? ? '个' : pf.uom,class: 'form-control',style: 'width: 60%', required: true  %>
+                  <%= part_form.text_field :uom, value: pf.new_record? ? '个' : pf.uom, class: 'form-control part-category-uom',style: 'width: 60%', required: true  %>
                 </div>
                 <div class="col-sm-2">
                   <label><span class="require">*</span>单价</label>
-                  <%= part_form.number_field :price, min: 0, step: 0.01, value: pf.new_record? ? 0 : pf.price,class: 'form-control', style: 'width: 60%',required: true  %>
+                  <%= part_form.number_field :price, min: 0, step: 0.01, value: pf.new_record? ? 0 : pf.price,class: 'form-control part-category-price', style: 'width: 60%', required: true  %>
                 </div>
                 <div class="col-sm-2">
                   <label><span class="require">*</span>数量</label>
                   <%= part_form.number_field :number, min: 0, step: 0.01, value: pf.new_record? ? 1 : pf.number,class: 'form-control',style: 'width: 60%', required: true  %>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                   <label>供应商</label>
-                  <%= part_form.collection_select :supply_id, Supply.all, :id, :full_name,{},{:class => 'form-control'}%>
+                  <%= part_form.collection_select :supply_id, Supply.all, :id, :full_name, {}, {class: 'form-control part-category-supply'} %>
                 </div>
                 <div class="col-sm-1 text-center">
                   <%= part_form.link_to_remove '删除', class:'btn btn-info btn-sm' %>
