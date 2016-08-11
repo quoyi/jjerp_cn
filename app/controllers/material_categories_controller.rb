@@ -20,6 +20,14 @@ class MaterialCategoriesController < ApplicationController
     end
   end
 
+  # PATCH/PUT /part_categories/1
+  # PATCH/PUT /part_categories/1.json
+  def update
+    mc = MaterialCategory.find_by_id(params[:id])
+    mc.update_attributes(deleted: false) if params[:reset].present? && params[:reset]
+    redirect_to material_categories_path, notice: '板料类型编辑成功！'
+  end
+
   # DELETE /material_categories/1
   # DELETE /material_categories/1.json
   def destroy

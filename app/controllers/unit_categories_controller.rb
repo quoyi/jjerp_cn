@@ -5,7 +5,7 @@ class UnitCategoriesController < ApplicationController
   # GET /unit_categories.json
   def index
     @unit_category = UnitCategory.new
-    @unit_categories = UnitCategory.where(deleted: false)
+    @unit_categories = UnitCategory.all
   end
 
   # POST /unit_categories
@@ -17,6 +17,14 @@ class UnitCategoriesController < ApplicationController
     else
       redirect_to unit_categories_path, error: '请检查部件类型名称，创建失败！'
     end
+  end
+
+  # PATCH/PUT /part_categories/1
+  # PATCH/PUT /part_categories/1.json
+  def update
+    uc = UnitCategory.find_by_id(params[:id])
+    uc.update_attributes(deleted: false) if params[:reset].present? && params[:reset]
+    redirect_to unit_categories_path, notice: '部件类型编辑成功！'
   end
 
   # DELETE /unit_categories/1
