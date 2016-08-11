@@ -34,8 +34,8 @@
         <tbody>
           <% @part_categories.each do |pc| %>
           <tr>
-            <td><%= pc.parent_id? ? PartCategory.find_by_id(pc.parent_id).try(:name) : '基本类型'  %></td>
-            <td><%= pc.name %></td>
+            <td><%= pc.parent_id? ? PartCategory.find_by_id(pc.parent_id).try(:name) : '基本类型' %></td>
+            <td><%= link_to pc.name, '#', data: { toggle: 'modal', target: '#editPartCategory', id: pc.id, name: pc.name }, title: '编辑配件类型名称' %></td>
             <td><%= pc.buy %></td>
             <td><%= pc.price %></td>
             <td><%= pc.store %></td>
@@ -58,3 +58,4 @@
   </div>
 </div>
 <%= render 'new' %>
+<%= render 'edit' %>
