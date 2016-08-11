@@ -35,19 +35,19 @@
         <div class="form-group">
           <%= f.label '数量', for: 'unit_number', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
-            <%= f.number_field :number, min: 1, class: 'form-control', required: true %>
+            <%= f.number_field :number, min: 0, step: 0.01, class: 'form-control', required: true %>
           </div>
         </div>
         <div class="form-group">
           <%= f.label '单价', for: 'unit_price', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
-            <%= f.number_field :price, min: 0, class: 'form-control', required: true %>
+            <%= f.number_field :price, min: 0, step: 0.01, class: 'form-control', required: true %>
           </div>
         </div>
         <div class="form-group">
           <%= f.label '厚度', for: 'unit_ply', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
-            <%= f.number_field :ply, min: 0, class: 'form-control', required: true %>
+            <%= f.number_field :ply, min: 0, step: 0.01, class: 'form-control', required: true %>
           </div>
         </div>
         <div class="form-group">

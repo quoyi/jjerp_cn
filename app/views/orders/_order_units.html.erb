@@ -21,9 +21,9 @@
                 <td><label>名称</label></td>
                 <td><%= unit_form.text_field :full_name, value: uf.new_record? ? '' : uf.full_name, required: true %></td>
                 <td><label>长</label></td>
-                <td><%= unit_form.number_field :length, min: 1, value: uf.new_record? ? 1 : uf.length, required: true  %></td>
+                <td><%= unit_form.number_field :length, min: 0, step: 0.01, value: uf.new_record? ? 1 : uf.length, required: true  %></td>
                 <td><label>宽</label></td>
-                <td><%= unit_form.number_field :width, min: 1, value: uf.new_record? ? 1 : uf.width, required: true  %></td>
+                <td><%= unit_form.number_field :width, min: 0, step: 0.01, value: uf.new_record? ? 1 : uf.width, required: true  %></td>
                 <td><label>尺寸</label></td>
                 <td><%= unit_form.text_field :size, value: uf.new_record? ? '' : uf.size, placeholder: '请输入成型尺寸' %></td>
                 <td></td>
@@ -41,7 +41,7 @@
               </tr>
               <tr>
                 <td><label>单价</label></td>
-                <td><%= unit_form.number_field :price, min: 0, value: uf.new_record? ? Material.find_by(ply: @order.ply, texture: @order.texture, color: @order.color).try(:price) : uf.price, required: true  %></td>
+                <td><%= unit_form.number_field :price, min: 0, step: 0.01, value: uf.new_record? ? Material.find_by(ply: @order.ply, texture: @order.texture, color: @order.color).try(:price) : uf.price, required: true  %></td>
                 <td><label>数量</label></td>
                 <td><%= unit_form.text_field :number, value: uf.new_record? ? 1 : uf.number, required: true  %></td>
                 <td><label>备注</label></td>

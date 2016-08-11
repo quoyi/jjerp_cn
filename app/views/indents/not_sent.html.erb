@@ -99,19 +99,19 @@
           <div class="row">
             <div class="col-sm-3">
               <%= f.label '橱柜' %>
-              <%= f.number_field :cupboard, class: 'form-control', min: 0, required: true, style: 'width:50%;' %>
+              <%= f.number_field :cupboard, class: 'form-control', min: 0, step: 0.01, required: true, style: 'width:50%;' %>
             </div>
             <div class="col-sm-3">
               <%= f.label '衣柜' %>
-              <%= f.number_field :robe, class: 'form-control', min: 0, required: true, style: 'width:50%;' %>
+              <%= f.number_field :robe, class: 'form-control', min: 0, step: 0.01, required: true, style: 'width:50%;' %>
             </div>
             <div class="col-sm-3">
               <%= f.label '门' %>
-              <%= f.number_field :door, class: 'form-control', min: 0, required: true, style: 'width:50%;' %>
+              <%= f.number_field :door, class: 'form-control', min: 0, step: 0.01, required: true, style: 'width:50%;' %>
             </div>
             <div class="col-sm-3">
               <%= f.label '配件' %>
-              <%= f.number_field :part, class: 'form-control', min: 0, required: true, style: 'width:50%;' %>
+              <%= f.number_field :part, class: 'form-control', min: 0, step: 0.01, required: true, style: 'width:50%;' %>
             </div>
           </div>
         </div>
