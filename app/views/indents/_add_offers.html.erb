@@ -27,11 +27,11 @@
                   </div>
                   <div class="col-sm-2">
                     <label>数量</label>
-                    <%= offer_form.number_field :number, value: ofo.new_record? ? 0 : ofo.number, min: 1, style: "width: 60%;", required: true %>
+                    <%= offer_form.number_field :number, value: ofo.new_record? ? 0 : ofo.number, min: 0, step: 0.01, style: "width: 60%;", required: true %>
                   </div>
                   <div class="col-sm-2">
                     <label>单价</label>
-                    <%= offer_form.number_field :price, min: 0, required: true %>
+                    <%= offer_form.number_field :price, min: 0, step: 0.01, required: true %>
                   </div>
                   <div class="col-sm-2">
                     <label>备注</label>

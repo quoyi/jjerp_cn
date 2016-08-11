@@ -57,7 +57,7 @@
 											</div>
 											<div class="col-sm-2">
 												<label data-toggle="tooltip" title="暂不可用"><span class="require">*</span>数量</label>
-												<%= order_form.number_field :number, value: 1, min: 1, style: "width: 50%;", readOnly: true, data: {toggle: 'tooltip'}, title: '暂不可用' %>
+												<%= order_form.number_field :number, value: 1, min: 0, step: 0.01, style: "width: 50%;", readOnly: true, data: {toggle: 'tooltip'}, title: '暂不可用' %>
 											</div>
 											<div class="col-sm-2">
 												<label>厚度</label>
@@ -74,18 +74,21 @@
 										</div>
 										<div class="row">
 											<!-- <div class="col-sm-2">
-														<label>长度</label>
-														<%= order_form.number_field :length, value: 1, min: 1, style: "width: 50%;" %>
+																<label>长度</label>
+																<%#= order_form.number_field :length, value: 1, min: 0, step: 0.01, style: "width: 50%;" %>
 											</div>
 											<div class="col-sm-2">
-														<label>宽度</label>
-														<%= order_form.number_field :width, value: 1, min: 1, style: "width: 50%;" %>
+																<label>宽度</label>
+																<%#= order_form.number_field :width, value: 1, min: 0, step: 0.01, style: "width: 50%;" %>
 											</div>
 											<div class="col-sm-2">
-														<label>高度</label>
-														<%= order_form.number_field :height, value: 1, min: 1, style: "width: 50%;" %>
+																<label>高度</label>
+																<%#= order_form.number_field :height, value: 1, min: 0, step: 0.01, style: "width: 50%;" %>
 											</div> -->
-                                                                                        <div class="col-sm-3"><label>价格</label><%= order_form.number_field :price, step: 0.01, min: 0.01, style: 'width: 50%;'%></div>
+											<div class="col-sm-3">
+												<label>价格</label>
+												<%= order_form.number_field :price, step: 0.01, min: 0.01, style: 'width: 50%;'%>
+											</div>
 											<div class="col-sm-9">
 												<label>备注</label>
 												<%= order_form.text_field :note, style: "width:90%;" %>

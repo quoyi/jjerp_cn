@@ -30,7 +30,7 @@
           <div class="form-group indent-new">
             <!-- <label for="indent_amount" class="col-sm-1 control-label"><span class="require">*</span>金额</label>
             <div class="col-sm-3">
-              <%= f.number_field :amount, class: 'form-control', min: 0, required: true %>
+              <%= f.number_field :amount, class: 'form-control', min: 0, step: 0.01, required: true %>
             </div> -->
             <%= f.label '代理商', for: 'indent_agent_id', class: 'col-sm-1 control-label' %>
             <div class="col-sm-3">
@@ -65,7 +65,7 @@
                     </div>
                     <div class="col-sm-2">
                       <label>数量</label>
-                      <%= order_form.number_field :number, value: 1, min: 1, style: "width: 50%;", readOnly: true, data: {toggle: 'tooltip'}, title: '数量不可编辑' %>
+                      <%= order_form.number_field :number, value: 1, min: 0, step: 0.01, style: "width: 50%;", readOnly: true, data: {toggle: 'tooltip'}, title: '数量不可编辑' %>
                     </div>
                     <div class="col-sm-2">
                       <label>厚度</label>
@@ -87,15 +87,15 @@
                   <div class="row">
                     <!-- <div class="col-sm-2">
                       <label>长度</label>
-                      <%= order_form.number_field :length, value: 1, min: 1, style: "width: 50%;" %>
+                      <%#= order_form.number_field :length, value: 1, min: 0, step: 0.01, style: "width: 50%;" %>
                     </div>
                     <div class="col-sm-2">
                       <label>宽度</label>
-                      <%= order_form.number_field :width, value: 1, min: 1, style: "width: 50%;" %>
+                      <%#= order_form.number_field :width, value: 1, min: 0, step: 0.01, style: "width: 50%;" %>
                     </div>
                     <div class="col-sm-2">
                       <label>高度</label>
-                      <%= order_form.number_field :height, value: 1, min: 1, style: "width: 50%;" %>
+                      <%#= order_form.number_field :height, value: 1, min: 0, step: 0.01, style: "width: 50%;" %>
                     </div> -->
                     <div class="col-sm-12">
                       <label>备注</label>

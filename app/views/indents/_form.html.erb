@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-sm-2">
                   <label>数量</label>
-                  <%= order_form.number_field :number, min: 1, style: "width: 50%;", required: true, readOnly: true, data: {toggle: 'tooltip'}, title: '数量不可编辑' %>
+                  <%= order_form.number_field :number, min: 0, step: 0.01, style: "width: 50%;", required: true, readOnly: true, data: {toggle: 'tooltip'}, title: '数量不可编辑' %>
                 </div>
                 <div class="col-sm-2">
                   <label>厚度</label>
@@ -41,15 +41,15 @@
               <div class="row">
                 <!-- <div class="col-sm-2">
                   <label>长度</label>
-                  <%= order_form.number_field :length, min: 1, style: "width: 50%;", required: true %>
+                  <%#= order_form.number_field :length, min: 0, step: 0.01, style: "width: 50%;", required: true %>
                 </div>
                 <div class="col-sm-2">
                   <label>宽度</label>
-                  <%= order_form.number_field :width, min: 1, style: "width: 50%;", required: true %>
+                  <%#= order_form.number_field :width, min: 0, step: 0.01, style: "width: 50%;", required: true %>
                 </div>
                 <div class="col-sm-2">
                   <label>高度</label>
-                  <%= order_form.number_field :height, min: 1, style: "width: 50%;", required: true %>
+                  <%#= order_form.number_field :height, min: 0, step: 0.01, style: "width: 50%;", required: true %>
                 </div> -->
                 <div class="col-sm-10">
                   <label>备注</label>
