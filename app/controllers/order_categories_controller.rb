@@ -5,7 +5,7 @@ class OrderCategoriesController < ApplicationController
   # GET /order_categories.json
   def index
     @order_category = OrderCategory.new
-    @order_categories = OrderCategory.where(deleted: false)
+    @order_categories = OrderCategory.all
   end
 
   # POST /order_categories
@@ -17,6 +17,14 @@ class OrderCategoriesController < ApplicationController
     else
       redirect_to order_categories_path, error: '请检查订单类型名称，创建失败！'
     end
+  end
+
+  # PATCH/PUT /part_categories/1
+  # PATCH/PUT /part_categories/1.json
+  def update
+    oc = OrderCategory.find_by_id(params[:id])
+    oc.update_attributes(deleted: false) if params[:reset].present? && params[:reset]
+    redirect_to order_categories_path, notice: '订单类型编辑成功！'
   end
 
   # DELETE /order_categories/1

@@ -28,7 +28,6 @@
             <th>终端客户</th>
             <th>代理商</th>
             <th>备注</th>
-            <th>操作</th>
           </tr>
         </thead>
         <tbody>
@@ -47,7 +46,6 @@
             <td><%= u.order.indent.customer %></td>
             <td><%= u.order.indent.agent.try(:full_name) %></td>
             <td style="max-width:200px;"><%= u.note %></td>
-            <td><%= link_to '删除', u, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
           </tr>
           <% end %>
         </tbody>

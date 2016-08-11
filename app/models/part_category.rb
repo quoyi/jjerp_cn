@@ -5,11 +5,12 @@ class PartCategory < ActiveRecord::Base
   belongs_to :supply
   belongs_to :parent, class_name: 'PartCategory'
   validates :name, presence: true
-  validates :name, uniqueness: true
+  #validates :name, uniqueness: {scope: :parent_id}
   before_save :set_part_category
 
 
   def set_part_category
+    # 设置基本类型的 parent_id
     self.parent_id = 0 unless self.parent_id
   end
 end

@@ -31,7 +31,13 @@
             <td><%= mc.oftype_name %></td>
             <td><%= mc.name %></td>
             <td style="max-width:400px;"><%= mc.note %></td>
-            <td><%= link_to '删除', mc, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
+            <td>
+              <% if mc.deleted %>
+              <%= link_to '恢复', material_category_path(mc, reset: true), method: :patch, style: "color: green !important;" %>
+              <% else %>
+              <%= link_to '删除', mc, method: :delete, style: "color: red !important;", data: { confirm: '确认删除？' } %>
+              <% end %>
+            </td>
           </tr>
           <% end %>
         </tbody>
