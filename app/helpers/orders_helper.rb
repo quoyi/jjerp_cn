@@ -43,7 +43,7 @@ module OrdersHelper
                 # end
                 unit = Unit.new(
                   order_id: order.id,
-                  name: order.name + "-b-" + (index + 1).to_s,
+                  #name: order.name + "-B-" + (index + 1).to_s,
                   full_name: row[0],
                   ply: order.ply,
                   texture: order.texture,

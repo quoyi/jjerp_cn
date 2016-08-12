@@ -74,3 +74,11 @@ function setPartCategoryPrice(obj){
     }
   });
 }
+
+
+function setOrderUnitSize(obj){
+  var fields = $(obj).parents(".fields");
+  var length = fields.find(".order-unit-length").val();
+  var width = fields.find(".order-unit-width").val();
+  fields.find(".order-unit-size").val((Number(length) + 2) + "*" + (Number(width) + 2));
+}
