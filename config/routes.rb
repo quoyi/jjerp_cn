@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
+  resources :sent_lists
   resources :banks
-  resources :sents
+  resources :sents do
+    collection do
+      get :change
+    end
+  end
   resources :users, only: [:index, :edit, :update]
 
   resources :offers

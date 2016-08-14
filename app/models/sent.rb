@@ -1,3 +1,4 @@
 class Sent < ActiveRecord::Base
-  belongs_to :indent
+  belongs_to :sent_list
+  belongs_to :owner, polymorphic: true
 end

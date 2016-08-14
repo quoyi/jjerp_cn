@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160807140212) do
+ActiveRecord::Schema.define(version: 20160814081841) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",            limit: 255, default: "",    null: false
@@ -226,6 +226,7 @@ ActiveRecord::Schema.define(version: 20160807140212) do
     t.datetime "created_at",                                                                null: false
     t.datetime "updated_at",                                                                null: false
     t.boolean  "is_use_order_material",                                     default: false
+    t.decimal  "income",                            precision: 8, scale: 2
   end
 
   add_index "orders", ["indent_id"], name: "index_orders_on_indent_id", using: :btree
@@ -235,9 +236,11 @@ ActiveRecord::Schema.define(version: 20160807140212) do
     t.string  "unit_ids",   limit: 255
     t.string  "part_ids",   limit: 255
     t.string  "print_size", limit: 255
+    t.integer "order_id",   limit: 4
   end
 
   add_index "packages", ["indent_id"], name: "index_packages_on_indent_id", using: :btree
+  add_index "packages", ["order_id"], name: "index_packages_on_order_id", using: :btree
 
   create_table "part_categories", force: :cascade do |t|
     t.integer  "parent_id",  limit: 4,                           default: 1
@@ -316,8 +319,19 @@ ActiveRecord::Schema.define(version: 20160807140212) do
 
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
 
+  create_table "sent_lists", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.integer  "total",      limit: 4
+    t.string   "created_by", limit: 255
+    t.boolean  "deleted"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "sents", force: :cascade do |t|
-    t.integer  "indent_id",      limit: 4
+    t.integer  "owner_id",       limit: 4,                                         null: false
+    t.string   "owner_type",     limit: 255,                                       null: false
+    t.integer  "sent_list_id",   limit: 4
     t.string   "name",           limit: 255
     t.datetime "sent_at"
     t.string   "area",           limit: 255
@@ -333,8 +347,6 @@ ActiveRecord::Schema.define(version: 20160807140212) do
     t.datetime "created_at",                                                       null: false
     t.datetime "updated_at",                                                       null: false
   end
-
-  add_index "sents", ["indent_id"], name: "index_sents_on_indent_id", using: :btree
 
   create_table "supplies", force: :cascade do |t|
     t.string   "name",         limit: 255,                 null: false
@@ -474,6 +486,5 @@ ActiveRecord::Schema.define(version: 20160807140212) do
   add_foreign_key "cities", "provinces"
   add_foreign_key "districts", "cities"
   add_foreign_key "materials", "supplies"
-  add_foreign_key "sents", "indents"
   add_foreign_key "tasks", "orders"
 end
