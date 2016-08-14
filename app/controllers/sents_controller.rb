@@ -39,12 +39,13 @@ class SentsController < ApplicationController
   # POST /sents
   # POST /sents.json
   def create
-    # binding.pry
     @sent = Sent.new(sent_params)
 
     respond_to do |format|
       if @sent.save
-        format.html { redirect_to not_sent_indents_path, notice: '发货创建成功！' }
+        indent = Indent.find(@sent.indent_id)
+        indent.sent!
+        format.html { redirect_to sents_path, notice: '发货创建成功！' }
         format.json { render :show, status: :created, location: @sent }
       else
         format.html { render :new }
@@ -77,25 +78,6 @@ class SentsController < ApplicationController
     end
   end
 
-  def change
-    # binding.pry
-    if params[:id].present? && Sent.find_by_id(params[:id])
-      @sent = Sent.find_by_id(params[:id])
-    else
-      @sent = Sent.new()
-    end
-    
-    if params[:type] == 'indent'
-      @indent_or_order = Indent.find_by_id(params[:indent_or_order_id])
-    elsif params[:type] == 'order'
-      @indent_or_order = Order.find_by_id(params[:indent_or_order_id])
-    else
-      @indent_or_order = nil
-    end
-
-    render layout: false
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_sent
@@ -104,6 +86,6 @@ class SentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def sent_params
-      params.require(:sent).permit(:indent_id, :name, :sent_at, :area, :receiver, :contact, :cupboard, :robe, :door, :part, :collection, :collection, :logistics, :logistics_code, :owner_id, :owner_type)
+      params.require(:sent).permit(:indent_id, :name, :sent_at, :area, :receiver, :contact, :cupboard, :robe, :door, :part, :collection, :collection, :logistics, :logistics_code)
     end
 end

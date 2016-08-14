@@ -88,7 +88,7 @@ class IndentsController < ApplicationController
       create_offer(order)
       update_order_status(order)
     end
-    # update_indent_status(indent)
+    update_indent_status(indent)
     redirect_to indent_path(indent), notice: '生成报价单成功！'
   end
 
@@ -137,7 +137,6 @@ class IndentsController < ApplicationController
         part_ids = @order_parts.map(&:id)
         if (unit_ids - packaged_unit_ids).empty? && (part_ids-packaged_part_ids).empty?
           @indent.packaged!
-          
         end
       end
       if params[:length].present? && params[:width].present?

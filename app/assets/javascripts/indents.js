@@ -76,11 +76,11 @@ $(function() {
   });
   /****** 总订单 列表 添加收入 --- 订单价格、收支信息的计算逻辑  开始 ******/
 
-  // not_sent页面填写发货信息订单号
+
   $("#addSent").on('show.bs.modal', function(e) {
     if (e != null && e.relatedTarget != null) {
       var indent_id = e.relatedTarget.dataset.indent;
-      $("#indent_or_order_name").text(indent_id);
+      $("#sent_indent_id").val(indent_id);
     }
   });
 

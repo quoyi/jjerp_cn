@@ -6,8 +6,6 @@ class Order < ActiveRecord::Base
   has_many :units, dependent: :destroy
   has_many :parts, dependent: :destroy
   has_many :crafts, dependent: :destroy
-  has_many :packages, dependent: :destroy
-  has_one :sent, as: :owner, dependent: :destroy #一个总订单只有一个发货信息
   # 发货时间需在十天以后
   # validate :validate_require_time
   before_create :generate_order_code
