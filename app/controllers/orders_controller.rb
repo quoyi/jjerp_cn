@@ -63,7 +63,7 @@ class OrdersController < ApplicationController
       # 生成报价单，更新总订单、子订单状态
       create_offer(@order)
       update_order_status(@order.reload)
-      update_indent_status(@order.indent)
+      # update_indent_status(@order.indent)
       
       redirect_to :back, notice: '子订单创建成功！'
     else
@@ -85,7 +85,7 @@ class OrdersController < ApplicationController
       # 生成报价单，更新总订单、子订单状态
       create_offer(@order)
       update_order_status(@order.reload)
-      update_indent_status(@order.indent)
+      # update_indent_status(@order.indent)
       redirect_to indent_path(@order.indent), notice: '子订单编辑成功！'
     else
       redirect_to :back, error: '子订单编辑失败！请仔细检查后再提交。'
@@ -111,7 +111,7 @@ class OrdersController < ApplicationController
     update_order_and_indent(@order)
     create_offer(@order)
     update_order_status(@order.reload)
-    update_indent_status(@order.indent)
+    # update_indent_status(@order.indent)
     redirect_to :back, notice: msg
     # 有上传文件时
     # if params[:file].original_filename !~ /.csv$/
