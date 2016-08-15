@@ -174,20 +174,17 @@ class OrdersController < ApplicationController
             id
           end
         end
-        binding.pry
         # 保存包装记录
         package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','))
         package.save!
         # 更新包装状态（已打印）
         Unit.where(id: unit_ids.compact.uniq).update_all(is_printed: true)
         Part.where(id: part_ids.compact.uniq).update_all(is_printed: true)
-        binding.pry
         # 查出已打包（已保存）的部件、配件id，用于界面显示
         packaged_unit_ids = @order.packages.map(&:unit_ids)
         packaged_part_ids = @order.packages.map(&:part_ids)
         unit_ids = @order_units.map(&:id)
         part_ids = @order_parts.map(&:id)
-        binding.pry
         # 订单的所有部件、配件均已打包，修改订单的状态为“已打包”
         if (unit_ids - packaged_unit_ids).empty? && (part_ids-packaged_part_ids).empty?
           @order.packaged!
