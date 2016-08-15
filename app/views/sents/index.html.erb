@@ -44,6 +44,7 @@
         <thead>
           <tr>
             <th>订单号</th>
+            <th>状态</th>
             <th>发货时间</th>
             <th>地区</th>
             <th>收货人</th>
@@ -60,8 +61,21 @@
         <tbody>
           <% @sents.each do |sent| %>
           <tr>
-            <td><%= link_to sent.indent.name, sent.indent, data: {toggle: 'tooltip'}, title: '查看订单详细信息' %></td>
-            <td><%= sent.sent_at.strftime("%Y-%m-%d") %></td>
+            
+            <% if sent.owner_type == Indent.name %>
+            <% indent = Indent.find_by_id(sent.owner_id) %>
+            <td><%= link_to indent.name, indent, data: {toggle: 'tooltip'}, title: '查看订单详细信息' %></td>
+            <td><%= indent.status_name %></td>
+            <% elsif sent.owner_type == Order.name %>
+            <% order = Order.find_by_id(sent.owner_id) %>
+            <td><%= link_to order.name, order, data: {toggle: 'tooltip'}, title: '查看订单详细信息' %></td>
+            <td><%= order.status_name %></td>
+            <% else %>
+              <td>订单错误</td>
+              <td></td>
+            <% end %>
+            </td>
+            <td><%= sent.sent_at.present? ? sent.sent_at.strftime("%Y-%m-%d") : '无回执' %></td>
             <td><%= sent.area %></td>
             <td><%= sent.receiver %></td>
             <td><%= sent.contact %></td>
@@ -71,7 +85,13 @@
             <td><%= sent.part %></td>
             <td><%= sent.collection %></td>
             <td><%= sent.logistics %></td>
-            <td><%= sent.logistics_code %></td>
+            <td>
+            <% if sent.logistics_code.present? %>
+              <%= sent.logistics_code %>
+            <% else %>
+              <%= link_to "填写", replenish_sents_path(id: sent.id), data: {toggle: 'modal', target: '#replenishSent'}, title: '填写发货信息', class: 'btn btn-xs btn-primary' %>
+            <% end %>
+            </td>
             <!-- <td><%= link_to '编辑', edit_sent_path(sent) %></td> -->
             <!-- <td><%= link_to '删除', sent, method: :delete, data: { confirm: '你确定要删除吗?' } %></td> -->
           </tr>
@@ -81,3 +101,15 @@
     </div>
   </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="replenishSent" tabindex="-1" role="dialog" aria-labelledby="replenishSentLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" style="width: 50%;">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$("#replenishSent").on("hidden.bs.modal", function(e){
+  $(this).removeData("bs.modal");
+});
+</script>

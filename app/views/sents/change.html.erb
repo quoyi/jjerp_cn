@@ -1,0 +1,55 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="addSentLabel"> 发货信息 
+    <small class="text-info" style="margin-left: 10px;">
+      订单号：<%= @indent_or_order.name %>&nbsp;&nbsp;&nbsp;&nbsp;
+      <% if @indent_or_order.class == Indent %>
+        代理商：<%= @indent_or_order.agent.full_name %>
+        <% customer =  @indent_or_order.customer %>
+        <% logistics = @indent_or_order.logistics %>
+      <% elsif @indent_or_order.class == Order %>
+        <% order_indent = @indent_or_order.indent %>
+        代理商：<%= order_indent.agent.full_name %>
+        <% customer = order_indent.customer %>
+        <% logistics = order_indent.logistics %>
+      <% else %>
+      <% end %>
+    </small>
+  </h4>
+</div>
+<%= form_for(@sent, html: {class: "form-inline"}) do |f| %>
+<div class="modal-body">
+  <%= f.hidden_field :owner_id, value: @indent_or_order.id if @sent.new_record? %>
+  <%= f.hidden_field :owner_type, value: @indent_or_order.class.name if @sent.new_record? %>
+  <table class="text-center" style="width: 100%;">
+    <tr>
+      <td><label>地&nbsp;&nbsp;&nbsp;&nbsp;区</label></td>
+      <td><%= f.text_field :area, class: 'form-control' %></td>
+      <td><label><span class="require">*</span>收货人</label></td>
+      <td><%= f.text_field :receiver, value: customer, class: 'form-control', required: true %></td>
+      <td><label><span class="require">*</span>联系人</label></td>
+      <td><%= f.text_field :contact, class: 'form-control', required: true %></td>
+    </tr>
+    <tr>
+      <td><label>代&nbsp;&nbsp;&nbsp;&nbsp;收</label></td>
+      <td><%= f.number_field :collection, class: 'form-control', min: 0, step: 0.01, style: "margin: 5px 0; width: 196px;" %></td>
+      <td><label><span class="require">*</span>物&nbsp;&nbsp;&nbsp;&nbsp;流</label></td>
+      <td><%= f.text_field :logistics, value: logistics, class: 'form-control' %></td>
+      <td><%= f.label '橱柜' %></td>
+      <td><%= f.number_field :cupboard, class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %></td>
+    </tr>
+    <tr>
+      <td><%= f.label '衣柜' %></td>
+      <td><%= f.number_field :robe, class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %></td>
+      <td><%= f.label '门' %></td>
+      <td><%= f.number_field :door, class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %></td>
+      <td><%= f.label '配件' %></td>
+      <td><%= f.number_field :part, class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %></td>
+    </tr>
+  </table>
+</div>
+<div class="modal-footer">
+  <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
+  <%= f.submit '提交', class: 'btn btn-primary' %>
+</div>
+<% end %>

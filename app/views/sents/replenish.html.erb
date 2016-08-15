@@ -1,0 +1,39 @@
+<!-- Modal -->
+<!-- <div class="modal fade" id="updateSentInfo" tabindex="-1" role="dialog" aria-labelledby="updateSentInfoLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"> -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="replenishSentLabel"> 发货单 
+          <small>
+            <% if @sent.owner_type == Indent.name %>
+            <% indent = Indent.find_by_id(@sent.owner_id) %>
+            <%= link_to indent.name, indent, data: {toggle: 'tooltip'}, title: '查看订单详细信息' %>
+            <% elsif @sent.owner_type == Order.name %>
+            <% order = Order.find_by_id(@sent.owner_id) %>
+            <%= link_to order.name, order, data: {toggle: 'tooltip'}, title: '查看订单详细信息' %>
+            <% else %>
+              订单错误
+            <% end %>
+          </small>
+        </h4>
+      </div>
+      <%= form_for @sent do |f| %>
+      <div class="modal-body">
+        <table class="text-center" style="width: 100%;">
+          <tr>
+            <td><label><span class="require">*</span>发货时间</label></td>
+            <td><%= f.date_field :sent_at, data: { provide: 'datepicker'}, required: true %></td>
+            <td data-toggle="tooltip" title="必填项"><label><span class="require">*</span>物流单号</label></td>
+            <td><%= f.text_field :logistics_code, required: true, placeholder: '请输入物流回执单号' %></td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
+        <%= f.submit '提交', class: 'btn btn-primary' %>
+      </div>
+      <% end %>
+<!--     </div>
+  </div>
+</div> -->

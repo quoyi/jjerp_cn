@@ -4,6 +4,7 @@ class Indent < ActiveRecord::Base
   has_many :incomes, dependent: :destroy
   # has_many :packages, dependent: :destroy
   belongs_to :agent
+  has_one :sent, as: :owner, dependent: :destroy #一个总订单只有一个发货信息
   # 验证唯一性
   validates_uniqueness_of :name
   validates_presence_of :name, :agent_id, :customer, :verify_at, :require_at
