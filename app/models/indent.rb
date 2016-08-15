@@ -2,7 +2,7 @@ class Indent < ActiveRecord::Base
   has_many :offers, dependent: :destroy
   has_many :orders, dependent: :destroy
   has_many :incomes, dependent: :destroy
-  has_many :packages, dependent: :destroy
+  # has_many :packages, dependent: :destroy
   belongs_to :agent
   # 验证唯一性
   validates_uniqueness_of :name

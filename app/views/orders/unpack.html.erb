@@ -1,0 +1,38 @@
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title">
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 未包装订单 <small>列表</small></h2>
+    </div>
+  </div>
+  <!-- Page title -->
+  <div class="content-box-large box-with-header">
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr class="info">
+            <th class="col-sm-2" data-toggle="tooltip" title="点击开始打包">订单号</th>
+            <th class="col-sm-1">金额</th>
+            <th class="col-sm-3">终端客户</th>
+            <th class="col-sm-2">代理商</th>
+            <th class="col-sm-2">接单时间</th>
+            <th class="col-sm-1">状态</th>
+            <th class="col-sm-1">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @orders.each do |order|%>
+          <tr>
+            <td data-toggle='tooltip' title='订单打包'><%= link_to "打包 " + order.name, package_order_path(order), class: 'btn btn-primary btn-xs'%></td>
+            <td><%= order.price %></td>
+            <td><%= order.indent.customer %></td>
+            <td><%= order.indent.agent.try(:full_name) %></td>
+            <td><%= order.created_at.localtime.strftime("%Y-%m-%d")%></td>
+            <td><%= order.status_name %></td>
+            <td><%= link_to '查看订单', order_path(order), class: 'detail-link', data: {toggle: 'tooltip'}, title: '查看订单详细' %></td>
+          </tr>
+          <%end%>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

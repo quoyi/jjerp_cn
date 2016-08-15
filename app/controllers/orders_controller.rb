@@ -85,7 +85,7 @@ class OrdersController < ApplicationController
       # 生成报价单，更新总订单、子订单状态
       create_offer(@order)
       update_order_status(@order.reload)
-      update_indent_status(@order.indent)
+      # update_indent_status(@order.indent)
       redirect_to indent_path(@order.indent), notice: '子订单编辑成功！'
     else
       redirect_to :back, error: '子订单编辑失败！请仔细检查后再提交。'
@@ -126,11 +126,106 @@ class OrdersController < ApplicationController
     # end
   end
 
+  # 自定义报价
   def custom_offer
     @indent = @order.indent
     @unit = Unit.new
     @material = Material.new
     @part_category = PartCategory.new
+  end
+
+  # 未打包
+  def unpack
+    @orders = Order.where("status >= ? and status <= ?", Order.statuses[:producing], Order.statuses[:packaged])
+  end
+
+  # GET 打包页面
+  def package
+    @order = Order.find_by_id(params[:id])
+    @order_units = @order.units
+    @order_parts = @order.parts
+    @packages = @order.packages
+    # @indent = Indent.find(params[:id])
+    # @order_units = @indent.orders.map(&:units).flatten
+    # @order_parts = @indent.orders.map(&:parts).flatten
+    # @packages = Indent.find(params[:id]).packages
+    # ids =>
+    #    {"1"=>["order_unit_10", "order_unit_11", "order_unit_12", "order_unit_13"],
+    # "2"=>["order_unit_14", "order_unit_15", "order_unit_16", "order_unit_17", "order_unit_18"],
+    # "3"=>["order_unit_19", "order_unit_20", "order_unit_21", "order_unit_22", "order_unit_23", "order_unit_24"],
+    # "4"=>["order_unit_25", "order_part_7", "order_part_8"]}
+    # 这些值需存在数据库表package中
+    # 打印尺寸需存在users表的default_print_size
+    if params[:order_unit_ids].present? &&  params[:order_unit_ids] != "{}"
+      label_size = params[:order_label_size].to_i if params[:order_label_size]
+      ids = ActiveSupport::JSON.decode(params[:order_unit_ids])
+
+      ids.each_pair do |key,values|
+        # package.print_size =
+        unit_ids = values.map  do |v|
+          if v =~ /order_unit/
+            id = v.gsub(/order_unit_/,'')
+            id
+          end
+        end
+        part_ids = values.map do |v|
+          if v =~ /order_part/
+            id = v.gsub(/order_part_/,'')
+            id
+          end
+        end
+        binding.pry
+        # 保存包装记录
+        package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','))
+        package.save!
+        # 更新包装状态（已打印）
+        Unit.where(id: unit_ids.compact.uniq).update_all(is_printed: true)
+        Part.where(id: part_ids.compact.uniq).update_all(is_printed: true)
+        binding.pry
+        # 查出已打包（已保存）的部件、配件id，用于界面显示
+        packaged_unit_ids = @order.packages.map(&:unit_ids)
+        packaged_part_ids = @order.packages.map(&:part_ids)
+        unit_ids = @order_units.map(&:id)
+        part_ids = @order_parts.map(&:id)
+        binding.pry
+        # 订单的所有部件、配件均已打包，修改订单的状态为“已打包”
+        if (unit_ids - packaged_unit_ids).empty? && (part_ids-packaged_part_ids).empty?
+          @order.packaged!
+        end
+      end
+
+      # （打印）标签属性设置
+      if params[:length].present? && params[:width].present?
+        @length = params[:length].to_i
+        @width = params[:width].to_i
+        current_user.print_size = @length.to_s + '*'+ @width.to_s
+        current_user.save! if current_user.changed?
+      elsif current_user.print_size
+        @length = current_user.print_size.split('*').first.to_i
+        @width = current_user.print_size.split('*').last.to_i
+      else
+        @length = 80
+        @width = 60
+      end
+
+      # 返回结果
+      respond_to do |format|
+        format.html {render :layout => false}
+        format.pdf do
+          # 打印尺寸毫米（长宽）
+          pdf = OrderPdf.new(@length, @width, label_size <= 0 ? 1 : label_size , @order.id)
+          send_data pdf.render, filename: "order_#{@order.id}.pdf",
+            type: "application/pdf",
+            disposition: "inline"
+        end
+      end
+    elsif params[:format] == 'pdf'
+      redirect_to package_order_path(@order)
+    else
+      respond_to do |format|
+        format.html
+      end
+    end
   end
 
 
