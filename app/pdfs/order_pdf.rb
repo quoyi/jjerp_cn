@@ -4,7 +4,7 @@ class OrderPdf < Prawn::Document
   def initialize(length, width, ids, order_id)
     super(:page_size => [mm2pt(length), mm2pt(width)], :margin => [2, 2])
     font "#{Rails.root}/app/assets/fonts/simfang.ttf", size: 5
-    @order = Indent.find(order_id)
+    @order = Order.find_by_id(order_id)
     @ids = ids
     @length = mm2pt(length) - 4
 
@@ -22,12 +22,12 @@ class OrderPdf < Prawn::Document
       end
       text "高档定橱柜衣柜", :align => :center, :size => 20
       text "编号:#{@order.name}", :size => 14
-      text "代理商:#{@order.agent.full_name}", :size => 14
-      text "地址: #{@order.customer}", :size => 14
+      text "代理商:#{@order.indent.agent.full_name}", :size => 14
+      text "地址: #{@order.indent.customer}", :size => 14
       text "产品:家具", :size => 14
       text "共#{@ids}件", :size => 14
       text "第#{@ids}-#{i+1}件", :size => 14
-      text "货到：#{@order.agent.address}", :size => 18
+      text "货到：#{@order.indent.agent.address}", :size => 18
     end
   end
 

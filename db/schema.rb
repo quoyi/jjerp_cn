@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160807140212) do
+ActiveRecord::Schema.define(version: 20160815031813) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",            limit: 255, default: "",    null: false
@@ -231,13 +231,13 @@ ActiveRecord::Schema.define(version: 20160807140212) do
   add_index "orders", ["indent_id"], name: "index_orders_on_indent_id", using: :btree
 
   create_table "packages", force: :cascade do |t|
-    t.integer "indent_id",  limit: 4,   null: false
     t.string  "unit_ids",   limit: 255
     t.string  "part_ids",   limit: 255
     t.string  "print_size", limit: 255
+    t.integer "order_id",   limit: 4
   end
 
-  add_index "packages", ["indent_id"], name: "index_packages_on_indent_id", using: :btree
+  add_index "packages", ["order_id"], name: "index_packages_on_order_id", using: :btree
 
   create_table "part_categories", force: :cascade do |t|
     t.integer  "parent_id",  limit: 4,                           default: 1

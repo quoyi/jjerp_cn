@@ -114,13 +114,13 @@
         <% if current_user.permission?("IndentsController", "unpack") ||
         current_user.permission?("OrdersController", "producing")
         %>
-            <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name) && ['unpack', 'producing'].include?(action_name) %>">
+            <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name) && ['unpack', 'producing', 'package'].include?(action_name) %>">
                 <a href="#">
                     <i class="fa fa-wrench"></i> 生产任务 <span class="caret pull-right"></span>
                 </a>
                 <ul>
                     <li class='<%="#{'active' if controller_name == 'orders' and action_name == 'producing'}" %>'><a href="/orders/producing">生产中</a></li>
-                    <li class='<%="#{'active' if controller_name == 'indents' and action_name == 'unpack'}" %>'><a href="/indents/unpack">包装</a></li>
+                    <li class='<%="#{'active' if controller_name == 'orders' and ['unpack', 'package'].include?(action_name) }" %>'><a href="/orders/unpack">包装</a></li>
                 </ul>
             </li>
         <% end %>

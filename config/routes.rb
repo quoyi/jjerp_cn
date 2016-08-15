@@ -36,9 +36,12 @@ Rails.application.routes.draw do
       post :import
       get :producing
       get :export
+      get :unpack
     end
     member  do
       get :custom_offer
+      get :package
+      post :package
     end
   end
   resources :departments
@@ -48,14 +51,6 @@ Rails.application.routes.draw do
       get :not_sent
       get :export_offer
     end
-    member do
-      get :package
-      post :package
-    end
-    collection do
-      get :unpack
-    end
-    
   end
   resources :permissions
   resources :roles

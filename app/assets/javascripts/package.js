@@ -6,6 +6,10 @@ function remove_order(row) {
   }
 }
 
+/**
+ * 包装 -- 下一页 按钮
+ * @return {Function} [description]
+ */
 function next() {
   var old_table = $("#old_table").find("tbody").html().trim();
 
@@ -49,6 +53,10 @@ function next() {
 
 }
 
+/**
+ * 包装 -- 上一页 按钮
+ * @return {[type]} [description]
+ */
 function previous() {
   var current_index = parseInt(localStorage.getItem("index"));
   var val = $("#new_table").find("tbody").html();
@@ -72,6 +80,11 @@ function previous() {
   return false;
 }
 
+/**
+ * 包装 -- 批量打印 按钮
+ * @param  {[type]} obj [description]
+ * @return {[type]}     [description]
+ */
 function print_pages(obj) {
   var order_units_size = $(obj).data("units");
   if (order_units_size == "" || order_units_size == 0) {
@@ -103,6 +116,10 @@ function print_pages(obj) {
   // return false;
 }
 
+/**
+ * 包装 -- 打印当前页 按钮
+ * @return {[type]} [description]
+ */
 function print_current_page() {
   var old_table = $("#old_table").find("tbody").html().trim();
 
