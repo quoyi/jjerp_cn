@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @sent_list.name %>
+</p>
+
+<p>
+  <strong>Total:</strong>
+  <%= @sent_list.total %>
+</p>
+
+<p>
+  <strong>Created by:</strong>
+  <%= @sent_list.created_by %>
+</p>
+
+<p>
+  <strong>Deleted:</strong>
+  <%= @sent_list.deleted %>
+</p>
+
+<%= link_to 'Edit', edit_sent_list_path(@sent_list) %> |
+<%= link_to 'Back', sent_lists_path %>

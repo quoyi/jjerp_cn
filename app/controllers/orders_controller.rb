@@ -63,7 +63,7 @@ class OrdersController < ApplicationController
       # 生成报价单，更新总订单、子订单状态
       create_offer(@order)
       update_order_status(@order.reload)
-      update_indent_status(@order.indent)
+      # update_indent_status(@order.indent)
       
       redirect_to :back, notice: '子订单创建成功！'
     else
@@ -111,7 +111,7 @@ class OrdersController < ApplicationController
     update_order_and_indent(@order)
     create_offer(@order)
     update_order_status(@order.reload)
-    update_indent_status(@order.indent)
+    # update_indent_status(@order.indent)
     redirect_to :back, notice: msg
     # 有上传文件时
     # if params[:file].original_filename !~ /.csv$/
@@ -181,10 +181,11 @@ class OrdersController < ApplicationController
         Unit.where(id: unit_ids.compact.uniq).update_all(is_printed: true)
         Part.where(id: part_ids.compact.uniq).update_all(is_printed: true)
         # 查出已打包（已保存）的部件、配件id，用于界面显示
-        packaged_unit_ids = @order.packages.map(&:unit_ids)
-        packaged_part_ids = @order.packages.map(&:part_ids)
+        packaged_unit_ids = @order.packages.map(&:unit_ids).join(',').split(',').uniq.map(&:to_i)
+        packaged_part_ids = @order.packages.map(&:part_ids).join(',').split(',').uniq.map(&:to_i)
         unit_ids = @order_units.map(&:id)
         part_ids = @order_parts.map(&:id)
+        binding.pry
         # 订单的所有部件、配件均已打包，修改订单的状态为“已打包”
         if (unit_ids - packaged_unit_ids).empty? && (part_ids-packaged_part_ids).empty?
           @order.packaged!

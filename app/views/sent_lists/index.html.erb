@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Sent Lists</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Total</th>
+      <th>Created by</th>
+      <th>Deleted</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sent_lists.each do |sent_list| %>
+      <tr>
+        <td><%= sent_list.name %></td>
+        <td><%= sent_list.total %></td>
+        <td><%= sent_list.created_by %></td>
+        <td><%= sent_list.deleted %></td>
+        <td><%= link_to 'Show', sent_list %></td>
+        <td><%= link_to 'Edit', edit_sent_list_path(sent_list) %></td>
+        <td><%= link_to 'Destroy', sent_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sent list', new_sent_list_path %>

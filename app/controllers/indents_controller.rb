@@ -88,12 +88,13 @@ class IndentsController < ApplicationController
       create_offer(order)
       update_order_status(order)
     end
-    update_indent_status(indent)
+    # update_indent_status(indent)
     redirect_to indent_path(indent), notice: '生成报价单成功！'
   end
 
+  # 未发货
   def not_sent
-    @indents = Indent.where(status:Indent.statuses[:packaged])
+    @indents = Indent.where("status >= ? and status <= ?", Indent.statuses[:producing], Indent.statuses[:sent])
     @sent = Sent.new()
   end
 
