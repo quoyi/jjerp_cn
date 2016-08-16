@@ -131,7 +131,11 @@
                 </td> -->
                 <td>
                   <%= link_to '编辑', edit_indent_path(i), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title:'编辑总订单' %>
-                  <%= link_to '到款', '#', class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', indent: i.id, amount: i.amount, arrear: i.arrear, username: current_user.name}, id: 'addIncomesBtn' %>
+                  <% if i.amount.to_i == 0 %>
+                    <button class="btn btn-primary btn-xs" disabled="true">到款</button>
+                  <%  else %>
+                      <%= link_to '到款', '#', class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', indent: i.id, amount: i.amount, arrear: i.arrear, username: current_user.name}, id: 'addIncomesBtn' %>
+                  <% end %>
                   <%#= link_to '生产', indent_path(id: i.id, indent: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
                 </td>
               </tr>

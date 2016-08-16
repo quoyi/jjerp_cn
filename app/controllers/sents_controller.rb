@@ -1,6 +1,6 @@
 class SentsController < ApplicationController
   before_action :set_sent, only: [:show, :edit, :update, :destroy]
-
+  include OrdersHelper
   # GET /sents
   # GET /sents.json
   def index
@@ -43,9 +43,17 @@ class SentsController < ApplicationController
 
     respond_to do |format|
       if @sent.save
-        format.html { redirect_to sents_path, notice: '发货创建成功！' }
+        if @sent.owner_type == 'Indent'
+          @sent.owner.orders.each do |order|
+            o_sent = Sent.new(sent_params)
+            o_sent.owner_id = order.id
+            o_sent.owner_type = order.class.name
+            o_sent.save!
+          end
+        end
+        format.html { redirect_to not_sent_indents_path, notice: '发货创建成功！' }
       else
-        format.html { redirect_to sents_path, notice: '发货创建失败！' }
+        format.html { redirect_to not_sent_indents_path, notice: '发货创建失败！' }
       end
     end
   end
@@ -76,7 +84,19 @@ class SentsController < ApplicationController
   # PATCH/PUT /sents/1.json
   def update
     respond_to do |format|
+      # binding.pry
       if @sent.update(sent_params)
+
+        if @sent.owner_type == 'Indent'
+          @sent.owner.orders.each do |order|
+            o_sent = order.sent
+            o_sent.update_attributes(sent_params)
+            o_sent.owner_id = order.id
+            o_sent.owner_type = order.class.name
+            o_sent.save!
+          end
+        end
+
         # 发货单的发货时间、物流回执单号不为空时，更新订单状态
         if @sent.sent_at.present? && @sent.logistics_code.present?
           if @sent.owner_type == Indent.name
@@ -88,9 +108,30 @@ class SentsController < ApplicationController
             # 更新订单状态错误
           end
         end
-        format.html { redirect_to sents_path, notice: '发货单编辑成功！' }
+        format.html { redirect_to not_sent_indents_path, notice: '发货单编辑成功！' }
       else
-        format.html { redirect_to sents_path, error: '发货单编辑失败！' }
+        format.html { redirect_to not_sent_indents_path, error: '发货单编辑失败！' }
+      end
+    end
+  end
+
+  def download
+    sents = Sent.where(id: params[:sent][:ids].split(','))
+    sent_list = SentList.create(total: sents.size)
+    sents.each do |s|
+      s.sent_list_id = sent_list.id
+      s.save!
+      s.owner.sending!
+      update_order_status(s.owner)
+    end
+    # binding.pry
+    respond_to do |format|
+      format.csv do
+        filename = "发货清单_"
+        datetime = Time.new.strftime('%Y%m%d%H%M%S')
+        filename += datetime
+        response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
+        render text: to_csv(sents)
       end
     end
   end
@@ -102,6 +143,39 @@ class SentsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to sents_url, notice: 'Sent was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def to_csv(object)
+    return [] if object.nil?
+    # make excel using utf8 to open csv file
+    head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
+    total = 0
+    CSV.generate(head) do |csv|
+      headers = [Time.new.strftime('%Y-%m-%d'),'发货清单']
+      csv << headers
+      # 获取字段名称
+      column_names = [ '序号', '地区', '收货人', '联系方式', '订单编号', '橱', '衣', '门', '配', '合计', '代收', '物流名称', '货号']
+      csv << column_names
+      object.each_with_index do |obj,i|
+        total += obj.cupboard + obj.robe + obj.door + obj.part
+        values = []
+        values << i+1
+        values << obj.area
+        values << obj.receiver
+        values << "\t" + obj.contact
+        values << obj.owner.name
+        values << obj.cupboard
+        values << obj.robe
+        values << obj.door
+        values << obj.part
+        values << obj.cupboard + obj.robe + obj.door + obj.part
+        values << obj.collection
+        values << obj.logistics
+        csv << values
+      end
+      footer = [ '', '', '', '', '', '', '', '', '', '', "打单时间:#{Time.new.strftime('%Y-%m-%d %H:%M:%S')}", "合计#{total}", '']
+      csv << footer
     end
   end
 

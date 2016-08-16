@@ -2,8 +2,13 @@
   <div class="content-box-header panel-heading">
     <!-- Page title -->
     <div class="panel-title">
-      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 待发货 <small>列表</small>
-      </h2>
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 待发货 <small>列表</small></h2>
+      <div class="pull-right panel-options">
+        <%= form_for(:sent, html: { class: "form-inline", id: "batch_set"}, method: 'get') do |f| %>
+          <input type="hidden" id="sents_ids" name="sent[ids]">
+          <button class="btn btn-primary" onclick = "return download()">下载</button>
+        <% end %>
+      </div>
     </div>
   </div>
   <div class="content-box-large box-with-header">
@@ -30,6 +35,11 @@
               <table class="table table-border">
                 <thead>
                   <tr>
+                    <td>全选</br>
+                      <% if indent.sent || indent.orders.detect{|o| o.sent && o.packaged? } %>
+                      <input type="checkbox" name="checkbox" onClick="CheckSelect(<%= indent.id%>)" checked>
+                      <% end %>
+                    </td>
                     <td>子订单编号</td>
                     <td>类型</td>
                     <td>包装件数</td>
@@ -39,7 +49,13 @@
                 </thead>
                 <tbody>
                   <% indent.orders.each do |order| %>
+                  <% next unless order.packaged? %>
                   <tr>
+                    <td>
+                      <% if order.sent %>
+                      <input type="checkbox" name="checkbox" checked class="index_checkbox checkbox-<%= indent.id%>" value="<%=order.sent.id%>" >
+                      <%end%>
+                    </td>
                     <td><%= order.name %></td>
                     <td><%= order.order_category.name %></td>
                     <td><%= order.packages.size %></td>

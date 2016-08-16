@@ -1,33 +1,25 @@
-<p id="notice"><%= notice %></p>
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title">
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 发货清单 <small>列表</small> </h2>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr>
+            <th>订单号</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sent_lists.each do |sent_list| %>
+          <tr>
 
-<h1>Listing Sent Lists</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Total</th>
-      <th>Created by</th>
-      <th>Deleted</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @sent_lists.each do |sent_list| %>
-      <tr>
-        <td><%= sent_list.name %></td>
-        <td><%= sent_list.total %></td>
-        <td><%= sent_list.created_by %></td>
-        <td><%= sent_list.deleted %></td>
-        <td><%= link_to 'Show', sent_list %></td>
-        <td><%= link_to 'Edit', edit_sent_list_path(sent_list) %></td>
-        <td><%= link_to 'Destroy', sent_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Sent list', new_sent_list_path %>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

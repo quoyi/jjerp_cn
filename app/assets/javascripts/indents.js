@@ -155,4 +155,49 @@ function getMaterialPrice(obj){
     }
   });
 }
+
+
+//全选和反选
+function CheckSelect(id){
+  var check_boxes = $('.checkbox-'+id);
+  for ( var i = 0; i < check_boxes.length; i++)  
+  {  
+    // 提取控件  
+    var checkbox = check_boxes[i];  
+    // 检查是否是指定的控件  
+    if (checkbox.checked === false)  
+    {  
+      // 正选  
+      checkbox.checked = true;  
+    }  
+    else if (checkbox.checked === true)  
+    {  
+      // 反选  
+      checkbox.checked = false;  
+    }
+  }  
+}
+
+function download(){
+  var ids = new Array();
+  var sents_ids = $("#sents_ids");  
+  var check_boxes = $('.index_checkbox');
+  for ( var i = 0; i < $('.index_checkbox').length; i++){ 
+    if(check_boxes[i].checked){
+      ids.push(check_boxes[i].value);
+    }
+  }
+  if(ids.length == 0){
+    alert("请先选中所要下载的发货信息！");
+    return false;
+  }
+
+  sents_ids.val(ids);
+
+  url = "/sents/download.csv";
+  $("#batch_set").attr('action', url);
+}
+
+
+
 /****** 总订单 新建 子订单 --- 价格 与 板料厚度、材质、颜色 的联动逻辑  结束 ******/
