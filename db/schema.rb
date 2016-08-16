@@ -339,8 +339,8 @@ ActiveRecord::Schema.define(version: 20160815072837) do
     t.integer  "door",           limit: 4,                           default: 0
     t.integer  "part",           limit: 4,                           default: 0
     t.decimal  "collection",                 precision: 8, scale: 2, default: 0.0
-    t.string   "logistics",      limit: 255,                                       null: false
-    t.string   "logistics_code", limit: 255,                                       null: false
+    t.string   "logistics",      limit: 255,                         default: "",  null: false
+    t.string   "logistics_code", limit: 255,                         default: "",  null: false
     t.datetime "created_at",                                                       null: false
     t.datetime "updated_at",                                                       null: false
   end
