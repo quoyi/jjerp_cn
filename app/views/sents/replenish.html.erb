@@ -22,6 +22,7 @@
       <div class="modal-body">
         <table class="text-center" style="width: 100%;">
           <tr>
+            <%= f.hidden_field :id, value: @sent.id %>
             <td><label><span class="require">*</span>发货时间</label></td>
             <td><%= f.date_field :sent_at, data: { provide: 'datepicker'}, required: true %></td>
             <td data-toggle="tooltip" title="必填项"><label><span class="require">*</span>物流单号</label></td>

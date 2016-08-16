@@ -75,7 +75,6 @@ class SentsController < ApplicationController
   # PATCH/PUT /sents/1
   # PATCH/PUT /sents/1.json
   def update
-    
     respond_to do |format|
       if @sent.update(sent_params)
         # 发货单的发货时间、物流回执单号不为空时，更新订单状态
@@ -114,7 +113,7 @@ class SentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def sent_params
-      params.require(:sent).permit(:indent_id, :name, :sent_at, :area, :receiver, :contact, :cupboard, :robe, :door, 
+      params.require(:sent).permit(:id, :sent_list_id, :name, :sent_at, :area, :receiver, :contact, :cupboard, :robe, :door, 
                                    :part, :collection, :collection, :logistics, :logistics_code, :owner_id, :owner_type)
     end
 end
