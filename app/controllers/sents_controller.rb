@@ -44,7 +44,9 @@ class SentsController < ApplicationController
     respond_to do |format|
       if @sent.save
         if @sent.owner_type == 'Indent'
+          # 所有已打包的子订单添加发货记录
           @sent.owner.orders.each do |order|
+            next unless order.packaged?
             o_sent = Sent.new(sent_params)
             o_sent.owner_id = order.id
             o_sent.owner_type = order.class.name
@@ -87,7 +89,9 @@ class SentsController < ApplicationController
       if @sent.update(sent_params)
 
         if @sent.owner_type == 'Indent'
+          # 所有已打包的子订单添加发货记录
           @sent.owner.orders.each do |order|
+            next unless order.packaged?
             o_sent = order.sent
             o_sent.update_attributes(sent_params)
             o_sent.owner_id = order.id
