@@ -195,6 +195,7 @@ class OrdersController < ApplicationController
         # 订单的所有部件、配件均已打包，修改订单的状态为“已打包”
         if (unit_ids - packaged_unit_ids).empty? && (part_ids-packaged_part_ids).empty?
           @order.packaged!
+          update_order_status(@order)
         end
       end
 
