@@ -136,7 +136,14 @@ class OrdersController < ApplicationController
 
   # 未打包
   def unpack
-    @orders = Order.where("status >= ? and status <= ?", Order.statuses[:producing], Order.statuses[:packaged])
+    @orders = Order.where(status: Order.statuses[:producing])
+    @orders.each do |order|
+      if order.status == "producing" && order.units.size == 0 && order.parts.size == 0 && order.crafts.size != 0
+        order.packaged!
+        update_order_status(order)
+      end
+    end
+    @orders = @orders.reload#.where(status: Order.statuses[:producing])
   end
 
   # GET 打包页面
