@@ -51,9 +51,9 @@ class SentsController < ApplicationController
             o_sent.save!
           end
         end
-        format.html { redirect_to not_sent_indents_path, notice: '发货创建成功！' }
+        format.html { redirect_to not_sent_indents_path, notice: '发货信息创建成功！' }
       else
-        format.html { redirect_to not_sent_indents_path, notice: '发货创建失败！' }
+        format.html { redirect_to not_sent_indents_path, notice: '发货信息创建失败！' }
       end
     end
   end
@@ -84,7 +84,6 @@ class SentsController < ApplicationController
   # PATCH/PUT /sents/1.json
   def update
     respond_to do |format|
-      # binding.pry
       if @sent.update(sent_params)
 
         if @sent.owner_type == 'Indent'
@@ -115,16 +114,17 @@ class SentsController < ApplicationController
     end
   end
 
+  # 下载发货清单
   def download
     sents = Sent.where(id: params[:sent][:ids].split(','))
-    sent_list = SentList.create(total: sents.size)
+    sent_list = SentList.create(name: "FH".upcase + Time.new.strftime('%y%m%d') + SecureRandom.hex(1).upcase, total: sents.size,
+                                created_by: Time.new.strftime('%Y-%m-%d %H:%M:%S'))
     sents.each do |s|
       s.sent_list_id = sent_list.id
       s.save!
       s.owner.sending!
       update_order_status(s.owner)
     end
-    # binding.pry
     respond_to do |format|
       format.csv do
         filename = "发货清单_"
