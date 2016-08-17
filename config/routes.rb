@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     collection do
       get :change
       get :replenish
+      get :download
     end
   end
   resources :users, only: [:index, :edit, :update]

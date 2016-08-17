@@ -127,13 +127,14 @@
         <% if current_user.permission?("IndentsController", "not_sent") ||
         current_user.permission?("OrdersController", "index")
         %>
-            <li  class="submenu <%= 'open' if ('indents' == controller_name && 'not_sent' == action_name) || ('sents' == controller_name && 'index' == action_name) %>">
+            <li  class="submenu <%= 'open' if ('indents' == controller_name && 'not_sent' == action_name) || ('sents' == controller_name && 'index' == action_name || 'sent_lists' == controller_name && 'index' == action_name) %>">
                 <a href="#">
                     <i class="fa fa-truck"></i> 物流发货 <span class="caret pull-right"></span>
                 </a>
                 <ul>
                     <li class='<%="#{'active' if controller_name == 'indents' and action_name == 'not_sent'}" %>'><a href="/indents/not_sent">待发货</a></li>
-                    <li class='<%="#{'active' if controller_name == 'sents' and action_name == 'index'}" %>'><a href="/sents">已发货</a></li>
+                    <li class='<%="#{'active' if controller_name == 'sent_lists' and action_name == 'index'}" %>'><a href="/sent_lists">发货清单</a></li>
+                    <li class='<%="#{'active' if controller_name == 'sents' and action_name == 'index'}" %>'><a href="/sents">发货/确认</a></li>
                 </ul>
             </li>
         <%end%>

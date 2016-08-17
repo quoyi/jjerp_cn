@@ -94,7 +94,7 @@ class IndentsController < ApplicationController
 
   # 未发货
   def not_sent
-    @indents = Indent.where("status >= ? and status <= ?", Indent.statuses[:producing], Indent.statuses[:sent])
+    @indents = Indent.where(status: Indent.statuses[:packaged])
     @sent = Sent.new()
   end
 
