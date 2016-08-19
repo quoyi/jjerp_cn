@@ -6,7 +6,7 @@
       <div class="pull-right panel-options">
         <%= form_for(:sent, html: { class: "form-inline", id: "batch_set"}, method: 'get') do |f| %>
           <input type="hidden" id="sents_ids" name="sent[ids]">
-          <button class="btn btn-primary" onclick = "return download();">下载</button>
+          <button class="btn btn-primary" onclick = "return download();">提交发货清单</button>
         <% end %>
       </div>
     </div>
@@ -27,7 +27,11 @@
                 欠款：<%= indent.arrear %>&nbsp;&nbsp;
                 状态：<%= indent.status_name %>&nbsp;&nbsp;
                 总件数：<%= indent.orders.map{|o| o.packages.map(&:label_size).compact.sum}.flatten.sum %>&nbsp;&nbsp;
-                <%= link_to '添加发货', change_sents_path(id: indent.sent.try(:id), indent_or_order_id: indent.id, type: 'indent'), class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addSent'}, id: 'addSentsBtn', title: '添加发货信息'  %>
+                <% if indent.status == Indent.statuses[:packaged] %>
+                <%= link_to '添加发货信息', change_sents_path(id: indent.sent.try(:id), indent_or_order_id: indent.id, type: 'indent'), class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addSent'}, id: 'addSentsBtn', title: '添加发货信息' %>
+                <% else %>
+                <%= link_to '添加发货信息', '#', class: 'btn btn-info btn-xs', data: { confirm: '未完全打包，无法以总订单为单位发货！' }, title: '添加发货信息' %>
+                <% end %>
               </p>
             </div>
           </div>

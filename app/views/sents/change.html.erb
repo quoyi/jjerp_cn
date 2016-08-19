@@ -4,12 +4,14 @@
     <small class="text-info" style="margin-left: 10px;">
       订单号：<%= @indent_or_order.name %>&nbsp;&nbsp;&nbsp;&nbsp;
       <% if @indent_or_order.class == Indent %>
-        代理商：<%= @indent_or_order.agent.full_name %>
+        代理商：<%= @indent_or_order.agent.full_name %>&nbsp;&nbsp;&nbsp;&nbsp;
+        总件数：<%= @indent_or_order.orders.map{|o| o.packages.map(&:label_size).compact.sum}.flatten.sum %>&nbsp;件
         <% customer =  @indent_or_order.customer %>
         <% logistics = @indent_or_order.logistics %>
       <% elsif @indent_or_order.class == Order %>
         <% order_indent = @indent_or_order.indent %>
-        代理商：<%= order_indent.agent.full_name %>
+        代理商：<%= order_indent.agent.full_name %>&nbsp;&nbsp;&nbsp;&nbsp;
+        总件数：<%= order_indent.orders.map{|o| o.packages.map(&:label_size).compact.sum}.flatten.sum %>&nbsp;件
         <% customer = order_indent.customer %>
         <% logistics = order_indent.logistics %>
       <% else %>

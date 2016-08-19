@@ -97,7 +97,7 @@
         <% if current_user.permission?("IndentsController", "index") ||
         current_user.permission?("OrdersController", "index")
         %>
-        <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name) && ['index', 'show', 'edit'].include?(action_name) %>">
+        <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name) && ['index', 'show', 'edit', 'custom_offer'].include?(action_name) %>">
             <a href="#">
                 <i class="fa fa-briefcase"></i> 订单管理 <span class="caret pull-right"></span>
             </a>
@@ -127,13 +127,13 @@
         <% if current_user.permission?("IndentsController", "not_sent") ||
         current_user.permission?("OrdersController", "index")
         %>
-            <li  class="submenu <%= 'open' if ('orders' == controller_name && 'not_sent' == action_name) || ('sents' == controller_name && 'index' == action_name || 'sent_lists' == controller_name && ['show', 'index'].include?(action_name) ) %>">
+            <li  class="submenu <%= 'open' if ('orders' == controller_name && 'not_sent' == action_name) || ('sents' == controller_name && 'index' == action_name || 'sent_lists' == controller_name && ['index', 'show', 'edit'].include?(action_name) ) %>">
                 <a href="#">
                     <i class="fa fa-truck"></i> 物流发货 <span class="caret pull-right"></span>
                 </a>
                 <ul>
                     <li class='<%="#{'active' if controller_name == 'orders' and action_name == 'not_sent'}" %>'><a href="/orders/not_sent">待发货</a></li>
-                    <li class='<%="#{'active' if controller_name == 'sent_lists' and ['show', 'index'].include?(action_name)}" %>'><a href="/sent_lists">发货清单</a></li>
+                    <li class='<%="#{'active' if controller_name == 'sent_lists' and ['index', 'show', 'edit'].include?(action_name)}" %>'><a href="/sent_lists">发货清单</a></li>
                     <li class='<%="#{'active' if controller_name == 'sents' and action_name == 'index'}" %>'><a href="/sents">发货/确认</a></li>
                 </ul>
             </li>

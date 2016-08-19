@@ -1,6 +1,58 @@
-<h1>Editing Sent List</h1>
-
-<%= render 'form' %>
-
-<%= link_to 'Show', @sent_list %> |
-<%= link_to 'Back', sent_lists_path %>
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title">
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 发货清单 <small>编辑</small> </h2>
+      <div class="pull-right panel-options">
+        <%= link_to '返回', :back, class: 'btn btn-info', data: {toggle:'tooltip'}, title: '返回发货清单列表' %>
+      </div>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr>
+            <td colspan="12" class="text-left"><%= @sent_list.name %> 发货清单</td>
+          </tr>
+          <tr>
+            <th>序号</th>
+            <th>地区</th>
+            <th>收货人</th>
+            <th>联系方式</th>
+            <th>订单编号</th>
+            <th>橱</th>
+            <th>衣</th>
+            <th>门</th>
+            <th>配</th>
+            <th>合计</th>
+            <th>代收</th>
+            <th>物流名称</th>
+            <th>删除</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sent_list.sents.each_with_index do |sent, index| %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= sent.area %></td>
+            <td><%= sent.receiver %></td>
+            <td><%= sent.contact %></td>
+            <td><%= sent.owner.name %></td>
+            <td><%= sent.cupboard %></td>
+            <td><%= sent.robe %></td>
+            <td><%= sent.door %></td>
+            <td><%= sent.part %></td>
+            <td><%= sent.cupboard + sent.robe + sent.door + sent.part %></td>
+            <td><%= sent.collection %></td>
+            <td><%= sent.logistics %></td>
+            <td><%= link_to '移除', sent, method: :delete, class: 'btn btn-xs btn-primary', data: {toggle: 'tooltip', confirm: '确认要将此发货记录移除？'}, title: '从此发货清单中移除' %></td>
+          </tr>
+          <% end %>
+          <tr>
+            <td colspan="12" class="text-right">发货时间：[<%= @sent_list.created_by %>][数量合计：<%= @sent_list.sents.map{|sent| sent.cupboard + sent.robe + sent.door + sent.part}.flatten.sum %>]</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

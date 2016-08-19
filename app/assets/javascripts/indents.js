@@ -194,7 +194,7 @@ function download(){
 
   sents_ids.val(ids);
 
-  url = "/sents/download.xls";
+  url = "/sents/download";
   $("#batch_set").attr('action', url);
 }
 

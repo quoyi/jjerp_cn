@@ -90,6 +90,7 @@ class SentsController < ApplicationController
   # PATCH/PUT /sents/1
   # PATCH/PUT /sents/1.json
   def update
+    binding.pry
     respond_to do |format|
       if @sent.update(sent_params)
 
@@ -98,7 +99,7 @@ class SentsController < ApplicationController
           @sent.owner.orders.each do |order|
             next unless order.packaged?
             o_sent = order.sent
-            o_sent.update_attributes(sent_params)
+            o_sent.present? ? o_sent.update_attributes(sent_params) : o_sent = Sent.new(sent_params)
             o_sent.owner_id = order.id
             o_sent.owner_type = order.class.name
             o_sent.save!
@@ -116,9 +117,9 @@ class SentsController < ApplicationController
             # 更新订单状态错误
           end
         end
-        format.html { redirect_to not_sent_orders_path, notice: '发货单编辑成功！' }
+        format.html { redirect_to :back, notice: '发货单编辑成功！' }
       else
-        format.html { redirect_to not_sent_orders_path, error: '发货单编辑失败！' }
+        format.html { redirect_to :back, error: '发货单编辑失败！' }
       end
     end
   end
@@ -144,7 +145,7 @@ class SentsController < ApplicationController
     
     respond_to do |format|
       # 根据访问时是否指定后缀名，而返回不同结果(例如：访问/sents/download.xls 返回 xls 格式文件)
-      format.html
+      format.html {redirect_to not_sent_orders_path, notice: '发货清单创建成功！'}
       format.xls do
         send_file "#{Rails.root}/public/excels/sent_lists/" + sent_list.name + ".xls", type: 'text/xls; charset=utf-8'
         #response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
@@ -156,10 +157,17 @@ class SentsController < ApplicationController
   # DELETE /sents/1
   # DELETE /sents/1.json
   def destroy
+    binding.pry
+    order = @sent.owner
+    sent_list = @sent.sent_list
     @sent.destroy
-    respond_to do |format|
-      format.html { redirect_to sents_url, notice: 'Sent was successfully destroyed.' }
-      format.json { head :no_content }
+    if sent_list.sents.size == 0
+      sent_list.destroy!
+      order.packaged! # 将子订单状态改回上一步“已打包”
+      File.delete("#{Rails.root}/public/excels/sent_lists/" + sent_list.name + ".xls")
+      redirect_to sent_lists_path, notice: '发货记录已删除！'
+    else
+      redirect_to :back, notice: '发货记录已删除！'
     end
   end
 
