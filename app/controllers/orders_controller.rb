@@ -189,8 +189,8 @@ class OrdersController < ApplicationController
           end
         end
         # 保存包装记录
-        package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','),
-                                                    label_size: label_size)
+        package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','))
+        package.label_size = label_size
         package.save!
         # 更新包装状态（已打印）
         Unit.where(id: unit_ids.compact.uniq).update_all(is_printed: true)
