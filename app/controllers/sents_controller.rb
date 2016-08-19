@@ -5,7 +5,7 @@ class SentsController < ApplicationController
   # GET /sents
   # GET /sents.json
   def index
-    @sents = Sent.all
+    @sents = Sent.where(owner_type: Order.name)
 
     if params[:start_at].present? && params[:end_at].present?
       @sents = @sents.where("sent_at between ? and ?", params[:start_at], params[:end_at])
@@ -14,11 +14,15 @@ class SentsController < ApplicationController
     end
 
     if params[:agent_id].present?
-      @sents = @sents.joins(:indent).where("indents.agent_id = ?", params[:agent_id])
+      indent = Indent.find_by(agent_id: params[:agent_id])
+      @sents = Sent.where(owner_type: Order.name, owner_id: indent.orders.map(&:id)) if indent.present?
+      # @sents = @sents.joins(:indent).where("indents.agent_id = ?", params[:agent_id])
     end
 
-    if params[:indent_name].present?
-      @sents = @sents.joins(:indent).where("indents.name = ?", params[:indent_name].to_s)
+    if params[:order_name].present?
+      order = Order.find_by_name(params[:order_name])
+      @sents = @sents.where(owner_id: order.id)
+      #@sents = @sents.joins(:indent).where("indents.name = ?", params[:indent_name].to_s)
     end
     @sent = Sent.new
   end
