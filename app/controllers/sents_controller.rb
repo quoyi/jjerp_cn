@@ -90,7 +90,6 @@ class SentsController < ApplicationController
   # PATCH/PUT /sents/1
   # PATCH/PUT /sents/1.json
   def update
-    binding.pry
     respond_to do |format|
       if @sent.update(sent_params)
 
@@ -157,7 +156,6 @@ class SentsController < ApplicationController
   # DELETE /sents/1
   # DELETE /sents/1.json
   def destroy
-    binding.pry
     order = @sent.owner
     sent_list = @sent.sent_list
     @sent.destroy
