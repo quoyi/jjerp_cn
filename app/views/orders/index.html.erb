@@ -58,17 +58,17 @@
           <td class="text-left" class="col-sm-1"><%= link_to o.name, o, data: {toggle: 'tooltip'}, title: '查看子订单详细信息' %></td>
           <td class="col-sm-1"><%= o.order_category.try(:name) %></td>
           <td class="col-sm-1"><%= o.indent.agent.try(:full_name) %></td>
-          <td class="col-sm-1"><%= o.indent.customer %></td>
+          <td class="col-sm-2"><%= o.indent.customer %></td>
           <!-- <td class="col-sm-1"><%= o.length %></td>
           <td class="col-sm-1"><%= o.width %></td>
           <td class="col-sm-1"><%= o.height %></td> -->
           <td class="col-sm-1"><%= o.price %></td>
           <td class="col-sm-1"><%= o.number %></td>
           <td  class="col-sm-1"><%= o.status_name %></td>
-          <td  class="col-sm-2"><%= o.note %></td>
-          <td class="col-sm-2">
+          <td  class="col-sm-3"><%= o.note %></td>
+          <td class="col-sm-1">
             <% if Order.statuses[o.status] >= 2 %>
-            生产中
+            已生产
             <% else %>
             <%= link_to '生产', order_path(id: o.id, order: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
             <% end %>

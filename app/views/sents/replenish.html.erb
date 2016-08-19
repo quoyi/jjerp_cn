@@ -26,7 +26,7 @@
             <td><label><span class="require">*</span>发货时间</label></td>
             <td>
             <%#= f.text_field :sent_at, onfocus: 'alert(123);', required: true %>
-            <%= f.text_field :sent_at, data: { provide: 'datepicker'}, required: true %></td>
+            <%= f.date_field :sent_at, data: { provide: 'datepicker'}, required: true %></td>
             <td data-toggle="tooltip" title="必填项"><label><span class="require">*</span>物流单号</label></td>
             <td><%= f.text_field :logistics_code, required: true, placeholder: '请输入物流回执单号' %></td>
           </tr>
