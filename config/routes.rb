@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   resources :orders do
     collection do
       post :import
+      get :not_sent
       get :producing
       get :export
       get :unpack
@@ -55,7 +56,6 @@ Rails.application.routes.draw do
   resources :indents do
     collection do
       get :generate
-      get :not_sent
       get :export_offer
     end
   end

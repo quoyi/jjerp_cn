@@ -60,7 +60,7 @@
             <% elsif Order.statuses[o.status] == 1 %>
             <%= link_to '生产', order_path(id: o.id, order: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
             <% else %>
-              生产中
+              已生产
             <% end %>
           </td>
         </tr>

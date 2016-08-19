@@ -25,7 +25,7 @@ class OrdersController < ApplicationController
       format.xls do
         filename = Time.now.strftime("%Y%m%d%H%M%S%L") + ".xls"
         export_orders(filename, @orders, params[:start_at], params[:end_at])
-        send_file "#{Rails.root}/public/excels/" + filename, type: 'text/xls; charset=utf-8'
+        send_file "#{Rails.root}/public/excels/orders/" + filename, type: 'text/xls; charset=utf-8'
       end
     end
   end
@@ -99,9 +99,16 @@ class OrdersController < ApplicationController
     redirect_to orders_url, notice: '子订单已删除。'
   end
 
+  # 未发货
+  def not_sent
+    @orders = Order.where(status: Order.statuses[:packaged])
+    @indents = @orders.group(:indent_id).map(&:indent)
+    @sent = Sent.new()
+  end
+
   #生产任务
   def producing
-    @orders = Order.producing
+    @orders = Order.where(status: Order.statuses[:producing])
   end
 
   # 导入文件，或手工输入
@@ -182,7 +189,8 @@ class OrdersController < ApplicationController
           end
         end
         # 保存包装记录
-        package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','))
+        package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','),
+                                                    label_size: label_size)
         package.save!
         # 更新包装状态（已打印）
         Unit.where(id: unit_ids.compact.uniq).update_all(is_printed: true)

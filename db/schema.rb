@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160815072837) do
+ActiveRecord::Schema.define(version: 20160819054409) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",            limit: 255, default: "",    null: false
@@ -226,6 +226,7 @@ ActiveRecord::Schema.define(version: 20160815072837) do
     t.datetime "created_at",                                                                null: false
     t.datetime "updated_at",                                                                null: false
     t.boolean  "is_use_order_material",                                     default: false
+    t.string   "logistics",             limit: 255
   end
 
   add_index "orders", ["indent_id"], name: "index_orders_on_indent_id", using: :btree
@@ -235,6 +236,7 @@ ActiveRecord::Schema.define(version: 20160815072837) do
     t.string  "part_ids",   limit: 255
     t.string  "print_size", limit: 255
     t.integer "order_id",   limit: 4
+    t.integer "label_size", limit: 4
   end
 
   add_index "packages", ["order_id"], name: "index_packages_on_order_id", using: :btree

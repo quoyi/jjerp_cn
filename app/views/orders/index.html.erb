@@ -13,68 +13,68 @@
       </div>
     </div> -->
     <div class="row content-table">
-        <%= form_tag orders_path, class: 'form-inline', method: 'get' do %>
-        <div class="panel panel-info">
-          <div class="panel-heading">
-            <span>查询条件</span>
+      <%= form_tag orders_path, class: 'form-inline', method: 'get' do %>
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <span>查询条件</span>
+        </div>
+        <div class="panel-body">
+          <div class="col-sm-6">
+            <label>下单时间：</label>
+            <%= date_field_tag :start_at, @start_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择起始日期' %>
+            &nbsp;&nbsp;--&nbsp;&nbsp;
+            <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择终止日期' %>
           </div>
-          <div class="panel-body">
-            <div class="col-sm-6">
-              <label>下单时间：</label>
-              <%= date_field_tag :start_at, @start_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择起始日期' %>
-              &nbsp;&nbsp;--&nbsp;&nbsp;
-              <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择终止日期' %>
-            </div>
-            <div class="col-sm-4">
-              <label>代理商: </label>
-              <input type="hidden" id="remoteDataAgent" name='agent_id' data-id="<%=@agent_search.try(:id)%>" data-name="<%=@agent_search.try(:full_name)%>" style="width: 80%" class="select2 ajax"/>
-            </div>
-            <div class="col-sm-2">
-              <%= submit_tag '查询', class: 'btn btn-primary btn-xs' %>
-              <%= link_to '导出结果', orders_path(format: "xls", start_at: params[:start_at], end_at: params[:end_at], agent_id: params[:agent_id]), class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '将查询结果导出到Excel文件' %>
-            </div>
+          <div class="col-sm-4">
+            <label>代理商: </label>
+            <input type="hidden" id="remoteDataAgent" name='agent_id' data-id="<%=@agent_search.try(:id)%>" data-name="<%=@agent_search.try(:full_name)%>" style="width: 80%" class="select2 ajax"/>
+          </div>
+          <div class="col-sm-2">
+            <%= submit_tag '查询', class: 'btn btn-primary btn-xs' %>
+            <%= link_to '导出结果', orders_path(format: "xls", start_at: params[:start_at], end_at: params[:end_at], agent_id: params[:agent_id]), class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '将查询结果导出到Excel文件' %>
           </div>
         </div>
-        <% end %>
+      </div>
+      <% end %>
     </div>
     <div class="row content-table">
       <table class="table table-hover table-striped table-bordered table-condensed text-center order-index-table">
-          <tr>
-            <th>订单号</th>
-            <th>类型</th>
-            <th>代理商</th>
-            <th>终端客户</th>
-            <!-- <th>长</th>
-            <th>宽</th>
-            <th>高</th> -->
-            <th>价格</th>
-            <th>数量</th>
-            <th>状态</th>
-            <th>备注</th>
-            <th>生产</th>
-          </tr>
-          <% @orders.each do |o| %>
-          <tr>
-            <td class="text-left" class="col-sm-1"><%= link_to o.name, o, data: {toggle: 'tooltip'}, title: '查看子订单详细信息' %></td>
-            <td class="col-sm-1"><%= o.order_category.try(:name) %></td>
-            <td class="col-sm-1"><%= o.indent.agent.try(:full_name) %></td>
-            <td class="col-sm-1"><%= o.indent.customer %></td>
-            <!-- <td class="col-sm-1"><%= o.length %></td>
-            <td class="col-sm-1"><%= o.width %></td>
-            <td class="col-sm-1"><%= o.height %></td> -->
-            <td class="col-sm-1"><%= o.price %></td>
-            <td class="col-sm-1"><%= o.number %></td>
-            <td  class="col-sm-1"><%= o.status_name %></td>
-            <td  class="col-sm-2"><%= o.note %></td>
-<td class="col-sm-2">
-<% if Order.statuses[o.status] >= 2 %>
-  生产中
-<% else %>
-  <%= link_to '生产', order_path(id: o.id, order: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
-<% end %>
-</td>
-          </tr>
-          <% end %>
+        <tr>
+          <th>订单号</th>
+          <th>类型</th>
+          <th>代理商</th>
+          <th>终端客户</th>
+          <!-- <th>长</th>
+          <th>宽</th>
+          <th>高</th> -->
+          <th>价格</th>
+          <th>数量</th>
+          <th>状态</th>
+          <th>备注</th>
+          <th>生产</th>
+        </tr>
+        <% @orders.each do |o| %>
+        <tr>
+          <td class="text-left" class="col-sm-1"><%= link_to o.name, o, data: {toggle: 'tooltip'}, title: '查看子订单详细信息' %></td>
+          <td class="col-sm-1"><%= o.order_category.try(:name) %></td>
+          <td class="col-sm-1"><%= o.indent.agent.try(:full_name) %></td>
+          <td class="col-sm-1"><%= o.indent.customer %></td>
+          <!-- <td class="col-sm-1"><%= o.length %></td>
+          <td class="col-sm-1"><%= o.width %></td>
+          <td class="col-sm-1"><%= o.height %></td> -->
+          <td class="col-sm-1"><%= o.price %></td>
+          <td class="col-sm-1"><%= o.number %></td>
+          <td  class="col-sm-1"><%= o.status_name %></td>
+          <td  class="col-sm-2"><%= o.note %></td>
+          <td class="col-sm-2">
+            <% if Order.statuses[o.status] >= 2 %>
+            生产中
+            <% else %>
+            <%= link_to '生产', order_path(id: o.id, order: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
+            <% end %>
+          </td>
+        </tr>
+        <% end %>
       </table>
     </div>
   </div>

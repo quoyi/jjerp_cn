@@ -89,7 +89,7 @@ module OrdersHelper
     row_num = "5"
     indents = orders.group(:indent_id).map{|o| o.indent }
     total = indents.map(&:amount).sum
-    wb  = WriteExcel.new("#{Rails.root}/public/excels/" + filename)
+    wb  = WriteExcel.new("#{Rails.root}/public/excels/orders/" + filename)
     ws = wb.add_worksheet
     ws.set_column('A:H', 28)
 

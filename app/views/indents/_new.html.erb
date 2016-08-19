@@ -48,6 +48,11 @@
 									<div class="col-sm-1 text-center indent-orders-title">
 										<h4>子订单</h4>
 									</div>
+									<!-- 初始下拉框默认选中项 -->
+	                <% init_ply_id = MaterialCategory.find_by(name: '18mm').id %>
+	                <% init_texture_id = MaterialCategory.find_by(name: '颗粒板').id %>
+	                <% init_color_id = MaterialCategory.find_by(name: '国色天香').id %>
+	                <% init_price = Material.find_by(ply: init_ply_id, texture: init_texture_id, color: init_color_id).try(:price) %>
 									<div class="col-sm-10">
 										<div class="row">
 											<div class="col-sm-3">
@@ -61,15 +66,15 @@
 											</div>
 											<div class="col-sm-2">
 												<label>厚度</label>
-												<%= order_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {}, {class: 'material-ply', onchange: 'getMaterialPrice(this)'} %>
+												<%= order_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {selected: init_ply_id}, {class: 'material-ply', onchange: 'getMaterialPrice(this)'} %>
 											</div>
 											<div class="col-sm-2">
 												<label>材质</label>
-												<%= order_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]), :id, :name, {}, {class: 'material-texture', onchange: 'getMaterialPrice(this)'} %>
+												<%= order_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]), :id, :name, {selected: init_texture_id}, {class: 'material-texture', onchange: 'getMaterialPrice(this)'} %>
 											</div>
 											<div class="col-sm-3">
 												<label>颜色</label>
-												<%= order_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]), :id, :name,  {}, {class: 'material-color',  onchange: 'getMaterialPrice(this)'} %>
+												<%= order_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]), :id, :name,  {selected: init_color_id}, {class: 'material-color',  onchange: 'getMaterialPrice(this)'} %>
 											</div>
 										</div>
 										<div class="row">
@@ -87,7 +92,7 @@
 											</div> -->
 											<div class="col-sm-3">
 												<label>价格</label>
-												<%= order_form.number_field :price, min: 0, step: 0.01, value: Material.first.price, style: 'width: 50%;', class: 'material-price' %>
+												<%= order_form.number_field :price, min: 0, step: 0.01, value: init_price, style: 'width: 50%;', class: 'material-price' %>
 											</div>
 											<div class="col-sm-9">
 												<label>备注</label>
