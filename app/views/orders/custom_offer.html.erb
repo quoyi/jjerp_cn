@@ -37,7 +37,7 @@
             <div class="row">
               <div class="col-sm-2">
                 <label>厚度</label>
-                <%= unit_form.collection_select :ply, MaterialCategory.where(oftype: MaterialCategory.oftypes[:ply]).order("oftype"), :id, :name, {}, {class: 'form-control material-ply', onchange: "getMaterialPrice(this)", value: uf.new_record? ? 0 : uf.ply}  %>
+                <%= unit_form.collection_select :ply, MaterialCategory.where(oftype: MaterialCategory.oftypes[:ply]).order("oftype"), :id, :name, {selected: uf.new_record? ? @order.ply : uf.ply}, {class: 'form-control material-ply', onchange: "getMaterialPrice(this)"}  %>
               </div>
               <div class="col-sm-2">
                 <label><span class="require">*</span>单位</label>
@@ -45,7 +45,7 @@
               </div>
               <div class="col-sm-2">
                 <label><span class="require">*</span>单价</label>
-                <%= unit_form.number_field :price, min: 0, step: 0.01, value: uf.new_record? ? Material.first.price : uf.price, class: 'form-control material-price',style: 'width: 60%', required: true  %>
+                <%= unit_form.number_field :price, min: 0, step: 0.01, value: uf.new_record? ? Material.find_by(ply: @order.ply, texture: @order.texture, color: @order.color).try(:price) : uf.price, class: 'form-control material-price',style: 'width: 60%', required: true  %>
               </div>
               <div class="col-sm-2">
                 <label><span class="require">*</span>数量</label>
@@ -55,11 +55,11 @@
             <div class="row" style="padding-top: 5px;">
               <div class="col-sm-2">
                 <label>材质</label>
-                <%= unit_form.collection_select :texture, MaterialCategory.where(oftype: MaterialCategory.oftypes[:texture]).order("oftype"), :id, :name,{},{class: 'form-control material-texture', onchange: "getMaterialPrice(this)", value: uf.new_record? ? 0 : uf.texture}  %>
+                <%= unit_form.collection_select :texture, MaterialCategory.where(oftype: MaterialCategory.oftypes[:texture]).order("oftype"), :id, :name,{selected: uf.new_record? ? @order.texture : uf.texture},{class: 'form-control material-texture', onchange: "getMaterialPrice(this)"}  %>
               </div>
               <div class="col-sm-2">
                 <label>颜色</label>
-                <%= unit_form.collection_select :color, MaterialCategory.where(oftype: MaterialCategory.oftypes[:color]).order("oftype"), :id, :name,{},{class: 'form-control material-color', onchange: "getMaterialPrice(this)", value: uf.new_record? ? 0 : uf.color} %>
+                <%= unit_form.collection_select :color, MaterialCategory.where(oftype: MaterialCategory.oftypes[:color]).order("oftype"), :id, :name,{selected: uf.new_record? ? @order.color : uf.texture},{class: 'form-control material-color', onchange: "getMaterialPrice(this)"} %>
               </div>
               <div class="col-sm-5">
                 <label>备注</label>

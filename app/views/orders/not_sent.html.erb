@@ -6,7 +6,7 @@
       <div class="pull-right panel-options">
         <%= form_for(:sent, html: { class: "form-inline", id: "batch_set"}, method: 'get') do |f| %>
           <input type="hidden" id="sents_ids" name="sent[ids]">
-          <button class="btn btn-primary" onclick = "return download()">下载</button>
+          <button class="btn btn-primary" onclick = "return download();">下载</button>
         <% end %>
       </div>
     </div>
@@ -15,8 +15,8 @@
     <div class="row">
       <% @indents.each do |indent| %>
       <div class="panel-group" style="margin: 0 !important;" id="accordion<%=indent.id%>" role="tablist" aria-multiselectable="true">
-        <div class="panel panel-info">
-          <div class="panel-heading" role="button" id="heading<%=indent.id%>" style="background-color: #D9EDF7;" data-toggle="collapse" data-parent="#accordion<%=indent.id %>" href="#collapse<%= indent.id %>" aria-expanded="true" aria-controls="collapse<%= indent.id %>">
+        <div class="panel panel-info" style="margin-bottom: 5px;">
+          <div class="panel-heading" role="button" id="heading<%=indent.id%>" data-toggle="collapse" data-parent="#accordion<%=indent.id %>" href="#collapse<%= indent.id %>" aria-expanded="true" aria-controls="collapse<%= indent.id %>">
             <div class="panel-title" role="button" style="margin: 0px; padding: 3px;">
               <label>总订单号：<%= indent.name %></label>
               <p class="pull-right" style="font-size: 14px;">
@@ -26,7 +26,7 @@
                 已收款：<%= indent.amount - indent.arrear %>&nbsp;&nbsp;
                 欠款：<%= indent.arrear %>&nbsp;&nbsp;
                 状态：<%= indent.status_name %>&nbsp;&nbsp;
-                总件数：<%= indent.orders.map{|o| o.packages.size}.flatten.sum %>&nbsp;&nbsp;
+                总件数：<%= indent.orders.map{|o| o.packages.map(&:label_size).compact.sum}.flatten.sum %>&nbsp;&nbsp;
                 <%= link_to '添加发货', change_sents_path(id: indent.sent.try(:id), indent_or_order_id: indent.id, type: 'indent'), class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addSent'}, id: 'addSentsBtn', title: '添加发货信息'  %>
               </p>
             </div>
@@ -60,7 +60,7 @@
                     </td>
                     <td><%= order.name %></td>
                     <td><%= order.order_category.name %></td>
-                    <td><%= order.packages.size %></td>
+                    <td><%= order.packages.map(&:label_size).compact.sum %></td>
                     <td><%= order.status_name %></td>
                     <td><%= order.note %></td>
                     <td><%= link_to '添加发货', change_sents_path(id: order.sent.try(:id), indent_or_order_id: order.id, type: 'order'), class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addSent'}, id: 'addSentsBtn', title: '添加发货信息' %></td>

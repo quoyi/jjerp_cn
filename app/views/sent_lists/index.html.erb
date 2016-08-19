@@ -23,7 +23,8 @@
             <td><%= sent_list.created_by %></td>
             <td>
               <%= link_to '查看', sent_list, class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '查看此清单详细' %>
-              <%= link_to '打印', '#', class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '重新打印此清单' %>
+              <%= link_to '下载', "/sents/download.xls?id=#{sent_list.id}", class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '下载此清单' %>
+              <%#= link_to '打印', '#', class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '重新打印此清单' %>
             </td>
           </tr>
           <% end %>

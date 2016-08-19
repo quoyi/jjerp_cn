@@ -1,5 +1,6 @@
 class SentsController < ApplicationController
   before_action :set_sent, only: [:show, :edit, :update, :destroy]
+  include SentsHelper
   include OrdersHelper
   # GET /sents
   # GET /sents.json
@@ -53,9 +54,9 @@ class SentsController < ApplicationController
             o_sent.save!
           end
         end
-        format.html { redirect_to not_sent_indents_path, notice: '发货信息创建成功！' }
+        format.html { redirect_to not_sent_orders_path, notice: '发货信息创建成功！' }
       else
-        format.html { redirect_to not_sent_indents_path, notice: '发货信息创建失败！' }
+        format.html { redirect_to not_sent_orders_path, notice: '发货信息创建失败！' }
       end
     end
   end
@@ -111,31 +112,39 @@ class SentsController < ApplicationController
             # 更新订单状态错误
           end
         end
-        format.html { redirect_to not_sent_indents_path, notice: '发货单编辑成功！' }
+        format.html { redirect_to not_sent_orders_path, notice: '发货单编辑成功！' }
       else
-        format.html { redirect_to not_sent_indents_path, error: '发货单编辑失败！' }
+        format.html { redirect_to not_sent_orders_path, error: '发货单编辑失败！' }
       end
     end
   end
 
   # 下载发货清单
+  # GET /sent_list
+  # GET /sent_list.xls
   def download
-    sents = Sent.where(id: params[:sent][:ids].split(','))
-    sent_list = SentList.create(name: "FH".upcase + Time.new.strftime('%y%m%d') + SecureRandom.hex(1).upcase, total: sents.size,
+    if params[:id].present?
+      sent_list = SentList.find_by_id(params[:id])
+    else
+      sents = Sent.where(id: params[:sent][:ids].split(','))
+      sent_list = SentList.create(name: "FH".upcase + Time.new.strftime('%y%m%d') + SecureRandom.hex(1).upcase, total: sents.size,
                                 created_by: Time.new.strftime('%Y-%m-%d %H:%M:%S'))
-    sents.each do |s|
-      s.sent_list_id = sent_list.id
-      s.save!
-      s.owner.sending!
-      update_order_status(s.owner)
+      sents.each do |s|
+        s.sent_list_id = sent_list.id
+        s.save!
+        s.owner.sending!
+        update_order_status(s.owner)
+      end
+      export_sent_list(sent_list)
     end
+    
     respond_to do |format|
-      format.csv do
-        filename = "发货清单_"
-        datetime = Time.new.strftime('%Y%m%d%H%M%S')
-        filename += datetime
-        response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
-        render text: to_csv(sents)
+      # 根据访问时是否指定后缀名，而返回不同结果(例如：访问/sents/download.xls 返回 xls 格式文件)
+      format.html
+      format.xls do
+        send_file "#{Rails.root}/public/excels/sent_lists/" + sent_list.name + ".xls", type: 'text/xls; charset=utf-8'
+        #response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
+        #render text: to_csv(sents)
       end
     end
   end

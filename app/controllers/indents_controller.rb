@@ -92,12 +92,6 @@ class IndentsController < ApplicationController
     redirect_to indent_path(indent), notice: '生成报价单成功！'
   end
 
-  # 未发货
-  def not_sent
-    @indents = Indent.where(status: Indent.statuses[:packaged])
-    @sent = Sent.new()
-  end
-
   # 导出报价单
   def export_offer
     @indent = Indent.find_by_id(params[:id])
