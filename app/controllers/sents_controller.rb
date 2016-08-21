@@ -150,6 +150,13 @@ class SentsController < ApplicationController
         #response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
         #render text: to_csv(sents)
       end
+      format.pdf do
+        # 打印尺寸毫米（长宽）
+        pdf = SentListPdf.new(sent_list)
+        send_data pdf.render, filename: "发货清单#{sent_list.name}.pdf",
+          type: "application/pdf",
+          disposition: "inline"
+      end
     end
   end
 
