@@ -8,6 +8,8 @@ class SentListPdf < Prawn::Document
     font "#{Rails.root}/app/assets/fonts/simfang.ttf", size: 12
     @sent_list = sent_list
     print_content
+    # autoprint # 自动打印
+    print
   end
 
 
