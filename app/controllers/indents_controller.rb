@@ -95,18 +95,19 @@ class IndentsController < ApplicationController
   # 导出报价单
   def export_offer
     @indent = Indent.find_by_id(params[:id])
+    export_offers(@indent)
     respond_to do |format|
       format.html { redirect_to order_union_path(@indent), notice: '导出成功' }
       format.json { head :no_content }
-      format.csv do
-        filename = "报价单－" + @indent.name
-        response.headers['Content-Type'] = "application/vnd.ms-excel"
-        response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
-        render text: to_csv(@indent)
-      end
-      # format.xls do
-      #   send_data to_csv(@indent)
+      # format.csv do
+      #   filename = "报价单－" + @indent.name
+      #   response.headers['Content-Type'] = "application/vnd.ms-excel"
+      #   response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
+      #   render text: to_csv(@indent)
       # end
+      format.xls do
+        send_file "#{Rails.root}/public/excels/offers/" + @indent.name + ".xls", type: 'text/xls; charset=utf-8'
+      end
     end
   end
 

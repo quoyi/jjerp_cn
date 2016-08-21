@@ -83,6 +83,56 @@ module OrdersHelper
     return _return
   end
 
+  def export_offers(indent)
+    filename = indent.name + ".xls"
+    offers = indent.offers
+    wb = WriteExcel.new("#{Rails.root}/public/excels/offers/" + filename)
+    ws = wb.add_worksheet
+    ws.set_column('A:H', 25) # 设置列宽
+    ws.set_column("C:C", 40)
+
+    # 第一行
+    title_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 28) # 水平居中、垂直居中、加粗、字号28
+    info_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 0, size: 16, border: 1)
+    thead_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 16, bg_color: 'gray', border: 1)
+    ws.merge_range("A1:H1", '伊思尔报价单', title_format)
+    ws.set_row(0, 34) # 设置行高
+
+    # 空行(合并单元格、正文样式)
+    # ws.write_blank(1,0) 
+    # ws.merge_range("A2:H2", '', info_format)
+    ws.set_row(1, 23)
+    ws.write_row("A2", ["总订单号", indent.name, '代理商', indent.agent.full_name,
+              '终端客户', indent.customer, '套数', indent.orders.map(&:number).sum()], thead_format)
+    ws.set_row(2, 23)
+    ws.write_row("A3", ['下单时间', indent.verify_at, '发货时间', indent.require_at, '状态', indent.status_name,
+              '金额￥', offers.map{|o| o.order.number * o.total}.sum()], thead_format)
+    ws.set_row(3, 23)
+    ws.write_row("A4", ['序号', '类型', '名称', '单价￥', '单位', '数量', '备注', '总价￥'], thead_format)
+
+    row_num = 5
+    offers.group_by(&:order_id).each_pair do |order_id, ofs|
+      ofs.each_with_index do |offer, index|
+        ws.write_row("A" + row_num.to_s, [index + 1, offer.item_type_name, offer.item_name, offer.price,
+                     offer.uom, offer.number, offer.note, offer.total], info_format)
+        ws.set_row(row_num - 1, 20)
+        row_num += 1
+      end
+      # 第一组报价单对应的订单信息
+      order = ofs.first.order
+      order_total = offers.map(&:total).sum
+      orders_total = order_total * order.number
+      ws.write_row("A" + row_num.to_s, ['子订单号', order.name, '单套合计￥', order_total, '单项套数', order.number,
+                '项目合计￥', orders_total], info_format)
+      ws.set_row(row_num - 1, 20)
+      row_num += 1
+      ws.merge_range("A" + row_num.to_s + ":H" + row_num.to_s, "", info_format)
+      ws.set_row(row_num - 1, 20)
+      row_num += 1
+    end
+    wb.close
+  end
+
   # 导出Excel格式 orders
   def export_orders(filename, orders, start_at, end_at)
     # 全局变量，当前行数
