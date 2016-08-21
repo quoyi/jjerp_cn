@@ -4,7 +4,7 @@
       <p class="pull-right">
         总套数：<%= @indent.orders.map(&:number).sum() %>&nbsp;&nbsp;&nbsp;&nbsp;
         总价： <%= @order_offers.map{|o| o.order.number * o.total}.sum() %>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;
-        <%= link_to '下载报价单', export_offer_indents_path(id: @indent,format: "csv"),class: "btn btn-xs btn-info"%>
+        <%= link_to '下载报价单', export_offer_indents_path(id: @indent,format: "xls"),class: "btn btn-xs btn-info"%>
       </p>
     </span>
   </div>
