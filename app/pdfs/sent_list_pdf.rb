@@ -5,7 +5,7 @@ class SentListPdf < Prawn::Document
 
   def initialize(sent_list)
     super(page_size: "A4", margin: [5, 5])
-    font "#{Rails.root}/app/assets/fonts/simfang.ttf", size: 12
+    font "#{Rails.root}/app/assets/fonts/songti.ttf", size: 12
     @sent_list = sent_list
     print_content
     # autoprint # 自动打印

@@ -3,7 +3,7 @@ class OrderPdf < Prawn::Document
   require 'prawn/table'
   def initialize(length, width, ids, order_id)
     super(:page_size => [mm2pt(length), mm2pt(width)], :margin => [2, 2])
-    font "#{Rails.root}/app/assets/fonts/simfang.ttf", size: 5
+    font "#{Rails.root}/app/assets/fonts/songti.ttf", size: 5
     @order = Order.find_by_id(order_id)
     @ids = ids
     @length = mm2pt(length) - 4
