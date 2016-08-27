@@ -4,7 +4,7 @@ class SentListPdf < Prawn::Document
   require 'prawn/table'
 
   def initialize(sent_list)
-    super(page_size: "A4", margin: [5, 5])
+    super(page_size: "A4", margin: [5, 5], page_layout: :landscape)
     font "#{Rails.root}/app/assets/fonts/songti.ttf", size: 12
     @sent_list = sent_list
     print_content
