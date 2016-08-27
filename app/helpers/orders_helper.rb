@@ -120,10 +120,10 @@ module OrdersHelper
       end
       # 第一组报价单对应的订单信息
       order = ofs.first.order
-      order_total = offers.map(&:total).sum
+      order_total = order.offers.map{|o| o.price * o.number}.sum()
       orders_total = order_total * order.number
       ws.write_row("A" + row_num.to_s, ['子订单号', order.name, '单套合计￥', order_total, '单项套数', order.number,
-                '项目合计￥', orders_total], info_format)
+                '项目合计￥', order_total], info_format)
       ws.set_row(row_num - 1, 20)
       row_num += 1
       ws.merge_range("A" + row_num.to_s + ":H" + row_num.to_s, "", info_format)
