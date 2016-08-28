@@ -14,16 +14,14 @@ class OrdersController < ApplicationController
     @orders = Order.all.order(created_at: :desc)
     @start_at = Date.today.beginning_of_month.to_s
     @end_at = Date.today.end_of_month.to_s
-    @province = '420000'
-    @city = '420100'
-    @district = '--地区--'
 
-    if params[:province].present? || params[:city].present? || params[:district].present?
-      @province = params[:province]
-      @city = params[:city]
-      @district = params[:district]      
-    end
+    @income = @order.incomes.new(username: current_user.name, income_at: Date.today)
 
+     
+    @province = params[:province] if params[:province].present?
+    @city = params[:city] if params[:city].present?
+    @district = params[:district]  if params[:district].present?
+    
     search = [ChinaCity.get(@province), ChinaCity.get(@city), ChinaCity.get(@district)].compact.join('')
     @orders = @orders.where("delivery_address like :keyword",keyword: "%#{search}%")
 

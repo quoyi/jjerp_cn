@@ -253,7 +253,8 @@ module OrdersHelper
   def update_order_and_indent(order)
     indent = order.indent
     indent_sum = 0
-    indent.orders.each do |o|
+    o = order
+    # indent.orders.each do |o|
       sum_units = 0
       # 自定义报价不计算尺寸
       group_units = o.units.group_by{|u| u.is_custom}
@@ -262,9 +263,12 @@ module OrdersHelper
       sum_parts = o.parts.map{|p| p.number * p.price}.sum()
       sum_crafts = o.crafts.map{|c| c.number * c.price}.sum()
       o.price = sum_units + sum_parts + sum_crafts  # 子订单金额 = 子订单部件合计 + 子订单配件合计 + 子订单工艺费合计
-      indent_sum += o.price
+      # indent_sum += o.price
       o.save!
-    end
+    # end
+    # 
+    indent_sum = indent.orders.pluck(:price).sum
+
     arrear_sum = indent.incomes.map(&:money).sum.to_f
     indent.amount = indent_sum  # 总订单金额 = 所有子订单金额合计
     # 欠款 = 金额 - 收入 
