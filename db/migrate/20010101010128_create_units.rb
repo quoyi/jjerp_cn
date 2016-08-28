@@ -13,7 +13,7 @@ class CreateUnits < ActiveRecord::Migration
       t.integer :length, null:false, default: 1 # 长
       t.integer :width, null:false, default: 1 # 宽
       t.decimal :number, null:false, precision: 8, scale: 2, default: 0 #数量
-      t.string :uom, null: false, default: '平方' # 单位
+      t.string :uom # 单位
       t.decimal :price, precision: 8, scale: 2, default: 0 # 单价
       t.string  :size, default: '' #剪裁尺寸
       t.string :note # 备注

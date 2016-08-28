@@ -13,6 +13,15 @@ class CraftsController < ApplicationController
   def show
   end
 
+  # GET /crafts/1
+  # GET /crafts/1.json
+  def find
+    @craft = Craft.find_by_id(params[:id]) if params[:id].present?
+    respond_to do |format|
+      format.json { render json: @craft}
+    end
+  end
+
   # GET /crafts/new
   def new
     @craft = Craft.new

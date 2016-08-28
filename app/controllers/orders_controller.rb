@@ -258,7 +258,7 @@ class OrdersController < ApplicationController
                                   units_attributes: [:id, :full_name, :number, :ply, :texture, :color, :is_custom,
                                                      :length, :width, :size, :uom, :price, :note, :_destroy],
                                   parts_attributes: [:id, :part_category_id, :order_id,
-                                                     :name, :buy, :price, :store, :uom, :number, :brand,
+                                                     :name, :buy, :price, :store, :uom, :number, :brand, :note,
                                                      :supply_id, :deleted, :_destroy],
                                   crafts_attributes: [:id, :order_id, :full_name, :uom,
                                                       :price, :number, :note, :status, :deleted, :_destroy])

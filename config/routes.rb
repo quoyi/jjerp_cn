@@ -18,7 +18,11 @@ Rails.application.routes.draw do
       get :stat
     end
   end
-  resources :crafts
+  resources :crafts do
+    collection do
+      post :find
+    end
+  end
   resources :tasks
   resources :units
   resources :supplies

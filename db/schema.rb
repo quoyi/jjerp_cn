@@ -184,7 +184,7 @@ ActiveRecord::Schema.define(version: 20160827110024) do
     t.integer  "item_id",    limit: 4
     t.integer  "item_type",  limit: 4,                            default: 0
     t.string   "item_name",  limit: 255
-    t.string   "uom",        limit: 255,                          default: "平方"
+    t.string   "uom",        limit: 255
     t.decimal  "number",                 precision: 10, scale: 6, default: 0.0
     t.decimal  "price",                  precision: 8,  scale: 2, default: 0.0
     t.decimal  "sum",                    precision: 8,  scale: 2, default: 0.0
@@ -246,7 +246,7 @@ ActiveRecord::Schema.define(version: 20160827110024) do
     t.decimal  "buy",                    precision: 8, scale: 2, default: 0.0
     t.decimal  "price",                  precision: 8, scale: 2, default: 0.0
     t.integer  "store",      limit: 4,                           default: 0,     null: false
-    t.string   "uom",        limit: 255,                         default: "平方"
+    t.string   "uom",        limit: 255
     t.string   "brand",      limit: 255
     t.integer  "supply_id",  limit: 4
     t.string   "note",       limit: 255
@@ -265,9 +265,10 @@ ActiveRecord::Schema.define(version: 20160827110024) do
     t.decimal  "buy",                          precision: 8, scale: 2
     t.decimal  "price",                        precision: 8, scale: 2
     t.integer  "store",            limit: 4,                           default: 1,     null: false
-    t.string   "uom",              limit: 255,                         default: "平方"
+    t.string   "uom",              limit: 255
     t.integer  "number",           limit: 4,                           default: 1,     null: false
     t.string   "brand",            limit: 255
+    t.string   "note",             limit: 255
     t.integer  "supply_id",        limit: 4,                                           null: false
     t.boolean  "deleted",                                              default: false
     t.datetime "created_at",                                                           null: false
@@ -400,7 +401,7 @@ ActiveRecord::Schema.define(version: 20160827110024) do
     t.integer  "length",           limit: 4,                           default: 1,     null: false
     t.integer  "width",            limit: 4,                           default: 1,     null: false
     t.decimal  "number",                       precision: 8, scale: 2, default: 0.0,   null: false
-    t.string   "uom",              limit: 255,                         default: "平方",  null: false
+    t.string   "uom",              limit: 255
     t.decimal  "price",                        precision: 8, scale: 2, default: 0.0
     t.string   "size",             limit: 255,                         default: ""
     t.string   "note",             limit: 255
@@ -429,12 +430,12 @@ ActiveRecord::Schema.define(version: 20160827110024) do
   add_index "units", ["unit_category_id"], name: "index_units_on_unit_category_id", using: :btree
 
   create_table "uoms", force: :cascade do |t|
-    t.string   "name",       limit: 255, default: "", null: false
+    t.string   "name",       limit: 255, default: "",    null: false
     t.string   "val",        limit: 255
-    t.string   "note",       limit: 255
-    t.boolean  "deleted"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.string   "note",       limit: 255, default: ""
+    t.boolean  "deleted",                default: false, null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
   end
 
   add_index "uoms", ["name"], name: "index_uoms_on_name", unique: true, using: :btree

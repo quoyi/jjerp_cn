@@ -7,10 +7,6 @@ $(function() {
       $("#import-form").submit();
     });
   });
-
-  $(".basic-part-category").change(function(){
-    alert(123);
-  });
 });
 
 
@@ -21,26 +17,24 @@ $(function() {
  */
 function setChildPartCategory(obj){
   var fields = $(obj).parents(".fields");
-  var child = fields.find(".child-part-category");
-  var uom = fields.find(".part-category-uom");
-  var price = fields.find(".part-category-price");
-  var supply = fields.find(".part-category-supply");
   $.ajax({
     url: "/part_categories/find",
     dataType: "json",
     data: {parent_id: $(obj).val()},
     type: "POST",
     success: function(data){
-      var options = "";
-      for (var i = 0; i <= data.length - 1; i++) {
-        if(i == 0){
-          uom.val(data[i].uom);
-          price.val(data[i].price);
-          supply.val(data[i].supply_id);
+      if(data != null){
+        var options = "";
+        for (var i = 0; i <= data.length - 1; i++) {
+          if(i == 0){
+            fields.find(".part-category-uom").val(data[i].uom);
+            fields.find(".part-category-price").val(data[i].price);
+            fields.find(".part-category-supply").val(data[i].supply_id);
+          }
+          options += "<option value='" + data[i].id + "'>" + data[i].name + "</option>"; 
         }
-        options += "<option value='" + data[i].id + "'>" + data[i].name + "</option>"; 
+        fields.find(".child-part-category").empty().append(options);
       }
-      child.empty().append(options);
     },
     error: function(data){
       alert("网络错误，无法获取子配件类型！");
@@ -54,9 +48,6 @@ function setChildPartCategory(obj){
  */
 function setPartCategoryPrice(obj){
   var fields = $(obj).parents(".fields");
-  var uom = fields.find(".part-category-uom");
-  var price = fields.find(".part-category-price");
-  var supply = fields.find(".part-category-supply");
   $.ajax({
     url: "/part_categories/find",
     dataType: "json",
@@ -64,9 +55,31 @@ function setPartCategoryPrice(obj){
     type: "POST",
     success: function(data){
       if(data != null){
-        uom.val(data[0].uom);
-        price.val(data[0].price);
-        supply.val(data[0].supply_id);
+        fields.find(".part-category-uom").val(data[0].uom);
+        fields.find(".part-category-price").val(data[0].price);
+        fields.find(".part-category-supply").val(data[0].supply_id);
+      }
+    },
+    error: function(data){
+      alert("网络错误，无法获取配件价格！");
+    }
+  });
+}
+
+/**
+ * 设置工艺单位、单价
+ */
+function setCraft(obj){
+  var fields = $(obj).parents(".fields");
+  $.ajax({
+    url: "/crafts/find",
+    dataType: "json",
+    data: {id: $(obj).val()},
+    type: "POST",
+    success: function(data){
+      if(data != null){
+        fields.find(".order_craft_uom").val(data.uom);
+        fields.find(".order_craft_price").val(data.price);
       }
     },
     error: function(data){
