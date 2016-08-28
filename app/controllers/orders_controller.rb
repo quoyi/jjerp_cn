@@ -52,6 +52,7 @@ class OrdersController < ApplicationController
     @unit = Unit.new
     @material = Material.new
     @part_category = PartCategory.new
+    @craft = Craft.new
     # 这里可能需要修改, 应查找unit_category并获取ID值，再查找对应的material；而不是写固定值“1”
     @units = Unit.where(order_id: @order.id)
     @parts = Part.where(order_id: @order.id)
@@ -155,6 +156,7 @@ class OrdersController < ApplicationController
     @unit = Unit.new
     @material = Material.new
     @part_category = PartCategory.new
+    @craft = Craft.new
   end
 
   # 未打包
@@ -272,7 +274,7 @@ class OrdersController < ApplicationController
                                   units_attributes: [:id, :full_name, :number, :ply, :texture, :color, :is_custom,
                                                      :length, :width, :size, :uom, :price, :note, :_destroy],
                                   parts_attributes: [:id, :part_category_id, :order_id,
-                                                     :name, :buy, :price, :store, :uom, :number, :brand,
+                                                     :name, :buy, :price, :store, :uom, :number, :brand, :note,
                                                      :supply_id, :deleted, :_destroy],
                                   crafts_attributes: [:id, :order_id, :full_name, :uom,
                                                       :price, :number, :note, :status, :deleted, :_destroy])

@@ -3,6 +3,7 @@
   <div class="modal-dialog modal-sm" role="document" style="width: 400px;">
     <div class="modal-content">
       <%= form_for @expend, html: {class: 'form-horizontal'} do |f| %>
+      <% expend = f.object %>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="addExpendsLabel"> 支出记录 <small>新建</small></h4>
@@ -23,13 +24,13 @@
         <div class="form-group">
           <label for="expend_username" class="control-label col-sm-3"><span class="require">*</span>经手人</label>
           <div class="col-sm-9">
-            <%= f.text_field :username, class: 'form-control col-sm-9', required: true %>
+            <%= f.text_field :username, value: expend.username, class: 'form-control col-sm-9', required: true %>
           </div>
         </div>
         <div class="form-group">
           <label for="expend_expend_at" class="control-label col-sm-3"><span class="require">*</span>时间</label>
           <div class="col-sm-9">
-            <%= f.date_field :expend_at, class: 'form-control col-sm-9', data: {provide: 'datepicker'}, required: true %>
+            <%= f.date_field :expend_at, value: expend.expend_at.strftime("%Y-%m-%d"), class: 'form-control col-sm-9', data: {provide: 'datepicker'}, required: true %>
           </div>
         </div>
         <div class="form-group">
@@ -47,3 +48,10 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
+    $("[data-provide=datepicker]").datepicker({
+      format: 'yyyy-mm-dd',
+      language: 'zh-CN',
+      autoclose: true
+    });
+</script>

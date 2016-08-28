@@ -84,6 +84,21 @@ permissions.each_pair do |k, v|
   end
 end
 
+####################################### 单位 #######################################
+Uom.create(name: '平方')
+Uom.create(name: '个')
+
+######################################## 工艺 #######################################
+Craft.create(full_name: '异形')
+Craft.create(full_name: '桌面')
+Craft.create(full_name: '酒架')
+Craft.create(full_name: '格子抽')
+Craft.create(full_name: '哑光G型拉手')
+Craft.create(full_name: '高光G型拉手')
+Craft.create(full_name: '免拉手工艺')
+Craft.create(full_name: '其他')
+Craft.create(full_name: '常规工艺')
+
 ####################################### 省 #######################################
 Province.create(:name => '北京')
 Province.create(:name => '天津')

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160819054409) do
+ActiveRecord::Schema.define(version: 20160827110024) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",            limit: 255, default: "",    null: false
@@ -184,7 +184,7 @@ ActiveRecord::Schema.define(version: 20160819054409) do
     t.integer  "item_id",    limit: 4
     t.integer  "item_type",  limit: 4,                            default: 0
     t.string   "item_name",  limit: 255
-    t.string   "uom",        limit: 255,                          default: "平方"
+    t.string   "uom",        limit: 255
     t.decimal  "number",                 precision: 10, scale: 6, default: 0.0
     t.decimal  "price",                  precision: 8,  scale: 2, default: 0.0
     t.decimal  "sum",                    precision: 8,  scale: 2, default: 0.0
@@ -226,7 +226,6 @@ ActiveRecord::Schema.define(version: 20160819054409) do
     t.datetime "created_at",                                                                null: false
     t.datetime "updated_at",                                                                null: false
     t.boolean  "is_use_order_material",                                     default: false
-    t.string   "logistics",             limit: 255
   end
 
   add_index "orders", ["indent_id"], name: "index_orders_on_indent_id", using: :btree
@@ -247,7 +246,7 @@ ActiveRecord::Schema.define(version: 20160819054409) do
     t.decimal  "buy",                    precision: 8, scale: 2, default: 0.0
     t.decimal  "price",                  precision: 8, scale: 2, default: 0.0
     t.integer  "store",      limit: 4,                           default: 0,     null: false
-    t.string   "uom",        limit: 255,                         default: "平方"
+    t.string   "uom",        limit: 255
     t.string   "brand",      limit: 255
     t.integer  "supply_id",  limit: 4
     t.string   "note",       limit: 255
@@ -266,9 +265,10 @@ ActiveRecord::Schema.define(version: 20160819054409) do
     t.decimal  "buy",                          precision: 8, scale: 2
     t.decimal  "price",                        precision: 8, scale: 2
     t.integer  "store",            limit: 4,                           default: 1,     null: false
-    t.string   "uom",              limit: 255,                         default: "平方"
+    t.string   "uom",              limit: 255
     t.integer  "number",           limit: 4,                           default: 1,     null: false
     t.string   "brand",            limit: 255
+    t.string   "note",             limit: 255
     t.integer  "supply_id",        limit: 4,                                           null: false
     t.boolean  "deleted",                                              default: false
     t.datetime "created_at",                                                           null: false
@@ -401,7 +401,7 @@ ActiveRecord::Schema.define(version: 20160819054409) do
     t.integer  "length",           limit: 4,                           default: 1,     null: false
     t.integer  "width",            limit: 4,                           default: 1,     null: false
     t.decimal  "number",                       precision: 8, scale: 2, default: 0.0,   null: false
-    t.string   "uom",              limit: 255,                         default: "平方",  null: false
+    t.string   "uom",              limit: 255
     t.decimal  "price",                        precision: 8, scale: 2, default: 0.0
     t.string   "size",             limit: 255,                         default: ""
     t.string   "note",             limit: 255
@@ -428,6 +428,17 @@ ActiveRecord::Schema.define(version: 20160819054409) do
   add_index "units", ["name"], name: "index_units_on_name", using: :btree
   add_index "units", ["order_id"], name: "index_units_on_order_id", using: :btree
   add_index "units", ["unit_category_id"], name: "index_units_on_unit_category_id", using: :btree
+
+  create_table "uoms", force: :cascade do |t|
+    t.string   "name",       limit: 255, default: "",    null: false
+    t.string   "val",        limit: 255
+    t.string   "note",       limit: 255, default: ""
+    t.boolean  "deleted",                default: false, null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+  end
+
+  add_index "uoms", ["name"], name: "index_uoms_on_name", unique: true, using: :btree
 
   create_table "user_categories", force: :cascade do |t|
     t.string   "serial",     limit: 255,                 null: false

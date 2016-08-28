@@ -8,7 +8,7 @@ class CreatePartCategories < ActiveRecord::Migration
       t.decimal :buy, precision: 8, scale: 2, default: 0 # 进价
       t.decimal :price, precision: 8, scale: 2, default: 0 # 售价
       t.integer :store, null: false, default: 0 # 库存
-      t.string :uom, default: '平方' # 单位
+      t.string :uom # 单位
       t.string :brand # 品牌
       t.references :supply, index: true # 供货商
       t.string :note # 备注

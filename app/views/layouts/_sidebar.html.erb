@@ -27,15 +27,17 @@
         <%end%>
         <% if current_user.permission?("AgentsController", "index") ||
         current_user.permission?("SuppliessController", "index") ||
+        current_user.permission?("UomsController", "index") ||
         current_user.permission?("OrderCategoriesController", "index") ||
         current_user.permission?("UnitCategoriesController", "index") ||
         current_user.permission?("UnitsController", "index") ||
         current_user.permission?("PartCategoriesController", "index") ||
         current_user.permission?("PartsController", "index") ||
         current_user.permission?("MaterialCategoriesController", "index") ||
-        current_user.permission?("MaterialsController", "index")
+        current_user.permission?("MaterialsController", "index") ||
+        current_user.permission?("CraftsController", "index")
         %>
-        <li  class="submenu <%= 'open' if ['agents', 'supplies', 'order_categories', 'unit_categories', 'units', 'part_categories', 'parts', 'material_categories', 'materials'].include?(controller_name)%>">
+        <li  class="submenu <%= 'open' if ['agents', 'supplies', 'uoms', 'order_categories', 'unit_categories', 'units', 'part_categories', 'parts', 'material_categories', 'materials', 'crafts'].include?(controller_name)%>">
             <a href="#">
                 <i class="fa fa-cogs"></i> 基础数据 <span class="caret pull-right"></span>
             </a>
@@ -45,6 +47,9 @@
                 <%end%>
                 <%if current_user.permission?("SuppliesController", "index")%>
                 <li class="<%="#{'active' if controller_name == 'supplies'}" %>"><%= link_to '供应商', supplies_path %></li>
+                <%end%>
+                <%if current_user.permission?("SuppliesController", "index")%>
+                <li class="<%="#{'active' if controller_name == 'uoms'}" %>"><%= link_to '单位', uoms_path %></li>
                 <%end%>
                 <%if current_user.permission?("OrderCategoriesController", "index")%>
                 <li class="<%="#{'active' if controller_name == 'order_categories'}" %>"><%= link_to '订单类型', order_categories_path %></li>
@@ -67,6 +72,9 @@
                 <% if current_user.permission?("MaterialsController", "index") %>
                 <li class="<%="#{'active' if controller_name == 'materials'}" %>"><%= link_to '板料', materials_path %></li>
                 <% end %>
+                <%if current_user.permission?("CraftsController", "index")%>
+                <li class="<%="#{'active' if controller_name == 'crafts'}" %>"><%= link_to '工艺', crafts_path %></li>
+                <%end%>
             </ul>
         </li>
         <%end%>

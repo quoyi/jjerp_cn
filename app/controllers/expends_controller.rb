@@ -5,7 +5,7 @@ class ExpendsController < ApplicationController
   # GET /expends
   # GET /expends.json
   def index
-    @expend = Expend.new
+    @expend = Expend.new(username: current_user.name, expend_at: Time.now)
     @expends = Expend.where(deleted: false)
   end
 
@@ -16,7 +16,7 @@ class ExpendsController < ApplicationController
 
   # GET /expends/new
   def new
-    @expend = Expend.new
+    @expend = Expend.new(username: current_user.name, expend_at: Time.now)
   end
 
   # GET /expends/1/edit
