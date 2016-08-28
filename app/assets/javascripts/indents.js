@@ -32,7 +32,7 @@ $(function() {
       type: 'GET',
       success: function(data){
         $("#indent_logistics").val(data.logistics);
-        $("#agent_address").text(data.province+data.city+data.district+data.town+data.address)
+        $("#agent_address").val(data.province + data.city + data.district + data.town + data.address)
       },
       error: function(data){
         alert("Error");
