@@ -1,7 +1,8 @@
 class MaterialCategory < ActiveRecord::Base
   has_many :material
   validates_presence_of :oftype, :name
-  validates :name, uniqueness: {scope: :oftype}
+  # validates :name, uniqueness: {scope: :oftype}
+  validates_uniqueness_of :name, scope: :oftype
 
   #下单条件：1.厚度 2.材质 3.颜色
   enum oftype: [:ply, :texture, :color]

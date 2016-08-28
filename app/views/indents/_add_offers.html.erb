@@ -23,7 +23,7 @@
                   </div>
                   <div class="col-sm-1">
                     <label>单位</label>
-                    <%= offer_form.text_field :uom, style: "width: 60%;", required: true %>
+                    <%= offer_form.select :uom, Uom.where(deleted: false).map{|o|[o.name,o.name]}, style: "width: 60%;", required: true %>
                   </div>
                   <div class="col-sm-2">
                     <label>数量</label>

@@ -23,7 +23,7 @@
               </div>
               <div class="col-sm-1">
                 <label>单位</label>
-                <%= part_form.text_field :uom, value: pf.new_record? ? '个' : pf.uom, required: true, style: "width:70%;", class: 'part-category-uom' %>
+                <%= part_form.select :uom, Uom.where(deleted: false).map{|u|[u.name,u.name]}, required: true, style: "width:70%;", class: 'part-category-uom' %>
               </div>
               <div class="col-sm-2">
                 <label>售价</label>

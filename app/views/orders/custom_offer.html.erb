@@ -41,7 +41,7 @@
               </div>
               <div class="col-sm-2">
                 <label><span class="require">*</span>单位</label>
-                <%= unit_form.text_field :uom, value: uf.new_record? ? '平方' : uf.uom, class: 'form-control material-uom',style: 'width: 60%', required: true  %>
+                <%= unit_form.select :uom, Uom.where(deleted: false).map{|u|[u.name,u.name]}, class: 'form-control material-uom',style: 'width: 60%', required: true  %>
               </div>
               <div class="col-sm-2">
                 <label><span class="require">*</span>单价</label>
@@ -104,7 +104,7 @@
               <div class="row">
                 <div class="col-sm-3">
                   <label><span class="require">*</span>单位</label>
-                  <%= part_form.text_field :uom, value: pf.new_record? ? '个' : pf.uom, class: 'form-control part-category-uom',style: 'width: 60%', required: true  %>
+                  <%= part_form.select :uom, Uom.where(deleted: false).map{|u|[u.name,u.name]}, class: 'form-control part-category-uom',style: 'width: 60%', required: true  %>
                 </div>
                 <div class="col-sm-3">
                   <label><span class="require">*</span>单价</label>
@@ -127,7 +127,7 @@
       <div class="panel panel-default">
         <div class="panel-heading order-panel-header">
           <h3 class="panel-title order-panel-header">工艺&nbsp;&nbsp;&nbsp;&nbsp;
-            <%= link_to '新建', '#', disabled: true, class: 'btn btn-info btn-xs', data: { toggle: 'tooltip'}, title: '新建工艺（暂未开放）' %>
+            <%= link_to '新建', '#', class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addCraft'}, title: '新建工艺' %>
             <%= f.link_to_add '添加工艺', :crafts, data: {target: '#orderCraftsForm'}, class: 'btn btn-info btn-xs pull-right' %>
           </h3>
         </div>
@@ -143,7 +143,7 @@
                 </div>
                 <div class="col-sm-2">
                   <label><span class="require">*</span>单位</label>
-                  <%= craft_form.text_field :uom, value: cf.new_record? ? '次' : cf.uom ,class: 'form-control',style: 'width: 60%', required: true %>
+                  <%= craft_form.select :uom, Uom.where(deleted: false).map{|u|[u.name,u.name]}, class: 'form-control',style: 'width: 60%', required: true %>
                 </div>
                 <div class="col-sm-2">
                   <label><span class="require">*</span>单价</label>
@@ -187,3 +187,4 @@
 </div>
 <%= render '/materials/new' %>
 <%= render '/part_categories/new' %>
+<%= render '/crafts/new' %>

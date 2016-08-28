@@ -19,10 +19,10 @@
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
           <tr class="info">
-            <th  class="text-center">类型</th>
-            <th  class="text-center">名称</th>
-            <th  class="text-center">备注</th>
-            <th  class="text-center">操作</th>
+            <th class="col-sm-1 text-center">类型</th>
+            <th class="col-sm-3 text-center">名称</th>
+            <th class="col-sm-6 text-center">备注</th>
+            <th class="col-sm-2 text-center">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -32,10 +32,11 @@
             <td><%= mc.name %></td>
             <td style="max-width:400px;"><%= mc.note %></td>
             <td>
+              <%= link_to "编辑", edit_material_category_path(id: mc.id), class:'btn btn-xs btn-primary', data: { toggle: 'modal', target: '#editMaterialCategory'} %>
               <% if mc.deleted %>
-              <%= link_to '恢复', material_category_path(mc, reset: true), method: :patch, style: "color: green !important;" %>
+              <%= link_to '恢复', material_category_path(mc, reset: true), method: :patch, class: 'btn btn-xs btn-default', style: "color: green !important;" %>
               <% else %>
-              <%= link_to '删除', mc, method: :delete, style: "color: red !important;", data: { confirm: '确认删除？' } %>
+              <%= link_to '删除', mc, method: :delete, style: "color: red !important;", class: 'btn btn-xs btn-default',  data: { confirm: '确认删除？' } %>
               <% end %>
             </td>
           </tr>
@@ -45,4 +46,18 @@
     </div>
   </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="editMaterialCategory" tabindex="-1" role="dialog" aria-labelledby="editMaterialCategoryLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$("#editMaterialCategory").on("hidden.bs.modal", function(e){
+  $(this).removeData("bs.modal");
+});
+</script>
+
 <%= render 'new' %>

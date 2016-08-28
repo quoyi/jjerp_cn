@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :uoms
   resources :sent_lists
   resources :banks
   resources :sents do

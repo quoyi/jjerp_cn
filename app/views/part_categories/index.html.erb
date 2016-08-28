@@ -35,7 +35,7 @@
           <% @part_categories.each do |pc| %>
           <tr>
             <td><%= pc.parent_id? ? PartCategory.find_by_id(pc.parent_id).try(:name) : '基本类型' %></td>
-            <td><%= link_to pc.name, '#', data: { toggle: 'modal', target: '#editPartCategory', id: pc.id, name: pc.name }, title: '编辑配件类型名称' %></td>
+            <td><%= pc.name %></td>
             <td><%= pc.buy %></td>
             <td><%= pc.price %></td>
             <td><%= pc.store %></td>
@@ -44,10 +44,11 @@
             <td><%= pc.brand %></td>
             <td style="max-width:400px;"><%= pc.note %></td>
             <td>
+              <%= link_to "编辑", '#', class:'btn btn-xs btn-primary', data: { toggle: 'modal', target: '#editPartCategory', id: pc.id, name: pc.name } %>
               <% if pc.deleted %>
-              <%= link_to '恢复', part_category_path(pc, reset: true), method: :patch, style: "color: green !important;" %>
+              <%= link_to '恢复', part_category_path(pc, reset: true), method: :patch, class:'btn btn-xs btn-default',  style: "color: green !important;" %>
               <% else %>
-              <%= link_to '删除', pc, method: :delete, style: "color: red !important;", data: { confirm: '确认删除？' } %>
+              <%= link_to '删除', pc, method: :delete, style: "color: red !important;", class:'btn btn-xs btn-default',  data: { confirm: '确认删除？' } %>
               <% end %>
             </td>
           </tr>

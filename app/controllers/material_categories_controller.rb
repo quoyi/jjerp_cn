@@ -1,5 +1,5 @@
 class MaterialCategoriesController < ApplicationController
-  before_action :set_material_category, only: [:destroy]
+  before_action :set_material_category, only: [:show, :edit, :update, :destroy]
 
   # GET /material_categories
   # GET /material_categories.json
@@ -20,12 +20,22 @@ class MaterialCategoriesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /part_categories/1
-  # PATCH/PUT /part_categories/1.json
+  # GET /material_categories/1/edit
+  def edit
+    @material_category = MaterialCategory.find_by_id(params[:id]) if params[:id].present?
+    render layout: false
+  end
+
+  # PATCH/PUT /material_categories/1
+  # PATCH/PUT /material_categories/1.json
   def update
     mc = MaterialCategory.find_by_id(params[:id])
     mc.update_attributes(deleted: false) if params[:reset].present? && params[:reset]
-    redirect_to material_categories_path, notice: '板料类型编辑成功！'
+    if mc.update(material_category_params)
+      redirect_to material_categories_path, notice: '板料类型编辑成功！'
+    else
+      redirect_to material_categories_path, error: '板料编辑失败！'
+    end
   end
 
   # DELETE /material_categories/1

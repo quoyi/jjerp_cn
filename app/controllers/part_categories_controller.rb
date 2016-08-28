@@ -11,7 +11,9 @@ class PartCategoriesController < ApplicationController
 
   # POST /part_categories/find.json
   def find
-    @part_categories = PartCategory.where(parent_id: params[:parent_id]) if params[:parent_id].present?
+    binding.pry
+    @part_categories = PartCategory.where(parent_id: params[:parent_id], deleted: false) if params[:parent_id].present?
+    # 通用性问题（view 中使用了 each，遍历单条记录时会报错），此处必须用where 
     @part_categories = PartCategory.where(id: params[:id]) if params[:id].present?
     respond_to do |format|
       format.json { render json: @part_categories}

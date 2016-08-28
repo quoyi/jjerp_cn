@@ -36,6 +36,7 @@ class OrdersController < ApplicationController
     @unit = Unit.new
     @material = Material.new
     @part_category = PartCategory.new
+    @craft = Craft.new
     # 这里可能需要修改, 应查找unit_category并获取ID值，再查找对应的material；而不是写固定值“1”
     @units = Unit.where(order_id: @order.id)
     @parts = Part.where(order_id: @order.id)
@@ -139,6 +140,7 @@ class OrdersController < ApplicationController
     @unit = Unit.new
     @material = Material.new
     @part_category = PartCategory.new
+    @craft = Craft.new
   end
 
   # 未打包
