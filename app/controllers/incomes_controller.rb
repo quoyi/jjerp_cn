@@ -5,7 +5,7 @@ class IncomesController < ApplicationController
   # GET /incomes
   # GET /incomes.json
   def index
-    @income = Income.new
+    @income = Income.new(username: current_user.name, income_at: Time.now)
     @incomes = params[:indent_id].present? ? Income.where(indent_id: params[:indent_id]) : Income.all
   end
 
@@ -16,7 +16,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    @income = Income.new
+    @income = Income.new(username: current_user.name, income_at: Time.now)
   end
 
   # GET /incomes/1/edit
@@ -66,6 +66,11 @@ class IncomesController < ApplicationController
     elsif params[:start_at].present? || params[:end_at].present?
       @incomes = @incomes.where("income_at = ? ", params[:start_at].present? ? params[:start_at] : params[:end_at])
       @expends = @expends.where("expend_at = ? ", params[:start_at].present? ? params[:start_at] : params[:end_at])
+    elsif !params[:start_at].present? && !params[:end_at].present?
+      beginning_month = Date.today.beginning_of_month
+      end_month = Date.today.end_of_month
+      @incomes = @incomes.where("income_at between ? and ?", beginning_month, end_month)
+      @expends = @expends.where("expend_at between ? and ?", beginning_month, end_month)
     end
 
     if params[:bank_id].present?

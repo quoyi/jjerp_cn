@@ -30,7 +30,7 @@
               </tr>
               <tr>
                 <td><label>单位</label></td>
-                <td><%= unit_form.text_field :uom, value: uf.new_record? ? '平方' : uf.uom, required: true, class: 'material-uom'  %></td>
+                <td><%= unit_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {include_blank: '请选择'}, {required: true, class: 'material-uom'} %></td>
                 <td><label>厚度</label></td>
                 <td><%= unit_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {}, {class: 'material-ply', onchange: 'getMaterialPrice(this)'} %></td>
                 <td><label>材质</label></td>

@@ -1,61 +1,57 @@
 <!-- Modal -->
-      <%= form_for @material, html: {class: 'form-horizontal'} do |f| %>
-      <div class="modal-header">
-        <h4 class="modal-title" id="addMaterialsLabel"> 板料 <small>新建</small></h4>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <%= f.label '厚度', for: 'material_ply', class: 'control-label col-sm-3' %>
-          <div class="col-sm-9">
-            <%= select_tag 'material[ply]', options_for_select(MaterialCategory.where(oftype: 0).map{|mc|[mc.name, mc.id]}, f.object.ply), disabled: true, class: 'form-control', required: true %>
-          </div>
-        </div>
-        <div class="form-group">
-          <%= f.label '材质', for: 'material_texture', class: 'control-label col-sm-3' %>
-          <div class="col-sm-9">
-            <%= select_tag 'material[texture]', options_for_select(MaterialCategory.where(oftype: 1).map{|mc|[mc.name, mc.id]}, f.object.texture), disabled: true, class: 'form-control', required: true %>
-          </div>
-        </div>
-        <div class="form-group">
-          <%= f.label '颜色', for: 'material_color', class: 'control-label col-sm-3' %>
-          <div class="col-sm-9">
-            <%= select_tag 'material[color]', options_for_select(MaterialCategory.where(oftype: 2).map{|mc|[mc.name, mc.id]}, f.object.color), disabled: true,class: 'form-control', required: true %>
-          </div>
-        </div>
-        <div class="form-group">
-          <%= f.label '进价', for: 'material_buy', class: 'control-label col-sm-3' %>
-          <div class="col-sm-9">
-            <%= f.number_field :buy, class: 'form-control', value: f.object.buy, min: 0, step: 0.01, required: true %>
-          </div>
-        </div>
-        <div class="form-group">
-          <%= f.label '售价', for: 'material_sell', class: 'control-label col-sm-3' %>
-          <div class="col-sm-9">
-            <%= f.number_field :price, class: 'form-control', value: f.object.price, min: 0, step: 0.01, required: true %>
-          </div>
-        </div>
-        <div class="form-group">
-          <%= f.label '单位', for: 'material_uom', class: 'control-label col-sm-3' %>
-          <div class="col-sm-9">
-            <%= f.text_field :uom, class: 'form-control', value: '平方', required: true %>
-          </div>
-        </div>
-        <div class="form-group">
-          <%= f.label '库存', for: 'material_store', class: 'control-label col-sm-3' %>
-          <div class="col-sm-9">
-            <%= f.number_field :store, class: 'form-control', value: 1, min: 0, step: 0.01, required: true %>
-          </div>
-        </div>
-        <div class="form-group">
-          <%= f.label '供应商', for: 'material_supply_id', class: 'control-label col-sm-3' %>
-          <div class="col-sm-9">
-            <%= select_tag 'material[supply_id]', options_for_select(Supply.all.map{|s|[s.full_name,s.id]}, f.object.supply_id), disabled: true,class: 'form-control', required: true %>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
-        <%= f.submit '提交', class: 'btn btn-primary' %>
-      </div>
-      <% end %>
-
+<%= form_for @material, html: {class: 'form-horizontal'} do |f| %>
+<div class="modal-body">
+  <div class="form-group">
+    <%= f.label '厚度', for: 'material_ply', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= select_tag 'material[ply]', options_for_select(MaterialCategory.where(oftype: 0).map{|mc|[mc.name, mc.id]}, f.object.ply), disabled: true, class: 'form-control', required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label '材质', for: 'material_texture', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= select_tag 'material[texture]', options_for_select(MaterialCategory.where(oftype: 1).map{|mc|[mc.name, mc.id]}, f.object.texture), disabled: true, class: 'form-control', required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label '颜色', for: 'material_color', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= select_tag 'material[color]', options_for_select(MaterialCategory.where(oftype: 2).map{|mc|[mc.name, mc.id]}, f.object.color), disabled: true,class: 'form-control', required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label '进价', for: 'material_buy', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= f.number_field :buy, class: 'form-control', value: f.object.buy, min: 0, step: 0.01, required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label '售价', for: 'material_sell', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= f.number_field :price, class: 'form-control', value: f.object.price, min: 0, step: 0.01, required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label '单位', for: 'material_uom', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= f.select :uom, Uom.where(deleted: false).map{|u|[u.name,u.name]}, class: 'form-control', required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label '库存', for: 'material_store', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= f.number_field :store, class: 'form-control', value: 1, min: 0, step: 0.01, required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label '供应商', for: 'material_supply_id', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= select_tag 'material[supply_id]', options_for_select(Supply.all.map{|s|[s.full_name,s.id]}, f.object.supply_id), disabled: true,class: 'form-control', required: true %>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <%= link_to '取消', materials_path, class: 'btn btn-default' %>
+  <%= f.submit '提交', class: 'btn btn-primary' %>
+</div>
+<% end %>

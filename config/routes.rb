@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :uoms
   resources :sent_lists
   resources :banks
   resources :sents do
@@ -17,7 +18,11 @@ Rails.application.routes.draw do
       get :stat
     end
   end
-  resources :crafts
+  resources :crafts do
+    collection do
+      post :find
+    end
+  end
   resources :tasks
   resources :units
   resources :supplies

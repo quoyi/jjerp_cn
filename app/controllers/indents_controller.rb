@@ -12,7 +12,7 @@ class IndentsController < ApplicationController
     now = Time.now
     after_ten_day = Time.now + 864000 # 十天 = 60 (秒钟/分钟) * 60 (分钟/天) * 24 (小时/天) * 10
     @indent = Indent.new(name: Time.now.strftime("%y%m%d") + SecureRandom.hex(1).upcase, verify_at: Time.now, require_at: after_ten_day)
-    @income = @indent.incomes.new
+    @income = @indent.incomes.new(username: current_user.name, income_at: now)
     @indents = Indent.all.order(created_at: :desc)
     if params[:start_at].present? && params[:end_at].present?
       @indents = @indents.where("verify_at between ? and ?", params[:start_at], params[:end_at])

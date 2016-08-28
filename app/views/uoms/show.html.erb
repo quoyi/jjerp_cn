@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @uom.name %>
+</p>
+
+<p>
+  <strong>Val:</strong>
+  <%= @uom.val %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @uom.note %>
+</p>
+
+<p>
+  <strong>Deleted:</strong>
+  <%= @uom.deleted %>
+</p>
+
+<%= link_to 'Edit', edit_uom_path(@uom) %> |
+<%= link_to 'Back', uoms_path %>

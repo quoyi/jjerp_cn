@@ -1,0 +1,27 @@
+<!-- Modal -->
+<div class="modal fade" id="addUom" tabindex="-1" role="dialog" aria-labelledby="addUomLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="addUomLabel"> 单位 <small>新建</small></h4>
+      </div>
+      <%= form_for @uom, class: 'form-inline' do |f| %>
+      <div class="modal-body" style="padding-bottom: 15px;">
+        <div class="row">
+          <div class="col-sm-3 text-center" style="padding: 0px;">
+            <label for="name" style="margin: 5px 7px;padding: 1px;"><span class="require">*</span>名称</label>
+          </div>
+          <div class="col-sm-9">
+            <%= f.text_field :name, value: @uom.name, required: true, placeholder: '请输入单位名称' %>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
+        <%= f.submit '提交', class: 'btn btn-primary' %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
