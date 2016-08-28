@@ -12,12 +12,27 @@ class OrdersController < ApplicationController
     @craft = Craft.new
     @order = Order.new
     @orders = Order.all.order(created_at: :desc)
+    @start_at = Date.today.beginning_of_month.to_s
+    @end_at = Date.today.end_of_month.to_s
+    @province = '420000'
+    @city = '420100'
+    @district = '--地区--'
+
+    if params[:province].present? || params[:city].present? || params[:district].present?
+      @province = params[:province]
+      @city = params[:city]
+      @district = params[:district]      
+    end
+
+    search = [ChinaCity.get(@province), ChinaCity.get(@city), ChinaCity.get(@district)].compact.join('')
+    @orders = @orders.where("delivery_address like :keyword",keyword: "%#{search}%")
+
     # 判断搜索条件 起始时间 -- 结束时间
     if params[:start_at].present? && params[:end_at].present?
-      @orders = @orders.joins(:indent).where("indents.verify_at between ? and ?", params[:start_at], params[:end_at])
-    elsif params[:start_at].present? || params[:end_at].present?
-      @orders = @orders.joins(:indent).where("indents.verify_at = ? ", params[:start_at].present? ? params[:start_at] : params[:end_at])
+      @start_at = params[:start_at]
+      @end_at = params[:end_at]
     end
+    @orders = @orders.joins(:indent).where("indents.verify_at between ? and ?", @start_at, @end_at)
     # 搜索条件 代理商ID
     @orders = @orders.joins(:indent).where("indents.agent_id = ?",params[:agent_id]) if params[:agent_id].present?
     respond_to do |format|
@@ -27,6 +42,7 @@ class OrdersController < ApplicationController
         export_orders(filename, @orders, params[:start_at], params[:end_at])
         send_file "#{Rails.root}/public/excels/orders/" + filename, type: 'text/xls; charset=utf-8'
       end
+
     end
   end
 
@@ -252,7 +268,7 @@ class OrdersController < ApplicationController
   def order_params
     params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture,
                                   :color, :length, :width, :height, :number, :price,
-                                  :status, :oftype, :note, :deleted, :file, :_destroy, :is_use_order_material,
+                                  :status, :oftype, :note, :deleted, :file, :_destroy, :is_use_order_material, :delivery_address,
                                   units_attributes: [:id, :full_name, :number, :ply, :texture, :color, :is_custom,
                                                      :length, :width, :size, :uom, :price, :note, :_destroy],
                                   parts_attributes: [:id, :part_category_id, :order_id,

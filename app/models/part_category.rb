@@ -8,7 +8,6 @@ class PartCategory < ActiveRecord::Base
   #validates :name, uniqueness: {scope: :parent_id}
   before_save :set_part_category
 
-
   def set_part_category
     # 设置基本类型的 parent_id
     self.parent_id = 0 unless self.parent_id

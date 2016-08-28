@@ -6,7 +6,12 @@ class IncomesController < ApplicationController
   # GET /incomes.json
   def index
     @income = Income.new
-    @incomes = params[:indent_id].present? ? Income.where(indent_id: params[:indent_id]) : Income.all
+    @incomes = Income.all
+
+    if params[:indent_id].present? 
+      indent = Indent.find(params[:indent_id])
+      @incomes =@incomes.where(order_id: indent.orders.pluck(:id))
+    end
   end
 
   # GET /incomes/1
@@ -27,6 +32,7 @@ class IncomesController < ApplicationController
   # POST /incomes.json
   def create
     @income = Income.new(income_params)
+    # @income.order_id = Order.find_by_name(income_params[:order_id]).id
     if @income.save
       # 修改银行卡的收入信息
       updateIncomeExpend(income_params, 0)
@@ -88,7 +94,7 @@ class IncomesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def income_params
-      params.require(:income).permit(:name, :reason, :indent_id, :money, :username, :income_at,
+      params.require(:income).permit(:name, :reason, :order_id, :money, :username, :income_at,
                                     :status, :note, :bank_id, :deleted)
     end
 end

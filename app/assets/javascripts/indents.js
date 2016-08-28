@@ -32,6 +32,7 @@ $(function() {
       type: 'GET',
       success: function(data){
         $("#indent_logistics").val(data.logistics);
+        $("#agent_address").text(data.province+data.city+data.district+data.town+data.address)
       },
       error: function(data){
         alert("Error");
@@ -62,12 +63,12 @@ $(function() {
   $("#addIncomes").on('show.bs.modal', function(e) {
     if (e != null && e.relatedTarget != null) {
       // 获取 订单号、应收金额、已收金额
-      var indent_id = e.relatedTarget.dataset.indent;
-      if (indent_id != null && indent_id != "") {
+      var order_id = e.relatedTarget.dataset.order;
+      if (order_id != null && order_id != "") {
         var amount = e.relatedTarget.dataset.amount;
         var arrear = e.relatedTarget.dataset.arrear;
         var username = e.relatedTarget.dataset.username;
-        $("#income_indent_id").val(indent_id);
+        $("#income_order_id").val(order_id);
         $("#income_should").val(amount);
         $("#income_yet").val(amount - arrear);
         $("#income_username").val(username);
@@ -120,6 +121,9 @@ $(function() {
       );;
     };
   })(this));
+
+
+
 });
 
 

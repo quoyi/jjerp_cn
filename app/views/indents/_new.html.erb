@@ -11,32 +11,37 @@
 				<div class="panel panel-default" style="margin-bottom: 0px;">
 					<div class="panel-heading">
 						<div class="form-group">
-							<label for="indent_name" class="col-sm-1 control-label"><span class="require">*</span>订单编号</label>
-							<div class="col-sm-3">
+							<label for="indent_name" class="col-sm-2 control-label"><span class="require">*</span>订单编号</label>
+							<div class="col-sm-2">
 								<%= f.text_field :name, value: @indent.name, class: 'form-control', required: true, readOnly: true %>
 							</div>
-							<label for="indent_customer" class="col-sm-1 control-label"><span class="require">*</span>终端客户</label>
-							<div class="col-sm-3">
+							<label for="indent_customer" class="col-sm-2 control-label"><span class="require">*</span>终端客户</label>
+							<div class="col-sm-2">
 								<%= f.text_field :customer, class: 'form-control', required: true %>
 							</div>
-							<label for="indent_logistics" class="col-sm-1 control-label"><span class="require">*</span>要求物流</label>
-							<div class="col-sm-3">
+							<label for="indent_logistics" class="col-sm-2 control-label"><span class="require">*</span>要求物流</label>
+							<div class="col-sm-2">
 								<%= f.text_field :logistics, class: 'form-control', required: true %>
 							</div>
 						</div>
 						<div class="form-group">
-							<%= f.label '代理商', for: 'indent_agent_id', class: 'col-sm-1 control-label' %>
-							<div class="col-sm-3">
-								<%= f.select :agent_id, @agents.map{|a|[a.full_name, a.id]}, class: 'form-control' %>
-								<%= link_to '新建代理商', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm' %>
-							</div>
-							<label for="indent_verify_at" class="col-sm-1 control-label"><span class="require">*</span>下单时间</label>
+							<label for="indent_verify_at" class="col-sm-2 control-label"><span class="require">*</span>下单时间</label>
 							<div class="col-sm-3">
 								<%= f.date_field :verify_at, class: 'form-control', data: {provide: 'datepicker'}, required: true %>
 							</div>
-							<label for="indent_require_at" class="col-sm-1 control-label"><span class="require">*</span>要求时间</label>
+							<label for="indent_require_at" class="col-sm-2 control-label"><span class="require">*</span>要求时间</label>
 							<div class="col-sm-3">
 								<%= f.date_field :require_at, class: 'form-control', data: {provide: 'datepicker'}, required: true %>
+							</div>
+						</div>
+						<div class="form-group">
+							<%= f.label '代理商', for: 'indent_agent_id', class: 'col-sm-2 control-label' %>
+							<div class="col-sm-4">
+								<%= f.select :agent_id, @agents.map{|a|[a.full_name, a.id]}, class: 'form-control' %>
+								<%= link_to '新建代理商', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm' %>
+							</div>
+							<div class="col-sm-6">
+								<b>代理商地址：<span id="agent_address"><%= @current_agent.full_address %></span> </b>
 							</div>
 						</div>
 					</div>
@@ -90,13 +95,18 @@
 																<label>高度</label>
 																<%#= order_form.number_field :height, value: 1, min: 0, step: 0.01, style: "width: 50%;" %>
 											</div> -->
-											<div class="col-sm-3">
+											<div class="col-sm-2">
 												<label>价格</label>
 												<%= order_form.number_field :price, min: 0, step: 0.01, value: init_price, style: 'width: 50%;', class: 'material-price' %>
 											</div>
-											<div class="col-sm-9">
+											<div class="col-sm-5">
 												<label>备注</label>
-												<%= order_form.text_field :note, style: "width:90%;" %>
+												<%= order_form.text_field :note, style: "width:80%;"%>
+											</div>
+											<div class="col-sm-5">
+												<label>收货地址</label>
+												<%= order_form.text_field :delivery_address, style: "width:80%;" %>
+												<small style="color: red">&nbsp;&nbsp;&nbsp;&nbsp;＊＊＊＊若不填写则默认为代理商地址</small>
 											</div>
 										</div>
 									</div>

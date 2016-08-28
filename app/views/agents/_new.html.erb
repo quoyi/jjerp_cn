@@ -17,7 +17,7 @@
               <%= f.text_field :name, value: @agent.name, required: true, readOnly: true %>
             </td>
             <td data-toggle="tooltip" title="必填项">
-              <label><span class="require">*</span>名称</label>
+              <label><span class="require">*</span>店面</label>
             </td>
             <td>
               <%= f.text_field :full_name, required: true %>
@@ -36,6 +36,39 @@
             <td>
               <%= f.text_field :contacts, required: true %>
             </td>
+          </tr>
+          <tr>
+            <td data-toggle="tooltip" title="必填项">
+              <label><span class="require">*</span>省市县</label>
+            </td>
+            <td colspan="3">
+              <div class="city-group">
+                <select name="agent[province]" id="agent_province" class="city-select">
+                  <option value="">--省份--</option>
+                  <%= options_for_select(ChinaCity.list) %>
+                </select>
+                <select name="agent[city]" id="agent_city" class="city-select">
+                  <option value="">--城市--</option>
+                </select>
+                <select name="agent[district]" id="agent_district" class="city-select">
+                  <option value="">--地区--</option>
+                </select>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <%= f.label '城镇' %>
+            </td>
+            <td>
+              <%= f.text_field :town %>
+            </td>
+            <td>
+              <label><span class="require">*</span>货到</label>
+            </td>
+            <td>
+              <%= f.text_field :address, required: true %>
+            </td>            
           </tr>
           <tr>
             <td>

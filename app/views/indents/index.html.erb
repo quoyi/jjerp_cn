@@ -7,10 +7,7 @@
       </div>
     </div>
   </div>
-  <% @start_at = nil; @end_at = nil;%>
   <% if params[:start_at] || params[:end_at] || params[:agent_id]%>
-  <% @start_at = params[:start_at]%>
-  <% @end_at = params[:end_at]%>
   <% @agent_search = Agent.find_by_id(params[:agent_id])%>
   <% end%>
   <div class="content-box-large box-with-header">
@@ -23,9 +20,9 @@
           <div class="panel-body">
             <div class="col-sm-6">
               <label>下单时间：</label>
-              <%= date_field_tag :start_at, @start_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择起始日期' %>
+              <%= date_field_tag :start_at, @start_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择起始日期',required: true  %>
               &nbsp;&nbsp;--&nbsp;&nbsp;
-              <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择终止日期' %>
+              <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择终止日期',required: true %>
             </div>
             <div class="col-sm-4">
               <label>代理商: </label>
@@ -131,11 +128,7 @@
                 </td> -->
                 <td>
                   <%= link_to '编辑', edit_indent_path(i), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title:'编辑总订单' %>
-                  <% if i.amount.to_i == 0 %>
-                    <button class="btn btn-primary btn-xs" disabled="true">到款</button>
-                  <%  else %>
-                      <%= link_to '到款', '#', class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', indent: i.id, amount: i.amount, arrear: i.arrear, username: current_user.name}, id: 'addIncomesBtn' %>
-                  <% end %>
+                  <%= link_to '到款详细', incomes_path(indent_id: i.id), class: 'btn-primary btn-xs' %>
                   <%#= link_to '生产', indent_path(id: i.id, indent: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
                 </td>
               </tr>
@@ -148,4 +141,3 @@
   </div>
 </div>
 <%= render 'new' %>
-<%= render '/incomes/new' %>

@@ -24,4 +24,5 @@
 //= require jquery_nested_form
 //= require bootstrap-datepicker/core
 //= require bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN
+//= require 'china_city/jquery.china_city'
 //= require_tree .

@@ -13,12 +13,15 @@ class IndentsController < ApplicationController
     after_ten_day = Time.now + 864000 # 十天 = 60 (秒钟/分钟) * 60 (分钟/天) * 24 (小时/天) * 10
     @indent = Indent.new(name: Time.now.strftime("%y%m%d") + SecureRandom.hex(1).upcase, verify_at: Time.now, require_at: after_ten_day)
     @income = @indent.incomes.new
+    @current_agent = @indent.agent ||  @agents.first
     @indents = Indent.all.order(created_at: :desc)
+    @start_at = Date.today.beginning_of_month.to_s
+    @end_at = Date.today.end_of_month.to_s
     if params[:start_at].present? && params[:end_at].present?
-      @indents = @indents.where("verify_at between ? and ?", params[:start_at], params[:end_at])
-    elsif params[:start_at].present? || params[:end_at].present?
-      @indents = @indents.where("verify_at = ? ", params[:start_at].present? ? params[:start_at] : params[:end_at])
+      @start_at = params[:start_at]
+      @end_at = params[:end_at]
     end
+    @indents = @indents.where("verify_at between ? and ?", @start_at, @end_at)
 
     if params[:agent_id].present?
       @indents = @indents.where(agent_id: params[:agent_id])
@@ -169,7 +172,7 @@ class IndentsController < ApplicationController
                                    :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted, :status,
                                    orders_attributes: [:id, :order_category_id, :customer, :number, :ply,
                                                        :texture, :color, :price, :length, :width, :height, :oftype,
-                                                       :note, :is_use_order_material, :_destroy],
+                                                       :note, :is_use_order_material, :delivery_address, :_destroy],
                                    offers_attributes: [:id, :order_id, :item_id, :item_type, :item_name,
                                                        :uom, :number, :price, :note, :_destroy])
      # _return[:orders_attributes].each_pair{|k,v| v[:type] = Order.types[v[:type]] }

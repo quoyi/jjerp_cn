@@ -2,6 +2,8 @@ class Order < ActiveRecord::Base
   include OffersHelper
   belongs_to :order_category
   belongs_to :indent
+  belongs_to :agent
+  has_many :incomes
   has_many :offers, dependent: :destroy
   has_many :units, dependent: :destroy
   has_many :parts, dependent: :destroy
@@ -10,6 +12,7 @@ class Order < ActiveRecord::Base
   has_one :sent, as: :owner, dependent: :destroy #一个子订单只有一个发货信息
   # 发货时间需在十天以后
   # validate :validate_require_time
+  validates_uniqueness_of :name
   before_create :generate_order_code
   accepts_nested_attributes_for :units, allow_destroy: true
   accepts_nested_attributes_for :parts, allow_destroy: true
@@ -32,6 +35,16 @@ class Order < ActiveRecord::Base
       when 'sent' then '已发货'
     else
       "未知状态"
+    end
+  end
+
+  def income_status
+    if self.incomes.pluck(:money).sum >= self.price
+      '全款'
+    elsif self.incomes.pluck(:money).sum.to_i == 0
+      '未打款'
+    else
+      '定金'
     end
   end
 
@@ -62,8 +75,10 @@ class Order < ActiveRecord::Base
   end
 
   def generate_order_code
-    last_order = Order.where(indent_id: self.indent.id).order('id ASC').last
-    order_index = last_order.present? ? (last_order.name.split(/-/).last.to_i + 1).to_s : 1
+    self.agent_id = self.indent.agent_id
+    self.delivery_address = self.agent.full_address if self.delivery_address.blank?
+    current_month = Time.now.strftime('%Y%m')
+    agent_orders_count = Order.where("name like '#{current_month}-%'").count
     temp_hash = {'1': 'w', '2': '', '3': '', '4': 'y', '5': '', '6': '', '7': ''}
 
     tmp = case Order.oftypes[oftype]
@@ -74,7 +89,7 @@ class Order < ActiveRecord::Base
             "#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
           end
 
-    self.name = self.indent.name + "-" + tmp + "-" + order_index.to_s
+    self.name =  current_month + "-" + tmp + "-" + (agent_orders_count+1).to_s
   end
 
   def caseType(type, str)

@@ -60,6 +60,8 @@ gem "prawnto_2", :require => "prawnto"
 gem 'prawn-table'
 gem 'prawn-print'
 
+gem 'china_city'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

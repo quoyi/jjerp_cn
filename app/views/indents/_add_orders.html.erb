@@ -63,9 +63,13 @@
                   <label>价格</label>
                   <%= order_form.number_field :price, min: 0, step: 0.01, value: of.new_record? ? init_price : of.price, style: 'width: 50%;', class: 'material-price' %>
                 </div>
-                <div class="col-sm-10">
+                <div class="col-sm-5">
                   <label>备注</label>
-                  <%= order_form.text_field :note, style: "width: 91%;" %>
+                  <%= order_form.text_field :note, style: "width: 51%;" %>
+                </div>
+                <div class="col-sm-5">
+                  <label>收货地址</label>
+                  <%= order_form.text_field :delivery_address, style: "width: 61%;" %>
                 </div>
               </div>
             </div>

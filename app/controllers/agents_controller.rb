@@ -14,7 +14,7 @@ class AgentsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: {:agents => (@agents.map{|ac| {id: ac.id, text: ac.full_name}} << {id: nil, text: '全部'}).reverse, :total => @agents.size} }
+      format.json { render json: {:agents => (@agents.map{|ac| {id: ac.id, text: (ac.full_name)}} << {id: nil, text: '全部'}).reverse, :total => @agents.size} }
     end
 
   end
@@ -41,6 +41,9 @@ class AgentsController < ApplicationController
   # POST /agents.json
   def create
     @agent = Agent.new(agent_params)
+    @agent.province = ChinaCity.get(agent_params[:province])
+    @agent.city = ChinaCity.get(agent_params[:city])
+    @agent.district = ChinaCity.get(agent_params[:district])
     if @agent.save
       redirect_to :back, notice: '代理商创建成功！'
     else
@@ -73,7 +76,7 @@ class AgentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def agent_params
-      params.require(:agent).permit(:name, :province_id, :city_id, :district_id, :address,
+      params.require(:agent).permit(:name, :province, :city, :district, :town, :address,
                                     :full_name, :contacts, :mobile, :e_account, :fax, :email,
                                     :wechar, :logistics, :order_condition, :send_condition,
                                     :cycle, :note, :deleted)

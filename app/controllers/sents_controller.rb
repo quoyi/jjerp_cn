@@ -166,9 +166,10 @@ class SentsController < ApplicationController
     order = @sent.owner
     sent_list = @sent.sent_list
     @sent.destroy
+    order.packaged! # 将子订单状态改回上一步“已打包”
+    update_order_status(order)
     if sent_list.sents.size == 0
       sent_list.destroy!
-      order.packaged! # 将子订单状态改回上一步“已打包”
       File.delete("#{Rails.root}/public/excels/sent_lists/" + sent_list.name + ".xls")
       redirect_to sent_lists_path, notice: '发货记录已删除！'
     else
