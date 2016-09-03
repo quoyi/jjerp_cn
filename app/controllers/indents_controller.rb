@@ -8,12 +8,12 @@ class IndentsController < ApplicationController
   # GET /indents.json
   def index
     @agent = Agent.new(name: "DL".upcase() + (Agent.count+1).to_s.rjust(4, "0"))
-    @agents = Agent.all
+    # @agents = Agent.all
     now = Time.now
     after_ten_day = Time.now + 864000 # 十天 = 60 (秒钟/分钟) * 60 (分钟/天) * 24 (小时/天) * 10
     @indent = Indent.new(name: Time.now.strftime("%y%m%d") + SecureRandom.hex(1).upcase, verify_at: Time.now, require_at: after_ten_day)
 
-    @current_agent = @indent.agent ||  @agents.first
+    # @current_agent = @indent.agent ||  @agents.first
 
     @income = @indent.incomes.new(username: current_user.name, income_at: now)
 
@@ -34,6 +34,7 @@ class IndentsController < ApplicationController
   # GET /units/1
   # GET /units/1.json
   def show
+    @agent = Agent.new(name: "DL".upcase() + (Agent.count+1).to_s.rjust(4, "0"))
     @order = Order.new
     @order_offers = @indent.offers
     @orders = Order.where(indent:@indent).order(created_at: :desc)
@@ -48,6 +49,7 @@ class IndentsController < ApplicationController
   def edit
     @agent = Agent.new
     @indent = Indent.find_by_id(params[:id])
+    render layout: false
   end
 
   # POST /indents
@@ -74,7 +76,7 @@ class IndentsController < ApplicationController
       else
         msg = "订单编辑成功！"
       end
-      redirect_to indents_path, notice: msg
+      redirect_to :back, notice: msg
     else
       redirect_to :back, error: "订单编辑失败！"
     end
@@ -171,9 +173,9 @@ class IndentsController < ApplicationController
     #     v[:status] = Order.statuses[v[:status]]
     #   end
     # end
-    params.require(:indent).permit(:id, :name, :offer_id, :agent_id, :customer, :verify_at, :require_at, :note,
+    params.require(:indent).permit(:id, :name, :offer_id, :agent_id, :customer, :verify_at, :require_at, :note, :address,
                                    :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted, :status,
-                                   orders_attributes: [:id, :order_category_id, :customer, :number, :ply,
+                                   orders_attributes: [:id, :order_category_id, :customer, :number, :ply, :material_price,
                                                        :texture, :color, :price, :length, :width, :height, :oftype,
                                                        :note, :is_use_order_material, :delivery_address, :_destroy],
                                    offers_attributes: [:id, :order_id, :item_id, :item_type, :item_name,

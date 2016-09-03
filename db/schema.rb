@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160827110024) do
+ActiveRecord::Schema.define(version: 20160828080741) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",            limit: 255, default: "",    null: false
-    t.integer  "province_id",     limit: 4
-    t.integer  "city_id",         limit: 4
-    t.integer  "district_id",     limit: 4
+    t.string   "province",        limit: 255
+    t.string   "city",            limit: 255
+    t.string   "district",        limit: 255
     t.string   "address",         limit: 255
     t.string   "full_name",       limit: 255,                 null: false
     t.string   "contacts",        limit: 255
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20160827110024) do
     t.boolean  "deleted",                     default: false
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
+    t.string   "town",            limit: 255
   end
 
   add_index "agents", ["full_name"], name: "index_agents_on_full_name", using: :btree
@@ -122,9 +123,12 @@ ActiveRecord::Schema.define(version: 20160827110024) do
     t.boolean  "deleted",                                        default: false, null: false
     t.datetime "created_at",                                                     null: false
     t.datetime "updated_at",                                                     null: false
+    t.integer  "order_id",   limit: 4
+    t.string   "source",     limit: 255
   end
 
   add_index "incomes", ["indent_id"], name: "index_incomes_on_indent_id", using: :btree
+  add_index "incomes", ["order_id"], name: "index_incomes_on_order_id", using: :btree
 
   create_table "indents", force: :cascade do |t|
     t.string   "name",          limit: 255,                                         null: false
@@ -133,6 +137,7 @@ ActiveRecord::Schema.define(version: 20160827110024) do
     t.date     "verify_at"
     t.date     "require_at"
     t.string   "logistics",     limit: 255
+    t.string   "address",       limit: 255
     t.integer  "status",        limit: 4,                           default: 0
     t.string   "note",          limit: 255
     t.decimal  "amount",                    precision: 8, scale: 2, default: 0.0
@@ -219,6 +224,7 @@ ActiveRecord::Schema.define(version: 20160827110024) do
     t.integer  "height",                limit: 4,                           default: 1,     null: false
     t.integer  "number",                limit: 4,                           default: 1,     null: false
     t.decimal  "price",                             precision: 8, scale: 2, default: 0.0
+    t.decimal  "material_price",                    precision: 8, scale: 2, default: 0.0
     t.integer  "status",                limit: 4,                           default: 0,     null: false
     t.integer  "oftype",                limit: 4,                           default: 0,     null: false
     t.string   "note",                  limit: 255
@@ -226,8 +232,11 @@ ActiveRecord::Schema.define(version: 20160827110024) do
     t.datetime "created_at",                                                                null: false
     t.datetime "updated_at",                                                                null: false
     t.boolean  "is_use_order_material",                                     default: false
+    t.integer  "agent_id",              limit: 4
+    t.string   "delivery_address",      limit: 255
   end
 
+  add_index "orders", ["agent_id"], name: "index_orders_on_agent_id", using: :btree
   add_index "orders", ["indent_id"], name: "index_orders_on_indent_id", using: :btree
 
   create_table "packages", force: :cascade do |t|
@@ -495,6 +504,8 @@ ActiveRecord::Schema.define(version: 20160827110024) do
 
   add_foreign_key "cities", "provinces"
   add_foreign_key "districts", "cities"
+  add_foreign_key "incomes", "orders"
   add_foreign_key "materials", "supplies"
+  add_foreign_key "orders", "agents"
   add_foreign_key "tasks", "orders"
 end

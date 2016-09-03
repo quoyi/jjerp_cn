@@ -32,7 +32,8 @@ $(function() {
       type: 'GET',
       success: function(data){
         $("#indent_logistics").val(data.logistics);
-        $("#agent_address").val(data.province + data.city + data.district + data.town + data.address)
+        //$("#indent_address").val(data.province + data.city + data.district + data.town + data.address)
+        $("#indent_address").val(data.address)
       },
       error: function(data){
         alert("Error");
@@ -47,14 +48,18 @@ $(function() {
     var agent_id = $("#indent_agent_id").val();
     getAgentLogistics(agent_id);
   });
+  $("#editIndent").on('shown.bs.modal', function(){
+    var agent_id = $("#indent_agent_id").val();
+    getAgentLogistics(agent_id);
+  });
 
   /**
    * 监听选择代理商事件，级联改变indent.logistics值
    */
-  $("#indent_agent_id").change(function(){
-    var agent_id = $(this).val();
-    getAgentLogistics(agent_id);
-  });
+  // $("#indent_agent_id").change(function(){
+  //   var agent_id = $(this).val();
+  //   getAgentLogistics(agent_id);
+  // });
   /****** 总订单 新建 --- 代理商 与 物流 的联动逻辑  结束 ******/
 
 

@@ -8,6 +8,7 @@ class CreateIndents < ActiveRecord::Migration
       t.date :verify_at # 回传确认时间
       t.date :require_at # 要求发货时间
       t.string :logistics # 物流
+      t.string :address # 收货地址
       t.integer :status, default: 0 # 状态
       t.string :note # 备注
       t.decimal :amount, precision: 8, scale: 2, default: 0 # 订单金额
