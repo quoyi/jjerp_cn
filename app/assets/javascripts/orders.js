@@ -41,6 +41,7 @@ function setChildPartCategory(obj){
     }
   });
 }
+
 /**
  * 设置父类型选中
  * @param  {[type]} obj [description]

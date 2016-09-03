@@ -11,18 +11,29 @@ class OrdersController < ApplicationController
     @part = Part.new
     @craft = Craft.new
     @order = Order.new
+    @income = Income.new(username: current_user.name, income_at: Time.now)
     @orders = Order.all.order(created_at: :desc)
     @start_at = Date.today.beginning_of_month.to_s
     @end_at = Date.today.end_of_month.to_s
+    @province = '420000'
+    @city = '420100'
+    @district = '--地区--'
+    search = ''
+    if params[:province].present?
+      @province = params[:province]
+      search << ChinaCity.get(@province)
+    end
 
-    @income = @order.incomes.new(username: current_user.name, income_at: Date.today)
+    if params[:city].present?
+      @city = params[:city]
+      search << ChinaCity.get(@city)
+    end
 
-     
-    @province = params[:province] if params[:province].present?
-    @city = params[:city] if params[:city].present?
-    @district = params[:district]  if params[:district].present?
-    
-    search = [ChinaCity.get(@province), ChinaCity.get(@city), ChinaCity.get(@district)].compact.join('')
+    if params[:district].present?
+      @district = params[:district]
+      search << ChinaCity.get(@district)
+    end
+
     @orders = @orders.where("delivery_address like :keyword",keyword: "%#{search}%")
 
     # 判断搜索条件 起始时间 -- 结束时间
@@ -40,7 +51,6 @@ class OrdersController < ApplicationController
         export_orders(filename, @orders, params[:start_at], params[:end_at])
         send_file "#{Rails.root}/public/excels/orders/" + filename, type: 'text/xls; charset=utf-8'
       end
-
     end
   end
 
@@ -101,7 +111,8 @@ class OrdersController < ApplicationController
       create_offer(@order)
       update_order_status(@order.reload)
       # update_indent_status(@order.indent)
-      redirect_to indent_path(@order.indent), notice: '子订单编辑成功！'
+      # 子订单列表页面更新后，应该返回到列表页面
+      redirect_to :back, notice: '子订单编辑成功！'
     else
       redirect_to :back, error: '子订单编辑失败！请仔细检查后再提交。'
     end

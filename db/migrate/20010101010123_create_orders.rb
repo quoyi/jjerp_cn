@@ -13,6 +13,7 @@ class CreateOrders < ActiveRecord::Migration
       t.integer :height, null: false, default: 1
       t.integer :number, null: false, default: 1 # 数量
       t.decimal :price, precision: 8, scale: 2, default: 0 # 价格
+      t.decimal :material_price, precision: 8, scale: 2, default: 0 # 板料价格
       t.integer :status, null: false, default: 0 # 状态: 0.报价中 1.已报价 2.生产中 3.已入库 4.已发货
       t.integer :oftype, null: false, default: 0 # 类型： 0.正常单 1.补单 3.加急单  4.批量单
       t.string :note # 备注

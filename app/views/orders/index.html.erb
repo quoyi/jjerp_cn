@@ -12,9 +12,9 @@
         <% end %>
       </div>
     </div> -->
-      <% if params[:start_at] || params[:end_at] || params[:agent_id]%>
-      <% @agent_search = Agent.find_by_id(params[:agent_id])%>
-      <% end%>
+    <% if params[:start_at] || params[:end_at] || params[:agent_id]%>
+    <% @agent_search = Agent.find_by_id(params[:agent_id])%>
+    <% end%>
     <div class="row content-table">
       <%= form_tag orders_path, class: 'form-inline', method: 'get' do %>
       <div class="panel panel-info">
@@ -23,33 +23,28 @@
         </div>
         <div class="panel-body">
           <div class="row">
-            <div class="col-sm-6">
-              <label>下单时间：</label>
-              <%= date_field_tag :start_at, @start_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择起始日期',required: true  %>
-              &nbsp;&nbsp;--&nbsp;&nbsp;
-              <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择终止日期',required: true  %>
-            </div>
-            <div class="col-sm-4">
-              <label>店面: </label>
-              <input type="hidden" id="remoteDataAgent" name='agent_id' data-id="<%=@agent_search.try(:id)%>" data-name="<%=@agent_search.try(:full_name)%>" style="width: 80%" class="select2 ajax"/>
+            <div class="col-sm-10">
+              <div class="row">
+                <label class="col-sm-2 text-right" style="margin-top: 5px;">下单时间</label>
+                <%= date_field_tag :start_at, @start_at, class: 'col-sm-2', data: {provide: 'datepicker'}, placeholder: '请选择起始日期',required: true  %>
+                <span class="col-sm-1 text-center" style="margin-top: 5px;font-weight: bold;">----</span>
+                <%= date_field_tag :end_at, @end_at, class: 'col-sm-2', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',required: true  %>
+                <label class="col-sm-2 text-right" style="margin-top: 5px;">店面</label>
+                <input type="hidden" id="remoteDataAgent" name='agent_id' data-id="<%=@agent_search.try(:id)%>" data-name="<%=@agent_search.try(:full_name)%>" class="select2 ajax col-sm-2"/>
+              </div>
+              <div class="row">
+                <label class="col-sm-2 text-right" style="margin-top: 5px;">地区 </label>
+                <div class="city-group">
+                  <%= select_tag(:province, options_for_select(ChinaCity.list.collect {|p| [ p[0], p[1] ] }, @province), { :prompt => "--省份--" , :class => "city-select col-sm-3"}) %>
+                  <%= select_tag(:city, options_for_select(ChinaCity.list(@province).collect {|p| [ p[0], p[1] ] }, @city), { :prompt => "--城市--",:class => "city-select col-sm-3" }) %>
+                  <%= select_tag(:district, options_for_select(ChinaCity.list(@city).collect {|p| [ p[0], p[1] ] }, @district), { :prompt => "--地区--",:class => "city-select col-sm-3" }) %>
+                </div>
+              </div>
             </div>
             <div class="col-sm-2">
-              <%= submit_tag '查询', class: 'btn btn-primary btn-xs' %>
-              <%= link_to '导出结果', orders_path(format: "xls", start_at: params[:start_at], end_at: params[:end_at], agent_id: params[:agent_id]), class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '将查询结果导出到Excel文件' %>
+              <%= submit_tag '查询', class: 'btn btn-primary btn-lg' %>
+              <%= link_to '导出结果', orders_path(format: "xls", start_at: params[:start_at], end_at: params[:end_at], agent_id: params[:agent_id]), class: 'btn btn-primary btn-lg', data: {toggle: 'tooltip'}, title: '将查询结果导出到Excel文件' %>
             </div>
-          </div>
-          <div class="row" style="margin-top: 10px;">
-            <div class="col-sm-1">
-              <label>地区: </label>
-            </div>
-            <div class="col-sm-5">
-              <div class="city-group">
-                <%= select_tag(:province, options_for_select(ChinaCity.list.collect {|p| [ p[0], p[1] ] }, @province), { :prompt => "--省份--" , :class => "city-select form-control"}) %>
-                <%= select_tag(:city, options_for_select(ChinaCity.list(@province).collect {|p| [ p[0], p[1] ] }, @city), { :prompt => "--城市--",:class => "city-select form-control" }) %>
-                
-                <%= select_tag(:district, options_for_select(ChinaCity.list(@city).collect {|p| [ p[0], p[1] ] }, @district), { :prompt => "--地区--",:class => "city-select form-control" }) %>
-              </div>
-            </div>            
           </div>
         </div>
       </div>
@@ -87,15 +82,15 @@
           <td><%=o.income_status %></td>
           <td  class="col-sm-2"><%= o.note %></td>
           <td class="col-sm-1">
-            <% if Order.statuses[o.status] >= 2 %>
-            已生产
-            <% else %>
-            <%= link_to '生产', order_path(id: o.id, order: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
-            <% end %>
             <% if o.income_status == '全款' %>
-              <button class="btn btn-primary btn-xs" disabled="true">到款</button>
-            <%  else %>
-                <%= link_to '到款', '#', class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', order: o.id, amount: o.price, arrear: ((o.price.to_f - o.incomes.pluck(:money).sum.to_f) >0 ? (o.price.to_f - o.incomes.pluck(:money).sum.to_f) : 0), username: current_user.name}, id: 'addIncomesBtn' %>
+            <button class="btn btn-primary btn-xs" disabled="true">到款</button>
+            <% else %>
+            <%= link_to '到款', '#', class: 'btn btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', order: o.id, amount: o.price, arrear: ((o.price.to_f - o.incomes.pluck(:money).sum.to_f) >0 ? (o.price.to_f - o.incomes.pluck(:money).sum.to_f) : 0), username: current_user.name}, id: 'addIncomesBtn' %>
+            <% end %>
+            <% if Order.statuses[o.status] >= 2 %>
+              <%= link_to '生产', '#', class: 'btn btn-xs btn-primary', disabled: true%>
+            <% else %>
+            <%= link_to '生产', order_path(id: o.id, order: {status: 'producing'}),method: :put,class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
             <% end %>
           </td>
         </tr>

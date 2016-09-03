@@ -127,7 +127,7 @@
                   <%# end %>
                 </td> -->
                 <td>
-                  <%= link_to '编辑', edit_indent_path(i), class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title:'编辑总订单' %>
+                  <%= link_to '编辑', edit_indent_path(i), class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#editIndent'}, title:'编辑总订单' %>
                   <%= link_to '到款详细', incomes_path(indent_id: i.id), class: 'btn-primary btn-xs' %>
                   <%#= link_to '生产', indent_path(id: i.id, indent: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
                 </td>
@@ -141,3 +141,15 @@
   </div>
 </div>
 <%= render 'new' %>
+<!-- Modal -->
+<div class="modal fade" id="editIndent" tabindex="-1" role="dialog" aria-labelledby="editIndentLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document" style="width: 80%;">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$("#editIndent").on("hidden.bs.modal", function(e){
+  $(this).removeData("bs.modal");
+});
+</script>

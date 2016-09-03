@@ -49,7 +49,7 @@
         <div class="form-group">
           <label for="income_income_at" class="control-label col-sm-3"><span class="require">*</span>时间</label>
           <div class="col-sm-9">
-            <%= f.date_field :income_at, vaue: income.income_at.strftime("%Y-%m-%d"), class: 'form-control col-sm-9', data: {provide: 'datepicker'}, required: true %>
+            <%= f.date_field :income_at, vaue: income.income_at.nil? ? '' : income.income_at.strftime("%Y-%m-%d"), class: 'form-control col-sm-9', data: {provide: 'datepicker'}, required: true %>
           </div>
         </div>
         <div class="form-group">

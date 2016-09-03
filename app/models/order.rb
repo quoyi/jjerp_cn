@@ -39,12 +39,16 @@ class Order < ActiveRecord::Base
   end
 
   def income_status
-    if self.incomes.pluck(:money).sum >= self.price
-      '全款'
-    elsif self.incomes.pluck(:money).sum.to_i == 0
-      '未打款'
+    if self.price == 0
+      '未报价'
     else
-      '定金'
+      if self.incomes.pluck(:money).sum >= self.price
+        '全款'
+      elsif self.incomes.pluck(:money).sum.to_i == 0
+        '未打款'
+      else
+        '定金'
+      end
     end
   end
 

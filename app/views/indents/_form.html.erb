@@ -1,0 +1,128 @@
+<script type="text/javascript">
+$("[data-provide=datepicker]").datepicker({
+  format: 'yyyy-mm-dd',
+  language: 'zh-CN',
+  autoclose: true
+});
+/**
+* 获取指定代理商信息
+* @param  {[type]} obj [description]
+* @return {[type]}     [description]
+*/
+function getAgentInfo(obj){
+  $.ajax({
+    url: "/agents/" + $(obj).val(),
+    dataType: 'json',
+    type: 'GET',
+    success: function(data){
+      var panels = $(obj).parents(".panel-heading");
+      panels.find("#indent_logistics").val(data.logistics);
+      //$("#indent_address").val(data.province + data.city + data.district + data.town + data.address)
+      panels.find("#indent_address").val(data.address)
+    },
+    error: function(data){
+      alert("Error");
+    }
+  });
+}
+</script>
+<%= nested_form_for @indent, url: @indent.new_record? ? indents_path : indent_path(@indent), html: {class: 'form-horizontal', multipart: true} do |f| %>
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="addIndentLabel"> 订单
+  <small><%= @indent.new_record? ? "新建" : "编辑" %></small>
+  <small style="font-weight: bold; color: #000; margin-left: 20px;">总订单号：<%= @indent.name %></small>
+  </h4>
+</div>
+<div class="modal-body" style="padding-bottom: 0px;">
+  <div class="panel panel-default" style="margin-bottom: 0px;">
+    <div class="panel-heading">
+      <div class="form-group">
+        <%= f.hidden_field :name, value: @indent.name %>
+        <label for="indent_customer" class="col-sm-1 control-label"><span class="require">*</span>终端客户</label>
+        <div class="col-sm-3">
+          <%= f.text_field :customer, class: 'form-control', required: true %>
+        </div>
+        <label for="indent_agent_id" class="col-sm-1 control-label"><span class="require">*</span>代理商</label>
+        <div class="col-sm-3">
+          <%= f.collection_select :agent_id, Agent.where(deleted: false), :id, :full_name, {include_blank: '请选择', selected: @indent.new_record? ? "" : @indent.agent_id}, {required: true, onchange: 'getAgentInfo(this)'} %>
+          <%= link_to '新建代理商', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm' %>
+        </div>
+        <label for="indent_logistics" class="col-sm-1 control-label"><span class="require">*</span>要求物流</label>
+        <div class="col-sm-2">
+          <%= f.text_field :logistics, class: 'form-control', required: true %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="indent_verify_at" class="col-sm-1 control-label"><span class="require">*</span>下单时间</label>
+        <div class="col-sm-3">
+          <%= f.date_field :verify_at, class: 'form-control', data: {provide: 'datepicker'}, required: true %>
+        </div>
+        <label for="indent_require_at" class="col-sm-1 control-label"><span class="require">*</span>要求时间</label>
+        <div class="col-sm-3">
+          <%= f.date_field :require_at, class: 'form-control', data: {provide: 'datepicker'}, required: true %>
+        </div>
+        <%= f.label '收货地址', class:'col-sm-1 control-label' %>
+        <div class="col-sm-2">
+          <%= f.text_field :address, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div id="<%= @indent.new_record? ? 'indentOrders' : 'editIndentOrders' %>">
+        <%= f.fields_for :orders, :wrapper => false do |order_form| %>
+        <div class="fields">
+          <div class="row">
+            <% of = order_form.object %>
+            <!-- 初始下拉框默认选中项 -->
+            <% init_ply_id = MaterialCategory.find_by(name: '18mm').id %>
+            <% init_texture_id = MaterialCategory.find_by(name: '颗粒板').id %>
+            <% init_color_id = MaterialCategory.find_by(name: '国色天香').id %>
+            <% init_price = Material.find_by(ply: init_ply_id, texture: init_texture_id, color: init_color_id).try(:price) %>
+            <div class="col-sm-1 text-center indent-orders-title">
+              <h4>子订单</h4>
+              <p><%= of.name unless of.new_record?%></p>
+            </div>
+            <div class="col-sm-10">
+              <div class="row">
+                <label class="col-sm-1 text-right" style="margin-top: 8px;"><span class="require">*</span>订单类型</label>
+                <%= order_form.collection_select :order_category_id, OrderCategory.all, :id, :name, {include_blank: '请选择', selected: of.new_record? ? "" : of.order_category_id}, {required: true, class:'col-sm-2'} %>
+                <%= order_form.collection_select :oftype, Order.oftype, :last, :first, {}, {class: 'col-sm-1'} %>
+                <!-- <div class="col-sm-2">
+                  <label data-toggle="tooltip" title="暂不可用"><span class="require">*</span>数量</label>
+                  <%#= order_form.number_field :number, value: 1, min: 0, step: 0.01, style: "width: 50%;", readOnly: true, data: {toggle: 'tooltip'}, title: '暂不可用' %>
+                </div> -->
+                <label class="col-sm-1 text-right" style="margin-top: 8px;">板料</label>
+                <%= order_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {selected: of.new_record? ? init_ply_id : of.ply}, {class: 'col-sm-1 material-ply', onchange: 'getMaterialPrice(this)'} %>
+                <%= order_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]), :id, :name, {selected: of.new_record? ? init_texture_id : of.texture}, {class: 'col-sm-2 material-texture', onchange: 'getMaterialPrice(this)'} %>
+                <%= order_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]), :id, :name,  {selected: of.new_record? ? init_color_id : of.color}, {class: 'col-sm-2 material-color',  onchange: 'getMaterialPrice(this)'} %>
+                <label class="col-sm-1 text-right" style="margin-top: 8px;">价格</label>
+                <%= order_form.number_field :material_price, min: 0, step: 0.01, value: of.new_record? ? init_price : of.material_price, class: 'col-sm-1 material-price' %>
+              </div>
+              <div class="row">
+                <label class="col-sm-1 text-right" style="margin-top: 8px;">收货地址</label>
+                <%= order_form.text_field :delivery_address, class: "col-sm-3", value: of.new_record? ? '' : of.delivery_address, placeholder: '不填则默认为代理商地址' %>
+                <label class="col-sm-1 text-right" style="margin-top: 8px;">备注</label>
+                <%= order_form.text_field :note, value: of.new_record? ? '' : of.note, class: 'col-sm-7' %>
+              </div>
+            </div>
+            <div class="col-sm-1 text-center indent-orders-delete">
+              <!-- 位置不对 -->
+              <%= order_form.link_to_remove '删除', class: 'btn btn-info btn-lg' %>
+            </div>
+          </div>
+          <hr style="margin: 5px;">
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="pull-left">
+    <%= f.link_to_add '添加子订单', :orders, data: { target: @indent.new_record? ? '#indentOrders' : '#editIndentOrders'}, class: 'btn btn-info' %>
+  </div>
+  <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
+  <%= f.submit '提交', class: 'btn btn-primary' %>
+</div>
+<% end %>
