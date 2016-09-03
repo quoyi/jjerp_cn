@@ -33,6 +33,7 @@ class OrdersController < ApplicationController
       @district = params[:district]
       search << ChinaCity.get(@district)
     end
+
     @orders = @orders.where("delivery_address like :keyword",keyword: "%#{search}%")
 
     # 判断搜索条件 起始时间 -- 结束时间

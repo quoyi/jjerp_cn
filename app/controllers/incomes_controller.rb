@@ -34,11 +34,42 @@ class IncomesController < ApplicationController
   # POST /incomes
   # POST /incomes.json
   def create
-    @income = Income.new(income_params)
-    # @income.order_id = Order.find_by_name(income_params[:order_id]).id
-    if @income.save
-      # 修改银行卡的收入信息
-      updateIncomeExpend(income_params, 0)
+    begin
+      Income.transaction do
+        @income = Income.new(income_params)
+        @income.save!
+        # 修改银行卡的收入信息
+        updateIncomeExpend(income_params, 0)
+        balance = income_params[:money].to_f - @income.order.price.to_f
+        if balance > 0
+          agent = @income.order.agent
+          order_name = @income.order.name
+          order_create_time = @income.order.created_at
+          agent.orders.where("created_at >= ?", order_create_time).each do |order|
+            next if order.income_status == '全款' || balance <= 0
+            arrear = order.price.to_f - order.incomes.pluck(:money).sum
+            if balance - arrear > 0
+              balance = balance - arrear
+            else
+              arrear = balance
+              balance = 0
+            end
+            income = order.incomes.new(money: arrear, username: current_user.name, income_at: Time.now, note: "来自订单#{order_name}")
+            income.save!
+          end
+
+          if balance > 0
+            agent.balance +=  balance
+            agent.note =  "来自订单#{order_name}"
+            agent.save!
+          end
+        end
+      end
+    rescue ActiveRecord::RecordInvalid => exception
+    end
+    
+    
+    if @income
       redirect_to :back, notice: '收入记录创建成功！'
     else
       redirect_to :back, error: '收入记录创建失败！'

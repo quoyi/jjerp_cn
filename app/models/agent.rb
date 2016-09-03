@@ -1,5 +1,6 @@
 class Agent < ActiveRecord::Base
   has_many :indents
+  has_many :orders
   validates :name, uniqueness: true
   validates_uniqueness_of :full_name
   #validates :full_name, uniqueness: {scope: :name}
