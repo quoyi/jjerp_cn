@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="addOrderUnits" tabindex="-1" role="dialog" aria-labelledby="addOrderUnitsLabel">
-  <div class="modal-dialog" role="document" style="width:50%">
+  <div class="modal-dialog modal-lg" role="document" style="width:80%">
     <div class="modal-content">
       <%= nested_form_for @order, html: {class: 'form-inline', multipart: true} do |f| %>
       <div class="modal-header">
@@ -9,47 +9,45 @@
       </div>
       <div class="modal-body" style="padding-bottom: 0px;">
         <div id="orderUnitsForm">
-          
           <%= f.fields_for :units, wrapper: false do |unit_form| %>
           <div class="fields">
-            <table>
-              <% uf = unit_form.object %>
-              <% if uf.new_record? %>
-                <%= unit_form.hidden_field :is_custom, value: false %>
-              <% end %>
-              <tr>
-                <td><label>名称</label></td>
-                <td><%= unit_form.text_field :full_name, value: uf.new_record? ? '' : uf.full_name, required: true %></td>
-                <td><label>长</label></td>
-                <td><%= unit_form.number_field :length, min: 0, step: 0.01, value: uf.new_record? ? 1 : uf.length, class: 'order-unit-length', onchange: 'setOrderUnitSize(this)', onblur: 'setOrderUnitSize(this)', required: true  %></td>
-                <td><label>宽</label></td>
-                <td><%= unit_form.number_field :width, min: 0, step: 0.01, value: uf.new_record? ? 1 : uf.width, class: 'order-unit-width', onchange: 'setOrderUnitSize(this)', onblur: 'setOrderUnitSize(this)', required: true  %></td>
-                <td><label>尺寸</label></td>
-                <td><%= unit_form.text_field :size, value: uf.new_record? ? '' : uf.size, class: 'order-unit-size', placeholder: '请输入成型尺寸' %></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><label>单位</label></td>
-                <td><%= unit_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {include_blank: '请选择'}, {required: true, class: 'material-uom'} %></td>
-                <td><label>厚度</label></td>
-                <td><%= unit_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {}, {class: 'material-ply', onchange: 'getMaterialPrice(this)'} %></td>
-                <td><label>材质</label></td>
-                <td><%= unit_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]),:id, :name, {}, {class: 'material-texture', onchange: 'getMaterialPrice(this)'} %></td>
-                <td><label>颜色</label></td>
-                <td><%= unit_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]),:id, :name, {}, {class: 'material-color', onchange: 'getMaterialPrice(this)'} %></td>
-                <td style="padding-left: 20px;"><%= unit_form.link_to_remove '删除', class:'btn btn-info btn-lg' %></td>
-              </tr>
-              <tr>
-                <td><label>单价</label></td>
-                <td><%= unit_form.number_field :price, min: 0, step: 0.01, value: uf.new_record? ? Material.find_by(ply: @order.ply, texture: @order.texture, color: @order.color).try(:price) : uf.price, required: true, class: 'material-price'  %></td>
-                <td><label>数量</label></td>
-                <td><%= unit_form.text_field :number, value: uf.new_record? ? 1 : uf.number, required: true  %></td>
-                <td><label>备注</label></td>
-                <td colspan="3"><%= unit_form.text_field :note, value: uf.new_record? ? '' : uf.note, style: 'width: 100%;' %></td>
-                <td></td>
-              </tr>
-            </table>
-            <hr style="margin-bottom: 5px;" />
+            <% uf = unit_form.object %>
+            <% if uf.new_record? %>
+            <%= unit_form.hidden_field :is_custom, value: false %>
+            <% end %>
+            <div class="row">
+              <div class="col-sm-11">
+                <div class="row">
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>名称</label>
+                  <%= unit_form.text_field :full_name, value: uf.new_record? ? '' : uf.full_name, class:'col-sm-2', required: true, placeholder: '请填写部件名称' %>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>板料</label>
+                  <%= unit_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {selected: @order.ply}, {class: 'material-ply col-sm-1', onchange: 'getMaterialPrice(this)'} %>
+                  <%= unit_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]),:id, :name, {selected: @order.texture}, {class: 'material-texture col-sm-2', onchange: 'getMaterialPrice(this)'} %>
+                  <%= unit_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]),:id, :name, {selected: @order.color}, {class: 'material-color col-sm-2', onchange: 'getMaterialPrice(this)'} %>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单位</label>
+                  <%= unit_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {include_blank: '请选择'}, {required: true, class: 'material-uom col-sm-2'} %>
+                </div>
+                <div class="row">
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单价</label>
+                  <%= unit_form.number_field :price, min: 0, step: 0.01, value: uf.new_record? ? @order.material_price : uf.price, required: true, class: 'material-price col-sm-2'  %>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>长宽</label>
+                  <%= unit_form.number_field :length, min: 0, step: 0.01, value: uf.new_record? ? 1 : uf.length, class: 'order-unit-length col-sm-1', onchange: 'setOrderUnitSize(this)', onblur: 'setOrderUnitSize(this)', required: true %>
+                  <%= unit_form.number_field :width, min: 0, step: 0.01, value: uf.new_record? ? 1 : uf.width, class: 'order-unit-width col-sm-1', onchange: 'setOrderUnitSize(this)', onblur: 'setOrderUnitSize(this)', required: true %>
+                  <!-- <label class="col-sm-1 text-right" style="margin: 7px 0;">尺寸</label> -->
+                  <%= unit_form.text_field :size, value: uf.new_record? ? '' : uf.size, class: 'order-unit-size col-sm-3', placeholder: '请填写成型尺寸', onchange: 'setOrderUnitLengthWidth(this)', onblur: 'setOrderUnitLengthWidth(this)' %>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>数量</label>
+                  <%= unit_form.text_field :number, value: uf.new_record? ? 1 : uf.number, class: 'col-sm-2', required: true  %>
+                </div>
+                <div class="row">
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;">备注</label>
+                  <%= unit_form.text_field :note, value: uf.new_record? ? '' : uf.note, class: 'col-sm-11', placeholder: '请填写备注信息' %>
+                </div>
+              </div>
+              <div class="col-sm-1 text-center" style="margin: 30px 0;">
+                <%= unit_form.link_to_remove '删除', class:'btn btn-info' %>
+              </div>
+            </div>
+            <hr style="margin: 5px 0;" />
           </div>
           <% end %>
         </div>

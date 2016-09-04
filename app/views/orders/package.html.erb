@@ -76,19 +76,14 @@ localStorage.setItem('index', 1);
                   <td><%= order_unit.size%></td> -->
                 </tr>
                 <%end%>
-                <% @order_parts.each do |order_part|%>
-                <% next if order_part.is_printed %>
-                <tr onclick="remove_order(this)" id="order_part_<%=order_part.id%>">
-                  <td><%= order_part.name%></td>
+                <%# @order_parts.each do |order_part|%>
+                <%# next if order_part.is_printed %>
+                <!-- <tr onclick="remove_order(this)" id="order_part_<%#=order_part.id%>">
+                  <td><%#= order_part.name%></td>
                   <td>配件</td>
-                  <td><%= order_part.part_category.name%></td>
-                  <!-- <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td> -->
-                </tr>
-                <%end%>
+                  <td><%#= order_part.part_category.name%></td>
+                </tr> -->
+                <%# end %>
               </tbody>
             </table>
           </div>
@@ -141,19 +136,14 @@ localStorage.setItem('index', 1);
                       <td><%= order_unit.size%></td> -->
                     </tr>
                   <% end %>
-                  <% Part.where(id: p.part_ids.split(',')).each do |order_part|%>
-                    <% next unless order_part.is_printed %>
-                    <tr>
-                      <td><%= order_part.name%></td>
-                      <td>配件</td>
-                      <td><%= order_part.part_category.name%></td>
-                      <!-- <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td> -->
-                    </tr>
-                  <% end %>
+                  <%# Part.where(id: p.part_ids.split(',')).each do |order_part|%>
+                    <%# next unless order_part.is_printed %>
+                    <!-- <tr>
+                     <td><%#= order_part.name%></td>
+                     <td>配件</td>
+                     <td><%#= order_part.part_category.name%></td>
+                   </tr> -->
+                  <%# end %>
                 <% end %>
               </tbody>
             </table>

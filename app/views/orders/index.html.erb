@@ -60,7 +60,7 @@
           <!-- <th>长</th>
           <th>宽</th>
           <th>高</th> -->
-          <th>价格</th>
+          <th data-toggle="tooltip" title="子订单金额">金额</th>
           <th>数量</th>
           <th>状态</th>
           <th>到款状态</th>
@@ -68,19 +68,19 @@
           <th>操作</th>
         </tr>
         <% @orders.each do |o| %>
-        <tr class="<%= 'danger' if o.indent.require_at.to_date - Date.today < 0%>">
-          <td class="text-left" class="col-sm-2"><%= link_to o.name, o, data: {toggle: 'tooltip'}, title: '查看子订单详细信息' %></td>
+        <tr class="<%= 'danger' if (o.indent.require_at.to_date - Date.today) < 0%>">
+          <td class="text-left" class="col-sm-1"><%= link_to o.name, o, data: {toggle: 'tooltip'}, title: '查看子订单详细信息' %></td>
           <td class="col-sm-1"><%= o.order_category.try(:name) %></td>
           <td class="col-sm-1"><%= o.indent.agent.try(:full_name) %></td>
-          <td class="col-sm-2"><%= o.indent.customer %></td>
+          <td class="col-sm-1"><%= o.indent.customer %></td>
           <!-- <td class="col-sm-1"><%= o.length %></td>
           <td class="col-sm-1"><%= o.width %></td>
           <td class="col-sm-1"><%= o.height %></td> -->
-          <td class="col-sm-1"><%= o.price %></td>
-          <td class="col-sm-1"><%= o.number %></td>
-          <td  class="col-sm-1"><%= o.status_name %></td>
-          <td><%=o.income_status %></td>
-          <td  class="col-sm-2"><%= o.note %></td>
+          <td data-toggle="tooltip" title="子订单金额"><%= o.price %></td>
+          <td><%= o.number %></td>
+          <td><%= o.status_name %></td>
+          <td class="<%= 'success' if o.income_status == '全款' %>"><%= o.income_status %></td>
+          <td class="col-sm-3"><%= o.note %></td>
           <td class="col-sm-1">
             <% if o.income_status == '全款' %>
             <button class="btn btn-primary btn-xs" disabled="true">到款</button>

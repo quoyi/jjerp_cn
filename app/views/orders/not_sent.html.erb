@@ -40,17 +40,17 @@
               <table class="table table-border">
                 <thead>
                   <tr>
-                    <td>全选</br>
+                    <td class="col-sm-1">全选</br>
                       <% if indent.sent || indent.orders.detect{|o| o.sent && o.packaged? } %>
                       <input type="checkbox" name="checkbox" onClick="CheckSelect(<%= indent.id%>)" checked>
                       <% end %>
                     </td>
-                    <td>子订单编号</td>
-                    <td>类型</td>
-                    <td>包装件数</td>
-                    <td>入库状态</td>
-                    <td>备注</td>
-                    <td>发货</td>
+                    <td class="col-sm-2">子订单编号</td>
+                    <td class="col-sm-1">类型</td>
+                    <td class="col-sm-1">包装件数</td>
+                    <td class="col-sm-1">入库状态</td>
+                    <td class="col-sm-5">备注</td>
+                    <td class="col-sm-1">发货</td>
                   </tr>
                 </thead>
                 <tbody>

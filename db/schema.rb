@@ -11,15 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160828080741) do
+ActiveRecord::Schema.define(version: 20160828134816) do
 
   create_table "agents", force: :cascade do |t|
-    t.string   "name",            limit: 255, default: "",    null: false
+    t.string   "name",            limit: 255,                         default: "",    null: false
     t.string   "province",        limit: 255
     t.string   "city",            limit: 255
     t.string   "district",        limit: 255
     t.string   "address",         limit: 255
-    t.string   "full_name",       limit: 255,                 null: false
+    t.string   "full_name",       limit: 255,                                         null: false
     t.string   "contacts",        limit: 255
     t.string   "mobile",          limit: 255
     t.string   "e_account",       limit: 255
@@ -31,10 +31,11 @@ ActiveRecord::Schema.define(version: 20160828080741) do
     t.integer  "send_condition",  limit: 4
     t.string   "cycle",           limit: 255
     t.string   "note",            limit: 255
-    t.boolean  "deleted",                     default: false
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.boolean  "deleted",                                             default: false
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
     t.string   "town",            limit: 255
+    t.decimal  "balance",                     precision: 8, scale: 2
   end
 
   add_index "agents", ["full_name"], name: "index_agents_on_full_name", using: :btree
