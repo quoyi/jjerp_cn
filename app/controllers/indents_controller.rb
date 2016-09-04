@@ -3,6 +3,7 @@ class IndentsController < ApplicationController
   include OrdersHelper
   include OffersHelper
   before_action :set_indent, only: [:show, :edit, :update, :destroy]
+  skip_before_filter :verify_authenticity_token, :only => [:part_list]
 
   # GET /indents
   # GET /indents.json
@@ -29,6 +30,8 @@ class IndentsController < ApplicationController
     if params[:agent_id].present?
       @indents = @indents.where(agent_id: params[:agent_id])
     end
+
+    @indents = @indents.page(params[:page])
   end
 
   # GET /units/1
@@ -119,6 +122,10 @@ class IndentsController < ApplicationController
         send_file "#{Rails.root}/public/excels/offers/" + @indent.name + ".xls", type: 'text/xls; charset=utf-8'
       end
     end
+  end
+
+  def part_list
+    binding.pry
   end
 
   private
