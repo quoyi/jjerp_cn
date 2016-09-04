@@ -2,6 +2,10 @@
   <div class="content-box-header panel-heading">
     <div class="panel-title">
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 订单 <small>列表</small> </h2>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#showSat">
+        查看订单统计
+      </button>
       <div class="pull-right panel-options">
         <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addIndent'} %>
       </div>
@@ -38,7 +42,87 @@
       <% end %>
     </div>
     <div class="row content-table">
-      <div class="col-sm-4" style="padding: 0 0;">
+      <div class="col-sm-12" style="padding: 0 0 0 5px;">
+        <div class="panel panel-info">
+          <table class="table table-hover table-striped table-bordered table-condensed text-center">
+            <thead>
+              <tr>
+                <th class="col-sm-1">
+                  全选<br/>
+                  <input type="checkbox" name="checkbox" onClick="partIndent()" checked>
+                </th>
+                <th class="col-xs-1">总订单号</th>
+                <th class="col-xs-1">代理商</th>
+                <th class="col-xs-2">终端信息</th>
+                <th class="col-xs-1">下单时间</th>
+                <th class="col-xs-1">发货时间</th>
+                <th class="col-xs-1">订单金额</th>
+                <th class="col-xs-1">欠款</th>
+                <th class="col-xs-1">报价单</th>
+                <th class="col-xs-2">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @indents.each do |i| %>
+              <tr>
+                <td>
+                  <input type="checkbox" name="checkbox" class="checkbox" value="<%=i.id%>" checked>
+                </td>
+                <td><%= link_to i.name, i, data: {toggle:'tooltip'}, title: '总订单详细' %></td>
+                <td><%= i.agent.try(:full_name) %></td>
+                <td><%= i.customer %></td>
+                <td><%= i.verify_at.strftime('%Y-%m-%d') %></td>
+                <td><%= i.require_at.strftime('%Y-%m-%d') %></td>
+                <td><%= i.amount %></td>
+                <td class="danger" data-toggle="tooltip" title="负数表示代理商预付款或押金"><%= i.arrear %></td>
+                <td><%= i.status_name %></td>
+                <!-- 这里需要判断是否已生成报价单 -->
+                <!-- <td>
+                  <%# if Indent.statuses[i.status.to_sym] > Indent.statuses[:offering] && Indent.statuses[i.status.to_sym] <= Indent.statuses[:sent] %>
+                  <%#= link_to '报价单', offers_path(indent_id: i.id) %>
+                  <%# else %>
+                  未报价
+                  <%# end %>
+                </td> -->
+                <td>
+                  <%= link_to '编辑', edit_indent_path(i), class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#editIndent'}, title:'编辑总订单' %>
+                  <%= link_to '到款详细', incomes_path(indent_id: i.id), class: 'btn-primary btn-xs' %>
+                  <%#= link_to '生产', indent_path(id: i.id, indent: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
+                </td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>  
+        </div>
+        <%= form_tag(part_list_indents_path, method: :post) do %>
+          <%= hidden_field_tag 'indent_ids', @indents.map(&:id).join(',') %>
+          <!-- 在这个button里监听事件 onClick="return submit_form()" 在submit_form()方法里吗获取到所有选中的checkbox的value，组合成字符串后放在上面hidden_field_tag的values中，表单提交后返回到模态框中 -->
+          <%= submit_tag '配件清单预览', class: 'btn btn-primary' %>
+        <% end %>
+        <%= paginate @indents %>
+      </div>
+    </div>
+  </div>
+</div>
+<%= render 'new' %>
+<!-- Modal -->
+<div class="modal fade" id="editIndent" tabindex="-1" role="dialog" aria-labelledby="editIndentLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document" style="width: 80%;">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="showSat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">订单统计信息</h4>
+      </div>
+      <div class="modal-body">
         <div class="panel panel-info">
           <div class="panel-heading">
             <span>订单统计信息</span>
@@ -93,63 +177,14 @@
           </table>
         </div>
       </div>
-      <div class="col-sm-8" style="padding: 0 0 0 5px;">
-        <div class="panel panel-info">
-          <table class="table table-hover table-striped table-bordered table-condensed text-center">
-            <thead>
-              <tr>
-                <th class="col-sm-1">总订单号</th>
-                <th class="col-xs-1">代理商</th>
-                <th class="col-xs-2">终端信息</th>
-                <th class="col-xs-1">下单时间</th>
-                <th class="col-xs-1">发货时间</th>
-                <th class="col-xs-1">订单金额</th>
-                <th class="col-xs-1">欠款</th>
-                <th class="col-xs-1">报价单</th>
-                <th class="col-xs-2">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @indents.each do |i| %>
-              <tr>
-                <td><%= link_to i.name, i, data: {toggle:'tooltip'}, title: '总订单详细' %></td>
-                <td><%= i.agent.try(:full_name) %></td>
-                <td><%= i.customer %></td>
-                <td><%= i.verify_at.strftime('%Y-%m-%d') %></td>
-                <td><%= i.require_at.strftime('%Y-%m-%d') %></td>
-                <td><%= i.amount %></td>
-                <td class="danger" data-toggle="tooltip" title="负数表示代理商预付款或押金"><%= i.arrear %></td>
-                <td><%= i.status_name %></td>
-                <!-- 这里需要判断是否已生成报价单 -->
-                <!-- <td>
-                  <%# if Indent.statuses[i.status.to_sym] > Indent.statuses[:offering] && Indent.statuses[i.status.to_sym] <= Indent.statuses[:sent] %>
-                  <%#= link_to '报价单', offers_path(indent_id: i.id) %>
-                  <%# else %>
-                  未报价
-                  <%# end %>
-                </td> -->
-                <td>
-                  <%= link_to '编辑', edit_indent_path(i), class: 'btn-primary btn-xs', data: {toggle: 'modal', target: '#editIndent'}, title:'编辑总订单' %>
-                  <%= link_to '到款详细', incomes_path(indent_id: i.id), class: 'btn-primary btn-xs' %>
-                  <%#= link_to '生产', indent_path(id: i.id, indent: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
-                </td>
-              </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
       </div>
     </div>
   </div>
 </div>
-<%= render 'new' %>
-<!-- Modal -->
-<div class="modal fade" id="editIndent" tabindex="-1" role="dialog" aria-labelledby="editIndentLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document" style="width: 80%;">
-    <div class="modal-content">
-    </div>
-  </div>
-</div>
+
+
 <script type="text/javascript">
 $("#editIndent").on("hidden.bs.modal", function(e){
 $(this).removeData("bs.modal");

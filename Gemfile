@@ -53,6 +53,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use Unicorn as the app server
 # gem 'unicorn'
+# 分页
+gem 'kaminari'
 
 # 打印
 gem 'prawn'
