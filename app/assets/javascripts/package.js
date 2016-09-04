@@ -92,12 +92,13 @@ function print_pages(obj) {
     return false;
   }
   var old_table = $("#old_table").find("tbody").html().trim();
-  if (old_table != '') {
-    alert('您还没有拆分完所有包装，请继续选择完再进行批量打印');
+  var new_table = $("#new_table").find("tbody").html().trim();
+  var tables = old_table + new_table;
+  if (old_table == '') {
+    //alert('您还没有拆分完所有包装，请继续选择完再进行批量打印');
     return false;
-  } else {
+  } else { // 未打包 & 已打包 中只要存在数据，就可以批量打印
     // 弹出模态框，获取输入的数据
-    // $("#packageInputNumber").modal('show');
     var number = prompt("请输入标签总数：", "");
     $("#order_label_size").val(number);
     var pack = {};
@@ -106,8 +107,10 @@ function print_pages(obj) {
     }
     var current_index = parseInt(localStorage.getItem("index"));
     var val = $("#new_table").find("tbody").html();
+    // old table 也加入打包
+    var old_val = $("#old_table").find("tbody").html();
     if (!pack[current_index]) {
-      pack[current_index] = val;
+      pack[current_index] = val + old_val;
       localStorage.setItem("pack", JSON.stringify(pack));
     }
     // print

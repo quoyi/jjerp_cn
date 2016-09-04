@@ -122,7 +122,7 @@
               <th>数量</th>
               <td><%= @order.number %></td>
               <th>金额</th>
-              <td style="text-align: right;"><%= @order.price %></td>
+              <td style="text-align: right;"><%= @order.price.round(2) %></td>
               <th>长</th>
               <td><%= @order.length %></td>
               <th>宽</th>
@@ -133,13 +133,13 @@
               <td><%= OrderCategory.find_by_id(@order.order_category_id).try(:name) %></td>
             </tr>
             <tr>
-              <th>厚度</th>
+              <th style="vertical-align: middle;">厚度</th>
               <td><%= MaterialCategory.find_by_id(@order.ply).try(:name) %></td>
-              <th>材质</th>
+              <th style="vertical-align: middle;">材质</th>
               <td><%= MaterialCategory.find_by_id(@order.texture).try(:name) %></td>
-              <th>颜色</th>
+              <th style="vertical-align: middle;">颜色</th>
               <td><%= MaterialCategory.find_by_id(@order.color).try(:name) %></td>
-              <th>备注</th>
+              <th style="vertical-align: middle;">备注</th>
               <td colspan="5" style="max-width:200px;word-break:break-all;word-wrap:break-word;"><%= @order.note %></td>
             </tr>
             <tr>
@@ -182,7 +182,7 @@
               <td><%= u.uom %></td>
               <td><%= u.price %></td>
               <td><%= u.number %></td>
-              <td><%= u.is_custom ? u.price * u.number : u.price * u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number %></td>
+              <td><%= u.is_custom ? (u.price * u.number).round(2) : (u.price * u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number).round(2) %></td>
               <td style="max-width:200px;word-break:break-all;word-wrap:break-word;"><%= u.note %></td>
             </tr>
             <% end %>
@@ -217,7 +217,7 @@
               <td><%= p.uom %></td>
               <td><%= p.price %></td>
               <td><%= p.number %></td>
-              <td colspan="2" style="text-align: right"><%= p.price * p.number %></td>
+              <td colspan="2" style="text-align: right"><%= (p.price * p.number).round(2) %></td>
               <td colspan="4"><%= p.note %></td>
             </tr>
             <% end %>
@@ -252,7 +252,7 @@
               <td><%= c.uom %></td>
               <td><%= c.price %></td>
               <td><%= c.number %></td>
-              <td colspan="2" style="text-align: right"><%= c.price * c.number %></td>
+              <td colspan="2" style="text-align: right"><%= (c.price * c.number).round(2) %></td>
               <td colspan="4" style="max-width:200px;word-break:break-all;word-wrap:break-word;"><%= c.note %></td>
             </tr>
             <% end %>

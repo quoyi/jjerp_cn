@@ -2,7 +2,7 @@
 <div class="modal fade" id="addOrderParts" tabindex="-1" role="dialog" aria-labelledby="addOrderPartsLabel">
   <div class="modal-dialog" role="document" style="width:80%;">
     <div class="modal-content">
-      <%= nested_form_for @order, html: {class: 'form-horizontal', multipart: true} do |f| %>
+      <%= nested_form_for @order, html: {class: 'form-inline', multipart: true} do |f| %>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="addOrderPartsLabel"> 配件 <small>编辑</small></h4>
@@ -13,36 +13,29 @@
           <div class="fields">
             <div class="row">
               <% pf = part_form.object %>
-              <div class="col-sm-2">
-                <label>基本类型</label>
-                <%= part_form.collection_select :part_category_id, PartCategory.where(parent_id:0), :id, :name, {selected: PartCategory.find_by_id(pf.part_category_id).try(:parent_id), include_blank: "请选择"}, {required: true, class: 'parent-part-category', onchange: 'setChildPartCategory(this)'} %>
-              </div>
-              <div class="col-sm-2">
-                <label>类型</label>
-                <%= part_form.collection_select :part_category_id, PartCategory.where.not(parent_id:0), :id, :name, {selected: pf.part_category_id, include_blank: "请选择"}, {required: true, class: 'child-part-category', onchange: 'setPartCategoryPrice(this)'} %>
-              </div>
-              <div class="col-sm-1">
-                <label>单位</label>
-                <%= part_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {value: pf.uom, include_blank: "请选择"}, {required: true, class: 'part-category-uom'}%>
-              </div>
-              <div class="col-sm-2">
-                <label>售价</label>
-                <%= part_form.number_field :price, min: 0, step: 0.01, value: pf.new_record? ? 0 : pf.price, class: 'part-category-price', required: true  %>
-              </div>
-              <div class="col-sm-1">
-                <label>数量</label>
-                <%= part_form.number_field :number, min: 0, step: 0.01, value: pf.new_record? ? 1 : pf.number, style: "width:70%;", required: true  %>
-              </div>
-              <div class="col-sm-1">
-                <label>备注</label>
-                <%= part_form.text_field :note, value: pf.new_record? ? @order.note : pf.note %>
-              </div>
-              <div class="col-sm-2">
-                <label>供应商</label>
-                <%= part_form.collection_select :supply_id, Supply.all, :id, :full_name, {selected: pf.supply_id,include_blank: "请选择"}, {required: true, class: "part-category-supply"}%>
+              <div class="col-sm-11">
+                <div class="row">
+                  <div class="">
+                    <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>类型</label>
+                    <%= part_form.collection_select :part_category_id, PartCategory.where(parent_id:0), :id, :name, {selected: PartCategory.find_by_id(pf.part_category_id).try(:parent_id), include_blank: "请选择"}, {required: true, class: 'parent-part-category col-sm-1', onchange: 'setChildPartCategory(this)'} %>
+                    <%= part_form.collection_select :part_category_id, PartCategory.where.not(parent_id:0), :id, :name, {selected: pf.part_category_id, include_blank: "请选择"}, {required: true, class: 'child-part-category col-sm-2', onchange: 'setPartCategoryPrice(this)'} %>
+                  </div>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单位</label>
+                  <%= part_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {value: pf.uom, include_blank: "请选择"}, {required: true, class: 'part-category-uom col-sm-1'}%>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;">售价</label>
+                  <%= part_form.number_field :price, min: 0, step: 0.01, value: pf.new_record? ? 0 : pf.price, class: 'part-category-price col-sm-1', required: true  %>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;">数量</label>
+                  <%= part_form.number_field :number, min: 0, step: 0.01, value: pf.new_record? ? 1 : pf.number, required: true, class: "col-sm-1" %>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>供应商</label>
+                  <%= part_form.collection_select :supply_id, Supply.all, :id, :full_name, {selected: pf.supply_id,include_blank: "请选择"}, {required: true, class: "part-category-supply col-sm-1"}%>
+                </div>
+                <div class="row">
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;">备注</label>
+                  <%= part_form.text_field :note, value: pf.new_record? ? @order.note : pf.note, class: 'col-sm-11', placeholder: '请填写备注信息'%>
+                </div>
               </div>
               <div class="col-sm-1 text-center">
-                <%= part_form.link_to_remove '删除', class:'btn btn-info btn-sm' %>
+                <%= part_form.link_to_remove '删除', class:'btn btn-info btn-lg' %>
               </div>
             </div>
             <hr style="margin: 5px 0;" />

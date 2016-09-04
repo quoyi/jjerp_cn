@@ -184,7 +184,7 @@ class OrdersController < ApplicationController
   def package
     @order = Order.find_by_id(params[:id])
     @order_units = @order.units
-    @order_parts = @order.parts
+    # @order_parts = @order.parts
     @packages = @order.packages
     # @indent = Indent.find(params[:id])
     # @order_units = @indent.orders.map(&:units).flatten
@@ -209,26 +209,27 @@ class OrdersController < ApplicationController
             id
           end
         end
-        part_ids = values.map do |v|
-          if v =~ /order_part/
-            id = v.gsub(/order_part_/,'')
-            id
-          end
-        end
+        # part_ids = values.map do |v|
+        #   if v =~ /order_part/
+        #     id = v.gsub(/order_part_/,'')
+        #     id
+        #   end
+        # end
         # 保存包装记录
-        package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','))
+        # package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','))
+        package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','))
         package.label_size = label_size
         package.save!
         # 更新包装状态（已打印）
         Unit.where(id: unit_ids.compact.uniq).update_all(is_printed: true)
-        Part.where(id: part_ids.compact.uniq).update_all(is_printed: true)
+        # Part.where(id: part_ids.compact.uniq).update_all(is_printed: true)
         # 查出已打包（已保存）的部件、配件id，用于界面显示
         packaged_unit_ids = @order.packages.map(&:unit_ids).join(',').split(',').uniq.map(&:to_i)
-        packaged_part_ids = @order.packages.map(&:part_ids).join(',').split(',').uniq.map(&:to_i)
+        # packaged_part_ids = @order.packages.map(&:part_ids).join(',').split(',').uniq.map(&:to_i)
         unit_ids = @order_units.map(&:id)
-        part_ids = @order_parts.map(&:id)
+        # part_ids = @order_parts.map(&:id)
         # 订单的所有部件、配件均已打包，修改订单的状态为“已打包”
-        if (unit_ids - packaged_unit_ids).empty? && (part_ids-packaged_part_ids).empty?
+        if (unit_ids - packaged_unit_ids).empty?
           @order.packaged!
           update_order_status(@order)
         end

@@ -32,7 +32,7 @@
               <%= select_tag :bank_id, options_from_collection_for_select(Bank.all, "id", "bank_card",:selected=>@bank_id), :include_blank => "请选择", class: "form-control" %>
             </div>
             <div class="col-sm-2">
-              <%= submit_tag '查询', class: 'btn btn-primary btn-sm' %>
+              <%= submit_tag '查询', class: 'btn btn-primary' %>
             </div>
           </div>
         </div>

@@ -89,10 +89,45 @@ function setCraft(obj){
   });
 }
 
-
+/**
+ * 修改 子订单 -- 编辑部件 -- 长宽后，设置 尺寸
+ * @param {[type]} obj [description]
+ */
 function setOrderUnitSize(obj){
-  var fields = $(obj).parents(".fields");
-  var length = fields.find(".order-unit-length").val();
-  var width = fields.find(".order-unit-width").val();
-  fields.find(".order-unit-size").val((Number(length) + 2) + "*" + (Number(width) + 2));
+  var fieldsElement = $(obj).parents(".fields");
+  var lengthElement = fieldsElement.find(".order-unit-length");
+  var widthElement = fieldsElement.find(".order-unit-width");
+  var sizeElement = fieldsElement.find(".order-unit-size");
+  sizeElement.val((Number(lengthElement.val()) + 2) + "*" + (Number(widthElement.val()) + 2));
+}
+
+/**
+ * 修改 子订单 -- 编辑部件 -- 尺寸后，设置 长宽
+ * @param {[type]} obj [description]
+ */
+function setOrderUnitLengthWidth(obj){
+  var fieldsElement = $(obj).parents(".fields");
+  var lengthElement = fieldsElement.find(".order-unit-length");
+  var widthElement = fieldsElement.find(".order-unit-width");
+  var sizeElement = $(obj);
+  var sizes = sizeElement.val().split("*");
+  if(sizes.length > 0 && sizes.length == 2){
+    // 长宽未填写时，才需要自动填写（防止将已填写的数据覆盖）
+    if(lengthElement.val() == null || lengthElement.val() <= 1){
+      var length = sizes[0] - 2;
+      if(length > 0){
+        lengthElement.val(length);
+      }else{
+        lengthElement.val(1);
+      }
+    }
+    if(widthElement.val() == null || widthElement.val() <= 1){
+      var width = sizes[1] - 2;
+      if(width > 0){
+        widthElement.val(width);
+      }else{
+        widthElement.val(1);
+      }
+    }
+  }
 }
