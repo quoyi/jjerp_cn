@@ -248,7 +248,7 @@
             <% if @crafts.present? %>
             <% @crafts.each do |c| %>
             <tr>
-              <td colspan="3"><%= c.full_name %></td>
+              <td colspan="3"><%= c.craft_category.try(:full_name) %></td>
               <td><%= c.uom %></td>
               <td><%= c.price %></td>
               <td><%= c.number %></td>

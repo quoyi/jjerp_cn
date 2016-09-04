@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Full name:</strong>
+  <%= @craft_category.full_name %>
+</p>
+
+<p>
+  <strong>Uom:</strong>
+  <%= @craft_category.uom %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @craft_category.price %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @craft_category.note %>
+</p>
+
+<p>
+  <strong>Deleted:</strong>
+  <%= @craft_category.deleted %>
+</p>
+
+<%= link_to 'Edit', edit_craft_category_path(@craft_category) %> |
+<%= link_to 'Back', craft_categories_path %>

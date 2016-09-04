@@ -81,6 +81,24 @@ function previous() {
 }
 
 /**
+ * 重新打印
+ * @param  {[type]} obj [description]
+ * @return {[type]}     [description]
+ */
+function reprint(obj){
+  var order_id = $(obj).data("oid");
+  $.ajax({
+    url: '/orders/' + order_id + "/reprint.pdf",
+    type: 'POST',
+    dataType: 'json',
+    data: {length: $("#package_label_length").val(), width: $("#package_label_width").val()},
+    success: function(data){
+      alert("重新打印成功！");
+    }
+  });
+}
+
+/**
  * 包装 -- 批量打印 按钮
  * @param  {[type]} obj [description]
  * @return {[type]}     [description]
@@ -88,7 +106,8 @@ function previous() {
 function print_pages(obj) {
   var order_units_size = $(obj).data("units");
   if (order_units_size == "" || order_units_size == 0) {
-    alert("没有打包数据，请确认！");
+    alert("所有部件均已打包，请选择重新打印！");
+    // 所有部件均已打包，请选择重新打印
     return false;
   }
   var old_table = $("#old_table").find("tbody").html().trim();
@@ -159,7 +178,7 @@ function print_current_page() {
 
 function set_ids(pack, current_index) {
   var r = pack[current_index].match(/<tr.*?id=(.*?)>/g);
-  values = $("#order_unit_ids").val();
+  var values = $("#order_unit_ids").val();
 
   if (values == "") {
     values = JSON.parse("{}");

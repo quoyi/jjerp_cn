@@ -165,7 +165,7 @@ class OrdersController < ApplicationController
     @unit = Unit.new
     @material = Material.new
     @part_category = PartCategory.new
-    @craft = Craft.new
+    @craft_category = CraftCategory.new
   end
 
   # 未打包
@@ -269,6 +269,38 @@ class OrdersController < ApplicationController
     end
   end
 
+  # 重新打印
+  # POST /orders/1/reprint
+  def reprint
+    @order = Order.find_by_id(params[:id])
+    label_size = @order.packages.map(&:label_size).sum
+    # （打印）标签属性设置
+    if params[:length].present? && params[:width].present?
+      @length = params[:length].to_i
+      @width = params[:width].to_i
+      current_user.print_size = @length.to_s + '*'+ @width.to_s
+      current_user.save! if current_user.changed?
+    elsif current_user.print_size
+      @length = current_user.print_size.split('*').first.to_i
+      @width = current_user.print_size.split('*').last.to_i
+    else
+      @length = 80
+      @width = 60
+    end
+    # 返回结果
+    respond_to do |format|
+      # 请求页面为 html 时，返回到打包页面
+      format.html {redirect_to package_order_path(@order)}
+      format.pdf do
+        # 打印尺寸毫米（长宽）
+        pdf = OrderPdf.new(@length, @width, label_size <= 0 ? 1 : label_size , @order.id)
+        send_data pdf.render, filename: "order_#{@order.id}.pdf",
+          type: "application/pdf",
+          disposition: "inline"
+      end
+    end
+  end
+
 
   private
   # Use callbacks to share common setup or constraints between actions.
@@ -278,15 +310,15 @@ class OrdersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def order_params
-    params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture,
-                                  :color, :length, :width, :height, :number, :price,
-                                  :status, :oftype, :note, :deleted, :file, :_destroy, :is_use_order_material, :delivery_address,
+    params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture, :material_price, :agent_id,
+                                  :color, :length, :width, :height, :number, :price, :customer, :delivery_address,
+                                  :status, :oftype, :note, :deleted, :file, :_destroy, :is_use_order_material,
                                   units_attributes: [:id, :full_name, :number, :ply, :texture, :color, :is_custom,
                                                      :length, :width, :size, :uom, :price, :note, :_destroy],
                                   parts_attributes: [:id, :part_category_id, :order_id,
                                                      :name, :buy, :price, :store, :uom, :number, :brand, :note,
                                                      :supply_id, :deleted, :_destroy],
-                                  crafts_attributes: [:id, :order_id, :full_name, :uom,
+                                  crafts_attributes: [:id, :order_id, :full_name, :uom, :craft_category_id,
                                                       :price, :number, :note, :status, :deleted, :_destroy])
   end
 end

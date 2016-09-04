@@ -73,7 +73,7 @@ function setPartCategoryPrice(obj){
 function setCraft(obj){
   var fields = $(obj).parents(".fields");
   $.ajax({
-    url: "/crafts/find",
+    url: "/craft_categories/find",
     dataType: "json",
     data: {id: $(obj).val()},
     type: "POST",

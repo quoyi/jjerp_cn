@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :craft_categories do
+    collection do
+      post :find
+    end
+  end
   resources :uoms
   resources :sent_lists
   resources :banks
@@ -18,11 +23,7 @@ Rails.application.routes.draw do
       get :stat
     end
   end
-  resources :crafts do
-    collection do
-      post :find
-    end
-  end
+  resources :crafts
   resources :tasks
   resources :units
   resources :supplies
@@ -55,6 +56,8 @@ Rails.application.routes.draw do
       get :custom_offer
       get :package
       post :package
+      get :reprint
+      post :reprint
     end
   end
   resources :departments

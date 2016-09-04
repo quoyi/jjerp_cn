@@ -35,15 +35,15 @@ puts 'created User success ! '
 PartCategory.create(id: 1, parent_id: 0, name:'拉篮')
 PartCategory.create(id: 2, parent_id: 0, name:'滑轨')
 PartCategory.create(id: 3, parent_id: 0, name:'角线')
-PartCategory.create(id: 4, parent_id: 1, name: '100侧拉篮', buy: 100.00, price: 110.00, store: 100, brand: '耐用牌', supply_id: 1)
-PartCategory.create(id: 5, parent_id: 1, name: '200侧拉篮', buy: 200.00, price: 210.00, store: 50, brand: '坚固牌', supply_id: 1)
-PartCategory.create(id: 6, parent_id: 1, name: '400侧拉篮', buy: 300.00, price: 310.00, store: 10, brand: '无敌牌', supply_id: 3)
-PartCategory.create(id: 7, parent_id: 2, name: '铜质滑轨', buy: 100.00, price: 110.00, store: 50, brand: '耐用牌', supply_id: 1)
-PartCategory.create(id: 8, parent_id: 2, name: '铁质滑轨', buy: 200.00, price: 210.00, store: 50, brand: '坚固牌', supply_id: 2)
-PartCategory.create(id: 9, parent_id: 2, name: '钢质滑轨', buy: 300.00, price: 310.00, store: 10, brand: '无敌牌', supply_id: 3)
-PartCategory.create(id: 10, parent_id: 3, name: '普通角线', buy: 100.00, price: 110.00, store: 100, brand: '耐用牌', supply_id: 1)
-PartCategory.create(id: 11, parent_id: 3, name: '高级角线', buy: 200.00, price: 210.00, store: 50, brand: '坚固牌', supply_id: 2)
-PartCategory.create(id: 12, parent_id: 3, name: '特制角线', buy: 500.00, price: 510.00, store: 10, brand: '无敌牌', supply_id: 3)
+PartCategory.create(id: 4, parent_id: 1, name: '100侧拉篮', buy: 100.00, uom: '个', price: 110.00, store: 100, brand: '耐用牌', supply_id: 1)
+PartCategory.create(id: 5, parent_id: 1, name: '200侧拉篮', buy: 200.00, uom: '个', price: 210.00, store: 50, brand: '坚固牌', supply_id: 1)
+PartCategory.create(id: 6, parent_id: 1, name: '400侧拉篮', buy: 300.00, uom: '个', price: 310.00, store: 10, brand: '无敌牌', supply_id: 3)
+PartCategory.create(id: 7, parent_id: 2, name: '铜质滑轨', buy: 100.00, uom: '个', price: 110.00, store: 50, brand: '耐用牌', supply_id: 1)
+PartCategory.create(id: 8, parent_id: 2, name: '铁质滑轨', buy: 200.00, uom: '个', price: 210.00, store: 50, brand: '坚固牌', supply_id: 2)
+PartCategory.create(id: 9, parent_id: 2, name: '钢质滑轨', buy: 300.00, uom: '个', price: 310.00, store: 10, brand: '无敌牌', supply_id: 3)
+PartCategory.create(id: 10, parent_id: 3, name: '普通角线', buy: 100.00, uom: '米', price: 110.00, store: 100, brand: '耐用牌', supply_id: 1)
+PartCategory.create(id: 11, parent_id: 3, name: '高级角线', buy: 200.00, uom: '米', price: 210.00, store: 50, brand: '坚固牌', supply_id: 2)
+PartCategory.create(id: 12, parent_id: 3, name: '特制角线', buy: 500.00, uom: '米', price: 510.00, store: 10, brand: '无敌牌', supply_id: 3)
 puts 'created PartCategory success ! '
 
 ####################################### 板料种类 #######################################
@@ -66,24 +66,24 @@ puts 'created MaterialCategory success ! '
 
 ####################################### 板料 #######################################
 Material.create(id: 1, ply: 1, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6a', full_name: '国色天香多层板3mm', uom: '平方', supply_id: 1);
-Material.create(id: 2, ply: 1, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6b', full_name: '一帘幽梦多层板3mm', uom: '平方', supply_id: 1);
-Material.create(id: 3, ply: 2, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6c', full_name: '国色天香多层板5mm', uom: '平方', supply_id: 1);
-Material.create(id: 4, ply: 2, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6d', full_name: '一帘幽梦多层板5mm', uom: '平方', supply_id: 1);
-Material.create(id: 5, ply: 1, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6e', full_name: '国色天香颗粒板3mm', uom: '平方', supply_id: 1);
-Material.create(id: 6, ply: 1, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6f', full_name: '一帘幽梦颗粒板3mm', uom: '平方', supply_id: 1);
-Material.create(id: 7, ply: 2, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6g', full_name: '国色天香颗粒板5mm', uom: '平方', supply_id: 1);
-Material.create(id: 8, ply: 2, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6h', full_name: '一帘幽梦颗粒板5mm', uom: '平方', supply_id: 1);
-Material.create(id: 9, ply: 3, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6i', full_name: '国色天香多层板15mm', uom: '平方', supply_id: 1);
-Material.create(id: 10, ply: 3, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6j', full_name: '一帘幽梦多层板15mm', uom: '平方', supply_id: 1);
-Material.create(id: 11, ply: 4, texture: 11, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6k', full_name: '国色天香多层板16mm', uom: '平方', supply_id: 1);
-Material.create(id: 12, ply: 4, texture: 11, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6l', full_name: '一帘幽梦多层板16mm', uom: '平方', supply_id: 1);
-Material.create(id: 13, ply: 3, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6m', full_name: '国色天香颗粒板15mm', uom: '平方', supply_id: 1);
-Material.create(id: 14, ply: 3, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6n', full_name: '一帘幽梦颗粒板15mm', uom: '平方', supply_id: 1);
-Material.create(id: 15, ply: 4, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6o', full_name: '国色天香颗粒板16mm', uom: '平方', supply_id: 1);
-Material.create(id: 16, ply: 4, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6p', full_name: '一帘幽梦颗粒板16mm', uom: '平方', supply_id: 1);
-Material.create(id: 17, ply: 6, texture: 9, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6q', full_name: '国色天香颗粒板18mm', uom: '平方', supply_id: 1);
-Material.create(id: 18, ply: 6, texture: 9, color: 15, store: 50, buy: 100.00, price: 110.00, name: '39fd6r', full_name: '一帘幽梦颗粒板18mm', uom: '平方', supply_id: 1);
-Material.create(id: 19, ply: 6, texture: 10, color: 14, store: 50, buy: 100.00, price: 110.00, name: '39fd6s', full_name: '国色天香密度板18mm', uom: '平方', supply_id: 1);
+Material.create(id: 2, ply: 1, texture: 11, color: 15, store: 50, buy: 100.00, price: 120.00, name: '39fd6b', full_name: '一帘幽梦多层板3mm', uom: '平方', supply_id: 1);
+Material.create(id: 3, ply: 2, texture: 11, color: 14, store: 50, buy: 100.00, price: 130.00, name: '39fd6c', full_name: '国色天香多层板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 4, ply: 2, texture: 11, color: 15, store: 50, buy: 100.00, price: 140.00, name: '39fd6d', full_name: '一帘幽梦多层板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 5, ply: 1, texture: 9, color: 14, store: 50, buy: 100.00, price: 150.00, name: '39fd6e', full_name: '国色天香颗粒板3mm', uom: '平方', supply_id: 1);
+Material.create(id: 6, ply: 1, texture: 9, color: 15, store: 50, buy: 100.00, price: 160.00, name: '39fd6f', full_name: '一帘幽梦颗粒板3mm', uom: '平方', supply_id: 1);
+Material.create(id: 7, ply: 2, texture: 9, color: 14, store: 50, buy: 100.00, price: 170.00, name: '39fd6g', full_name: '国色天香颗粒板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 8, ply: 2, texture: 9, color: 15, store: 50, buy: 100.00, price: 180.00, name: '39fd6h', full_name: '一帘幽梦颗粒板5mm', uom: '平方', supply_id: 1);
+Material.create(id: 9, ply: 3, texture: 11, color: 14, store: 50, buy: 100.00, price: 190.00, name: '39fd6i', full_name: '国色天香多层板15mm', uom: '平方', supply_id: 1);
+Material.create(id: 10, ply: 3, texture: 11, color: 15, store: 50, buy: 100.00, price: 200.00, name: '39fd6j', full_name: '一帘幽梦多层板15mm', uom: '平方', supply_id: 1);
+Material.create(id: 11, ply: 4, texture: 11, color: 14, store: 50, buy: 100.00, price: 210.00, name: '39fd6k', full_name: '国色天香多层板16mm', uom: '平方', supply_id: 1);
+Material.create(id: 12, ply: 4, texture: 11, color: 15, store: 50, buy: 100.00, price: 220.00, name: '39fd6l', full_name: '一帘幽梦多层板16mm', uom: '平方', supply_id: 1);
+Material.create(id: 13, ply: 3, texture: 9, color: 14, store: 50, buy: 100.00, price: 230.00, name: '39fd6m', full_name: '国色天香颗粒板15mm', uom: '平方', supply_id: 1);
+Material.create(id: 14, ply: 3, texture: 9, color: 15, store: 50, buy: 100.00, price: 240.00, name: '39fd6n', full_name: '一帘幽梦颗粒板15mm', uom: '平方', supply_id: 1);
+Material.create(id: 15, ply: 4, texture: 9, color: 14, store: 50, buy: 100.00, price: 250.00, name: '39fd6o', full_name: '国色天香颗粒板16mm', uom: '平方', supply_id: 1);
+Material.create(id: 16, ply: 4, texture: 9, color: 15, store: 50, buy: 100.00, price: 260.00, name: '39fd6p', full_name: '一帘幽梦颗粒板16mm', uom: '平方', supply_id: 1);
+Material.create(id: 17, ply: 6, texture: 9, color: 14, store: 50, buy: 100.00, price: 270.00, name: '39fd6q', full_name: '国色天香颗粒板18mm', uom: '平方', supply_id: 1);
+Material.create(id: 18, ply: 6, texture: 9, color: 15, store: 50, buy: 100.00, price: 280.00, name: '39fd6r', full_name: '一帘幽梦颗粒板18mm', uom: '平方', supply_id: 1);
+Material.create(id: 19, ply: 6, texture: 10, color: 14, store: 50, buy: 100.00, price: 290.00, name: '39fd6s', full_name: '国色天香密度板18mm', uom: '平方', supply_id: 1);
 puts 'created Material success ! '
 
 ####################################### 订单类型 #######################################
@@ -112,14 +112,16 @@ puts 'created Bank success ! '
 ####################################### 单位 #######################################
 Uom.create(name: '平方')
 Uom.create(name: '个')
+Uom.create(name: '次')
+Uom.create(name: '米')
 
 ######################################## 工艺 #######################################
-Craft.create(full_name: '异形')
-Craft.create(full_name: '桌面')
-Craft.create(full_name: '酒架')
-Craft.create(full_name: '格子抽')
-Craft.create(full_name: '哑光G型拉手')
-Craft.create(full_name: '高光G型拉手')
-Craft.create(full_name: '免拉手工艺')
-Craft.create(full_name: '其他')
-Craft.create(full_name: '常规工艺')
+CraftCategory.create(full_name: '异形', uom: '次', price: 100)
+CraftCategory.create(full_name: '桌面', uom: '平方', price: 400)
+CraftCategory.create(full_name: '酒架', uom: '个', price: 120)
+CraftCategory.create(full_name: '格子抽', uom: '个', price: 50)
+CraftCategory.create(full_name: '哑光G型拉手', uom: '个', price: 18)
+CraftCategory.create(full_name: '高光G型拉手', uom: '个', price: 32)
+CraftCategory.create(full_name: '免拉手工艺', uom: '个', price: 10)
+CraftCategory.create(full_name: '其他', uom: '个', price: 70)
+CraftCategory.create(full_name: '常规工艺', uom: '次', price: 8)

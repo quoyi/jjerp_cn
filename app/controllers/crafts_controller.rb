@@ -13,15 +13,6 @@ class CraftsController < ApplicationController
   def show
   end
 
-  # GET /crafts/1
-  # GET /crafts/1.json
-  def find
-    @craft = Craft.find_by_id(params[:id]) if params[:id].present?
-    respond_to do |format|
-      format.json { render json: @craft}
-    end
-  end
-
   # GET /crafts/new
   def new
     @craft = Craft.new
@@ -74,6 +65,6 @@ class CraftsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def craft_params
-      params.require(:craft).permit(:order_id, :full_name, :note, :status, :price, :number, :deleted, :reset)
+      params.require(:craft).permit(:order_id, :craft_category_id, :full_name, :note, :status, :price, :number, :deleted, :reset)
     end
 end
