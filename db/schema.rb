@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160828134816) do
+ActiveRecord::Schema.define(version: 20160904133542) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",            limit: 255,                         default: "",    null: false
@@ -59,6 +59,18 @@ ActiveRecord::Schema.define(version: 20160828134816) do
 
   add_index "cities", ["province_id", "name"], name: "index_cities_on_province_id_and_name", unique: true, using: :btree
   add_index "cities", ["province_id"], name: "index_cities_on_province_id", using: :btree
+
+  create_table "craft_categories", force: :cascade do |t|
+    t.string   "full_name",  limit: 255
+    t.string   "uom",        limit: 255
+    t.decimal  "price",                  precision: 8, scale: 2, default: 0.0, null: false
+    t.string   "note",       limit: 255
+    t.boolean  "deleted"
+    t.datetime "created_at",                                                   null: false
+    t.datetime "updated_at",                                                   null: false
+  end
+
+  add_index "craft_categories", ["full_name"], name: "index_craft_categories_on_full_name", unique: true, using: :btree
 
   create_table "crafts", force: :cascade do |t|
     t.integer  "order_id",   limit: 4
@@ -217,6 +229,7 @@ ActiveRecord::Schema.define(version: 20160828134816) do
     t.integer  "indent_id",             limit: 4,                                           null: false
     t.string   "name",                  limit: 255,                         default: "",    null: false
     t.integer  "order_category_id",     limit: 4,                           default: 1,     null: false
+    t.string   "customer",              limit: 255
     t.integer  "ply",                   limit: 4,                           default: 0,     null: false
     t.integer  "texture",               limit: 4,                           default: 0,     null: false
     t.integer  "color",                 limit: 4,                           default: 0,     null: false
@@ -228,6 +241,7 @@ ActiveRecord::Schema.define(version: 20160828134816) do
     t.decimal  "material_price",                    precision: 8, scale: 2, default: 0.0
     t.integer  "status",                limit: 4,                           default: 0,     null: false
     t.integer  "oftype",                limit: 4,                           default: 0,     null: false
+    t.integer  "package_num",           limit: 4,                           default: 0,     null: false
     t.string   "note",                  limit: 255
     t.boolean  "deleted",                                                   default: false, null: false
     t.datetime "created_at",                                                                null: false

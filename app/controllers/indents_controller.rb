@@ -184,6 +184,7 @@ class IndentsController < ApplicationController
                                    :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted, :status,
                                    orders_attributes: [:id, :order_category_id, :customer, :number, :ply, :material_price,
                                                        :texture, :color, :price, :length, :width, :height, :oftype,
+                                                       :agent_id, :name, :status, :deleted, :customer,
                                                        :note, :is_use_order_material, :delivery_address, :_destroy],
                                    offers_attributes: [:id, :order_id, :item_id, :item_type, :item_name,
                                                        :uom, :number, :price, :note, :_destroy])

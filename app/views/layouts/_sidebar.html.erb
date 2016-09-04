@@ -37,7 +37,7 @@
         current_user.permission?("MaterialsController", "index") ||
         current_user.permission?("CraftsController", "index")
         %>
-        <li  class="submenu <%= 'open' if ['agents', 'supplies', 'uoms', 'order_categories', 'unit_categories', 'units', 'part_categories', 'parts', 'material_categories', 'materials', 'crafts'].include?(controller_name)%>">
+        <li  class="submenu <%= 'open' if ['agents', 'supplies', 'uoms', 'order_categories', 'unit_categories', 'units', 'part_categories', 'parts', 'material_categories', 'materials', 'craft_categories'].include?(controller_name)%>">
             <a href="#">
                 <i class="fa fa-cogs"></i> 基础数据 <span class="caret pull-right"></span>
             </a>
@@ -72,8 +72,8 @@
                 <% if current_user.permission?("MaterialsController", "index") %>
                 <li class="<%="#{'active' if controller_name == 'materials'}" %>"><%= link_to '板料', materials_path %></li>
                 <% end %>
-                <%if current_user.permission?("CraftsController", "index")%>
-                <li class="<%="#{'active' if controller_name == 'crafts'}" %>"><%= link_to '工艺', crafts_path %></li>
+                <%if current_user.permission?("CraftCategoriesController", "index")%>
+                <li class="<%="#{'active' if controller_name == 'craft_categories'}" %>"><%= link_to '工艺类型', craft_categories_path %></li>
                 <%end%>
             </ul>
         </li>

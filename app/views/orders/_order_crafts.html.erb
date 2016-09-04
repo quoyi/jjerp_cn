@@ -16,7 +16,7 @@
               <div class="col-sm-11">
                 <div class="row">
                   <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>名称</label>
-                  <%= craft_form.collection_select :full_name, Craft.where(deleted: false), :id, :full_name, {include_blank: '请选择'}, {class: 'col-sm-3', required: true, onchange: 'setCraft(this)'}%>
+                  <%= craft_form.collection_select :craft_category_id, CraftCategory.where(deleted: false), :id, :full_name, {include_blank: '请选择'}, {class: 'col-sm-3', required: true, onchange: 'setCraft(this)'}%>
                   <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单位</label>
                   <%= craft_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {include_blank: '请选择'}, {class: 'col-sm-1 order_craft_uom'} %>
                   <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单价</label>

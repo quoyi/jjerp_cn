@@ -1,0 +1,60 @@
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title">
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 工艺类型 <small>列表</small> </h2>
+      <div class="pull-right panel-options">
+        <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addCraftCategory'} %>
+      </div>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <div class="row content-table">
+      <table class="table table-hover table-striped table-bordered table-condensed text-center">
+        <thead>
+          <tr>
+            <th>名称</th>
+            <th>单位</th>
+            <th>价格</th>
+            <th>备注</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @craft_categories.each do |craft_category| %>
+          <tr>
+            <td><%= craft_category.full_name %></td>
+            <td><%= craft_category.uom %></td>
+            <td><%= craft_category.price %></td>
+            <td style="max-width: 300px;"><%= craft_category.note %></td>
+            <td><%= craft_category.deleted? ? '已删除' : '使用中' %></td>
+            <td>
+              <%= link_to "编辑", edit_craft_category_path(craft_category), data: {toggle: 'modal', target: '#editCraftCategory'}, class: 'btn btn-xs btn-primary' %>
+              <% if craft_category.deleted %>
+              <%= link_to '恢复', craft_category_path(craft_category, craft_category: {reset: true}), method: :patch, style: "color: green !important;", class: 'btn btn-xs btn-default' %>
+              <% else %>
+              <%= link_to '删除', craft_category, method: :delete, class: 'btn btn-xs btn-default', style: "color: red !important;", data: { confirm: '确认删除？' } %>
+              <% end %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editCraftCategory" tabindex="-1" role="dialog" aria-labelledby="editCraftCategoryLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$("#editCraftCategory").on("hidden.bs.modal", function(e){
+  $(this).removeData("bs.modal");
+});
+</script>
+
+<%= render 'new' %>

@@ -1,5 +1,4 @@
 class Craft < ActiveRecord::Base
   belongs_to :order
-
-  attr_accessor :reset
+  belongs_to :craft_category
 end

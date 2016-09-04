@@ -23,25 +23,36 @@ localStorage.setItem('index', 1);
       <div class="panel-heading">
         <div class="row">
           <div class="col-sm-4">
-            <label style="font-size: 18px;">条码：</label>
-            <%= text_field_tag :unit_part_craft_name, '', autofocus:true, style: 'font-size: 18px; font-weight: bold; width:80%;' %>
+            <label style="font-size: 18px;">条码</label>
+            <%= text_field_tag :unit_part_craft_name, '', autofocus:true, style: 'font-size: 18px; font-weight: bold;' %>
           </div>
-          <div class="col-md-8 col-sm-8">
-            <%= form_tag("/orders/#{@order.id}/package.pdf", method: :post, class: 'form-inline') do |f| %>
-            <%= hidden_field_tag 'order_unit_ids', '' %>
-            <%= hidden_field_tag 'order_label_size', 0 %>
-            <label>&nbsp;&nbsp;&nbsp;&nbsp;标签尺寸：</label>
-            <%= number_field_tag 'length', @length, value: "80", class: "form-control", style: "width: 10%", readOnly: true %>
-            &nbsp;&nbsp;×&nbsp;&nbsp;
-            <%= number_field_tag 'width', @width, value: "60", class: "form-control", style: "width: 10%", readOnly: true %>
-            <div class="pull-right">
-              <button class="btn btn-info" onclick="return previous();">上一包</button>
-              <button class="btn btn-info" onclick="return next();">下一包</button>
-              <button class="btn btn-primary" onclick="return print_current_page();">打印当前</button>
-              <button class="btn btn-primary" onclick="return print_pages(this);" data-units="<%= @order_units.map(&:is_printed).uniq.select { |e| !e  }.size %>">批量打印</button>
-              <button class="btn btn-primary" onclick="return alert('暂未开放！');" <%= disabled='disabled' unless @packages.present? %>>重新打印</button>
+          <div class="col-md-6 col-sm-6">
+            <div class="row" style="margin-top: 2px;">
+              <%= form_tag("/orders/#{@order.id}/package.pdf", method: :post, class: 'form-inline') do |f| %>
+              <%= hidden_field_tag 'order_unit_ids', '' %>
+              <%= hidden_field_tag 'order_label_size', 0 %>
+              <div class="col-sm-6">
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;尺寸：</label>
+                <%= number_field_tag 'length', @length, value: "80", class: "form-control", style: "width: 30%", readOnly: true, id: 'package_label_length' %>
+                &nbsp;&nbsp;×&nbsp;&nbsp;
+                <%= number_field_tag 'width', @width, value: "60", class: "form-control", style: "width: 30%", readOnly: true, id: 'package_label_width' %>
+              </div>
+              <div class="col-sm-6">
+                <button class="btn btn-info" onclick="return previous();">上一包</button>
+                <button class="btn btn-info" onclick="return next();">下一包</button>
+                <button class="btn btn-primary" onclick="return print_current_page();">打印当前</button>
+                <button class="btn btn-primary" onclick="return print_pages(this);" data-units="<%= @order_units.map(&:is_printed).uniq.select { |e| !e  }.size %>">批量打印</button>
+                <!-- <button class="btn btn-primary" onclick="return alert('暂未开放！');" <%#= disabled='disabled' unless @packages.present? %>>重新打印</button> -->
+              </div>
+              <% end %>
             </div>
-            <% end %>
+          </div>
+          <div class="col-md-2 col-sm-2 text-center">
+          <%= form_tag("/orders/#{@order.id}/reprint.pdf", method: :post) do |reprint_form| %>
+            <%= hidden_field_tag :length, "80" %>
+            <%= hidden_field_tag :width, "60" %>
+            <button type="submit" class="btn btn-primary" style="margin-top: 2px;" <%= disabled='disabled' unless @order.packages.map(&:label_size).sum > 0 %>>重新打印</button>
+          <% end %>
           </div>
         </div>
       </div>
@@ -123,32 +134,31 @@ localStorage.setItem('index', 1);
               </thead>
               <tbody>
                 <% @packages.each do |p|%>
-                  <% Unit.where(id: p.unit_ids.split(',')).each do |order_unit|%>
-                    <% next unless order_unit.is_printed %>
-                    <tr>
-                      <td><%= order_unit.name%></td>
-                      <td>部件</td>
-                      <td><%= order_unit.full_name%></td>
-                      <!-- <td><%= order_unit.length%></td>
-                      <td><%= order_unit.width%></td>
-                      <td><%= MaterialCategory.find_by_id(order_unit.ply).try(:name)%></td>
-                      <td><%= MaterialCategory.find_by_id(order_unit.color).try(:name)%></td>
-                      <td><%= order_unit.size%></td> -->
-                    </tr>
-                  <% end %>
-                  <%# Part.where(id: p.part_ids.split(',')).each do |order_part|%>
-                    <%# next unless order_part.is_printed %>
-                    <!-- <tr>
-                     <td><%#= order_part.name%></td>
-                     <td>配件</td>
-                     <td><%#= order_part.part_category.name%></td>
-                   </tr> -->
-                  <%# end %>
+                <% Unit.where(id: p.unit_ids.split(',')).each do |order_unit|%>
+                <% next unless order_unit.is_printed %>
+                <tr>
+                  <td><%= order_unit.name%></td>
+                  <td>部件</td>
+                  <td><%= order_unit.full_name%></td>
+                  <!-- <td><%= order_unit.length%></td>
+                  <td><%= order_unit.width%></td>
+                  <td><%= MaterialCategory.find_by_id(order_unit.ply).try(:name)%></td>
+                  <td><%= MaterialCategory.find_by_id(order_unit.color).try(:name)%></td>
+                  <td><%= order_unit.size%></td> -->
+                </tr>
+                <% end %>
+                <%# Part.where(id: p.part_ids.split(',')).each do |order_part|%>
+                <%# next unless order_part.is_printed %>
+                <!-- <tr>
+                  <td><%#= order_part.name%></td>
+                  <td>配件</td>
+                  <td><%#= order_part.part_category.name%></td>
+                </tr> -->
+                <%# end %>
                 <% end %>
               </tbody>
             </table>
           </div>
-
         </div>
       </div>
     </div>
