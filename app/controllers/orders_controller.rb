@@ -169,18 +169,28 @@ class OrdersController < ApplicationController
   end
 
   # 未打包
+  # GET /orders/unpack
   def unpack
     @orders = Order.where(status: Order.statuses[:producing])
     @orders.each do |order|
-      if order.status == "producing" && order.units.size == 0 && order.parts.size == 0 && order.crafts.size != 0
+      # 子订单状态为 未打包，且部件数量为0
+      if order.status == "producing" && order.units.size == 0
         order.packaged!
+        order.update_attributes(package_num: 0) # 打包数为0
         update_order_status(order)
       end
     end
     @orders = @orders.reload#.where(status: Order.statuses[:producing])
   end
 
+  # 已打包
+  # GET /orders/packaged
+  def packaged
+    @orders = Order.where(status: Order.statuses[:packaged])
+  end
+
   # GET 打包页面
+  # orders/1/package
   def package
     @order = Order.find_by_id(params[:id])
     @order_units = @order.units
