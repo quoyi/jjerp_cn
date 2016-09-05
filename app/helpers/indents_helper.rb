@@ -20,30 +20,82 @@ module IndentsHelper
   #     indent.offering!
   #   end
   # end
-  # def export_execl(indent)
-  #   return nil if indent.nil?
-  #   offers = indent.offers
-  #   # 新建一个 indent.name + ".xls" 的 excel 文件，并添加一个 sheet
-  #   wb = WriteExcel.new(indent.name + '.xls')
-  #   ws = wb.add_worksheet
-  #   # 语法 write(row, column, text)
-  #   ws.write(0, 0, "总订单号")
-  #   ws.write(0, 1, indent.name)
-  #   ws.write(0, 2, "代理商")
-  #   ws.write(0, 3, indent.agent.full_name)
-  #   ws.write(0, 4, "终端客户")
-  #   ws.write(0, 5, indent.customer)
-  #   ws.write(0, 6, "总套数")
-  #   ws.write(0, 7, indent.orders.map(&:number).sum())
-  #   ws.write(1, 0, "下单时间")
-  #   ws.write(1, 1, indent.verify_at)
-  #   ws.write(1, 2, "发货时间")
-  #   ws.write(1, 3, indent.require_at)
-  #   ws.write(1, 4, "状态")
-  #   ws.write(1, 5, indent.status_name)
-  #   ws.write(1, 6, "金额￥")
-  #   ws.write(1, 7, offers.map{|o| o.order.number * o.total}.sum())
+  
+  # 导出 配件清单
+  def export_part_list(result)
+    wb = WriteExcel.new("#{Rails.root}/public/excels/parts/" + result["file_name"] + ".xls")
+    ws = wb.add_worksheet
+    # 标题样式：水平居中、垂直居中、加粗、字号20
+    title_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size:20, border: 1)
+    # 表标题样式：水平居左、垂直居中、不加粗、字号16
+    table_title_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 16, bg_color: 'gray', border: 1)
+    # 表头样式：水平居左、垂直居中、不加粗、字号16
+    table_header_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 0, size: 12, border: 1)
+    # 正文样式：水平居中、垂直居中、不加粗、字号16
+    info_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 0, size: 12, border: 1)
+    # 表根样式：水平居中、垂直居中、不加粗、字号16
+    table_footer_format = wb.add_format(align: 'right', valign: 'vcenter', bold: 0, size: 16)
 
-  #   wb.close
-  # end
+    # 设置列宽
+    ws.set_column("A:F", 18)
+
+    ws.merge_range("A1:F1", '伊思尔制造中心 ——— 配件清单', title_format)
+    ws.set_row(0, 34) # 设置行高
+
+    indent_num = 1
+    result.each_pair do |key, value|
+      next if key == "file_name"
+      num_cupboard = value["cupboard"].length
+      num_others = value["others"].length
+      # 必须存在配件，才显示总订单信息
+      if num_cupboard > 0 || num_others > 0
+        indent_num += 1
+        ws.write_row("A" + indent_num.to_s, ["总订单号", value["indent"].name, 
+                                                   "代理商", value["indent"].agent.try(:full_name), 
+                                                   "终端客户", value["indent"].customer],
+                                                   table_title_format)
+        ws.set_row(indent_num - 1, 28) # 设置行高
+
+        if num_cupboard > 0
+          indent_num += 1
+          ws.merge_range("A" + indent_num.to_s + ":F" + indent_num.to_s, "橱柜配件清单", table_title_format)
+          ws.set_row(indent_num - 1 , 28) # 设置行高
+          indent_num += 1
+
+          ws.merge_range("E" + indent_num.to_s + ":F" + indent_num.to_s, "", info_format)
+          ws.write_row("A" + indent_num.to_s, ["名称", "规格", "品牌", "数量", "备注"], table_header_format)
+          value["cupboard"].each_value do |cupboards|
+            indent_num += 1
+            ws.merge_range("E" + indent_num.to_s + ":F" + indent_num.to_s, "", info_format)
+            ws.write_row("A" + indent_num.to_s, [cupboards.first.part_category.try(:name), cupboards.first.uom, 
+                                                 cupboards.first.brand, cupboards.map(&:number).sum(), 
+                                                 cupboards.map(&:note).join(' ')], info_format)
+          end
+          indent_num += 1
+          ws.merge_range("A" + indent_num.to_s + ":F" + indent_num.to_s, "", info_format)
+        end
+
+        if num_others > 0
+          indent_num += 1
+          ws.merge_range("A" + indent_num.to_s + ":F" + indent_num.to_s, "衣柜配件清单", table_title_format)
+          ws.set_row(indent_num - 1 , 28) # 设置行高
+          indent_num += 1
+
+          ws.merge_range("E" + indent_num.to_s + ":F" + indent_num.to_s, "", info_format)
+          ws.write_row("A" + indent_num.to_s, ["名称", "规格", "品牌", "数量", "备注"], table_header_format)
+          value["others"].each_value do |others|
+            indent_num += 1
+            ws.merge_range("E" + indent_num.to_s + ":F" + indent_num.to_s, "", info_format)
+            ws.write_row("A" + indent_num.to_s,[others.first.part_category.try(:name), others.first.uom,
+                                                others.first.brand, others.map(&:number).sum(),
+                                                others.first.note], info_format)
+          end
+          indent_num += 1
+          ws.merge_range("A" + indent_num.to_s + ":F" + indent_num.to_s, "", info_format)
+        end
+      end
+    end
+
+    wb.close
+  end
 end

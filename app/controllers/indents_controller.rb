@@ -110,7 +110,7 @@ class IndentsController < ApplicationController
     @indent = Indent.find_by_id(params[:id])
     export_offers(@indent)
     respond_to do |format|
-      format.html { redirect_to order_union_path(@indent), notice: '导出成功' }
+      format.html { redirect_to order_union_path(@indent), notice: '报价单导出成功' }
       format.json { head :no_content }
       # format.csv do
       #   filename = "报价单－" + @indent.name
@@ -124,8 +124,43 @@ class IndentsController < ApplicationController
     end
   end
 
-  def part_list
-    binding.pry
+  # 导出配件清单
+  def export_parts
+    respond_to do |format|
+      format.html { redirect_to indents_path, notice: '配件清单导出成功' }
+      format.xls do
+        send_file "#{Rails.root}/public/excels/parts/" + params[:file_name] + ".xls", type: 'text/xls; charset=utf-8'
+        # File.delete("#{Rails.root}/public/excels/parts/" + params[:file_name] + ".xls")
+      end
+    end
+  end
+
+  # 配件清单预览(返回结果如下：)
+  # @result = {indent_id: {indent: indent; cupboard: [cupboard_parts]; others: [other_parts]}; ... }
+  def preview
+    @result = {}
+    if params[:ids].present?
+      ids = params[:ids].split(",")
+      @indents = Indent.where(id: ids).order(created_at: :desc)
+      # 添加文件名称，方便下载使用
+      @result["file_name"] = "配件清单-" + Time.now.strftime('%y%m%d-') + SecureRandom.hex(2).upcase
+      @indents.each do |indent|
+        indent_parts = {}
+        indent_parts["indent"] = indent
+        # 橱柜体单独统计配件
+        cupboard_parts = indent.orders.where(order_category: 1).map{|o| o.parts}.flatten
+        # 其他订单类型 一起统计配件
+        other_parts = indent.orders.where.not(order_category: 1).map{|o| o.parts}.flatten
+        # 分别分组查询
+        indent_parts["cupboard"]  = cupboard_parts.group_by{|p| [p.part_category_id, p.uom, p.brand]}
+        indent_parts["others"]  = other_parts.group_by{|p| [p.part_category_id, p.uom, p.brand]}
+        
+        @result[indent.id] = indent_parts
+      end
+    end
+    # 生成配件清单excel
+    export_part_list(@result)
+    render layout: false
   end
 
   private

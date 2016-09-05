@@ -1,7 +1,8 @@
 <script type="text/javascript">
 $(function(){
-localStorage.clear();
-localStorage.setItem('index', 1);
+  // localStorage.clear();
+  localStorage.removeItem('index');
+  localStorage.setItem('index', 1);
 });
 </script>
 <div class="panel-warning">
@@ -30,7 +31,7 @@ localStorage.setItem('index', 1);
             <div class="row" style="margin-top: 2px;">
               <%= form_tag("/orders/#{@order.id}/package.pdf", method: :post, class: 'form-inline') do |f| %>
               <%= hidden_field_tag 'order_unit_ids', '' %>
-              <%= hidden_field_tag 'order_label_size', 0 %>
+              <%= hidden_field_tag 'order_label_size', 0 %><!-- 标签数量 -->
               <div class="col-sm-6">
                 <label>&nbsp;&nbsp;&nbsp;&nbsp;尺寸：</label>
                 <%= number_field_tag 'length', @length, value: "80", class: "form-control", style: "width: 30%", readOnly: true, id: 'package_label_length' %>

@@ -9,9 +9,9 @@ Rails.application.routes.draw do
   resources :banks
   resources :sents do
     collection do
-      get :change
-      get :replenish
-      get :download
+      get :change # 修改发货信息
+      get :replenish # 补充发货信息
+      get :download # 下载发货信息
     end
   end
   resources :users, only: [:index, :edit, :update]
@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   resources :expends
   resources :incomes do
     collection do
-      get :stat
+      get :stat # 财务统计
     end
   end
   resources :crafts
@@ -41,33 +41,35 @@ Rails.application.routes.draw do
   resources :parts
   resources :materials do
     collection do
-      post :find
+      post :find # 查找指定板料
+    end
+  end
+  resources :indents do
+    collection do
+      get :generate # 生成报价单
+      get :export_offer # 导出报价单
+      get :export_parts # 导出配件清单
+      get :preview # 预览配件清单
     end
   end
   resources :orders do
     collection do
-      post :import
-      get :not_sent
-      get :producing
-      get :export
-      get :unpack
+      post :import # 导入拆单数据
+      get :not_sent # 未发货
+      get :producing # 生产中
+      get :export # 导出
+      get :unpack # 未打包
+      get :packaged # 已打包
     end
     member  do
-      get :custom_offer
-      get :package
-      post :package
-      get :reprint
-      post :reprint
+      get :custom_offer # 自定义报价
+      get :package # 打包
+      post :package # 打包
+      get :reprint # 重新打印标签
+      post :reprint # 重新打印标签
     end
   end
   resources :departments
-  resources :indents do
-    collection do
-      get :generate
-      get :export_offer
-      post :part_list
-    end
-  end
   resources :permissions
   resources :roles
   devise_for :users, controllers: {
