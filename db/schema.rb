@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20160904133542) do
     t.string   "province",        limit: 255
     t.string   "city",            limit: 255
     t.string   "district",        limit: 255
+    t.string   "town",            limit: 255
     t.string   "address",         limit: 255
     t.string   "full_name",       limit: 255,                                         null: false
     t.string   "contacts",        limit: 255
@@ -26,6 +27,9 @@ ActiveRecord::Schema.define(version: 20160904133542) do
     t.string   "fax",             limit: 255
     t.string   "email",           limit: 255
     t.string   "wechar",          limit: 255
+    t.decimal  "balance",                     precision: 8, scale: 2, default: 0.0,   null: false
+    t.decimal  "arrear",                      precision: 8, scale: 2, default: 0.0,   null: false
+    t.decimal  "history",                     precision: 8, scale: 2, default: 0.0,   null: false
     t.string   "logistics",       limit: 255
     t.integer  "order_condition", limit: 4
     t.integer  "send_condition",  limit: 4
@@ -34,8 +38,6 @@ ActiveRecord::Schema.define(version: 20160904133542) do
     t.boolean  "deleted",                                             default: false
     t.datetime "created_at",                                                          null: false
     t.datetime "updated_at",                                                          null: false
-    t.string   "town",            limit: 255
-    t.decimal  "balance",                     precision: 8, scale: 2
   end
 
   add_index "agents", ["full_name"], name: "index_agents_on_full_name", using: :btree
@@ -46,10 +48,10 @@ ActiveRecord::Schema.define(version: 20160904133542) do
     t.string   "bank_name",  limit: 255
     t.string   "bank_card",  limit: 255
     t.decimal  "balance",                precision: 8, scale: 2, default: 0.0
-    t.datetime "created_at",                                                   null: false
-    t.datetime "updated_at",                                                   null: false
     t.decimal  "incomes",                precision: 8, scale: 2, default: 0.0
     t.decimal  "expends",                precision: 8, scale: 2, default: 0.0
+    t.datetime "created_at",                                                   null: false
+    t.datetime "updated_at",                                                   null: false
   end
 
   create_table "cities", force: :cascade do |t|
@@ -61,28 +63,29 @@ ActiveRecord::Schema.define(version: 20160904133542) do
   add_index "cities", ["province_id"], name: "index_cities_on_province_id", using: :btree
 
   create_table "craft_categories", force: :cascade do |t|
-    t.string   "full_name",  limit: 255
-    t.string   "uom",        limit: 255
-    t.decimal  "price",                  precision: 8, scale: 2, default: 0.0, null: false
+    t.string   "full_name",  limit: 255,                         default: "",    null: false
+    t.string   "uom",        limit: 255,                         default: ""
+    t.decimal  "price",                  precision: 8, scale: 2, default: 0.0,   null: false
     t.string   "note",       limit: 255
-    t.boolean  "deleted"
-    t.datetime "created_at",                                                   null: false
-    t.datetime "updated_at",                                                   null: false
+    t.boolean  "deleted",                                        default: false
+    t.datetime "created_at",                                                     null: false
+    t.datetime "updated_at",                                                     null: false
   end
 
   add_index "craft_categories", ["full_name"], name: "index_craft_categories_on_full_name", unique: true, using: :btree
 
   create_table "crafts", force: :cascade do |t|
-    t.integer  "order_id",   limit: 4
-    t.string   "full_name",  limit: 255,                         default: ""
-    t.string   "uom",        limit: 255
-    t.decimal  "price",                  precision: 8, scale: 2, default: 0.0,   null: false
-    t.integer  "number",     limit: 4,                           default: 1,     null: false
-    t.string   "note",       limit: 255
+    t.integer  "order_id",          limit: 4
+    t.integer  "craft_category_id", limit: 4
+    t.string   "full_name",         limit: 255,                         default: ""
+    t.string   "uom",               limit: 255
+    t.decimal  "price",                         precision: 8, scale: 2, default: 0.0,   null: false
+    t.integer  "number",            limit: 4,                           default: 1,     null: false
+    t.string   "note",              limit: 255
     t.boolean  "status"
-    t.boolean  "deleted",                                        default: false
-    t.datetime "created_at",                                                     null: false
-    t.datetime "updated_at",                                                     null: false
+    t.boolean  "deleted",                                               default: false
+    t.datetime "created_at",                                                            null: false
+    t.datetime "updated_at",                                                            null: false
   end
 
   add_index "crafts", ["full_name"], name: "index_crafts_on_full_name", using: :btree
@@ -134,10 +137,10 @@ ActiveRecord::Schema.define(version: 20160904133542) do
     t.integer  "status",     limit: 4
     t.string   "note",       limit: 255
     t.boolean  "deleted",                                        default: false, null: false
+    t.integer  "order_id",   limit: 4
+    t.string   "source",     limit: 255,                         default: ""
     t.datetime "created_at",                                                     null: false
     t.datetime "updated_at",                                                     null: false
-    t.integer  "order_id",   limit: 4
-    t.string   "source",     limit: 255
   end
 
   add_index "incomes", ["indent_id"], name: "index_incomes_on_indent_id", using: :btree
@@ -243,23 +246,23 @@ ActiveRecord::Schema.define(version: 20160904133542) do
     t.integer  "oftype",                limit: 4,                           default: 0,     null: false
     t.integer  "package_num",           limit: 4,                           default: 0,     null: false
     t.string   "note",                  limit: 255
+    t.string   "delivery_address",      limit: 255,                         default: "",    null: false
     t.boolean  "deleted",                                                   default: false, null: false
-    t.datetime "created_at",                                                                null: false
-    t.datetime "updated_at",                                                                null: false
     t.boolean  "is_use_order_material",                                     default: false
     t.integer  "agent_id",              limit: 4
-    t.string   "delivery_address",      limit: 255
+    t.datetime "created_at",                                                                null: false
+    t.datetime "updated_at",                                                                null: false
   end
 
   add_index "orders", ["agent_id"], name: "index_orders_on_agent_id", using: :btree
   add_index "orders", ["indent_id"], name: "index_orders_on_indent_id", using: :btree
 
   create_table "packages", force: :cascade do |t|
-    t.string  "unit_ids",   limit: 255
-    t.string  "part_ids",   limit: 255
+    t.integer "order_id",   limit: 4,                null: false
+    t.string  "unit_ids",   limit: 255, default: ""
+    t.string  "part_ids",   limit: 255, default: ""
     t.string  "print_size", limit: 255
-    t.integer "order_id",   limit: 4
-    t.integer "label_size", limit: 4
+    t.integer "label_size", limit: 4,   default: 0
   end
 
   add_index "packages", ["order_id"], name: "index_packages_on_order_id", using: :btree
@@ -294,10 +297,10 @@ ActiveRecord::Schema.define(version: 20160904133542) do
     t.string   "brand",            limit: 255
     t.string   "note",             limit: 255
     t.integer  "supply_id",        limit: 4,                                           null: false
+    t.boolean  "is_printed",                                           default: false
     t.boolean  "deleted",                                              default: false
     t.datetime "created_at",                                                           null: false
     t.datetime "updated_at",                                                           null: false
-    t.boolean  "is_printed",                                           default: false
   end
 
   add_index "parts", ["name"], name: "index_parts_on_name", using: :btree
@@ -430,6 +433,8 @@ ActiveRecord::Schema.define(version: 20160904133542) do
     t.string   "size",             limit: 255,                         default: ""
     t.string   "note",             limit: 255
     t.integer  "supply_id",        limit: 4
+    t.boolean  "is_custom",                                            default: false
+    t.boolean  "is_printed",                                           default: false
     t.string   "edge",             limit: 255
     t.string   "customer",         limit: 255
     t.integer  "out_edge_thick",   limit: 4,                           default: 0,     null: false
@@ -445,8 +450,6 @@ ActiveRecord::Schema.define(version: 20160904133542) do
     t.boolean  "deleted",                                              default: false
     t.datetime "created_at",                                                           null: false
     t.datetime "updated_at",                                                           null: false
-    t.boolean  "is_printed",                                           default: false
-    t.boolean  "is_custom",                                            default: false
   end
 
   add_index "units", ["name"], name: "index_units_on_name", using: :btree
@@ -519,8 +522,6 @@ ActiveRecord::Schema.define(version: 20160904133542) do
 
   add_foreign_key "cities", "provinces"
   add_foreign_key "districts", "cities"
-  add_foreign_key "incomes", "orders"
   add_foreign_key "materials", "supplies"
-  add_foreign_key "orders", "agents"
   add_foreign_key "tasks", "orders"
 end

@@ -2,20 +2,19 @@
   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
   <h4 class="modal-title" id="addSentLabel"> 发货信息 
     <small class="text-info" style="margin-left: 10px;">
-      订单号：<%= @indent_or_order.name %>&nbsp;&nbsp;&nbsp;&nbsp;
       <% if @indent_or_order.class == Indent %>
-        代理商：<%= @indent_or_order.agent.full_name %>&nbsp;&nbsp;&nbsp;&nbsp;
-        总件数：<%= @indent_or_order.orders.map{|o| o.packages.map(&:label_size).compact.sum}.flatten.sum %>&nbsp;件
-        <% customer =  @indent_or_order.customer %>
-        <% logistics = @indent_or_order.logistics %>
+        <% indent = @indent_or_order %>
+        <% agent = @indent_or_order.agent %>
       <% elsif @indent_or_order.class == Order %>
-        <% order_indent = @indent_or_order.indent %>
-        代理商：<%= order_indent.agent.full_name %>&nbsp;&nbsp;&nbsp;&nbsp;
-        总件数：<%= order_indent.orders.map{|o| o.packages.map(&:label_size).compact.sum}.flatten.sum %>&nbsp;件
-        <% customer = order_indent.customer %>
-        <% logistics = order_indent.logistics %>
+        <% indent = @indent_or_order.indent %>
+        <% agent = indent.agent %>
       <% else %>
       <% end %>
+      订单号：<%= @indent_or_order.name %>&nbsp;&nbsp;&nbsp;&nbsp;
+      终端客户：<%= indent.customer.truncate(12) %>&nbsp;&nbsp;&nbsp;&nbsp;
+      代理商：<%= agent.full_name.truncate(12) %>&nbsp;&nbsp;&nbsp;&nbsp;
+      总件数：<%= indent.orders.map{|o| o.packages.map(&:label_size).compact.sum}.flatten.sum %>&nbsp;件&nbsp;&nbsp;&nbsp;&nbsp;
+      欠款：<%= agent.arrear %>&nbsp;元
     </small>
   </h4>
 </div>
@@ -26,27 +25,51 @@
   <table class="text-center" style="width: 100%;">
     <tr>
       <td><label>地&nbsp;&nbsp;&nbsp;&nbsp;区</label></td>
-      <td><%= f.text_field :area, class: 'form-control' %></td>
+      <td><%= f.text_field :area, class: 'form-control', value: "#{indent.address}" %></td>
       <td><label><span class="require">*</span>收货人</label></td>
-      <td><%= f.text_field :receiver, value: customer, class: 'form-control', required: true %></td>
+      <td><%= f.text_field :receiver, value: "#{indent.customer}", class: 'form-control', required: true %></td>
       <td><label><span class="require">*</span>联系方式</label></td>
-      <td><%= f.text_field :contact, class: 'form-control', required: true %></td>
+      <td><%= f.text_field :contact, class: 'form-control', required: true, value: "#{agent.mobile}" %></td>
     </tr>
     <tr>
       <td><label>代&nbsp;&nbsp;&nbsp;&nbsp;收</label></td>
-      <td><%= f.number_field :collection, class: 'form-control', min: 0, step: 0.01, style: "margin: 5px 0; width: 196px;" %></td>
+      <td><%= f.number_field :collection, value: "#{indent.arrear}",class: 'form-control', min: 0, step: 0.01, style: "margin: 5px 0; width: 196px;" %></td>
       <td><label><span class="require">*</span>物&nbsp;&nbsp;&nbsp;&nbsp;流</label></td>
-      <td><%= f.text_field :logistics, value: logistics, class: 'form-control' %></td>
+      <td><%= f.text_field :logistics, value: "#{indent.logistics}", class: 'form-control' %></td>
       <td><%= f.label '橱柜' %></td>
-      <td><%= f.number_field :cupboard, class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %></td>
+      <td>
+        <% if @indent_or_order.class == Indent %>
+        <%= f.number_field :cupboard, value: "#{@indent_or_order.orders.where(order_category_id: OrderCategory.find_by(name: '橱柜').try(:id)).count}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+        <% else %>
+        <%= f.number_field :cupboard, value: "#{@indent_or_order.order_category.name == '橱柜' ? 1 : 0}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+        <% end %>
+      </td>
     </tr>
     <tr>
       <td><%= f.label '衣柜' %></td>
-      <td><%= f.number_field :robe, class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %></td>
+      <td>
+        <% if @indent_or_order.class == Indent %>
+          <%= f.number_field :robe, value: "#{@indent_or_order.orders.where(order_category_id: OrderCategory.find_by(name: '衣柜').try(:id)).count}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+        <% else %>
+          <%= f.number_field :robe, value: "#{@indent_or_order.order_category.name == '衣柜' ? 1 : 0}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+        <% end %>
+      </td>
       <td><%= f.label '门' %></td>
-      <td><%= f.number_field :door, class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %></td>
+      <td>
+        <% if @indent_or_order.class == Indent %>
+          <%= f.number_field :door, value: "#{@indent_or_order.orders.where(order_category_id: OrderCategory.find_by(name: '门').try(:id)).count}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+        <% else %>
+          <%= f.number_field :door, value: "#{@indent_or_order.order_category.name == '门' ? 1 : 0}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+        <% end %>    
+      </td>
       <td><%= f.label '配件' %></td>
-      <td><%= f.number_field :part, class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %></td>
+      <td>
+        <% if @indent_or_order.class == Indent %>
+          <%= f.number_field :part, value: "#{@indent_or_order.orders.where(order_category_id: OrderCategory.find_by(name: '配件').try(:id)).count}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+        <% else %>
+          <%= f.number_field :part, value: "#{@indent_or_order.order_category.name == '配件' ? 1 : 0}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+        <% end %>
+      </td>
     </tr>
   </table>
 </div>

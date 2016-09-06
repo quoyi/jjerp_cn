@@ -129,7 +129,7 @@
                 <ul>
                     <li class='<%="#{'active' if controller_name == 'orders' and action_name == 'producing'}" %>'><a href="/orders/producing">生产中</a></li>
                     <li class='<%="#{'active' if controller_name == 'orders' and ['unpack', 'package'].include?(action_name) }" %>'><a href="/orders/unpack">未打包</a></li>
-                    <li class='<%="#{'active' if controller_name == 'orders' and ['packaged', 'package'].include?(action_name) }" %>'><a href="/orders/packaged">已打包</a></li>
+                    <li class='<%="#{'active' if controller_name == 'orders' and ['packaged'].include?(action_name) }" %>'><a href="/orders/packaged">已打包</a></li>
                 </ul>
             </li>
         <% end %>

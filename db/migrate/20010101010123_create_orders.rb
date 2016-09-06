@@ -19,7 +19,10 @@ class CreateOrders < ActiveRecord::Migration
       t.integer :oftype, null: false, default: 0 # 类型： 0.正常单 1.补单 3.加急单  4.批量单
       t.integer :package_num, null: false, default: 0 # 打包数
       t.string :note # 备注
+      t.string :delivery_address, null: false, default: '' # 收货地址
       t.boolean :deleted, null: false, default: false # 标记删除
+      t.boolean :is_use_order_material, default: false # 使用子订单的板料属性或使用部件板料属性 标记
+      t.references :agent, index: true
       t.timestamps null: false
     end
   end

@@ -18,7 +18,8 @@ class CreateUnits < ActiveRecord::Migration
       t.string  :size, default: '' #剪裁尺寸
       t.string :note # 备注
       t.references :supply # 供应商
-
+      t.boolean :is_custom, default: false # 是否为自定义报价的部件
+      t.boolean :is_printed, default: false # 是否已打印
       
       t.string :edge #封边
       t.string :customer #终端信息

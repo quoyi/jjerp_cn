@@ -81,15 +81,27 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    @order = Order.new(order_params)
-    if @order.save
-      # 子订单保存后，更新订单、子订单的价格合计
-      update_order_and_indent(@order)
-      # 生成报价单，更新总订单、子订单状态
-      create_offer(@order)
-      update_order_status(@order.reload)
-      # update_indent_status(@order.indent)
-      
+    Order.transaction do
+      @order = Order.new(order_params)
+      # 保存新建子订单之前，先获取总订单 （原）金额，后面需要减 （原）金额
+      origin_indent_amount = @order.indent.orders.pluck(:price).sum
+      @order.save!
+
+      # 更新总订单金额
+      indent = @order.indent
+      # 总订单 -- 所有子订单金额合计
+      indent_amount = indent.orders.pluck(:price).sum
+      # 总订单 -- 所有收入金额合计
+      indent_income = indent.incomes.pluck(:money).sum
+      # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
+      indent.update!(amount: indent_amount, arrear: indent_amount - indent_income, status: Indent.statuses[:offering])
+
+      # 更新代理商 历史欠款合计、历史订单合计
+      agent = indent.agent
+      agent.update!(arrear: agent.arrear + indent.amount - origin_indent_amount, history: agent.history + indent.amount - origin_indent_amount)
+    end
+    
+    if @order
       redirect_to :back, notice: '子订单创建成功！'
     else
       redirect_to :back, error: '子订单创建失败！'
@@ -100,28 +112,80 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1.json
   def update
     return redirect_to @order, error: '请求无效！请检查数据是否有效。' unless params[:order]
-    if @order.update(order_params)
+    Order.transaction do
+      # 更新之前，先获取总订单 （原）金额，后面需要减 （原）金额
+      origin_indent_amount = @order.indent.orders.pluck(:price).sum
+
+      @order.update!(order_params)
       # 自定义报价时，查找或创建板料，防止找不到板料
       @order.units.where(is_custom: true).each do |unit|
         Material.find_or_create_by(ply: unit.ply, texture: unit.texture, color: unit.color, full_name: "#{unit.ply_name}-#{unit.texture_name}-#{unit.color_name}", buy: 0, price: unit.price)
       end
-      # 子订单更新后，更新总订单、子订单的价格合计
-      update_order_and_indent(@order)
-      # 生成报价单，更新总订单、子订单状态
+
+      # 更新子订单金额
+      sum_units = 0
+      # 将子订单的所有部件按是否"自定义报价"分组 {true: 自定义报价部件; false: 正常拆单部件}
+      group_units = @order.units.group_by{|u| u.is_custom}
+      # 自定义报价中的部件 尺寸 不参与计算
+      sum_units += group_units[true].map{|u| u.number * u.price}.sum() if group_units[true]
+      # 正常拆单部件 尺寸 参与计算
+      sum_units += group_units[false].map{|u| u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum() if group_units[false]
+      # 计算 配件 金额
+      sum_parts = @order.parts.map{|p| p.number * p.price}.sum()
+      # 计算 工艺 金额
+      sum_crafts = @order.crafts.map{|c| c.number * c.price}.sum()
+      # 子订单金额 = 子订单部件合计 + 子订单配件合计 + 子订单工艺费合计
+      @order.update!(price: sum_units + sum_parts + sum_crafts)
+
+      # 更新总订单金额
+      indent = @order.indent
+      # 总订单 -- 所有子订单 （新）金额合计
+      indent_amount = indent.orders.pluck(:price).sum
+      # 总订单 -- 所有收入 （新）金额合计
+      indent_income = indent.incomes.pluck(:money).sum
+      # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
+      indent.update!(amount: indent_amount, arrear: indent_amount - indent_income)
+
+      # 更新代理商 历史欠款合计、历史订单合计
+      agent = indent.agent
+      agent.update!(arrear: agent.arrear + indent.amount - origin_indent_amount, 
+                    history: agent.history + indent.amount - origin_indent_amount)
+
+      # 生成报价单
       create_offer(@order)
+      # 修改子订单、总订单的状态
       update_order_status(@order.reload)
-      # update_indent_status(@order.indent)
-      # 子订单列表页面更新后，应该返回到列表页面
-      redirect_to :back, notice: '子订单编辑成功！'
-    else
-      redirect_to :back, error: '子订单编辑失败！请仔细检查后再提交。'
     end
+
+    # 子订单列表页面更新后，应该返回到列表页面
+    redirect_to :back, notice: '子订单编辑成功！'
   end
 
   # DELETE /orders/1
   # DELETE /orders/1.json
   def destroy
-    @order.destroy
+    Order.transaction do
+      # 更新总订单金额
+      indent = @order.indent
+      # 总订单 -- 所有子订单 （新）金额合计
+      indent_amount = indent.orders.pluck(:price).sum
+      # 总订单 -- 所有收入 （新）金额合计
+      indent_income = indent.incomes.pluck(:money).sum
+      # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
+      indent.update!(amount: indent_amount - @order.price, arrear: indent_amount - @order.price - indent_income)
+
+      # 更新代理商 历史欠款合计、历史订单合计
+      agent = indent.agent
+      agent.update!(arrear: agent.arrear - @order.price, 
+                    history: agent.history - @order.price)
+
+      # 生成报价单
+      create_offer(@order)
+      # 修改子订单、总订单的状态
+      update_order_status(@order.reload)
+      @order.destroy!
+    end
+    binding.pry
     redirect_to orders_url, notice: '子订单已删除。'
   end
 
@@ -139,24 +203,47 @@ class OrdersController < ApplicationController
 
   # 导入文件，或手工输入
   def import
-    msg = import_order_units(params[:file], @order.name)
-    # 订单修改后，更新订单、子订单的价格合计
-    update_order_and_indent(@order)
-    create_offer(@order)
-    update_order_status(@order.reload)
-    # update_indent_status(@order.indent)
+    Order.transaction do
+      # 更新之前，先获取总订单 （原）金额，后面需要减 （原）金额
+      origin_indent_amount = @order.indent.orders.pluck(:price).sum
+
+      msg = import_order_units(params[:file], @order.name)
+
+      # 更新子订单金额
+      sum_units = 0
+      # 将子订单的所有部件按是否"自定义报价"分组 {true: 自定义报价部件; false: 正常拆单部件}
+      group_units = @order.units.group_by{|u| u.is_custom}
+      # 自定义报价中的部件 尺寸 不参与计算
+      sum_units += group_units[true].map{|u| u.number * u.price}.sum() if group_units[true]
+      # 正常拆单部件 尺寸 参与计算
+      sum_units += group_units[false].map{|u| u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum() if group_units[false]
+      # 计算 配件 金额
+      sum_parts = @order.parts.map{|p| p.number * p.price}.sum()
+      # 计算 工艺 金额
+      sum_crafts = @order.crafts.map{|c| c.number * c.price}.sum()
+      # 子订单金额 = 子订单部件合计 + 子订单配件合计 + 子订单工艺费合计
+      @order.update!(price: sum_units + sum_parts + sum_crafts)
+
+      # 更新总订单金额
+      indent = @order.indent
+      # 总订单 -- 所有子订单金额合计
+      indent_amount = indent.orders.pluck(:price).sum
+      # 总订单 -- 所有收入金额合计
+      indent_income = indent.incomes.pluck(:money).sum
+      # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
+      indent.update!(amount: indent_amount, arrear: indent_amount - indent_income)
+
+      # 更新代理商 历史欠款合计、历史订单合计
+      agent = indent.agent
+      agent.update!(arrear: agent.arrear + indent.amount - origin_indent_amount, history: agent.history + indent.amount - origin_indent_amount)
+
+      # 生成报价单
+      create_offer(@order)
+      # 修改子订单、总订单的状态
+      update_order_status(@order.reload)
+    end
+    
     redirect_to :back, notice: msg
-    # 有上传文件时
-    # if params[:file].original_filename !~ /.csv$/
-    #   return redirect_to order_path(@order), error: '文件格式不正确！'
-    # else
-    #   msg = import_order_units(params[:file], @order.name)
-    #   if msg == "success"
-    #     return redirect_to order_path(@order), notice: "拆单导入成功"
-    #   else
-    #     return redirect_to order_path(@order), alert: msg
-    #   end
-    # end
   end
 
   # 自定义报价
@@ -192,7 +279,14 @@ class OrdersController < ApplicationController
   # GET 打包页面
   # orders/1/package
   def package
-    @order = Order.find_by_id(params[:id])
+    # 按照顺序查找： 指定编号、指定ID、第一个（防止打印页面报错）
+    if params[:name].present?
+      @order = Order.find_by(name: params[:name])
+    elsif params[:id].present?
+      @order = Order.find_by_id(params[:id])
+    else
+      @order = Order.order(created_at: :asc).first
+    end
     @order_units = @order.units
     # @order_parts = @order.parts
     @packages = @order.packages

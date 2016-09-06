@@ -14,6 +14,7 @@ class Order < ActiveRecord::Base
   # validate :validate_require_time
   validates_uniqueness_of :name
   before_create :generate_order_code
+  # after_update :update_indent_and_agent # 更新子订单时，同步更新总订单、代理商金额
   accepts_nested_attributes_for :units, allow_destroy: true
   accepts_nested_attributes_for :parts, allow_destroy: true
   accepts_nested_attributes_for :crafts, allow_destroy: true
@@ -99,5 +100,21 @@ class Order < ActiveRecord::Base
   def caseType(type, str)
 
   end
+
+  # # 更新订单时，同步更新代理商金额
+  # def update_indent_and_agent
+  #   indent = self.indent
+  #   agent = indent.agent
+  #   order_amount = self.price
+  #   # 单个总订单金额合计
+  #   indent_amount = indent.orders.map(&:price).sum
+  #   # 单个总订单收款合计
+  #   income_amount = indent.incomes.map(&:money).sum
+  #   # 单个总订单金额合计 = 修改后的所有子订单金额合计  ||  单个总订单欠款合计 = 单个总订单金额合计 - 收款合计
+  #   indent.update_attributes(amount: indent_amount, arrear: indent_amount - income_amount)
+  #   # 代理商欠款 = 所有总订单金额 - 所有已收款
+  #   agent_arrear = agent.indents.map{ |i| i.orders.map(&:price).sum }.sum
+  #   agent.update_attributes(arrear: agent_arrear)
+  # end
 
 end

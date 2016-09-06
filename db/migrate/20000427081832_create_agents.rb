@@ -6,6 +6,7 @@ class CreateAgents < ActiveRecord::Migration
       t.string :province # 省
       t.string :city # 市
       t.string :district # 县
+      t.string :town # 镇
       t.string :address # 地址
       t.string :full_name, null: false, index: true # 代理商名称,需要查询
       t.string :contacts # 负责人姓名
@@ -14,6 +15,9 @@ class CreateAgents < ActiveRecord::Migration
       t.string :fax # 传真
       t.string :email # 邮箱
       t.string :wechar # 微信
+      t.decimal :balance, precision: 8, scale: 2, null: false, default: 0 # 余额
+      t.decimal :arrear, precision: 8, scale: 2, null: false, default: 0 # 欠款
+      t.decimal :history, precision: 8, scale: 2, null: false, default: 0 # 历史订单总金额
       t.string :logistics # 指定物流
       t.integer :order_condition # 下单条件
       t.integer :send_condition # 发货条件

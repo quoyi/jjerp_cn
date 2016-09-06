@@ -25,6 +25,30 @@ class Offer < ActiveRecord::Base
 
   def calculate_total
     self.total = self.price * self.number
-    update_order_and_indent(self.order)
+    @order = self.order
+
+    # 更新子订单金额
+    sum_units = 0
+    # 将子订单的所有部件按是否"自定义报价"分组 {true: 自定义报价部件; false: 正常拆单部件}
+    group_units = @order.units.group_by{|u| u.is_custom}
+    # 自定义报价中的部件 尺寸 不参与计算
+    sum_units += group_units[true].map{|u| u.number * u.price}.sum() if group_units[true]
+    # 正常拆单部件 尺寸 参与计算
+    sum_units += group_units[false].map{|u| u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum() if group_units[false]
+    # 计算 配件 金额
+    sum_parts = @order.parts.map{|p| p.number * p.price}.sum()
+    # 计算 工艺 金额
+    sum_crafts = @order.crafts.map{|c| c.number * c.price}.sum()
+    # 子订单金额 = 子订单部件合计 + 子订单配件合计 + 子订单工艺费合计
+    @order.update!(price: sum_units + sum_parts + sum_crafts)
+
+    # 更新总订单金额
+    indent = @order.indent
+    # 总订单 -- 所有子订单金额合计
+    indent_amount = indent.orders.pluck(:price).sum
+    # 总订单 -- 所有收入金额合计
+    indent_income = indent.incomes.pluck(:money).sum
+    # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
+    indent.update!(amount: indent_amount, arrear: indent_amount - indent_income)
   end
 end

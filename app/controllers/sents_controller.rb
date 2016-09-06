@@ -131,8 +131,7 @@ class SentsController < ApplicationController
       sent_list = SentList.find_by_id(params[:id])
     else
       sents = Sent.where(id: params[:sent][:ids].split(','))
-      sent_list = SentList.create(name: "FH".upcase + Time.new.strftime('%y%m%d') + SecureRandom.hex(1).upcase, total: sents.size,
-                                created_by: Time.new.strftime('%Y-%m-%d %H:%M:%S'))
+      sent_list = SentList.create(total: sents.size, created_by: Time.new.strftime('%Y-%m-%d %H:%M:%S'))
       sents.each do |s|
         s.sent_list_id = sent_list.id
         s.save!

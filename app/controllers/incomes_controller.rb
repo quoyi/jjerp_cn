@@ -38,6 +38,17 @@ class IncomesController < ApplicationController
       Income.transaction do
         @income = Income.new(income_params)
         @income.save!
+        # 更新总订单 欠款合计
+        indent = @income.order.indent
+        indent.update!(arrear: indent.arrear - @income.money)
+        agent = indent.agent
+        new_arrear = agent.arrear - @income.money
+        if new_arrear <= 0 
+          agent.update!(arrear: 0, balance: - new_arrear)
+        else
+          agent.update!(arrear: new_arrear)
+        end
+
         # 修改银行卡的收入信息
         updateIncomeExpend(income_params, 0)
         balance = income_params[:money].to_f - @income.order.price.to_f
@@ -91,7 +102,8 @@ class IncomesController < ApplicationController
   # DELETE /incomes/1
   # DELETE /incomes/1.json
   def destroy
-    @income.destroy
+    @income.update(deleted: true)
+    # @income.destroy
     redirect_to incomes_path, notice: '收入记录已删除。'
   end
 
@@ -133,7 +145,7 @@ class IncomesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def income_params
-      params.require(:income).permit(:name, :reason, :order_id, :money, :username, :income_at,
-                                    :status, :note, :bank_id, :deleted)
+      params.require(:income).permit(:name, :reason, :indent_id, :order_id, :money, :username,
+                                     :income_at, :status, :note, :bank_id, :deleted)
     end
 end

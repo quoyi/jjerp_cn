@@ -1,7 +1,7 @@
 ####################################### 代理商 #######################################
-Agent.create(id: 1,name: 'JX0001',address: '湖北武汉', full_name: '小秦代理', contacts: '王xx', mobile: '18610086121', logistics: '顺丰')
-Agent.create(id: 2,name: 'JX0002',address: '贵州贵阳', full_name: '傣家代理', contacts: '岳xx', mobile: '18610086122', logistics: '圆通')
-Agent.create(id: 3,name: 'JX0003',address: '河南郑州', full_name: '小孙代理', contacts: '孙x', mobile: '18610086123', logistics: '韵达')
+Agent.create(id: 1,name: 'JX0001',address: '湖北省武汉市', full_name: '小秦代理', contacts: '王xx', mobile: '18610086121', logistics: '顺丰')
+Agent.create(id: 2,name: 'JX0002',address: '贵州省贵阳市', full_name: '傣家代理', contacts: '岳xx', mobile: '18610086122', logistics: '圆通')
+Agent.create(id: 3,name: 'JX0003',address: '河南省郑州市', full_name: '小孙代理', contacts: '孙x', mobile: '18610086123', logistics: '韵达')
 puts 'created Agent success ! '
 
 ####################################### 供应商 #######################################
@@ -87,11 +87,11 @@ Material.create(id: 19, ply: 6, texture: 10, color: 14, store: 50, buy: 100.00, 
 puts 'created Material success ! '
 
 ####################################### 订单类型 #######################################
-OrderCategory.create(:name => "橱柜体")
-OrderCategory.create(:name => "橱柜门")
-OrderCategory.create(:name => "家具")
-OrderCategory.create(:name => "衣柜门")
+OrderCategory.create(:name => "橱柜")
+OrderCategory.create(:name => "衣柜")
+OrderCategory.create(:name => "门")
 OrderCategory.create(:name => "配件")
+OrderCategory.create(:name => "家具")
 OrderCategory.create(:name => "电器")
 OrderCategory.create(:name => "其他")
 puts 'created OrderCategory success ! '

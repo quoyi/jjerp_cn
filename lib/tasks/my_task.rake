@@ -12,4 +12,10 @@ namespace :my_task do
       end
     end
   end
+
+  desc "清除所有无用文件"
+  task :clear do
+    puts "测试清除所有无用文件"
+  end
+
 end

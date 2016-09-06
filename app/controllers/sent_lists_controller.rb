@@ -4,7 +4,7 @@ class SentListsController < ApplicationController
   # GET /sent_lists
   # GET /sent_lists.json
   def index
-    @sent_lists = SentList.all
+    @sent_lists = SentList.all.order(created_at: :desc)
   end
 
   # GET /sent_lists/1
