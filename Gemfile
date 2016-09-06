@@ -37,6 +37,9 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'writeexcel', '~> 1.0', '>= 1.0.5'
 # 字符转换（解决乱码）
 # gem 'iconv', '~> 1.0', '>= 1.0.4'
+# 
+# 定时任务，用于定时清理 public/excels/ 目录
+gem 'whenever', '~> 0.9.7'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
