@@ -13,6 +13,7 @@ class CreateParts < ActiveRecord::Migration
       t.string :brand # 品牌
       t.string :note # 备注
       t.references :supply, null: false, index: true # 供货商
+      t.boolean :is_printed, default: false # 是否已打印
       t.boolean :deleted, default: false # 标记删除
       t.timestamps null: false
     end

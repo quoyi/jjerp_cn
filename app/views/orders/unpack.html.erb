@@ -4,9 +4,26 @@
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 未包装订单 <small>列表</small></h2>
     </div>
   </div>
+  
   <!-- Page title -->
   <div class="content-box-large box-with-header">
     <div class="row content-table">
+      <% searh_order = Order.where("created_at >= ? AND created_at <= ?", Date.today.beginning_of_month, Date.today.end_of_month).order(created_at: :asc).first %>
+      <%= form_tag package_order_path(searh_order), class: 'form-inline', method: 'get' do %>
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <span>查询条件</span>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <%= text_field_tag :name, '', autofocus:true, class:'col-sm-offset-3 col-sm-6', placeholder: '请输入订单号', style: 'font-size: 18px; font-weight: bold;', data: {toggle: 'tooltip'}, title: '请输入需要查找、打包的订单号' %>
+            <div class="col-sm-3 text-left">
+            <%= submit_tag '查询', class: 'btn btn-primary', data: {toggle: "tooltip"}, title: '填写订单后，按 Enter 键（或点此按钮）查询' %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% end %>
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
           <tr class="info">
@@ -22,13 +39,15 @@
         <tbody>
           <% @orders.each do |order|%>
           <tr>
-            <td data-toggle='tooltip' title='订单打包'><%= link_to "打包 " + order.name, package_order_path(order), class: 'btn btn-primary btn-xs'%></td>
+            <td data-toggle='tooltip' title='订单详细'><%= link_to order.name, order, class: 'detail-link' %></td>
             <td><%= order.indent.customer %></td>
             <td><%= order.indent.agent.try(:full_name) %></td>
             <td><%= order.note %></td>
             <td><%= order.created_at.localtime.strftime("%Y-%m-%d")%></td>
             <td><%= order.status_name %></td>
-            <td><%= link_to '查看订单', order_path(order), class: 'detail-link', data: {toggle: 'tooltip'}, title: '查看订单详细' %></td>
+            <td>
+              <%= link_to "打包 ", package_order_path(order), class: 'btn btn-primary btn-xs' %>
+            </td>
           </tr>
           <%end%>
         </tbody>

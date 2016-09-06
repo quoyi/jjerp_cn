@@ -250,39 +250,40 @@ module OrdersHelper
 
 
   # 修改子订单和总订单
-  def update_order_and_indent(order)
-    indent = order.indent
-    indent_sum = 0
-    o = order
-    # indent.orders.each do |o|
-      sum_units = 0
-      # 自定义报价不计算尺寸
-      group_units = o.units.group_by{|u| u.is_custom}
-      sum_units += group_units[true].map{|u| u.number * u.price}.sum() if group_units[true]
-      sum_units += group_units[false].map{|u| u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum() if group_units[false]
-      sum_parts = o.parts.map{|p| p.number * p.price}.sum()
-      sum_crafts = o.crafts.map{|c| c.number * c.price}.sum()
-      o.price = sum_units + sum_parts + sum_crafts  # 子订单金额 = 子订单部件合计 + 子订单配件合计 + 子订单工艺费合计
-      # indent_sum += o.price
-      o.save!
-    # end
-    # 
-    indent_sum = indent.orders.pluck(:price).sum
+  # def update_order_and_indent(order)
+  #   indent = order.indent
+  #   indent_sum = 0
+  #   o = order
+  #   # indent.orders.each do |o|
+  #     sum_units = 0
+  #     # 自定义报价不计算尺寸
+  #     group_units = o.units.group_by{|u| u.is_custom}
+  #     sum_units += group_units[true].map{|u| u.number * u.price}.sum() if group_units[true]
+  #     sum_units += group_units[false].map{|u| u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum() if group_units[false]
+  #     sum_parts = o.parts.map{|p| p.number * p.price}.sum()
+  #     sum_crafts = o.crafts.map{|c| c.number * c.price}.sum()
+  #     o.price = sum_units + sum_parts + sum_crafts  # 子订单金额 = 子订单部件合计 + 子订单配件合计 + 子订单工艺费合计
+  #     # indent_sum += o.price
+  #     o.save!
+  #   # end
+  #   # 
+  #   # indent_sum = indent.orders.pluck(:price).sum
 
-    arrear_sum = indent.incomes.map(&:money).sum.to_f
-    indent.amount = indent_sum  # 总订单金额 = 所有子订单金额合计
-    # 欠款 = 金额 - 收入 
-    indent.arrear = indent_sum - arrear_sum
-    indent.save!
-    # total_incomes = indent.incomes.map(&:money).sum
-    # new_total = indent.amount = order.price = total_units + total_parts + total_crafts
-    # indent.arrear = indent.amount - total_incomes
-    # indent.total_history += (new_total - old_total)
-    # indent.total_arrear += (new_total - old_total)
-  end
+  #   # arrear_sum = indent.incomes.map(&:money).sum.to_f
+  #   # indent.amount = indent_sum  # 总订单金额 = 所有子订单金额合计
+  #   # # 欠款 = 金额 - 收入 
+  #   # indent.arrear = indent_sum - arrear_sum
+  #   # indent.save!
+
+  #   # total_incomes = indent.incomes.map(&:money).sum
+  #   # new_total = indent.amount = order.price = total_units + total_parts + total_crafts
+  #   # indent.arrear = indent.amount - total_incomes
+  #   # indent.total_history += (new_total - old_total)
+  #   # indent.total_arrear += (new_total - old_total)
+  # end
 
 
-  # 修改子订单状态
+  # 修改子订单、总订单状态
   def update_order_status(order)
     indent = order.indent
     offers = order.reload.offers
@@ -293,18 +294,9 @@ module OrdersHelper
     if status == 1 && offers.empty?
       order.offering!
     end
-
-    # 子订单状态为 1.已报价 ，且删除所有报价信息后，修改状态为 0.报价中
-    # if order.offers.empty?
-    #   order.offering!
-    #   indent.offering!
-    # else
-    #   order.offered! if Order.statuses[order.status] <= 1
-    # end
     
     # 所有子订单中，最小状态值作为总订单的状态
     min_status = indent.orders.map{|o|Order.statuses[o.status]}.min
-    indent.status = min_status
-    indent.save!
+    indent.update!(status: min_status)
   end
 end

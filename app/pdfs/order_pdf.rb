@@ -26,8 +26,9 @@ class OrderPdf < Prawn::Document
       text "终端客户: #{@order.indent.customer}", :size => 14
       text "产    品: #{@order.order_category.try(:name)}", :size => 14
       text "备    注: #{@order.note.truncate(12)}", size: 14
-      text " ", size: 14
+      text " ", size: 5
       text "货  到: #{@order.delivery_address}", :size => 18
+      text " ", size: 5
       text "共 #{@ids} 件  第#{@ids}-#{i+1}件", :size => 14, align: :right, valign: :bottom
     end
   end

@@ -41,6 +41,7 @@ class IndentsController < ApplicationController
     @order = Order.new
     @order_offers = @indent.offers
     @orders = Order.where(indent:@indent).order(created_at: :desc)
+    @income = Income.new(username: current_user.name, income_at: Time.now)
   end
 
   # GET /indents/new
@@ -58,8 +59,18 @@ class IndentsController < ApplicationController
   # POST /indents
   # POST /indents.json
   def create
-    @indent = Indent.new(indent_params)
-    if @indent.save
+    # 新建总订单时，修改代理商欠款
+    Indent.transaction do
+      @indent = Indent.new(indent_params)
+      # 保存新总订单之前，先获取总订单 （原）金额，后面需要减 （原）金额
+      origin_indent_amount = @indent.orders.pluck(:price).sum
+      @indent.save!
+      agent = @indent.agent
+      agent.update!(arrear: agent.arrear + @indent.amount - origin_indent_amount, 
+                    history: agent.history + @indent.amount - origin_indent_amount)
+    end
+    
+    if @indent
       redirect_to indents_path, notice: '订单创建成功！'
     else
       redirect_to indents_path, error: '请检查编号是否唯一且数据正确，订单创建失败！'
@@ -69,27 +80,41 @@ class IndentsController < ApplicationController
   # PATCH/PUT /indents/1
   # PATCH/PUT /indents/1.json
   def update
-    if @indent.update(indent_params)
-      @indent.orders.each do |o|
-        update_order_and_indent(o)
-        update_order_status(o)
-      end
-      if @indent.status == 'producing'
-        msg = "订单: #{@indent.name} 开始生产！"
-      else
-        msg = "订单编辑成功！"
-      end
-      redirect_to :back, notice: msg
-    else
-      redirect_to :back, error: "订单编辑失败！"
+    Indent.transaction do
+      # 更新总订单之前，先获取总订单 （原）金额，后面需要减 （原）金额
+      origin_indent_amount = @indent.orders.pluck(:price).sum
+      @indent.update!(indent_params)
+      # 更新总订单金额
+      # 总订单 -- 所有子订单金额合计
+      indent_amount = @indent.orders.pluck(:price).sum
+      # 总订单 -- 所有收入金额合计
+      indent_income = @indent.incomes.pluck(:money).sum
+      # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
+      @indent.update!(amount: indent_amount, arrear: indent_amount - indent_income)
+
+      # 所有子订单中，最小状态值作为总订单的状态
+      min_status = @indent.orders.map{|o|Order.statuses[o.status]}.min
+      @indent.update!(status: min_status)
+
+      agent = @indent.agent
+      agent.update!(arrear: agent.arrear + @indent.amount - origin_indent_amount, 
+                    history: agent.history + @indent.amount - origin_indent_amount)
     end
+
+    redirect_to :back, notice: "订单编辑成功！"
   end
 
   # DELETE /indents/1
   # DELETE /indents/1.json
   def destroy
-    # 需要标记删除，不能真正地删除
-    @indent.destroy
+    Indent.transaction do
+      agent = @indent.agent
+      agent.update!(arrear: agent.arrear - @indent.amount, 
+                    history: agent.history - @indent.amount)
+      # 删除所有子订单
+      @indent.orders.destroy_all
+      @indent.destroy!
+    end
     redirect_to indents_path, notice: '订单已删除。'
   end
 
