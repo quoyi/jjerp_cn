@@ -12,7 +12,7 @@ class IndentsController < ApplicationController
     # @agents = Agent.all
     now = Time.now
     after_ten_day = Time.now + 864000 # 十天 = 60 (秒钟/分钟) * 60 (分钟/天) * 24 (小时/天) * 10
-    @indent = Indent.new(name: Time.now.strftime("%y%m%d") + SecureRandom.hex(1).upcase, verify_at: Time.now, require_at: after_ten_day)
+    @indent = Indent.new(name: Time.now.strftime("%Y%m%d") + SecureRandom.hex(1).upcase, verify_at: Time.now, require_at: after_ten_day)
 
     # @current_agent = @indent.agent ||  @agents.first
 
@@ -130,9 +130,10 @@ class IndentsController < ApplicationController
       format.html { redirect_to indents_path, notice: '配件清单导出成功' }
       format.xls do
         send_file "#{Rails.root}/public/excels/parts/" + params[:file_name] + ".xls", type: 'text/xls; charset=utf-8'
-        # File.delete("#{Rails.root}/public/excels/parts/" + params[:file_name] + ".xls")
       end
     end
+    # 不能删，否则下载时找不到文件
+    # File.delete("#{Rails.root}/public/excels/parts/" + params[:file_name] + ".xls")
   end
 
   # 配件清单预览(返回结果如下：)
@@ -143,7 +144,7 @@ class IndentsController < ApplicationController
       ids = params[:ids].split(",")
       @indents = Indent.where(id: ids).order(created_at: :desc)
       # 添加文件名称，方便下载使用
-      @result["file_name"] = "配件清单-" + Time.now.strftime('%y%m%d-') + SecureRandom.hex(2).upcase
+      @result["file_name"] = "配件清单-" + Time.now.strftime("%Y%m%d-") + SecureRandom.hex(2).upcase
       @indents.each do |indent|
         indent_parts = {}
         indent_parts["indent"] = indent
