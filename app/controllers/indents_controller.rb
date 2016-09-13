@@ -81,23 +81,17 @@ class IndentsController < ApplicationController
   # PATCH/PUT /indents/1.json
   def update
     Indent.transaction do
+      # 获取删除的 orders
       # 更新总订单之前，先获取总订单 （原）金额，后面需要减 （原）金额
       origin_indent_amount = @indent.orders.pluck(:price).sum
+      origin_indent_arrear = @indent.orders.pluck(:arrear).sum
       @indent.update!(indent_params)
       # 更新总订单金额
-      # 总订单 -- 所有子订单金额合计
-      indent_amount = @indent.orders.pluck(:price).sum
-      # 总订单 -- 所有收入金额合计
-      indent_income = @indent.incomes.pluck(:money).sum
-      # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
-      @indent.update!(amount: indent_amount, arrear: indent_amount - indent_income)
-
-      # 所有子订单中，最小状态值作为总订单的状态
-      min_status = @indent.orders.map{|o|Order.statuses[o.status]}.min
-      @indent.update!(status: min_status)
-
+      @indent.update!(amount: @indent.orders.pluck(:price).sum, arrear: @indent.orders.pluck(:arrear).sum,
+                      status: @indent.orders.map{|o|Order.statuses[o.status]}.min || 0)
+      indent_remain = origin_indent_amount - @indent.amount
       agent = @indent.agent
-      agent.update!(arrear: agent.arrear + @indent.amount - origin_indent_amount, 
+      agent.update!(balance: agent.balance + indent_remain, arrear: agent.arrear + @indent.arrear - origin_indent_arrear, 
                     history: agent.history + @indent.amount - origin_indent_amount)
     end
 
