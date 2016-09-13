@@ -81,7 +81,6 @@ class IncomesController < ApplicationController
           agent_orders_incomes = agent.orders.map{|o|o.incomes.pluck(:money)}.flatten.sum
           # 代理商金额差
           agent_orders_remain = agent_orders_amount - agent_orders_incomes
-          binding.pry
           if agent_orders_remain >= 0
             agent.update!(balance: agent_balance, arrear: agent_orders_remain)
           else
