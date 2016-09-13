@@ -519,7 +519,6 @@ class OrdersController < ApplicationController
 
   # GET 转款
   def change_income
-    binding.pry
     @order = Order.find_by_id(params[:id]) if params[:id].present?
     if params[:order].present?
       target_order = Order.find_by_id(params[:order][:id])

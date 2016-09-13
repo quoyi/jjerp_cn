@@ -42,7 +42,6 @@ class IncomesController < ApplicationController
           agent_balance = agent.balance + income_params[:money].to_f
           # 修改银行卡的收入信息
           updateIncomeExpend(income_params, 0)
-          binding.pry
           # 从代理商余额扣除订单金额
           agent.orders.where("created_at >= ?", order.created_at).order(created_at: :asc).each do |o|
             next if o.income_status == '全款' || agent_balance <= 0
