@@ -221,24 +221,27 @@ class OrdersController < ApplicationController
     Order.transaction do
       indent = @order.indent
       agent = indent.agent
-      
-      # 更新总订单金额
-      # 总订单 -- 所有子订单 （新）金额合计
-      indent_amount = indent.orders.pluck(:price).sum
-      # 总订单 -- 所有收入 （新）金额合计
-      indent_income = indent.incomes.pluck(:money).sum
-      # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
-      indent.update!(amount: indent_amount - @order.price, arrear: indent_amount - @order.price - indent_income)
-
-      order_incomes = @order.incomes.pluck(:money).sum
-      # 删除子订单前，先将金额退回到代理商余额、修改代理商历史金额
-      agent.update!(balance: agent.balance + order_incomes, arrear: agent.arrear - @order.price,
-                    history: agent.history - @order.price)
-      # 生成报价单
-      create_offer(@order)
-      # 修改子订单、总订单的状态
-      update_order_status(@order.reload)
+      order = @order
+      @order.incomes.destroy_all
       @order.destroy!
+      binding.pry
+      # 更新总订单金额、欠款
+      # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
+      indent.update!(amount: indent.orders.pluck(:price).sum, arrear: indent.orders.pluck(:arrear).sum)
+
+      order_incomes = order.incomes.pluck(:money).sum
+      # 删除子订单前，先将金额退回到代理商余额、修改代理商历史金额
+      if agent.balance > 0
+        agent.update!(balance: agent.balance + order.price, history: agent.history - order.price)
+      else
+        agent.update!(arrear: agent.arrear - order.price, history: agent.history - order.price)
+      end
+      
+      # 生成报价单
+      create_offer(order)
+      # 修改子订单、总订单的状态
+      update_order_status(order)
+      
     end
     redirect_to orders_url, notice: '子订单已删除。'
   end

@@ -3,7 +3,7 @@ class Order < ActiveRecord::Base
   belongs_to :order_category
   belongs_to :indent
   belongs_to :agent
-  has_many :incomes
+  has_many :incomes, dependent: :destroy
   has_many :offers, dependent: :destroy
   has_many :units, dependent: :destroy
   has_many :parts, dependent: :destroy
