@@ -8,7 +8,7 @@
     <!-- <div class="row content-title">
       <div class="btn-group" role="group" aria-label="">
         <% PartCategory.group(:name).map(&:name).push('所有').each do |k| %>
-        <%= link_to k, parts_path(name: k), class: "btn btn-default #{'btn-primary' if params[:name].presence == k}" %>
+        <%#= link_to k, parts_path(name: k), class: "btn btn-default #{'btn-primary' if params[:name].presence == k}" %>
         <% end %>
       </div>
     </div> -->
@@ -87,6 +87,13 @@
             <% else %>
             <%= link_to '到款', '#', class: 'btn btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', order: o.id, amount: o.price, arrear: ((o.price.to_f - o.incomes.pluck(:money).sum.to_f) >0 ? (o.price.to_f - o.incomes.pluck(:money).sum.to_f) : 0), username: current_user.name}, id: 'addIncomesBtn' %>
             <% end %>
+            <% other_orders = o.agent.orders.where("arrear > 0 AND id <> ?", o.id) %>
+            <!-- 单签订单有收入记录、且有其他欠款订单欠款时，才能点击按钮 -->
+            <% if o.incomes.pluck(:money).sum > 0 && other_orders.present? %>
+            <%= link_to '转款', change_income_order_path(o), class: 'btn btn-primary btn-xs', data: {toggle: 'modal', target: '#changeIncomes' } %>
+            <% else %>
+            <button class="btn btn-primary btn-xs" disabled="true">转款</button>
+            <% end %>
             <% if Order.statuses[o.status] >= 2 %>
               <%= link_to '生产', '#', class: 'btn btn-xs btn-primary', disabled: true%>
             <% else %>
@@ -100,3 +107,16 @@
   </div>
 </div>
 <%= render '/incomes/new' %>
+
+<!-- Modal -->
+<div class="modal fade" id="changeIncomes" tabindex="-1" role="dialog" aria-labelledby="changeIncomesLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" style="width: 50%;">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$("#changeIncomes").on("hidden.bs.modal", function(e){
+  $(this).removeData("bs.modal");
+});
+</script>

@@ -10,7 +10,7 @@ class IncomesController < ApplicationController
       indent = Indent.find(params[:indent_id])
       @incomes =@incomes.where(order_id: indent.orders.pluck(:id))
     end
-    @income = Income.new(bank_id: Bank.find_by(is_default: 1), username: current_user.name, income_at: Time.now)
+    @income = Income.new(bank_id: Bank.find_by(is_default: 1).id, username: current_user.name, income_at: Time.now)
 
   end
 
@@ -21,7 +21,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    @income = Income.new(bank_id: Bank.find_by(is_default: 1), username: current_user.name, income_at: Time.now)
+    @income = Income.new(bank_id: Bank.find_by(is_default: 1).id, username: current_user.name, income_at: Time.now)
   end
 
   # GET /incomes/1/edit
@@ -42,6 +42,7 @@ class IncomesController < ApplicationController
           agent_balance = agent.balance + income_params[:money].to_f
           # 修改银行卡的收入信息
           updateIncomeExpend(income_params, 0)
+          binding.pry
           # 从代理商余额扣除订单金额
           agent.orders.where("created_at >= ?", order.created_at).order(created_at: :asc).each do |o|
             next if o.income_status == '全款' || agent_balance <= 0
@@ -75,8 +76,18 @@ class IncomesController < ApplicationController
             end
           end
           # 更新代理商余额、总订单的欠款
-          agent_arrear = agent.arrear - @income.money
-          agent.update!(balance: agent_balance, arrear: agent_arrear >= 0 ? agent_arrear : 0)
+          # 代理商所有订单金额合计
+          agent_orders_amount = agent.orders.pluck(:price).sum
+          # 代理商所有订单的收入合计
+          agent_orders_incomes = agent.orders.map{|o|o.incomes.pluck(:money)}.flatten.sum
+          # 代理商金额差
+          agent_orders_remain = agent_orders_amount - agent_orders_incomes
+          binding.pry
+          if agent_orders_remain >= 0
+            agent.update!(balance: agent_balance, arrear: agent_orders_remain)
+          else
+            agent.update!(balance: agent_balance + agent_orders_remain.abs)
+          end
           indent.update!(arrear: indent.orders.pluck(:arrear).sum)
         else # 直接新建收入时
           @income = Income.new(income_params)

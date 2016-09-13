@@ -1,0 +1,45 @@
+<!-- Modal -->
+<div class="modal fade" id="changeIncomes" tabindex="-1" role="dialog" aria-labelledby="changeIncomesLabel">
+  <div class="modal-dialog modal-sm" role="document" style="width: 400px;">
+    <div class="modal-content">
+
+      <%= form_for @income, html: {class: 'form-horizontal'} do |f| %>
+      <% income = f.object  %>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="changeIncomesLabel"> 订单收入 <small>转款</small></h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="income_order_id" class="control-label col-sm-3"><span class="require">*</span>订单号</label>
+          <div class="col-sm-9">
+            <%= select_tag 'income[order_id]', options_for_select(Order.all.map{|i|[i.name, i.id]}), class: 'form-control indents_income_order_id', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="income_bank_id" class="control-label col-sm-3"><span class="require">*</span>银行卡</label>
+          <div class="col-sm-9">
+            <%= select_tag 'income[bank_id]', options_for_select(Bank.all.map{|i|[i.bank_card, i.id]}), class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="income_income_at" class="control-label col-sm-3"><span class="require">*</span>时间</label>
+          <div class="col-sm-9">
+            <%= f.date_field :income_at, vaue: income.income_at.nil? ? '' : income.income_at.strftime("%Y-%m-%d"), class: 'form-control col-sm-9', data: {provide: 'datepicker'}, required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '备注', for: 'income_note', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :note, class: 'form-control col-sm-9' %>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
+        <%= f.submit '提交', class: 'btn btn-primary' %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>

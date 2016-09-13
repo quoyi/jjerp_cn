@@ -67,6 +67,10 @@ class OrdersController < ApplicationController
     @crafts = Craft.where(order_id: @order.id)
     @indent = @order.indent
     @agent = @indent.agent
+    respond_to do |format|
+      format.html 
+      format.json { render json: @order }
+    end
   end
 
   # GET /orders/new
@@ -224,7 +228,6 @@ class OrdersController < ApplicationController
       order = @order
       @order.incomes.destroy_all
       @order.destroy!
-      binding.pry
       # 更新总订单金额、欠款
       # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
       indent.update!(amount: indent.orders.pluck(:price).sum, arrear: indent.orders.pluck(:arrear).sum)
@@ -511,6 +514,54 @@ class OrdersController < ApplicationController
           type: "application/pdf",
           disposition: "inline"
       end
+    end
+  end
+
+  # GET 转款
+  def change_income
+    binding.pry
+    @order = Order.find_by_id(params[:id]) if params[:id].present?
+    if params[:order].present?
+      target_order = Order.find_by_id(params[:order][:id])
+      msg = "操作成功！"
+      Order.transaction do
+        now = Time.now
+        tmp_money = params[:order][:price].to_f
+        if params[:order][:id].present?
+          income = target_order.incomes.new(indent_id: target_order.indent.id, bank_id: Bank.find_by(is_default: 1).id,
+                                            income_at: now, username: current_user.name, money: tmp_money,
+                                            note: "从订单#{@order.name}手动转款#{tmp_money}")
+          income.save!
+          @order.incomes.order(created_at: :desc).each do |i|
+            break if tmp_money == 0
+            if i.money <= tmp_money
+              tmp_money -= i.money
+              i.destroy!
+            else
+              i.update!(money: i.money - tmp_money, note: i.note + ";#{current_user.name}于#{now}从此订单转出#{tmp_money}到#{target_order.name}")
+              tmp_money = 0
+            end
+          end
+          @order.update!(arrear: @order.arrear + params[:order][:price].to_f)
+          msg = "成功将#{@order.name}的#{params[:order][:price]}转款到#{target_order.name}"
+        else
+          agent = @order.agent
+          agent_balance = @order.agent.balance
+          @order.update!(arrear: @order.arrear + params[:order][:price].to_f)
+          if agent_balance >= 0
+            agent.update!(balance: agent.balance + params[:order][:price].to_f,
+                          arrear: agent.orders.pluck(:arrear).sum)
+          # else
+          #   agent.update!(arrear: agent.arrear - params[:order][:price].to_f)
+          end
+          msg = "成功将#{@order.name}的#{params[:order][:price]}转款到代理商#{agent.full_name}余额中"
+        end
+        indent = @order.indent
+        indent.update!(arrear: indent.orders.pluck(:arrear).sum)
+      end
+      redirect_to orders_path, success: msg
+    else
+      render layout: false
     end
   end
 
