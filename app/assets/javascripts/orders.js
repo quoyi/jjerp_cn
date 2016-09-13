@@ -131,3 +131,29 @@ function setOrderUnitLengthWidth(obj){
     }
   }
 }
+
+/**
+ * 订单 -- 转款
+ * @param  {[type]} obj [description]
+ * @return {[type]}     [description]
+ */
+function changeIncomeOrder(obj){
+  var order_id = $(obj).val();
+  var price_field = $(obj).parents(".row").find(".change_income_order_price");
+  var price = price_field.val();
+  if(order_id != null && order_id != ""){
+    $.ajax({
+      url: "/orders/" + order_id,
+      type: "GET",
+      dataType: "JSON",
+      success: function(data){
+        // console.log(data);
+        price_field.val(data.arrear);
+        price_field.attr("max", data.arrear);
+      },
+      error: function(data){
+        jsNoty("网络错误，无法获取子订单信息！", "error");
+      }
+    });
+  }
+}

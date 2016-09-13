@@ -68,6 +68,8 @@ Rails.application.routes.draw do
       post :package # 打包
       get :reprint # 重新打印标签
       post :reprint # 重新打印标签
+      get :change_income # 转款
+      post :change_income # 转款
     end
   end
   resources :departments
