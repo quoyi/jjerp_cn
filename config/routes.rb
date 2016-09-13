@@ -46,6 +46,7 @@ Rails.application.routes.draw do
   end
   resources :indents do
     collection do
+      get :incomes # 到款详细
       get :generate # 生成报价单
       get :export_offer # 导出报价单
       get :export_parts # 导出配件清单

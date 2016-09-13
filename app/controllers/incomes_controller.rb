@@ -5,15 +5,12 @@ class IncomesController < ApplicationController
   # GET /incomes
   # GET /incomes.json
   def index
-
     @incomes = Income.all
-
     if params[:indent_id].present? 
       indent = Indent.find(params[:indent_id])
       @incomes =@incomes.where(order_id: indent.orders.pluck(:id))
     end
-
-    @income = Income.new(username: current_user.name, income_at: Time.now)
+    @income = Income.new(bank_id: Bank.find_by(is_default: 1), username: current_user.name, income_at: Time.now)
 
   end
 
@@ -24,7 +21,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    @income = Income.new(username: current_user.name, income_at: Time.now)
+    @income = Income.new(bank_id: Bank.find_by(is_default: 1), username: current_user.name, income_at: Time.now)
   end
 
   # GET /incomes/1/edit
@@ -36,44 +33,55 @@ class IncomesController < ApplicationController
   def create
     begin
       Income.transaction do
-        @income = Income.new(income_params)
-        @income.save!
-        # 更新总订单 欠款合计
-        indent = @income.order.indent
-        indent.update!(arrear: indent.arrear - @income.money)
-        agent = indent.agent
-        new_arrear = agent.arrear - @income.money
-        if new_arrear <= 0 
-          agent.update!(arrear: 0, balance: - new_arrear)
-        else
-          agent.update!(arrear: new_arrear)
-        end
-
-        # 修改银行卡的收入信息
-        updateIncomeExpend(income_params, 0)
-        balance = income_params[:money].to_f - @income.order.price.to_f
-        if balance > 0
-          agent = @income.order.agent
-          order_name = @income.order.name
-          order_create_time = @income.order.created_at
-          agent.orders.where("created_at >= ?", order_create_time).each do |order|
-            next if order.income_status == '全款' || balance <= 0
-            arrear = order.price.to_f - order.incomes.pluck(:money).sum
-            if balance - arrear > 0
-              balance = balance - arrear
+        # 在子订单上新增收入时
+        if income_params[:order_id].present?
+          # 更新总订单 欠款合计
+          order = Order.find_by_id(income_params[:order_id])
+          indent = order.indent
+          agent = indent.agent
+          agent_balance = agent.balance + income_params[:money].to_f
+          # 修改银行卡的收入信息
+          updateIncomeExpend(income_params, 0)
+          # 从代理商余额扣除订单金额
+          agent.orders.where("created_at >= ?", order.created_at).order(created_at: :asc).each do |o|
+            next if o.income_status == '全款' || agent_balance <= 0
+            o_arrear = o.arrear.to_f
+            # 代理商余额足够时，扣除余额，新增订单收入记录；否则，扣除代理商余额、不足金额计算到订单欠款，跳出循环
+            if agent_balance >= o_arrear
+              agent_balance = agent_balance - o_arrear
+              @income = o.incomes.new(indent_id: indent.id, bank_id: income_params[:bank_id], username: current_user.name,
+                                      money: o_arrear, income_at: income_params[:income_at],
+                                      note: "来自订单#{order.name}于#{income_params[:income_at]}收入的#{income_params[:money]},剩余#{income_params[:money].to_f - o_arrear}已存入代理商余额")
+              @income.save!
+              # 更新子订单的欠款
+              o.update!(arrear: 0)
             else
-              arrear = balance
-              balance = 0
+              # 代理商余额大于0时，新增扣款记录、不足金额计算到订单欠款
+              if agent_balance > 0
+                # 重复代码：跳出循环时，不执行本次循环break后面的代码
+                @income = o.incomes.new(indent_id: indent.id, bank_id: income_params[:bank_id], money: agent_balance, 
+                                     username: current_user.name, income_at: income_params[:income_at],
+                                     note: "来自订单#{order.name}于#{income_params[:income_at]}收入的#{income_params[:money]}")
+                @income.save!
+                # 更新子订单的欠款
+                o.update!(arrear: o.arrear - agent_balance)
+                agent_balance = 0
+              else
+                # 更新子订单的欠款
+                o.update!(arrear: o.price)
+              end
+              # 直接跳出本层循环（不是本次！）
+              break
             end
-            income = order.incomes.new(money: arrear, username: current_user.name, income_at: Time.now, note: "来自订单#{order_name}")
-            income.save!
           end
-
-          if balance > 0
-            agent.balance +=  balance
-            agent.note =  "来自订单#{order_name}"
-            agent.save!
-          end
+          # 更新代理商余额、总订单的欠款
+          agent_arrear = agent.arrear - @income.money
+          agent.update!(balance: agent_balance, arrear: agent_arrear >= 0 ? agent_arrear : 0)
+          indent.update!(arrear: indent.orders.pluck(:arrear).sum)
+        else # 直接新建收入时
+          @income = Income.new(income_params)
+          @income.indent_id = @income.order.indent.id
+          @income.save!
         end
       end
     rescue ActiveRecord::RecordInvalid => exception

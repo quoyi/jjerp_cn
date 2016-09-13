@@ -41,7 +41,7 @@ class IndentsController < ApplicationController
     @order = Order.new
     @order_offers = @indent.offers
     @orders = Order.where(indent:@indent).order(created_at: :desc)
-    @income = Income.new(username: current_user.name, income_at: Time.now)
+    @income = Income.new(bank_id: Bank.find_by(is_default: 1), username: current_user.name, income_at: Time.now)
   end
 
   # GET /indents/new
@@ -116,6 +116,12 @@ class IndentsController < ApplicationController
       @indent.destroy!
     end
     redirect_to indents_path, notice: '订单已删除。'
+  end
+
+  # 到款详细
+  def incomes
+    @indent = Indent.find_by_id(params[:id]) if params[:id].present?
+    @incomes = @indent.incomes
   end
 
   # 生成报价单

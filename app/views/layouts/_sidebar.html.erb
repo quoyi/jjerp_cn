@@ -105,7 +105,7 @@
         <% if current_user.permission?("IndentsController", "index") ||
         current_user.permission?("OrdersController", "index")
         %>
-        <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name) && ['index', 'show', 'edit', 'custom_offer'].include?(action_name) %>">
+        <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name) && ['index', 'show', 'edit', 'custom_offer', 'incomes'].include?(action_name) %>">
             <a href="#">
                 <i class="fa fa-briefcase"></i> 订单管理 <span class="caret pull-right"></span>
             </a>

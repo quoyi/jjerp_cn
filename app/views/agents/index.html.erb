@@ -12,10 +12,11 @@
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
           <tr>
-            <th>编号</th>
             <th>名称</th>
             <th>电话</th>
             <th>负责人</th>
+            <th>欠款</th>
+            <th>余额</th>
             <th>QQ</th>
             <th>传真</th>
             <th>邮箱</th>
@@ -30,10 +31,11 @@
         <tbody>
           <% @agents.each do |a| %>
           <tr>
-            <td><%= a.name %></td>
             <td><%= link_to a.full_name, edit_agent_path(a), data:{toggle: 'tooltip'}, title: '编辑代理商' %></td>
             <td><%= a.mobile %></td>
             <td><%= a.contacts %></td>
+            <td><%= a.arrear %></td>
+            <td><%= a.balance %></td>
             <td><%= a.e_account %></td>
             <td><%= a.fax %></td>
             <td><%= a.email %></td>

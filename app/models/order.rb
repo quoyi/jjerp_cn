@@ -82,8 +82,9 @@ class Order < ActiveRecord::Base
   def generate_order_code
     self.agent_id = self.indent.agent_id
     self.delivery_address = self.agent.full_address if self.delivery_address.blank?
-    current_month = Time.now.strftime('%Y%m')
-    agent_orders_count = Order.where("name like '#{current_month}-%'").count
+    current_year = Time.now.year.to_s
+    current_month = Time.now.mon.to_s
+    agent_orders_count = Order.where("name like '#{current_year}%-#{current_month}-%'").count
     temp_hash = {'1': 'w', '2': '', '3': '', '4': 'y', '5': '', '6': '', '7': ''}
 
     tmp = case Order.oftypes[oftype]
@@ -94,7 +95,7 @@ class Order < ActiveRecord::Base
             "#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
           end
 
-    self.name =  current_month + "-" + tmp + "-" + (agent_orders_count+1).to_s
+    self.name =  current_year + tmp + "-#{current_month}-" + (agent_orders_count+1).to_s
   end
 
   def caseType(type, str)

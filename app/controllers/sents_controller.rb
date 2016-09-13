@@ -52,9 +52,21 @@ class SentsController < ApplicationController
           # 所有已打包的子订单添加发货记录
           @sent.owner.orders.each do |order|
             next unless order.packaged?
-            o_sent = Sent.new(sent_params)
-            o_sent.owner_id = order.id
-            o_sent.owner_type = order.class.name
+            cupboard = 0
+            robe = 0
+            door = 0
+            part = 0
+            case order.order_category.name
+              when "橱柜" then cupboard = order.packages.pluck(:label_size).sum
+              when "衣柜" then robe = order.packages.pluck(:label_size).sum
+              when "门" then door = order.packages.pluck(:label_size).sum
+              when "配件" then part = order.packages.pluck(:label_size).sum
+              else
+            end
+            o_sent = Sent.new(owner_id: order.id, owner_type: Order.name, area: sent_params[:area], 
+                              receiver: sent_params[:receiver], contact: sent_params[:contact], 
+                              collection: sent_params[:collection], logistics: sent_params[:logistics],
+                              cupboard: cupboard, robe: robe, door: door, part: part)
             o_sent.save!
           end
         end
@@ -131,7 +143,9 @@ class SentsController < ApplicationController
       sent_list = SentList.find_by_id(params[:id])
     else
       sents = Sent.where(id: params[:sent][:ids].split(','))
-      sent_list = SentList.create(total: sents.size, created_by: Time.new.strftime('%Y-%m-%d %H:%M:%S'))
+      sent = sents.first
+      label_size = sent.cupboard + sent.robe + sent.door + sent.part
+      sent_list = SentList.create(total: label_size, created_by: Time.new.strftime('%Y-%m-%d %H:%M:%S'))
       sents.each do |s|
         s.sent_list_id = sent_list.id
         s.save!

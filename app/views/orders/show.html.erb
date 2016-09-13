@@ -9,14 +9,14 @@
   </div>
   <div class="content-box-large box-with-header">
     <div class="row">
-      <div class="col-sm-3">
+      <div class="col-sm-2">
         <div class="panel panel-info">
           <div class="panel-heading">
             <span>总订单信息</span>
           </div>
           <table class="table table-hover table-striped table-bordered table-condensed text-center order-show-table">
             <tr>
-              <th>总订单编号</th>
+              <th class="col-sm-4">总订单编号</th>
               <td><%= @indent.try(:name) %></td>
             </tr>
             <tr>
@@ -47,7 +47,7 @@
           </div>
           <table class="table table-hover table-striped table-bordered table-condensed text-center order-show-table">
             <tr>
-              <th>客户编号</th>
+              <th class="col-sm-4">客户编号</th>
               <td><%= @agent.try(:name) %></td>
             </tr>
             <tr>
@@ -93,7 +93,7 @@
           </table>
         </div>
       </div>
-      <div class="col-sm-9">
+      <div class="col-sm-10">
         <div class="panel panel-info">
           <div class="panel-heading">
             <span>订单详细</span> <small><%= @order.status_name %></small>
@@ -156,7 +156,7 @@
               </th>
             </tr>
             <tr>
-              <th>名称</th>
+              <th class="col-sm-2">名称</th>
               <th>厚度</th>
               <th>材质</th>
               <th>颜色</th>
@@ -167,7 +167,7 @@
               <th>单价</th>
               <th>数量</th>
               <th>合计金额</th>
-              <th>备注</th>
+              <th class="col-sm-2">备注</th>
             </tr>
             <% if @units.present? %>
             <% @units.each do |u| %>

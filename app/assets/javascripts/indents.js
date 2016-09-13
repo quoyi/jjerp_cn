@@ -14,7 +14,7 @@ $(function() {
       var logic = now.setDate(now.getDate() + 10);
       var require_at = e.date;
       if (require_at < logic) {
-        alert("建议发货时间为10天后！");
+        jsNoty("建议发货时间为10天后！", "warning");
       }
     }
   });
@@ -36,7 +36,7 @@ $(function() {
         $("#indent_address").val(data.address)
       },
       error: function(data){
-        alert("Error");
+        jsNoty("网络错误！","error");
       }
     });
   }
@@ -148,16 +148,16 @@ function getMaterialPrice(obj){
     type: 'POST',
     success: function(data){
       if(data != null){
+        console.log(data);
         fields.find(".material-uom").val(data.uom);
         fields.find(".material-price").val(data.price);
-        fields.find(".material-uom").val(data.uom);
       }
       else{
         fields.find(".material-price").val(0);
       }
     },
     error: function(data){
-      alert("网络错误！");
+      jsNoty("网络错误！","error");
     }
   });
 }
@@ -195,7 +195,7 @@ function download(){
     }
   }
   if(ids.length == 0){
-    alert("请先选中所要下载的发货信息！");
+    jsNoty("请先选中所要下载的发货信息！","warning");
     return false;
   }
 
