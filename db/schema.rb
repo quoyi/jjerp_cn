@@ -50,9 +50,12 @@ ActiveRecord::Schema.define(version: 20160904133542) do
     t.decimal  "balance",                precision: 8, scale: 2, default: 0.0
     t.decimal  "incomes",                precision: 8, scale: 2, default: 0.0
     t.decimal  "expends",                precision: 8, scale: 2, default: 0.0
-    t.datetime "created_at",                                                   null: false
-    t.datetime "updated_at",                                                   null: false
+    t.boolean  "is_default",                                     default: false
+    t.datetime "created_at",                                                     null: false
+    t.datetime "updated_at",                                                     null: false
   end
+
+  add_index "banks", ["is_default"], name: "index_banks_on_is_default", using: :btree
 
   create_table "cities", force: :cascade do |t|
     t.integer "province_id", limit: 4
@@ -130,19 +133,21 @@ ActiveRecord::Schema.define(version: 20160904133542) do
     t.string   "name",       limit: 255
     t.integer  "bank_id",    limit: 4
     t.string   "reason",     limit: 255
-    t.integer  "indent_id",  limit: 4
+    t.integer  "indent_id",  limit: 4,                                           null: false
     t.decimal  "money",                  precision: 8, scale: 2
     t.string   "username",   limit: 255
     t.datetime "income_at"
     t.integer  "status",     limit: 4
     t.string   "note",       limit: 255
     t.boolean  "deleted",                                        default: false, null: false
-    t.integer  "order_id",   limit: 4
+    t.integer  "order_id",   limit: 4,                                           null: false
     t.string   "source",     limit: 255,                         default: ""
     t.datetime "created_at",                                                     null: false
     t.datetime "updated_at",                                                     null: false
   end
 
+  add_index "incomes", ["bank_id"], name: "index_incomes_on_bank_id", using: :btree
+  add_index "incomes", ["income_at"], name: "index_incomes_on_income_at", using: :btree
   add_index "incomes", ["indent_id"], name: "index_incomes_on_indent_id", using: :btree
   add_index "incomes", ["order_id"], name: "index_incomes_on_order_id", using: :btree
 
@@ -241,6 +246,7 @@ ActiveRecord::Schema.define(version: 20160904133542) do
     t.integer  "height",                limit: 4,                           default: 1,     null: false
     t.integer  "number",                limit: 4,                           default: 1,     null: false
     t.decimal  "price",                             precision: 8, scale: 2, default: 0.0
+    t.decimal  "arrear",                            precision: 8, scale: 2, default: 0.0
     t.decimal  "material_price",                    precision: 8, scale: 2, default: 0.0
     t.integer  "status",                limit: 4,                           default: 0,     null: false
     t.integer  "oftype",                limit: 4,                           default: 0,     null: false

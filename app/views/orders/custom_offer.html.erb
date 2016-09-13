@@ -34,13 +34,13 @@
               <div class="col-sm-11">
                 <div class="row">
                   <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>名称</label>
-                  <%= unit_form.text_field :full_name, value: uf.new_record? ? '' : uf.full_name, class:'col-sm-2', required: true, placeholder: '请填写部件名称' %>
+                  <%= unit_form.text_field :full_name, value: uf.new_record? ? @order.note : uf.full_name, class:'col-sm-2', required: true, placeholder: '请填写部件名称' %>
                   <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>板料</label>
                   <%= unit_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {selected: @order.ply}, {class: 'material-ply col-sm-1', onchange: 'getMaterialPrice(this)'} %>
                   <%= unit_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]),:id, :name, {selected: @order.texture}, {class: 'material-texture col-sm-2', onchange: 'getMaterialPrice(this)'} %>
                   <%= unit_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]),:id, :name, {selected: @order.color}, {class: 'material-color col-sm-2', onchange: 'getMaterialPrice(this)'} %>
                   <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单位</label>
-                  <%= unit_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {include_blank: '请选择'}, {required: true, class: 'material-uom col-sm-2'} %>
+                  <%= unit_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {include_blank: '请选择', selected: '平方'}, {required: true, class: 'material-uom col-sm-2'} %>
                 </div>
                 <div class="row">
                   <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单价</label>
@@ -55,7 +55,7 @@
                 </div>
                 <div class="row">
                   <label class="col-sm-1 text-right" style="margin: 7px 0;">备注</label>
-                  <%= unit_form.text_field :note, value: uf.new_record? ? '' : uf.note, class: 'col-sm-11', placeholder: '请填写备注信息' %>
+                  <%= unit_form.text_field :note, value: uf.new_record? ? @order.note : uf.note, size: 15, class: 'col-sm-11', placeholder: '请填写备注信息' %>
                 </div>
               </div>
               <div class="col-sm-1 text-center" style="margin: 30px 0;">

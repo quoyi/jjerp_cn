@@ -29,7 +29,7 @@ function jsNoty(msg, type){
     type: type,
     theme: 'bootstrapTheme',
     layout: 'bottomRight',
-    // timeout: 8000,
+    timeout: 5000,
     closeWith: ['button', 'click'],
     template: '<div class="alert alert-'+ type +'"><span class="noty_text"></span><div class="noty_close"></div></div>',
     animation: { // 动画方式

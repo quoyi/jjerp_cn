@@ -24,22 +24,21 @@ $(function(){
     <div class="panel panel-info">
       <div class="panel-heading">
         <div class="row">
-          <div class="col-sm-4">
-            <label style="font-size: 18px;">条码</label>
-            <%= text_field_tag :unit_part_craft_name, '', autofocus:true, style: 'font-size: 18px; font-weight: bold;' %>
+          <div class="col-sm-3">
+            <%= text_field_tag :unit_part_craft_name, '', autofocus:true, style: 'font-size: 18px; font-weight: bold;', placeholder: '请扫描或者输入条码号' %>
           </div>
-          <div class="col-md-6 col-sm-6">
+          <div class="col-sm-7">
             <div class="row" style="margin-top: 2px;">
               <%= form_tag("/orders/#{@order.id}/package.pdf", method: :post, class: 'form-inline') do |f| %>
               <%= hidden_field_tag 'order_unit_ids', '' %>
               <%= hidden_field_tag 'order_label_size', 0 %><!-- 标签数量 -->
-              <div class="col-sm-6">
+              <div class="col-sm-5">
                 <label>&nbsp;&nbsp;&nbsp;&nbsp;尺寸：</label>
                 <%= number_field_tag 'length', @length, value: "80", class: "form-control", style: "width: 30%", readOnly: true, id: 'package_label_length' %>
                 &nbsp;&nbsp;×&nbsp;&nbsp;
                 <%= number_field_tag 'width', @width, value: "60", class: "form-control", style: "width: 30%", readOnly: true, id: 'package_label_width' %>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-7 text-right">
                 <button class="btn btn-info" onclick="return previous();">上一包</button>
                 <button class="btn btn-info" onclick="return next();">下一包</button>
                 <button class="btn btn-primary" onclick="return print_current_page();">打印当前</button>
@@ -49,7 +48,7 @@ $(function(){
               <% end %>
             </div>
           </div>
-          <div class="col-md-2 col-sm-2 text-center">
+          <div class="col-sm-2 text-center">
           <%= form_tag("/orders/#{@order.id}/reprint.pdf", method: :post) do |reprint_form| %>
             <%= hidden_field_tag :length, "80" %>
             <%= hidden_field_tag :width, "60" %>

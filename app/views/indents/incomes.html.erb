@@ -1,0 +1,58 @@
+<div class="panel-warning">
+  <div class="content-box-header panel-heading">
+    <div class="panel-title">
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 总订单 <small>到款</small> </h2>
+      <div class="pull-right panel-options">
+        <%= link_to '返回', :back, class: 'btn btn-info', data: {toggle:'tooltip'}, title: '返回到订单列表' %>
+      </div>
+    </div>
+  </div>
+  <div class="content-box-large box-with-header">
+    <div class="row">
+      <div style="font-size: 18px;">
+        <p class="pull-left">总订单号：
+          <code><%= @indent.name %></code>&nbsp;&nbsp;&nbsp;&nbsp;
+          <small class="indent-add-order-btn">
+          代理商:&nbsp;&nbsp;<code><%= @indent.agent.try(:full_name) %></code>&nbsp;&nbsp;&nbsp;&nbsp;
+          终端客户:&nbsp;&nbsp;<code><%= @indent.customer %></code>&nbsp;&nbsp;&nbsp;&nbsp;
+          状态:&nbsp;&nbsp;<code><%= @indent.status_name %></code>&nbsp;&nbsp;&nbsp;&nbsp;
+          总金额:&nbsp;&nbsp;<code><%= @indent.amount %>&nbsp;元</code>&nbsp;&nbsp;&nbsp;&nbsp;
+          欠款:&nbsp;&nbsp;<code><%= @indent.arrear %>&nbsp;元</code>
+          </small>
+        </p>
+      </div>
+      <table class="table table-hover table-striped table-bordered table-condensed indent-show-table">
+        <tr>
+          <th class="col-sm-1">子订单号</th>
+          <th>银行</th>
+          <th class="col-sm-2">卡号</th>
+          <th>金额</th>
+          <th>经手人</th>
+          <th>时间</th>
+          <th class="col-sm-4">备注</th>
+          <!-- <th>操作</th> -->
+        </tr>
+        <% @incomes.each do |income| %>
+        <tr>
+          <td><%= income.order.try(:name) %></td>
+          <td><%= income.bank.bank_name %></td>
+          <td><%= income.bank.bank_card %></td>
+          <td class="success"><%= income.money %></td>
+          <td><%= income.username %></td>
+          <td><%= income.income_at.strftime("%Y-%m-%d") %></td>
+          <td><%= income.note %></td>
+          <!-- <td><%#= link_to income.indent.try(:name), "#", data: {toggle:'tooltip'}, title: '到款详细' %></td> -->
+        </tr>
+        <% end %>
+        <tr class="text-right">
+          <td colspan="7">
+          应收:&nbsp;&nbsp;<%= @indent.amount %>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;
+          欠款:&nbsp;&nbsp;<%= @indent.arrear %>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;
+          实收:&nbsp;&nbsp;<%= @incomes.map(&:money).sum %>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;
+            
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

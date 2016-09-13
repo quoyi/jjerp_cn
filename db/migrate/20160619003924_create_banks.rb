@@ -8,6 +8,7 @@ class CreateBanks < ActiveRecord::Migration
       t.decimal :balance, precision: 8, scale: 2, default: 0 # 余额
       t.decimal :incomes, precision: 8, scale: 2, default:0 # 收入合计
       t.decimal :expends, precision: 8, scale: 2, default:0 # 支出合计
+      t.boolean :is_default, index: true, default: false # 收入未指定银行卡时，使用此字段
       t.timestamps null: false
     end
   end

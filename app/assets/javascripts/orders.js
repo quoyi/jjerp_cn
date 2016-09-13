@@ -37,7 +37,7 @@ function setChildPartCategory(obj){
       }
     },
     error: function(data){
-      alert("网络错误，无法获取子配件类型！");
+      jsNoty("网络错误，无法获取子配件类型！", "error");
     }
   });
 }
@@ -62,7 +62,7 @@ function setPartCategoryPrice(obj){
       }
     },
     error: function(data){
-      alert("网络错误，无法获取配件价格！");
+      jsNoty("网络错误，无法获取配件价格！", "error");
     }
   });
 }
@@ -84,7 +84,7 @@ function setCraft(obj){
       }
     },
     error: function(data){
-      alert("网络错误，无法获取配件价格！");
+      jsNoty("网络错误，无法获取配件价格！", "error");
     }
   });
 }

@@ -32,11 +32,11 @@ function next() {
         $("#new_table").find("tbody").html(pack[current_index + 1]);
       }
     } else {
-      alert('没有下一包了');
+      jsNoty("没有下一包了", "information");
       return false;
     }
   } else {
-    alert('请先选择当前包装的部件!');
+    jsNoty("当前包未添加部件！", "warning");
     return false;
   }
 
@@ -61,10 +61,10 @@ function previous() {
   var current_index = parseInt(localStorage.getItem("index"));
   var val = $("#new_table").find("tbody").html();
   var pack = JSON.parse(localStorage.getItem("pack"));
-  if (val.trim() == '') {
-    alert('当前包没有数据。');
-    return false;
-  }
+  // if (val.trim() == '') {
+  //   jsNoty("当前包没有数据。", "information");
+  //   return false;
+  // }
   if (pack && pack[current_index - 1]) {
     pack[current_index] = val;
     localStorage.setItem("pack", JSON.stringify(pack));
@@ -74,68 +74,10 @@ function previous() {
     $("#new_table").find("tbody").html(pack[current_index - 1]);
     return false;
   } else {
-    alert('没有上一包了。');
+    jsNoty("没有上一包了。", "information");
     return false;
   }
   return false;
-}
-
-/**
- * 重新打印
- * @param  {[type]} obj [description]
- * @return {[type]}     [description]
- */
-function reprint(obj){
-  var order_id = $(obj).data("oid");
-  $.ajax({
-    url: '/orders/' + order_id + "/reprint.pdf",
-    type: 'POST',
-    dataType: 'json',
-    data: {length: $("#package_label_length").val(), width: $("#package_label_width").val()},
-    success: function(data){
-      alert("重新打印成功！");
-    }
-  });
-}
-
-/**
- * 包装 -- 批量打印 按钮
- * @param  {[type]} obj [description]
- * @return {[type]}     [description]
- */
-function print_pages(obj) {
-  var order_units_size = $(obj).data("units");
-  if (order_units_size == "" || order_units_size == 0) {
-    alert("所有部件均已打包，请选择重新打印！");
-    // 所有部件均已打包，请选择重新打印
-    return false;
-  }
-  var old_table = $("#old_table").find("tbody").html().trim();
-  var new_table = $("#new_table").find("tbody").html().trim();
-  var tables = old_table + new_table;
-  if (old_table == '') {
-    //alert('您还没有拆分完所有包装，请继续选择完再进行批量打印');
-    return false;
-  } else { // 未打包 & 已打包 中只要存在数据，就可以批量打印
-    // 弹出模态框，获取输入的数据
-    var number = prompt("请输入标签总数：", "");
-    $("#order_label_size").val(number);
-    var pack = {};
-    if (localStorage.getItem("pack")) {
-      pack = JSON.parse(localStorage.getItem("pack"));
-    }
-    var current_index = parseInt(localStorage.getItem("index"));
-    var val = $("#new_table").find("tbody").html();
-    // old table 也加入打包
-    var old_val = $("#old_table").find("tbody").html();
-    if (!pack[current_index]) {
-      pack[current_index] = val + old_val;
-      localStorage.setItem("pack", JSON.stringify(pack));
-    }
-    // print
-    set_ids(pack, current_index);
-  }
-  // return false;
 }
 
 /**
@@ -152,13 +94,13 @@ function print_current_page() {
     pack = JSON.parse(localStorage.getItem("pack"));
   }
   if (val.trim() == '') {
-    alert('当前包没有数据。');
+    jsNoty("当前包没有数据。", "error");
     return false;
   }
 
   if (val) {
     if (pack[current_index - 1]) {
-      alert('上一包还没打印呢，请先打印上一包！');
+      jsNoty("上一包未打印，请先打印上一包！", "warning");
       return false;
     } else {
       if (!pack[current_index]) {
@@ -171,10 +113,74 @@ function print_current_page() {
     }
 
   } else {
-    alert('请先选择当前包装的部件!');
+    jsNoty("请选择当前包装的部件！", "error");
     return false;
   }
 }
+
+/**
+ * 包装 -- 批量打印 按钮
+ * @param  {[type]} obj [description]
+ * @return {[type]}     [description]
+ */
+function print_pages(obj) {
+  var order_units_size = $(obj).data("units");
+  if (order_units_size == "" || order_units_size == 0) {
+    jsNoty("所有部件均已打包，请选择重新打印！", "error");
+    // 所有部件均已打包，请选择重新打印
+    return false;
+  }
+  var old_table = $("#old_table").find("tbody").html().trim();
+  var new_table = $("#new_table").find("tbody").html().trim();
+  var tables = old_table + new_table;
+  if (old_table == '') {
+    //alert('您还没有拆分完所有包装，请继续选择完再进行批量打印');
+    return false;
+  } else { // 未打包 & 已打包 中只要存在数据，就可以批量打印
+    // 弹出模态框，获取输入的数据
+    var number = prompt("请输入标签总数：", "");
+    if(number == null || number == 0){
+      jsNoty("请输入标签总数！", "error");
+      return false;
+    }else{
+      $("#order_label_size").val(number);
+      var pack = {};
+      if (localStorage.getItem("pack")) {
+        pack = JSON.parse(localStorage.getItem("pack"));
+      }
+      var current_index = parseInt(localStorage.getItem("index"));
+      var val = $("#new_table").find("tbody").html();
+      // old table 也加入打包
+      var old_val = $("#old_table").find("tbody").html();
+      if (!pack[current_index]) {
+        pack[current_index] = val + old_val;
+        localStorage.setItem("pack", JSON.stringify(pack));
+      }
+      // print
+      set_ids(pack, current_index);
+    }
+  }
+  // return false;
+}
+
+/**
+ * 重新打印
+ * @param  {[type]} obj [description]
+ * @return {[type]}     [description]
+ */
+function reprint(obj){
+  var order_id = $(obj).data("oid");
+  $.ajax({
+    url: '/orders/' + order_id + "/reprint.pdf",
+    type: 'POST',
+    dataType: 'json',
+    data: {length: $("#package_label_length").val(), width: $("#package_label_width").val()},
+    success: function(data){
+      jsNoty("重新打印成功！", "success");
+    }
+  });
+}
+
 
 function set_ids(pack, current_index) {
   var r = pack[current_index].match(/<tr.*?id=(.*?)>/g);

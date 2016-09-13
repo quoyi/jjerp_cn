@@ -39,9 +39,9 @@
       <td><%= f.label '橱柜' %></td>
       <td>
         <% if @indent_or_order.class == Indent %>
-        <%= f.number_field :cupboard, value: "#{@indent_or_order.orders.where(order_category_id: OrderCategory.find_by(name: '橱柜').try(:id)).count}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+        <%= f.number_field :cupboard, value: "#{@indent_or_order.orders.where(order_category_id: OrderCategory.find_by(name: '橱柜').try(:id)).map{|o| o.packages.pluck(:label_size).sum}.sum}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
         <% else %>
-        <%= f.number_field :cupboard, value: "#{@indent_or_order.order_category.name == '橱柜' ? 1 : 0}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+        <%= f.number_field :cupboard, value: "#{@indent_or_order.order_category.name == '橱柜' ? @indent_or_order.packages.pluck(:label_size).sum : 0}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
         <% end %>
       </td>
     </tr>
@@ -49,25 +49,25 @@
       <td><%= f.label '衣柜' %></td>
       <td>
         <% if @indent_or_order.class == Indent %>
-          <%= f.number_field :robe, value: "#{@indent_or_order.orders.where(order_category_id: OrderCategory.find_by(name: '衣柜').try(:id)).count}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+          <%= f.number_field :robe, value: "#{@indent_or_order.orders.where(order_category_id: OrderCategory.find_by(name: '衣柜').try(:id)).map{|o| o.packages.pluck(:label_size).sum}.sum}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
         <% else %>
-          <%= f.number_field :robe, value: "#{@indent_or_order.order_category.name == '衣柜' ? 1 : 0}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+          <%= f.number_field :robe, value: "#{@indent_or_order.order_category.name == '衣柜' ? @indent_or_order.packages.pluck(:label_size).sum : 0}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
         <% end %>
       </td>
       <td><%= f.label '门' %></td>
       <td>
         <% if @indent_or_order.class == Indent %>
-          <%= f.number_field :door, value: "#{@indent_or_order.orders.where(order_category_id: OrderCategory.find_by(name: '门').try(:id)).count}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+          <%= f.number_field :door, value: "#{@indent_or_order.orders.where(order_category_id: OrderCategory.find_by(name: '门').try(:id)).map{|o| o.packages.pluck(:label_size).sum}.sum}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
         <% else %>
-          <%= f.number_field :door, value: "#{@indent_or_order.order_category.name == '门' ? 1 : 0}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+          <%= f.number_field :door, value: "#{@indent_or_order.order_category.name == '门' ? @indent_or_order.packages.pluck(:label_size).sum : 0}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
         <% end %>    
       </td>
       <td><%= f.label '配件' %></td>
       <td>
         <% if @indent_or_order.class == Indent %>
-          <%= f.number_field :part, value: "#{@indent_or_order.orders.where(order_category_id: OrderCategory.find_by(name: '配件').try(:id)).count}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+          <%= f.number_field :part, value: "#{@indent_or_order.orders.where(order_category_id: OrderCategory.find_by(name: '配件').try(:id)).map{|o| o.packages.pluck(:label_size).sum}.sum}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
         <% else %>
-          <%= f.number_field :part, value: "#{@indent_or_order.order_category.name == '配件' ? 1 : 0}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
+          <%= f.number_field :part, value: "#{@indent_or_order.order_category.name == '配件' ? @indent_or_order.packages.pluck(:label_size).sum : 0}", class: 'form-control', min: 0, step: 1, required: true, style: "width: 196px;" %>
         <% end %>
       </td>
     </tr>
