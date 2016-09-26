@@ -23,7 +23,8 @@
           <!-- 橱柜配件清单 开始 -->
           <% if num_cupboard > 0 %>
             <tr>
-              <td colspan="6" class="info text-left">橱柜配件清单</td>
+              <td colspan="6" class="info text-left">橱柜配件清单&nbsp;&nbsp;<code><%= value["cupboard_orders_name"].join("，") %></code>
+              </td>
             </tr>
             <tr>
               <th>名称</th>
@@ -50,7 +51,8 @@
           <!-- 衣柜配件清单 开始 -->
           <% if num_others > 0 %>
             <tr>
-              <td colspan="6" class="info text-left">衣柜配件清单</td>
+              <td colspan="6" class="info text-left">衣柜配件清单&nbsp;&nbsp;<code><%= value["other_orders_name"].join("，") %></code>
+              </td>
             </tr>
             <tr>
               <th>名称</th>

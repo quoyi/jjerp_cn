@@ -20,7 +20,7 @@ class OrderPdf < Prawn::Document
       if i != 0
         start_new_page
       end
-      text "伊思尔橱柜衣柜", :align => :center, :size => 20
+      text "高端定制橱柜衣柜", :align => :center, :size => 20
       text "编    号: #{@order.name}", :size => 14
       text "代 理 商: #{@order.indent.agent.full_name}", :size => 14
       text "终端客户: #{@order.indent.customer}", :size => 14
@@ -28,8 +28,9 @@ class OrderPdf < Prawn::Document
       text "备    注: #{@order.note.truncate(12)}", size: 14
       text " ", size: 5
       text "货  到: #{@order.delivery_address}", :size => 18
-      text " ", size: 5
+      image "#{Rails.root}/app/assets/images/d2code.png", at: [2, cursor], width: 38, height: 38
       text "共 #{@ids} 件  第#{@ids}-#{i+1}件", :size => 14, align: :right, valign: :bottom
+      
     end
   end
 

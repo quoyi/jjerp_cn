@@ -15,26 +15,38 @@ class OrdersController < ApplicationController
     @orders = Order.all.order(created_at: :desc)
     @start_at = Date.today.beginning_of_month.to_s
     @end_at = Date.today.end_of_month.to_s
-    @province = '420000'
-    @city = '420100'
-    @district = '--地区--'
+    
+    @order_category_id = ''
     search = ''
     if params[:province].present?
       @province = params[:province]
-      search << ChinaCity.get(@province)
+    else
+      @province = '420000'
     end
+    search << ChinaCity.get(@province)
+    @agents = Agent.where(province: @province)
 
     if params[:city].present?
       @city = params[:city]
-      search << ChinaCity.get(@city)
+    elsif params[:province].present?
+       @city = ''
+    else
+      @city = '420100'
     end
+    search << ChinaCity.get(@city)
+    # @city 不为空时，才需要过滤
+    @agents = @agents.where(city: @city) unless @city.blank?
 
     if params[:district].present?
       @district = params[:district]
-      search << ChinaCity.get(@district)
+    else
+      @district = ''
     end
+    search << ChinaCity.get(@district)
+    # @district 不为空时，才需要过滤
+    @agents = @agents.wehre(district: @district) unless @district.blank?
 
-    @orders = @orders.where("delivery_address like :keyword",keyword: "%#{search}%")
+    @orders = @orders.where("delivery_address like :keyword", keyword: "%#{search}%")
 
     # 判断搜索条件 起始时间 -- 结束时间
     if params[:start_at].present? && params[:end_at].present?
@@ -42,13 +54,34 @@ class OrdersController < ApplicationController
       @end_at = params[:end_at]
     end
     @orders = @orders.joins(:indent).where("indents.verify_at between ? and ?", @start_at, @end_at)
+    # 搜索条件 订单类型
+    if params[:order_category_id].present?
+      @order_category_id = params[:order_category_id]
+    end
+    @orders = @orders.where(order_category_id: @order_category_id) unless @order_category_id.blank?
     # 搜索条件 代理商ID
-    @orders = @orders.joins(:indent).where("indents.agent_id = ?",params[:agent_id]) if params[:agent_id].present?
+    if params[:agent_id].present?
+      @agent_id = params[:agent_id]
+    else
+      @agent_id = ''
+    end
+    @orders = @orders.joins(:indent).where("indents.agent_id = ?",params[:agent_id]) unless @agent_id.blank?
+    # 查询结果统计信息
+    @orders_result = {}
+    @orders_result[:total] = @orders.count
+    @orders_result[:cupboard] = @orders.where(order_category_id: OrderCategory.find_by(name: '橱柜').try(:id)).count
+    @orders_result[:robe] = @orders.where(order_category_id: OrderCategory.find_by(name: '衣柜').try(:id)).count
+    @orders_result[:door] = @orders.where(order_category_id: OrderCategory.find_by(name: '门').try(:id)).count
+    @orders_result[:part] = @orders.where(order_category_id: OrderCategory.find_by(name: '配件').try(:id)).count
+    @orders_result[:other] = @orders.where(order_category_id: OrderCategory.find_by(name: '其他').try(:id)).count
+    # 分页
+    @download = @orders if params[:format] == "xls"
+    @orders = @orders.page(params[:page])
     respond_to do |format|
       format.html 
       format.xls do
         filename = Time.now.strftime("%Y%m%d%H%M%S%L") + ".xls"
-        export_orders(filename, @orders, params[:start_at], params[:end_at])
+        export_orders(filename, @download, params[:start_at], params[:end_at])
         send_file "#{Rails.root}/public/excels/orders/" + filename, type: 'text/xls; charset=utf-8'
       end
     end

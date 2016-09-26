@@ -174,9 +174,13 @@ class IndentsController < ApplicationController
         indent_parts = {}
         indent_parts["indent"] = indent
         # 橱柜体单独统计配件
-        cupboard_parts = indent.orders.where(order_category: 1).map{|o| o.parts}.flatten
+        cupboard_orders = indent.orders.where(order_category_id: OrderCategory.find_by(name: "橱柜").id)
+        cupboard_parts = cupboard_orders.map{|o| o.parts}.flatten
+        indent_parts["cupboard_orders_name"] = cupboard_orders.pluck(:name)
         # 其他订单类型 一起统计配件
-        other_parts = indent.orders.where.not(order_category: 1).map{|o| o.parts}.flatten
+        other_orders = indent.orders.where.not(order_category_id: OrderCategory.find_by(name: "橱柜").id)
+        other_parts = other_orders.map{|o| o.parts}.flatten
+        indent_parts["other_orders_name"] = other_orders.pluck(:name)
         # 分别分组查询
         indent_parts["cupboard"]  = cupboard_parts.group_by{|p| [p.part_category_id, p.uom, p.brand]}
         indent_parts["others"]  = other_parts.group_by{|p| [p.part_category_id, p.uom, p.brand]}

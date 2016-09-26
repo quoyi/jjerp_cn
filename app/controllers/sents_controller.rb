@@ -152,9 +152,9 @@ class SentsController < ApplicationController
         s.owner.sending!
         update_order_status(s.owner)
       end
-      export_sent_list(sent_list)
+      
     end
-    
+    export_sent_list(sent_list)
     respond_to do |format|
       # 根据访问时是否指定后缀名，而返回不同结果(例如：访问/sents/download.xls 返回 xls 格式文件)
       format.html {redirect_to not_sent_orders_path, notice: '发货清单创建成功！'}

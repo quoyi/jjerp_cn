@@ -42,14 +42,19 @@ class PartCategoriesController < ApplicationController
   # GET /part_categories/1
   # GET /part_categories/1.json
   def edit
+    @part_category = PartCategory.find_by_id(params[:id]) if params[:id].present?
+    render layout: false
   end
 
   # PATCH/PUT /part_categories/1
   # PATCH/PUT /part_categories/1.json
   def update
     pc = PartCategory.find_by_id(params[:id])
-    pc.update_attributes(deleted: false) if params[:reset].present? && params[:reset]
-    pc.update_attributes(name: params[:name]) if params[:name].present?
+    if params[:reset].present?
+      pc.update_attributes(deleted: false)
+    else
+      pc.update(part_category_params)
+    end
     respond_to do |format|
       format.html { redirect_to part_categories_path, notice: '配件类型编辑成功！' }
       format.json { render json: pc}

@@ -1,0 +1,62 @@
+<%= form_for @part_category, html: {class: 'form-horizontal'} do |f| %> 
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="editPartCategoryLabel"> 配件类型 <small> 编辑 </small></h4>
+</div>
+<div class="modal-body">
+  <div class="form-group">
+    <label for="part_category_name" class="control-label col-sm-2 text-center" style="padding: 6px 0;"><span class="require">*</span>名称</label>
+    <div class="col-sm-10">
+      <%= f.text_field :name, class: 'form-control', required: true %>
+    </div>
+  </div>
+  <% unless @part_category.parent_id == 0 %>
+  <div class="form-group">
+    <label for="part_category_buy" class="control-label col-sm-2 text-center" style="padding: 6px 0;"><span class="require">*</span>进价</label>
+    <div class="col-sm-10">
+      <%= f.number_field :buy, min: 0, step: 0.01, value: @part_category.buy, class: 'form-control', required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="part_category_price" class="control-label col-sm-2 text-center" style="padding: 6px 0;"><span class="require">*</span>售价</label>
+    <div class="col-sm-10">
+      <%= f.number_field :price, min: 0, step: 0.01, value: @part_category.price, class: 'form-control', required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="part_category_store" class="control-label col-sm-2 text-center" style="padding: 6px 0;"><span class="require">*</span>库存</label>
+    <div class="col-sm-10">
+      <%= f.number_field :store, min: 0, step: 0.01, value: @part_category.store, class: 'form-control', required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="part_category_uom" class="control-label col-sm-2 text-center" style="padding: 6px 0;"><span class="require">*</span>单位</label>
+    <div class="col-sm-10">
+      <%= f.select :uom, Uom.all.collect {|u| [u.name, u.name]}, {selected: @part_category.uom}, class: 'form-control', required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="part_category_supply_id" class="control-label col-sm-2 text-center" style="padding: 6px 0;"><span class="require">*</span>供应商</label>
+    <div class="col-sm-10">
+      <%= f.select :supply_id, Supply.all.collect { |s| [s.full_name, s.id]}, selected: @part_category.supply_id, class: 'form-control', required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="part_category_brand" class="control-label col-sm-2 text-center" style="padding: 6px 0;">品牌</label>
+    <div class="col-sm-10">
+      <%= f.text_field :brand, value: @part_category.brand, class: 'form-control' %>
+    </div>
+  </div>
+  <% end %>
+  <div class="form-group">
+    <label for="part_category_note" class="control-label col-sm-2 text-center" style="padding: 6px 0;">备注</label>
+    <div class="col-sm-10">
+      <%= f.text_field :note, value: @part_category.note, class: 'form-control' %>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
+  <%= f.submit '提交', class: 'btn btn-primary' %>
+</div>
+<% end %>

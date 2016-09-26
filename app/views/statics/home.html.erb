@@ -17,8 +17,25 @@
     <div class="row">
       <% if current_user.role?("super_admin") || current_user.role?("admin") %>
       <div class="text-center"><h2>欢迎登陆，管理员！</h2></div>
+      <% elsif current_user.role?("employee") %>
+        <% searh_order = Order.where("created_at >= ? AND created_at <= ?", Date.today.beginning_of_month, Date.today.end_of_month).order(created_at: :asc).first %>
+        <%= form_tag package_order_path(searh_order), class: 'form-inline', method: 'get' do %>
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <span>查询条件</span>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <%= text_field_tag :name, '', autofocus:true, class:'col-sm-offset-3 col-sm-6', placeholder: '请输入订单号', style: 'font-size: 18px; font-weight: bold;', data: {toggle: 'tooltip'}, title: '请输入需要查找、打包的订单号' %>
+              <div class="col-sm-3 text-left">
+              <%= submit_tag '查询', class: 'btn btn-primary', data: {toggle: "tooltip"}, title: '填写订单后，按 Enter 键（或点此按钮）查询' %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% end %>
       <% else %>
-      <div class="col-md-8" style="padding: 0 5px;">
+      <!-- <div class="col-md-8" style="padding: 0 5px;">
         <div class="content-box-header">
           我的订单
         </div>
@@ -35,25 +52,25 @@
               <th>物流</th>
               <th>备注</th>
             </tr>
-            <% unless @indents.empty? %>
-            <% @indents.each_with_index do |indent, index|  %>
+            <%# unless @indents.empty? %>
+            <%# @indents.each_with_index do |indent, index|  %>
             <tr>
-              <td><%= index + 1 %></td>
-              <td><%= indent.name %></td>
-              <td><%= indent.customer %></td>
-              <td><%= indent.amount %></td>
-              <td><%= indent.arrear %></td>
-              <td><%= indent.verify_at.strftime("%Y-%m-%d") if indent.verify_at %></td>
-              <td><%= indent.require_at.strftime("%Y-%m-%d") if indent.require_at %></td>
-              <td><%= indent.logistics %></td>
-              <td><%= indent.note %></td>
+              <td><%#= index + 1 %></td>
+              <td><%#= indent.name %></td>
+              <td><%#= indent.customer %></td>
+              <td><%#= indent.amount %></td>
+              <td><%#= indent.arrear %></td>
+              <td><%#= indent.verify_at.strftime("%Y-%m-%d") if indent.verify_at %></td>
+              <td><%#= indent.require_at.strftime("%Y-%m-%d") if indent.require_at %></td>
+              <td><%#= indent.logistics %></td>
+              <td><%#= indent.note %></td>
             </tr>
-            <% end %>
-            <% else %>
+            <%# end %>
+            <%# else %>
             <tr>
               <td colspan="8">暂无订单数据</td>
             </tr>
-            <% end %>
+            <%# end %>
           </table>
         </div>
       </div>
@@ -65,31 +82,31 @@
           <table class="table table-hover table-striped table-bordered table-condensed text-center">
             <tr>
               <th>&nbsp;&nbsp;&nbsp;&nbsp;姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名&nbsp;&nbsp;&nbsp;&nbsp;</th>
-              <td><%= current_user.name ||= "未知" %></td>
+              <td><%#= current_user.name ||= "未知" %></td>
               <th>&nbsp;&nbsp;&nbsp;&nbsp;电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话&nbsp;&nbsp;&nbsp;&nbsp;</th>
-              <td><%= current_user.mobile ||= "未知" %></td>
+              <td><%#= current_user.mobile ||= "未知" %></td>
             </tr>
             <tr>
               <th>&nbsp;&nbsp;&nbsp;&nbsp;类&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型&nbsp;&nbsp;&nbsp;&nbsp;</th>
-              <td><%= current_user.user_category ||= "-" %></td>
+              <td><%#= current_user.user_category ||= "-" %></td>
               <th>登&nbsp;&nbsp;陆&nbsp;&nbsp;&nbsp;次&nbsp;&nbsp;数</th>
-              <td><%= current_user.sign_in_count ||= "未知" %></td>
+              <td><%#= current_user.sign_in_count ||= "未知" %></td>
             </tr>
             <tr>
               <th>本次登陆时间</th>
-              <td><%= current_user.current_sign_in_at.strftime("%Y-%m-%d") %></td>
+              <td><%#= current_user.current_sign_in_at.strftime("%Y-%m-%d") %></td>
               <th>本次登陆地址</th>
-              <td><%= current_user.current_sign_in_ip %></td>
+              <td><%#= current_user.current_sign_in_ip %></td>
             </tr>
             <tr>
               <th>上次登陆时间</th>
-              <td><%= current_user.last_sign_in_at.strftime("%Y-%m-%d") %></td>
+              <td><%#= current_user.last_sign_in_at.strftime("%Y-%m-%d") %></td>
               <th>上次登陆地址</th>
-              <td><%= current_user.last_sign_in_ip %>  </td>
+              <td><%#= current_user.last_sign_in_ip %>  </td>
             </tr>
           </table>
         </div>
-      </div>
+      </div> -->
       <% end %>
     </div>
   </div>

@@ -5,8 +5,9 @@ class SentList < ActiveRecord::Base
 
   def generate_code
     current_month = Time.now.strftime('%Y%m')
-    agent_orders_count = SentList.where("name like 'FH#{current_month}-%'").count
+    agent_last_order = SentList.where("name like 'FH#{current_month}-%'").order(:created_at).last
 
-    self.name = "FH" + current_month + "-" + (agent_orders_count+1).to_s
+    agent_last_order_index = agent_last_order.name.split("-").last.to_i if agent_last_order.present?
+    self.name = "FH" + current_month + "-" + (agent_last_order_index+1).to_s
   end
 end

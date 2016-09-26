@@ -36,6 +36,7 @@ module OffersHelper
         offer.item_name = [MaterialCategory.find(material.ply).name, MaterialCategory.find(material.texture).name,  MaterialCategory.find(material.color).name].join('-')
         offer.item_type = Offer.item_types[:unit]
         offer.uom = '平方'
+        offer.note = offer.note.to_s + unit.note.to_s + " "
         offer.save!
         unit_num += 1
       end
@@ -48,6 +49,7 @@ module OffersHelper
         offer.item_name = part.part_category.try(:name)
         offer.item_type = Offer.item_types[:part]
         offer.uom = '个'
+        offer.note = offer.note.to_s + part.note.to_s + " "
         offer.save!
         part_num += 1
       end
@@ -60,6 +62,7 @@ module OffersHelper
         offer.item_name = craft.full_name
         offer.item_type = Offer.item_types[:craft]
         offer.uom = '次'
+        offer.note = offer.note.to_s + craft.note.to_s + " "
         offer.save!
         craft_num += 1
       end

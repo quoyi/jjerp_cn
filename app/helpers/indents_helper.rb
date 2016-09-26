@@ -39,7 +39,7 @@ module IndentsHelper
     # 设置列宽
     ws.set_column("A:F", 18)
 
-    ws.merge_range("A1:F1", '伊思尔制造中心 ——— 配件清单', title_format)
+    ws.merge_range("A1:F1", '高端定制橱柜衣柜 ——— 配件清单', title_format)
     ws.set_row(0, 34) # 设置行高
 
     indent_num = 1

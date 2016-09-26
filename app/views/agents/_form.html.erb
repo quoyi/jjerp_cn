@@ -35,16 +35,26 @@
       </td>
       <td colspan="3">
         <div class="city-group">
-          <select name="agent[province]" id="agent_province" class="city-select">
+          <% if @agent.new_record? %>
+          <%= f.select :province, options_for_select(ChinaCity.list), { :prompt => "--省份--" , :class => "city-select"} %>
+          <%= f.select :city, options_for_select(ChinaCity.list), { :prompt => "--城市--" , :class => "city-select"} %>
+          <%= f.select :district, options_for_select(ChinaCity.list), { :prompt => "--地区--" , :class => "city-select"} %>
+          <% else %>
+          <%= f.select :province, options_for_select(ChinaCity.list, @agent.province), { :prompt => "--省份--" , :class => "city-select"} %>
+          <%= f.select :city, options_for_select(ChinaCity.list(@agent.province), @agent.city), { :prompt => "--城市--" , :class => "city-select"} %>
+          <%= f.select :district, options_for_select(ChinaCity.list(@agent.city), @agent.district), { :prompt => "--地区--" , :class => "city-select"} %>
+          <% end %>
+          <!-- <select name="agent[province]" id="agent_province" class="city-select">
             <option value="">--省份--</option>
-            <%= options_for_select(ChinaCity.list) %>
-          </select>
+            <%#= options_for_select(ChinaCity.list) %>
+          </select> 
           <select name="agent[city]" id="agent_city" class="city-select">
             <option value="">--城市--</option>
           </select>
           <select name="agent[district]" id="agent_district" class="city-select">
             <option value="">--地区--</option>
           </select>
+          -->
         </div>
       </td>
     </tr>
