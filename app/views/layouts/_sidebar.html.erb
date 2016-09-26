@@ -51,9 +51,9 @@
                 <%if current_user.permission?("SuppliesController", "index")%>
                 <li class="<%="#{'active' if controller_name == 'uoms'}" %>"><%= link_to '单位', uoms_path %></li>
                 <%end%>
-                <%if current_user.permission?("OrderCategoriesController", "index")%>
-                <li class="<%="#{'active' if controller_name == 'order_categories'}" %>"><%= link_to '订单类型', order_categories_path %></li>
-                <%end%>
+                <%#if current_user.permission?("OrderCategoriesController", "index")%>
+                <!-- <li class="<%#="#{'active' if controller_name == 'order_categories'}" %>"><%#= link_to '订单类型', order_categories_path %></li> -->
+                <%#end%>
                 <% if current_user.permission?("UnitCategoriesController", "index")%>
                 <li class="<%="#{'active' if controller_name == 'unit_categories'}" %>"><%= link_to '部件类型', unit_categories_path %></li>
                 <%end%>

@@ -40,7 +40,7 @@ permissions.each_pair do |k, v|
     employee.role_permissions.create(klass: k, actions: 'unpack,package')
   end
   if k == 'OrdersController'
-    employee.role_permissions.create(klass: k, actions: 'producing')
+    employee.role_permissions.create(klass: k, actions: 'producing,unpack,packaged')
   end
 end
 

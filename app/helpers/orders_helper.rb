@@ -95,7 +95,7 @@ module OrdersHelper
     title_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 28) # 水平居中、垂直居中、加粗、字号28
     info_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 0, size: 16, border: 1)
     thead_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 16, bg_color: 'gray', border: 1)
-    ws.merge_range("A1:H1", '伊思尔报价单', title_format)
+    ws.merge_range("A1:H1", '报价单', title_format)
     ws.set_row(0, 34) # 设置行高
 
     # 空行(合并单元格、正文样式)
@@ -122,7 +122,7 @@ module OrdersHelper
       order = ofs.first.order
       order_total = order.offers.map{|o| o.price * o.number}.sum().round(2)
       orders_total = order_total * order.number
-      ws.write_row("A" + row_num.to_s, ['子订单号', order.name, '单套合计￥', order_total, '单项套数', order.number,
+      ws.write_row("A" + row_num.to_s, ['子订单号', order.name, '单套合计￥', order_total, '备注', order.note,
                 '项目合计￥', orders_total], info_format)
       ws.set_row(row_num - 1, 20)
       row_num += 1
@@ -145,8 +145,8 @@ module OrdersHelper
 
     # 第一行
     title_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 28) # 水平居中、垂直居中、加粗、字号28
-    info_format = wb.add_format(align: 'left', valign: 'vcenter', bold: 1, size: 16)
-    ws.merge_range('A1:H1', '伊思尔对账单', title_format) # 合并单元格，写入数据，修改样式为 title_format
+    info_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 16)
+    ws.merge_range('A1:H1', '对账单', title_format) # 合并单元格，写入数据，修改样式为 title_format
     ws.set_row(0, 34)
 
     # 空一行
@@ -175,8 +175,8 @@ module OrdersHelper
     myblue = wb.set_custom_color(14, 0, 204, 255)
     mybluewhite = wb.set_custom_color(15, 204, 255, 255)
     indents.each_with_index do |indent, ii|
-      indent_format = ii % 2 == 0 ? wb.add_format(align: 'left', valign: 'vcenter', bold: 1, size: 16, bg_color: myorange, border: 1) 
-                                  : wb.add_format(align: 'left', valign: 'vcenter', bold: 1, size: 16, bg_color: myblue, border: 1)
+      indent_format = ii % 2 == 0 ? wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 16, bg_color: myorange, border: 1) 
+                                  : wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 16, bg_color: myblue, border: 1)
       # 总订单信息一
       ws.set_row(row_num.to_i - 1, 28) # 设置第5行行高
       ws.write('A' + row_num, '总订单号', indent_format)
@@ -199,32 +199,34 @@ module OrdersHelper
       ws.write('G' + row_num, '金额￥', indent_format)
       ws.write('H' + row_num, indent.amount, indent_format)
 
-      order_format = ii % 2 == 0 ? wb.add_format(align: 'left', valign: 'vcenter', bold: 0, size: 12, bg_color: myyellow, border: 1)
-                                 : wb.add_format(align: 'left', valign: 'vcenter', bold: 0, size: 12, bg_color: mybluewhite, border: 1)
+      order_title_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 12, bg_color: myyellow, border: 1)
+      order_info_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 12, bg_color: 'gray', border: 1)
+      order_format = ii % 2 == 0 ? wb.add_format(align: 'center', valign: 'vcenter', bold: 0, size: 12, bg_color: myyellow, border: 1)
+                                 : wb.add_format(align: 'center', valign: 'vcenter', bold: 0, size: 12, bg_color: mybluewhite, border: 1)
       ws.set_row(row_num.to_i, 20) # 设置第7行行高
       row_num = (row_num.to_i + 1).to_s
       # 子订单信息表头
-      ws.write('A' + row_num, '序号', order_format)
-      ws.write('B' + row_num, '类型', order_format)
-      ws.write('C' + row_num, '名称', order_format)
-      ws.write('D' + row_num, '单价￥', order_format)
-      ws.write('E' + row_num, '单位', order_format)
-      ws.write('F' + row_num, '数量', order_format)
-      ws.write('G' + row_num, '备注', order_format)
-      ws.write('H' + row_num, '总价￥', order_format)
+      ws.write('A' + row_num, '序号', order_title_format)
+      ws.write('B' + row_num, '类型', order_title_format)
+      ws.write('C' + row_num, '名称', order_title_format)
+      ws.write('D' + row_num, '单价￥', order_title_format)
+      ws.write('E' + row_num, '单位', order_title_format)
+      ws.write('F' + row_num, '数量', order_title_format)
+      ws.write('G' + row_num, '备注', order_title_format)
+      ws.write('H' + row_num, '总价￥', order_title_format)
       #子订单信息
       indent.orders.each_with_index do |order, oi|
         # 子订单信息一
         ws.set_row(row_num.to_i, 20)
         row_num = (row_num.to_i + 1).to_s
-        ws.write('A' + row_num, '子订单号', order_format)
-        ws.write('B' + row_num, order.name, order_format)
-        ws.write('C' + row_num, order.order_category.name, order_format)
-        ws.write('D' + row_num, '', order_format)
-        ws.write('E' + row_num, '', order_format)
-        ws.write('F' + row_num, '', order_format)
-        ws.write('G' + row_num, '项目合计￥', order_format)
-        ws.write('H' + row_num, order.price * order.number, order_format)
+        ws.write('A' + row_num, '子订单号', order_info_format)
+        ws.write('B' + row_num, order.name, order_info_format)
+        ws.write('C' + row_num, '订单类型', order_info_format)
+        ws.write('D' + row_num, order.order_category.name, order_info_format)
+        ws.write('E' + row_num, '备注', order_info_format)
+        ws.write('F' + row_num, order.note, order_info_format)
+        ws.write('G' + row_num, '项目合计￥', order_info_format)
+        ws.write('H' + row_num, order.price * order.number, order_info_format)
 
         order.offers.each_with_index do |offer, ooi|
           ws.set_row(row_num.to_i, 20)

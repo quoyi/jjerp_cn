@@ -85,7 +85,7 @@ class Order < ActiveRecord::Base
     current_year = Time.now.year.to_s
     current_month = Time.now.mon.to_s
     agent_orders_count = Order.where("name like '#{current_year}%-#{current_month}-%'").count
-    temp_hash = {'1': 'w', '2': '', '3': '', '4': 'y', '5': '', '6': '', '7': ''}
+    temp_hash = {'1': 'w', '2': 'y', '3': 'm', '4': 'p', '5': 'q'}
 
     tmp = case Order.oftypes[oftype]
           when 1 then "补#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
