@@ -19,7 +19,7 @@ module SentsHelper
     ws.set_column("A:E", 18)
     ws.set_column("K:N", 18)
 
-    ws.merge_range("A1:N1", '高端定制橱柜衣柜 ——— 发货清单', title_format)
+    ws.merge_range("A1:N1", '伊思尔生产管理 ——— 发货清单', title_format)
     ws.set_row(0, 34) # 设置行高
 
     ws.merge_range("A2:N2", sent_list.created_by.split(" ")[0] + " 发货清单", table_title_format)
