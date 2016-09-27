@@ -2,7 +2,7 @@
   <div class="content-box-header panel-heading">
     <div class="panel-title" style="margin-bottom: 2px; padding-bottom: 0px;">
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 订单 <small>列表</small> </h2>
-      <%= link_to '查看统计', '#', class: "btn btn-primary", data: {toggle: 'modal', target: '#showSat'}, style:'margin-left: 20px; color: #fff;' %>
+      <%= link_to '查看统计', '#', class: "btn btn-primary", data: {toggle: 'modal', target: '#showStat'}, style:'margin-left: 20px; color: #fff;' %>
       <div class="pull-right panel-options">
         <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addIndent'} %>
       </div>
@@ -116,12 +116,12 @@
   </div>
 </div>
 <!-- 总订单统计信息模态框 Modal -->
-<div class="modal fade" id="showSat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="showStat" tabindex="-1" role="dialog" aria-labelledby="showStatLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">订单统计信息</h4>
+        <h4 class="modal-title" id="showStatLabel">订单统计信息</h4>
       </div>
       <div class="modal-body">
         <div class="panel panel-info">

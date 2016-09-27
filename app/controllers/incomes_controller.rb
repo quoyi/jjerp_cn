@@ -51,7 +51,7 @@ class IncomesController < ApplicationController
               agent_balance = agent_balance - o_arrear
               @income = o.incomes.new(indent_id: indent.id, bank_id: income_params[:bank_id], username: current_user.name,
                                       money: o_arrear, income_at: income_params[:income_at],
-                                      note: "来自订单#{order.name}于#{income_params[:income_at]}收入的#{income_params[:money]},剩余#{income_params[:money].to_f - o_arrear}已存入代理商余额")
+                                      note: "来自订单#{order.name}于#{income_params[:income_at]}收入的#{income_params[:money].to_i},剩余#{income_params[:money].to_i - o_arrear}已存入代理商余额")
               @income.save!
               # 更新子订单的欠款
               o.update!(arrear: 0)
@@ -61,7 +61,7 @@ class IncomesController < ApplicationController
                 # 重复代码：跳出循环时，不执行本次循环break后面的代码
                 @income = o.incomes.new(indent_id: indent.id, bank_id: income_params[:bank_id], money: agent_balance, 
                                      username: current_user.name, income_at: income_params[:income_at],
-                                     note: "来自订单#{order.name}于#{income_params[:income_at]}收入的#{income_params[:money]}")
+                                     note: "来自订单#{order.name}于#{income_params[:income_at]}收入的#{income_params[:money].to_i}")
                 @income.save!
                 # 更新子订单的欠款
                 o.update!(arrear: o.arrear - agent_balance)
