@@ -36,25 +36,14 @@
       <td colspan="3">
         <div class="city-group">
           <% if @agent.new_record? %>
-          <%= f.select :province, options_for_select(ChinaCity.list), { :prompt => "--省份--" , :class => "city-select", required: true} %>
-          <%= f.select :city, options_for_select(ChinaCity.list), { :prompt => "--城市--" , :class => "city-select", required: true} %>
-          <%= f.select :district, options_for_select(ChinaCity.list), { :prompt => "--地区--" , :class => "city-select", required: true} %>
+          <%= f.select :province, options_for_select(ChinaCity.list), {prompt: '--省份--'} ,{:class => "city-select", required: true} %>
+          <%= f.select :city, options_for_select([]), {prompt: '--城市--'},{:class => "city-select"} %>
+          <%= f.select :district, options_for_select([]),{prompt: '--地区--'},{ :class => "city-select"} %>
           <% else %>
-          <%= f.select :province, options_for_select(ChinaCity.list, @agent.province), { :prompt => "--省份--" , :class => "city-select", required: true} %>
-          <%= f.select :city, options_for_select(ChinaCity.list(@agent.province), @agent.city), { :prompt => "--城市--" , :class => "city-select", required: true} %>
-          <%= f.select :district, options_for_select(ChinaCity.list(@agent.city), @agent.district), { :prompt => "--地区--" , :class => "city-select", required: true} %>
+          <%= f.select :province, options_for_select(ChinaCity.list, @agent.province), {prompt: '--省份--'},{ :class => "city-select", required: true} %>
+          <%= f.select :city, options_for_select(ChinaCity.list(@agent.province), @agent.city), {prompt: '--城市--'},{:class => "city-select"} %>
+          <%= f.select :district, options_for_select(ChinaCity.list(@agent.city), @agent.district), {prompt: '--地区--'},{ :class => "city-select"} %>
           <% end %>
-          <!-- <select name="agent[province]" id="agent_province" class="city-select">
-            <option value="">--省份--</option>
-            <%#= options_for_select(ChinaCity.list) %>
-          </select> 
-          <select name="agent[city]" id="agent_city" class="city-select">
-            <option value="">--城市--</option>
-          </select>
-          <select name="agent[district]" id="agent_district" class="city-select">
-            <option value="">--地区--</option>
-          </select>
-          -->
         </div>
       </td>
     </tr>
@@ -65,11 +54,11 @@
       <td>
         <%= f.text_field :town %>
       </td>
-      <td>
-        <label><span class="require">*</span>收货地址</label>
+      <td data-toggle="tooltip" title="请填写详细地址（除省市县镇外的信息）">
+        <label>详细地址</label>
       </td>
-      <td>
-        <%= f.text_field :address, required: true %>
+      <td data-toggle="tooltip" title="请填写详细地址（除省市县镇外的信息）">
+        <%= f.text_field :address, maxlength: 20, data: {toggle: 'tooltip'}, title: '详细地址(不包含省市县)' %>
       </td>
     </tr>
     <tr>
@@ -101,11 +90,11 @@
       </td>
     </tr>
     <tr>
-      <td>
-        <%= f.label '物流' %>
+      <td data-toggle="tooltip" title="必填项">
+        <label><span class="require">*</span>物流</label>
       </td>
       <td>
-        <%= f.text_field :logistics %>
+        <%= f.text_field :logistics, required: true %>
       </td>
       <td>
         <%= f.label '结账周期(天)' %>

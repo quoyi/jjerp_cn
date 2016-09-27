@@ -41,9 +41,9 @@ class AgentsController < ApplicationController
   # POST /agents.json
   def create
     @agent = Agent.new(agent_params)
-    @agent.province = ChinaCity.get(agent_params[:province])
-    @agent.city = ChinaCity.get(agent_params[:city])
-    @agent.district = ChinaCity.get(agent_params[:district])
+    # @agent.province = ChinaCity.get(agent_params[:province])
+    # @agent.city = ChinaCity.get(agent_params[:city])
+    # @agent.district = ChinaCity.get(agent_params[:district])
     if @agent.save
       redirect_to :back, notice: '代理商创建成功！'
     else

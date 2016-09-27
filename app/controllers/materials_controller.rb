@@ -10,6 +10,29 @@ class MaterialsController < ApplicationController
     # else
     @materials = Material.where(deleted: false)
     # end
+    
+    materials_arr = []
+ 
+    Unit.all.group_by{|u| [u.ply, u.texture, u.color]}.each_pair do |key, value|
+      obj = {}
+      materail = Material.find_by(ply: key.first, texture: key.second, color: key.last)
+      total_number = 0 
+      value.each do |unit|
+        if unit.is_custom
+          total_number += unit.number.to_f
+        else
+          size = unit.size.split(/[xX*×]/).map(&:to_i)
+          total_number += ((unit.number.to_f * size[0] * size[1])/(1000*1000))
+        end
+      end
+      obj[:name] = materail.try(:full_name)
+      obj[:number] = total_number
+      materials_arr << obj
+    end
+
+
+    @materials_top_arr = materials_arr.sort_by{|m| m[:number] }.first(10)
+
     respond_to do |format|
       format.html 
       format.json {render json: {flag: @materials.empty? ? "false" : "true"} }
