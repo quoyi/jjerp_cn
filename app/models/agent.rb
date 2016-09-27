@@ -7,7 +7,7 @@ class Agent < ActiveRecord::Base
   #
 
   def full_address
-    [self.province, self.city, self.district, self.town, self.address].join('')
+    [ChinaCity.get(self.province), ChinaCity.get(self.city), ChinaCity.get(self.district), self.town, self.address].join('')
   end
 
 end
