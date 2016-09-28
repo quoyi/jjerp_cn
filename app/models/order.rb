@@ -14,6 +14,7 @@ class Order < ActiveRecord::Base
   # validate :validate_require_time
   validates_uniqueness_of :name
   before_create :generate_order_code
+  before_save :order_money_to_int
   # after_update :update_indent_and_agent # 更新子订单时，同步更新总订单、代理商金额
   accepts_nested_attributes_for :units, allow_destroy: true
   accepts_nested_attributes_for :parts, allow_destroy: true
@@ -96,6 +97,10 @@ class Order < ActiveRecord::Base
           end
 
     self.name =  current_year + tmp + "-#{current_month}-" + (agent_orders_count+1).to_s
+  end
+
+  def order_money_to_int
+    self.price = self.price.to_i
   end
 
   def caseType(type, str)
