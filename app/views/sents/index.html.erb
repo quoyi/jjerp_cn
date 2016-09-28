@@ -45,7 +45,10 @@
           <tr>
             <th>发货清单号</th>
             <th>子订单号</th>
+            <th>代理商</th>
+            <th>终端客户</th>
             <th>状态</th>
+            <th>备注</th>
             <th>发货时间</th>
             <th>地区</th>
             <th>收货人</th>
@@ -67,11 +70,17 @@
             <% if sent.owner_type == Indent.name %>
             <% indent = Indent.find_by_id(sent.owner_id) %>
             <td><%= link_to indent.name, indent, data: {toggle: 'tooltip'}, title: '查看订单详细信息' %></td>
+            <td><%= indent.agent.try(:full_name) %></td>
+            <td><%= indent.customer %></td>
             <td><%= indent.status_name %></td>
+            <td><%= indent.note %></td>
             <% elsif sent.owner_type == Order.name %>
             <% order = Order.find_by_id(sent.owner_id) %>
             <td><%= link_to order.name, order, data: {toggle: 'tooltip'}, title: '查看订单详细信息' %></td>
+            <td><%= order.indent.agent.try(:full_name) %></td>
+            <td><%= order.indent.customer %></td>
             <td><%= order.status_name %></td>
+            <td><%= order.note %></td>
             <% else %>
               <td>订单错误</td>
               <td></td>

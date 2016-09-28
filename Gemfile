@@ -40,6 +40,9 @@ gem 'writeexcel', '~> 1.0', '>= 1.0.5'
 # 
 # 定时任务，用于定时清理 public/excels/ 目录
 gem 'whenever', '~> 0.9.7'
+# 条形码
+gem 'barby', '~> 0.6.4'
+gem 'chunky_png'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
