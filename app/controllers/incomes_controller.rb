@@ -10,7 +10,6 @@ class IncomesController < ApplicationController
       indent = Indent.find(params[:indent_id])
       @incomes =@incomes.where(order_id: indent.orders.pluck(:id))
     end
-    binding.pry
     @incomes = @incomes.page(params[:page])
     @income = Income.new(bank_id: Bank.find_by(is_default: 1).id, username: current_user.name, income_at: Time.now)
   end
@@ -152,7 +151,6 @@ class IncomesController < ApplicationController
     @expends = @expends.order(expend_at: :desc)
 
     @incomes_expends = @incomes.to_a + @expends.to_a
-    binding.pry
     # @incomes_expends = @incomes_expends.page(params[:page])
   end
 
