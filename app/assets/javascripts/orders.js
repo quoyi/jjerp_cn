@@ -7,6 +7,42 @@ $(function() {
       $("#import-form").submit();
     });
   });
+
+  // ajax 方式获取指定 省市县 的代理商，并修改代理商可选项
+  function ajaxGetAgent(condition){
+    $.ajax({
+      url: "/agents/search",
+      type: "get",
+      dataType: "json",
+      data: condition,
+      success: function(data){
+        if(data != null){
+          var options = "<option value=''>请选择</option>";
+          for (var i = 0; i <= data.length - 1; i++) {
+            options += "<option value='" + data[i].id + "'>" + data[i].full_name + "</option>"; 
+          }
+          $(".orders-search-agent").empty().append(options);
+        }
+      },
+      error: function(){
+
+      }
+    });
+  }
+
+  // 子订单 - 搜索条件 - 省市县 修改后，搜索对应的代理商
+  $(".orders-search-province").change(function(){
+    var data = {province: $(this).val()};
+    ajaxGetAgent(data);
+  });
+  $(".orders-search-city").change(function(){
+    var data = {province: $(this).siblings(".orders-search-province").val(), city: $(this).val()};
+    ajaxGetAgent(data);
+  });
+  $(".orders-search-district").change(function(){
+    var data = {province: $(this).siblings(".orders-search-province").val(), city: $(this).siblings(".orders-search-city").val(), district: $(this).val()};
+    ajaxGetAgent(data);
+  });
 });
 
 

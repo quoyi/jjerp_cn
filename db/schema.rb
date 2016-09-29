@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160904133542) do
+ActiveRecord::Schema.define(version: 20160929035615) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",            limit: 255,                         default: "",    null: false
@@ -258,6 +258,7 @@ ActiveRecord::Schema.define(version: 20160904133542) do
     t.integer  "agent_id",              limit: 4
     t.datetime "created_at",                                                                null: false
     t.datetime "updated_at",                                                                null: false
+    t.integer  "index",                 limit: 4
   end
 
   add_index "orders", ["agent_id"], name: "index_orders_on_agent_id", using: :btree

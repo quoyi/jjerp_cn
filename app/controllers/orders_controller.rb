@@ -10,9 +10,9 @@ class OrdersController < ApplicationController
     @unit = Unit.new
     @part = Part.new
     @craft = Craft.new
-    @order = Order.new
+    @order = Order.new(created_at: Time.now)
     @income = Income.new(username: current_user.name, income_at: Time.now)
-    @orders = Order.all.order(created_at: :desc)
+    @orders = Order.all.order(created_at: :desc, index: :desc)
     @start_at = Date.today.beginning_of_month.to_s
     @end_at = Date.today.end_of_month.to_s
     
@@ -28,10 +28,8 @@ class OrdersController < ApplicationController
 
     if params[:city].present?
       @city = params[:city]
-    elsif params[:province].present?
-       @city = ''
     else
-      @city = '420100'
+      @city = ''
     end
     search << ChinaCity.get(@city)
     # @city 不为空时，才需要过滤
@@ -53,19 +51,20 @@ class OrdersController < ApplicationController
       @start_at = params[:start_at]
       @end_at = params[:end_at]
     end
-    @orders = @orders.joins(:indent).where("indents.verify_at between ? and ?", @start_at, @end_at)
+    @orders = @orders.where("created_at between ? and ?", @start_at, @end_at)
     # 搜索条件 订单类型
     if params[:order_category_id].present?
       @order_category_id = params[:order_category_id]
     end
     @orders = @orders.where(order_category_id: @order_category_id) unless @order_category_id.blank?
-    # 搜索条件 代理商ID
+    # 搜索条件 代理商ID(@agent_id是返回给view使用)
     if params[:agent_id].present?
       @agent_id = params[:agent_id]
     else
       @agent_id = ''
     end
-    @orders = @orders.joins(:indent).where("indents.agent_id = ?",params[:agent_id]) unless @agent_id.blank?
+    @orders = @orders.where("agent_id = ?", @agent_id) unless @agent_id.blank?
+
     # 查询结果统计信息
     @orders_result = {}
     @orders_result[:total] = @orders.count
@@ -77,6 +76,7 @@ class OrdersController < ApplicationController
     # 分页
     @download = @orders if params[:format] == "xls"
     @orders = @orders.page(params[:page])
+    # @orders = @orders.sort_by{|o|[o.name.split("-")[0].to_i,o.name.split('-')[1].to_i,o.name.split('-')[2].to_i]}
     respond_to do |format|
       format.html 
       format.xls do
@@ -292,6 +292,7 @@ class OrdersController < ApplicationController
   #生产任务
   def producing
     @orders = Order.where(status: Order.statuses[:producing])
+    @orders = @orders.page(params[:page])
   end
 
   # 导入文件，或手工输入
@@ -428,12 +429,14 @@ class OrdersController < ApplicationController
       end
     end
     @orders = @orders.reload#.where(status: Order.statuses[:producing])
+    @orders = @orders.page(params[:page])
   end
 
   # 已打包
   # GET /orders/packaged
   def packaged
     @orders = Order.where(status: Order.statuses[:packaged])
+    @orders = @orders.page(params[:page])
   end
 
   # GET 打包页面

@@ -36,8 +36,8 @@
       <td colspan="3">
         <div class="city-group">
           <% if @agent.new_record? %>
-          <%= f.select :province, options_for_select(ChinaCity.list), {prompt: '--省份--'} ,{:class => "city-select", required: true} %>
-          <%= f.select :city, options_for_select([]), {prompt: '--城市--'},{:class => "city-select"} %>
+          <%= f.select :province, options_for_select(ChinaCity.list, "420000"), {prompt: '--省份--'} ,{:class => "city-select", required: true} %>
+          <%= f.select :city, options_for_select(ChinaCity.list("420000")), {prompt: '--城市--'},{:class => "city-select"} %>
           <%= f.select :district, options_for_select([]),{prompt: '--地区--'},{ :class => "city-select"} %>
           <% else %>
           <%= f.select :province, options_for_select(ChinaCity.list, @agent.province), {prompt: '--省份--'},{ :class => "city-select", required: true} %>

@@ -13,17 +13,23 @@ class SentsController < ApplicationController
       @sents = @sents.where("sent_at = ? ", params[:start_at].present? ? params[:start_at] : params[:end_at])
     end
 
-    if params[:agent_id].present?
-      indent = Indent.find_by(agent_id: params[:agent_id])
-      @sents = Sent.where(owner_type: Order.name, owner_id: indent.orders.map(&:id)) if indent.present?
-      # @sents = @sents.joins(:indent).where("indents.agent_id = ?", params[:agent_id])
-    end
-
     if params[:order_name].present?
-      order = Order.find_by_name(params[:order_name])
-      @sents = @sents.where(owner_id: order.id)
+      order = Order.where("name like '%#{params[:order_name]}%'").first
+      @sents =  @sents.where(owner_id: order.id) if order.present?
       #@sents = @sents.joins(:indent).where("indents.name = ?", params[:indent_name].to_s)
     end
+
+    if params[:agent_id].present?
+      # indent = Indent.find_by(agent_id: params[:agent_id])
+      orders = Order.where(agent_id: params[:agent_id])
+      if orders.present?
+        @sents = @sents.where(owner_id: orders.map(&:id))
+      else
+        @sents = []
+      end
+    end
+    @sents = @sents.page(params[:page])
+    
     @sent = Sent.new
   end
 

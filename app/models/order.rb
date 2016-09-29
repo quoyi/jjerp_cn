@@ -95,8 +95,8 @@ class Order < ActiveRecord::Base
           else
             "#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
           end
-
-    self.name =  current_year + tmp + "-#{current_month}-" + (agent_orders_count+1).to_s
+    self.index = agent_orders_count + 1
+    self.name =  current_year + tmp + "-#{current_month}-" + self.index.to_s
   end
 
   def order_money_to_int
