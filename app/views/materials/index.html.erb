@@ -2,7 +2,7 @@
   <div class="content-box-header panel-heading">
     <div class="panel-title" style="margin-bottom: 2px; padding-bottom: 0px;">
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 板料 <small>列表</small> </h2>
-      <%#= link_to '查看统计', '#', class: "btn btn-primary", data: {toggle: 'modal', target: '#showMaterialStat'}, style:'margin-left: 20px; margin-buttom: 0px; color: #fff;' %>
+      <%= link_to '查看统计', '#', class: "btn btn-primary", data: {toggle: 'modal', target: '#showMaterialStat'}, style:'margin-left: 20px; margin-buttom: 0px; color: #fff;' %>
       <div class="pull-right panel-options">
         <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addMaterials'} %>
       </div>
@@ -73,8 +73,8 @@
           <table class="table table-hover table-striped table-bordered table-condensed text-center order-show-table">
             <tr>
               <th>排名</th>
-              <th>名称</th>
-              <th>数量</th>
+              <th>板料名称</th>
+              <th>使用数量</th>
             </tr>
             
             <% @materials_top_arr.each_with_index do |m,i| %>

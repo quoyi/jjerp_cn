@@ -68,6 +68,15 @@ class AgentsController < ApplicationController
     redirect_to agents_url, notice: '代理商已删除。'
   end
 
+  # ajax 搜索指定代理商
+  def search
+    # binding.pry
+    @agents = Agent.where(province: params[:province])
+    @agents = @agents.where(city: params[:city]) unless params[:city].blank?
+    @agents = @agents.where(district: params[:district]) unless params[:district].blank?
+    render json: @agents
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_agent

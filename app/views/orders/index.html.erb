@@ -37,13 +37,13 @@
               <div class="row">
                 <label class="col-sm-2 text-right" style="margin-top: 5px;">地区</label>
                 <div class="col-sm-5 city-group">
-                  <%= select_tag(:province, options_for_select(ChinaCity.list.collect {|p| [ p[0], p[1] ] }, @province), { :prompt => "--省份--" , :class => "city-select col-sm-4"}) %>
-                  <%= select_tag(:city, options_for_select(ChinaCity.list(@province).collect {|p| [ p[0], p[1] ] }, @city), { :prompt => "--城市--",:class => "city-select col-sm-4" }) %>
-                  <%= select_tag(:district, options_for_select(ChinaCity.list(@city).collect {|p| [ p[0], p[1] ] }, @district), { :prompt => "--地区--",:class => "city-select col-sm-4" }) %>
+                  <%= select_tag(:province, options_for_select(ChinaCity.list.collect {|p| [ p[0], p[1] ] }, @province), { :prompt => "--省份--" , :class => "city-select col-sm-4 orders-search-province", required: true}) %>
+                  <%= select_tag(:city, options_for_select(ChinaCity.list(@province).collect {|p| [ p[0], p[1] ] }, @city), { :prompt => "--城市--",:class => "city-select col-sm-4 orders-search-city" }) %>
+                  <%= select_tag(:district, options_for_select(ChinaCity.list(@city).collect {|p| [ p[0], p[1] ] }, @district), { :prompt => "--地区--",:class => "city-select col-sm-4 orders-search-district" }) %>
                 </div>
                 <label class="col-sm-2 text-right" style="margin-top: 5px;">店面名称</label>
                 <!-- <input type="hidden" id="remoteDataAgent" name='agent_id' data-id="<%#=@agent_search.try(:id)%>" data-name="<%#=@agent_search.try(:full_name)%>" class="select2 ajax"/> -->
-                <%= select_tag :agent_id, options_from_collection_for_select(@agents, :id, :full_name, @agent_id), include_blank: '请选择', value: '', class: 'col-sm-3' %>
+                <%= select_tag :agent_id, options_from_collection_for_select(@agents, :id, :full_name, @agent_id), include_blank: '请选择', value: '', class: 'col-sm-3 orders-search-agent' %>
               </div>
             </div>
             <div class="col-sm-2 text-center" style="padding: 13px 0;">

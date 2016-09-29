@@ -5,6 +5,7 @@ class SentListsController < ApplicationController
   # GET /sent_lists.json
   def index
     @sent_lists = SentList.all.order(created_at: :desc)
+    @sent_lists = @sent_lists.page(params[:page])
   end
 
   # GET /sent_lists/1

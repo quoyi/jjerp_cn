@@ -7,6 +7,7 @@ class ExpendsController < ApplicationController
   def index
     @expend = Expend.new(username: current_user.name, expend_at: Time.now)
     @expends = Expend.where(deleted: false)
+    @expends = @expends.page(params[:page])
   end
 
   # GET /expends/1

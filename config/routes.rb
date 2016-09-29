@@ -27,7 +27,11 @@ Rails.application.routes.draw do
   resources :tasks
   resources :units
   resources :supplies
-  resources :agents
+  resources :agents do
+    collection do
+      get :search
+    end
+  end
   resources :unit_categories
   resources :user_categories
   resources :order_categories
