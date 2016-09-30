@@ -19,7 +19,8 @@
       <div class="text-center"><h2>欢迎登陆，管理员！</h2></div>
       <% elsif current_user.role?("employee") %>
         <% searh_order = Order.where("created_at >= ? AND created_at <= ?", Date.today.beginning_of_month, Date.today.end_of_month).order(created_at: :asc).first %>
-        <%= form_tag package_order_path(searh_order), class: 'form-inline', method: 'get' do %>
+<% if searh_order.present? %>        
+<%= form_tag package_order_path(searh_order), class: 'form-inline', method: 'get' do %>
         <div class="panel panel-info">
           <div class="panel-heading">
             <span>查询订单</span>
@@ -33,6 +34,7 @@
             </div>
           </div>
         </div>
+	<% end %>
         <% end %>
       <% else %>
       <!-- <div class="col-md-8" style="padding: 0 5px;">
