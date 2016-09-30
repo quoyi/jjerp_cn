@@ -119,21 +119,31 @@
             </ul>
         </li>
         <% end %>
-        <% if current_user.permission?("IndentsController", "unpack") ||
-        current_user.permission?("OrdersController", "producing")
+        <% if current_user.permission?("OrdersController", "unpack") ||
+        current_user.permission?("OrdersController", "package") ||
+        current_user.permission?("OrdersController", "producing") || 
+        current_user.permission?("OrdersController", "packaged")
         %>
             <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name) && ['unpack', 'producing', 'package', 'packaged'].include?(action_name) %>">
                 <a href="#">
                     <i class="fa fa-wrench"></i> 生产任务 <span class="caret pull-right"></span>
                 </a>
                 <ul>
+                    <% if current_user.permission?("OrdersController", "producing") %>
                     <li class='<%="#{'active' if controller_name == 'orders' and action_name == 'producing'}" %>'><a href="/orders/producing">生产中</a></li>
+                    <% end %>
+                    <% if current_user.permission?("OrdersController", "unpack") || 
+                          current_user.permission?("OrdersController", "package") %>
                     <li class='<%="#{'active' if controller_name == 'orders' and ['unpack', 'package'].include?(action_name) }" %>'><a href="/orders/unpack">未打包</a></li>
+                    <% end %>
+                    <% if current_user.permission?("OrdersController", "packaged") %>
                     <li class='<%="#{'active' if controller_name == 'orders' and ['packaged'].include?(action_name) }" %>'><a href="/orders/packaged">已打包</a></li>
+                    <% end %>
                 </ul>
             </li>
         <% end %>
-        <% if current_user.permission?("IndentsController", "not_sent") ||
+        <% if current_user.permission?("OrdersController", "not_sent") ||
+        current_user.permission?("SentListsController", "index") ||
         current_user.permission?("OrdersController", "index")
         %>
             <li  class="submenu <%= 'open' if ('orders' == controller_name && 'not_sent' == action_name) || ('sents' == controller_name && 'index' == action_name || 'sent_lists' == controller_name && ['index', 'show', 'edit'].include?(action_name) ) %>">
@@ -141,9 +151,15 @@
                     <i class="fa fa-truck"></i> 物流发货 <span class="caret pull-right"></span>
                 </a>
                 <ul>
+                    <% if current_user.permission?("OrdersController", "not_sent") %>
                     <li class='<%="#{'active' if controller_name == 'orders' and action_name == 'not_sent'}" %>'><a href="/orders/not_sent">待发货</a></li>
+                    <% end %>
+                    <% if current_user.permission?("SentListsController", "index") %>
                     <li class='<%="#{'active' if controller_name == 'sent_lists' and ['index', 'show', 'edit'].include?(action_name)}" %>'><a href="/sent_lists">发货清单</a></li>
+                    <% end %>
+                    <% if current_user.permission?("SentsController", "index") %>
                     <li class='<%="#{'active' if controller_name == 'sents' and action_name == 'index'}" %>'><a href="/sents">发货/确认</a></li>
+                    <% end %>
                 </ul>
             </li>
         <%end%>
