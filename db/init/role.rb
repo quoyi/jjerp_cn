@@ -1,3 +1,29 @@
+PartCategory.create(id: 1, parent_id: 0, name:'拉篮')
+PartCategory.create(id: 2, parent_id: 0, name:'滑轨')
+PartCategory.create(id: 3, parent_id: 0, name:'角线')
+
+OrderCategory.create(:name => "橱柜")
+OrderCategory.create(:name => "衣柜")
+OrderCategory.create(:name => "门")
+OrderCategory.create(:name => "配件")
+OrderCategory.create(:name => "其他")
+
+UnitCategory.create(:name => "板料")
+UnitCategory.create(:name => "配件")
+UnitCategory.create(:name => "工艺")
+
+Uom.create(name: '平方')
+Uom.create(name: '个')
+Uom.create(name: '次')
+Uom.create(name: '米')
+
+UserCategory.create(id: 1, serial: 'UC0001', name: '普通用户', nick: 'normal', visible: true)
+UserCategory.create(id: 2, serial: 'UC0002', name: '企业用户', nick: 'employe', visible: true)
+UserCategory.create(id: 3, serial: 'UC0003', name: '代理商', nick: 'agent', visible: true)
+UserCategory.create(id: 4, serial: 'UC0004', name: '供应商', nick: 'supply', visible: true)
+UserCategory.create(id: 5, serial: 'UC0005', name: '管理员', nick: 'admin', visible: true)
+UserCategory.create(id: 6, serial: 'UC0006', name: '超级管理员', nick: 'super', visible: false)
+puts 'created UserCategory success ! '
 ####################################### 角色 #######################################
 Role.find_or_create_by!(name: '超级管理员', nick: 'super_admin')
 permissions = Role.permissions
@@ -76,3 +102,15 @@ permissions.each_pair do |k, v|
     delivery.role_permissions.create(klass: k, actions: 'index,show,producing')
   end
 end
+
+user = User.find_or_create_by!(email: Rails.application.secrets.admin_email) do |user|
+  user.name = Rails.application.secrets.admin_name
+  user.password = Rails.application.secrets.admin_password
+  user.password_confirmation = Rails.application.secrets.admin_password
+  super_admin = Role.find_or_create_by!(nick: 'super_admin', name: '超级管理员')
+  financial = Role.find_or_create_by!(nick: 'financial', name: '财务')
+  user.add_role!(super_admin.nick)
+  user.add_role!(financial.nick)
+end
+puts 'created User success !'
+

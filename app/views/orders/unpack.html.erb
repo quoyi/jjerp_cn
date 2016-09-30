@@ -9,6 +9,7 @@
   <div class="content-box-large box-with-header">
     <div class="row content-table">
       <% searh_order = Order.where("created_at >= ? AND created_at <= ?", Date.today.beginning_of_month, Date.today.end_of_month).order(created_at: :asc).first %>
+      <% if searh_order.present? %>
       <%= form_tag package_order_path(searh_order), class: 'form-inline', method: 'get' do %>
       <div class="panel panel-info">
         <div class="panel-heading">
@@ -23,6 +24,7 @@
           </div>
         </div>
       </div>
+      <% end %>
       <% end %>
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>

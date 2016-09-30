@@ -11,7 +11,7 @@ class IncomesController < ApplicationController
       @incomes =@incomes.where(order_id: indent.orders.pluck(:id))
     end
     @incomes = @incomes.page(params[:page])
-    @income = Income.new(bank_id: Bank.find_by(is_default: 1).id, username: current_user.name, income_at: Time.now)
+    @income = Income.new(bank_id: Bank.find_by(is_default: 1).try(:id), username: current_user.name, income_at: Time.now)
   end
 
   # GET /incomes/1

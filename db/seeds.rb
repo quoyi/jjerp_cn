@@ -8,7 +8,7 @@
 ####################################### 用户种类 #######################################
 #require "#{Rails.root}/db/init/arear"
 require "#{Rails.root}/db/init/role"
-require "#{Rails.root}/db/init/basic"
+#require "#{Rails.root}/db/init/basic"
 
 
 
