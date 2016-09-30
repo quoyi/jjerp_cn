@@ -6,10 +6,10 @@
         <%= f.label '编号' %>
       </td>
       <td>
-        <%= f.text_field :full_name, required: true %>
+        <%= f.text_field :name,value: "GY"+(Supply.count+1).to_s.rjust(4,"0"),readOnly: true, required: true %>
       </td>
       <td>
-        <%= f.label '名称' %>
+	<label><span class="require">*</span>名称</label>
       </td>
       <td>
         <%= f.text_field :full_name, required: true %>
@@ -20,13 +20,13 @@
         <%= f.label '电话' %>
       </td>
       <td>
-        <%= f.text_field :mobile, required: true %>
+        <%= f.text_field :mobile %>
       </td>
       <td>
         <%= f.label '账户' %>
       </td>
       <td>
-        <%= f.text_field :bank_account, required: true %>
+        <%= f.text_field :bank_account %>
       </td>
     </tr>
     <tr>
