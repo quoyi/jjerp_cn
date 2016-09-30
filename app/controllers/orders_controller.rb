@@ -429,7 +429,7 @@ class OrdersController < ApplicationController
       end
     end
     @orders = @orders.reload#.where(status: Order.statuses[:producing])
-    @orders = @orders.page(params[:page])
+    # @orders = @orders.page(params[:page])
   end
 
   # 已打包

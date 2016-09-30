@@ -3,22 +3,29 @@
   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
   <h4 class="modal-title" id="<%= @craft_category.new_record? ? 'addCraftCategoryLabel' : 'editCraftCategoryLabel' %>"> 工艺类型 <small><%= @craft_category.new_record? ? '新建' : '编辑' %></small></h4>
 </div>
-<div class="modal-body" style="padding-bottom: 15px;">
-    <div class="form-group">
-      <label for="craft_category_full_name" class="col-sm-2 text-right" style="margin: 5px 7px;padding: 1px;"><span class="require">*</span>名称</label>
-<div class="col-sm-9">      <%= f.text_field :full_name, class: 'form-control', required: true, placeholder: '请填写工艺名称' %>
-    </div></div>
-    <div class="form-group">
-      <label for="craft_category_uom" class="col-sm-2 text-right" style="margin: 5px 7px;padding: 1px;"><span class="require">*</span>单位</label>
-<div class="col-sm-9">      <%= f.collection_select :uom, Uom.where(deleted: false), :name, :name, {include_blank: '请选择'}, {class: 'form-control'} %></div>
+<div class="modal-body">
+  <div class="form-group">
+    <label for="craft_category_full_name" class="col-sm-3 control-label"><span class="require">*</span>名称</label>
+    <div class="col-sm-9">
+      <%= f.text_field :full_name, class: 'form-control', required: true, placeholder: '请填写工艺名称' %>
     </div>
-    <div class="form-group">
-      <label for="craft_category_price" class="col-sm-2 text-right" style="margin: 5px 7px;padding: 1px;"><span class="require">*</span>价格</label>
-<div class="col-sm-9">      <%= f.number_field :price, min: 0, step: 0.01, value: 1, class: 'form-control', required: true %></div>
+  </div>
+  <div class="form-group">
+    <label for="craft_category_uom" class="col-sm-3 control-label"><span class="require">*</span>单位</label>
+    <div class="col-sm-9">
+      <%= f.collection_select :uom, Uom.where(deleted: false), :name, :name, {include_blank: '请选择'}, {class: 'form-control'} %>
     </div>
-    <div class="form-group">
-      <label for="craft_category_note" class="col-sm-2 text-right" style="margin: 5px 7px;padding: 1px;">备注</label>
-<div class="col-sm-9">      <%= f.text_field :note, class: 'form-control', placeholder: '请填写备注信息' %></div>
+  </div>
+  <div class="form-group">
+    <label for="craft_category_price" class="col-sm-3 control-label"><span class="require">*</span>价格</label>
+    <div class="col-sm-9">
+      <%= f.number_field :price, min: 0, step: 0.01, value: 1, class: 'form-control', required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label '备注', for: 'craft_category_note', class: 'col-sm-3 control-label' %>
+    <div class="col-sm-9">
+      <%= f.text_field :note, class: 'form-control', placeholder: '请填写备注信息' %>
     </div>
 </div>
 <div class="modal-footer">
