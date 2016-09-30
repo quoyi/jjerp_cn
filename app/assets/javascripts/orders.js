@@ -16,6 +16,7 @@ $(function() {
       dataType: "json",
       data: condition,
       success: function(data){
+        // console.log(data);
         if(data != null){
           var options = "<option value=''>请选择</option>";
           for (var i = 0; i <= data.length - 1; i++) {
