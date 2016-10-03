@@ -41,7 +41,7 @@ class IndentsController < ApplicationController
     @order = Order.new
     @order_offers = @indent.offers
     @orders = Order.where(indent:@indent).order(created_at: :desc)
-    @income = Income.new(bank_id: Bank.find_by(is_default: 1).try(:&id), username: current_user.name, income_at: Time.now)
+    @income = Income.new(bank_id: Bank.find_by(is_default: 1).try(:id), username: current_user.name, income_at: Time.now)
   end
 
   # GET /indents/new
