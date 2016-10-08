@@ -79,17 +79,17 @@ function getAgentInfo(obj){
             <% init_texture_id = MaterialCategory.find_by(name: '颗粒板').try(:id) %>
             <% init_color_id = MaterialCategory.find_by(name: '国色天香').try(:id) %>
             <% init_price = Material.find_by(ply: init_ply_id, texture: init_texture_id, color: init_color_id).try(:price) %>
-            <div class="col-sm-2 text-center indent-orders-title">
+            <div class="col-sm-1 text-center indent-orders-title">
               <% if of.new_record? %>
               <h4>子订单</h4>
               <% else %>
-              <%=order_form.text_field :name, value: of.name, required: true %>
+              <%=order_form.text_field :name, value: of.name, required: true, style: 'width: 80%' %>
               <% end %>
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-10">
               <div class="row">
                 <label class="col-sm-1 text-right" style="margin-top: 8px;"><span class="require">*</span>类型</label>
-                <%= order_form.collection_select :order_category_id, OrderCategory.all, :id, :name, {include_blank: '请选择', selected: of.new_record? ? "" : of.order_category_id}, {required: true, class:'col-sm-1'} %>
+                <%= order_form.collection_select :order_category_id, OrderCategory.all, :id, :name, {include_blank: '请选择', selected: of.new_record? ? "" : of.order_category_id}, {required: true, class:'col-sm-2'} %>
                 <%= order_form.collection_select :oftype, Order.oftype, :last, :first, {}, {class: 'col-sm-1'} %>
                 <!-- <div class="col-sm-2">
                   <label data-toggle="tooltip" title="暂不可用"><span class="require">*</span>数量</label>
