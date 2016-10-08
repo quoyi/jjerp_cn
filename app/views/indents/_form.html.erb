@@ -80,8 +80,11 @@ function getAgentInfo(obj){
             <% init_color_id = MaterialCategory.find_by(name: '国色天香').try(:id) %>
             <% init_price = Material.find_by(ply: init_ply_id, texture: init_texture_id, color: init_color_id).try(:price) %>
             <div class="col-sm-1 text-center indent-orders-title">
+              <% if of.new_record? %>
               <h4>子订单</h4>
-              <p><%= of.name unless of.new_record?%></p>
+              <% else %>
+              <p><%=order_form.text_field :name, value: of.name %></p>
+              <% end %>
             </div>
             <div class="col-sm-10">
               <div class="row">
