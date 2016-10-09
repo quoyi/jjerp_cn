@@ -144,9 +144,10 @@ class OrdersController < ApplicationController
       @order.update!(order_params)
       # 自定义报价时，查找或创建板料，防止找不到板料
       @order.units.where(is_custom: true).each do |unit|
-        Material.find_or_create_by(ply: unit.ply, texture: unit.texture, color: unit.color,
-                                   full_name: "#{unit.ply_name}-#{unit.texture_name}-#{unit.color_name}",
-                                   buy: 0, price: unit.price)
+        m = Material.find_or_create_by(ply: unit.ply, texture: unit.texture, color: unit.color)
+        m.full_name = "#{unit.ply_name}-#{unit.texture_name}-#{unit.color_name}" unless m.full_name.present?
+        m.buy = 0 unless m.buy.present?
+        m.price = unit.price unless m.price.present?
       end
 
       # 更新子订单金额、代理商余额、收入记录
@@ -241,7 +242,7 @@ class OrdersController < ApplicationController
       indent_arrear = indent.orders.pluck(:arrear).sum
       # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
       indent.update!(amount: indent_amount, arrear: indent_arrear)
-
+      binding.pry
       # 生成报价单
       create_offer(@order)
       # 修改子订单、总订单的状态
