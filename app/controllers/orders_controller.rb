@@ -242,7 +242,7 @@ class OrdersController < ApplicationController
       indent_arrear = indent.orders.pluck(:arrear).sum
       # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
       indent.update!(amount: indent_amount, arrear: indent_arrear)
-      binding.pry
+      
       # 生成报价单
       create_offer(@order)
       # 修改子订单、总订单的状态

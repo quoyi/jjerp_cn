@@ -7,7 +7,7 @@ class CreateCrafts < ActiveRecord::Migration
       t.string :full_name, index: true, default: '' # 名称
       t.string :uom # 单位
       t.decimal :price, precision: 8, scale: 2, null: false, default: 0 # 单价
-      t.integer :number, null: false, default: 1 # 数量
+      t.decimal :number, null: false, precision: 8, scale: 2, default: 1 # 数量
       t.string :note # 备注
       t.boolean :status # 状态
       t.boolean :deleted, default: false # 标记删除

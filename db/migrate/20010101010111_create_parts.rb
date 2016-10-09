@@ -9,7 +9,7 @@ class CreateParts < ActiveRecord::Migration
       t.decimal :price, precision: 8, scale: 2 # 售价
       t.integer :store, null: false, default: 1 # 库存
       t.string :uom # 单位
-      t.integer :number, null: false, default: 1 # 数量
+      t.decimal :number, null: false, precision: 8, scale: 2, default: 1 # 数量
       t.string :brand # 品牌
       t.string :note # 备注
       t.references :supply, null: false, index: true # 供货商
