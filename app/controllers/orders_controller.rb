@@ -42,7 +42,7 @@ class OrdersController < ApplicationController
     end
     search << ChinaCity.get(@district)
     # @district 不为空时，才需要过滤
-    @agents = @agents.wehre(district: @district) unless @district.blank?
+    @agents = @agents.where(district: @district) unless @district.blank?
 
     @orders = @orders.where("delivery_address like :keyword", keyword: "%#{search}%")
 
