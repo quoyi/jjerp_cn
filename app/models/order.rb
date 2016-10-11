@@ -12,7 +12,7 @@ class Order < ActiveRecord::Base
   has_one :sent, as: :owner, dependent: :destroy #一个子订单只有一个发货信息
   # 发货时间需在十天以后
   # validate :validate_require_time
-  validates_uniqueness_of :name
+  #validates_uniqueness_of :name
   before_create :generate_order_code
   before_save :order_money_to_int
   # after_update :update_indent_and_agent # 更新子订单时，同步更新总订单、代理商金额
@@ -85,7 +85,12 @@ class Order < ActiveRecord::Base
     self.delivery_address = self.agent.full_address if self.delivery_address.blank?
     current_year = Time.now.year.to_s
     current_month = Time.now.mon.to_s
-    agent_orders_count = Order.where("name like '#{current_year}%-#{current_month}-%'").count
+    agent_order = Order.where("name like '#{current_year}%-#{current_month}-%'").last
+    if agent_order.present?
+      agent_orders_count = agent_order.name.split("-").last.to_i
+    else
+      agent_orders_count = 0
+    end
     temp_hash = {'1': 'w', '2': 'y', '3': 'm', '4': 'p', '5': 'q'}
 
     tmp = case Order.oftypes[oftype]
