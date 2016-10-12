@@ -1,6 +1,9 @@
 log/*
 tmp/*
 public/excels/*
+public/assets/*
+public/images/*
 config/database.yml
+config/secrets.yml
 *.lock
 !.gitignore
