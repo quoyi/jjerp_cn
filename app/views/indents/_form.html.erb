@@ -111,7 +111,8 @@ function getAgentInfo(obj){
             </div>
             <div class="col-sm-1 text-center indent-orders-delete">
               <!-- 位置不对 -->
-              <%= order_form.link_to_remove '删除', class: 'btn btn-info btn-lg' %>
+              <%= order_form.link_to_remove '删除', class: 'btn btn-info btn-lg hidden' %>
+              <%= link_to "删除", 'javascript:void(0);', class: 'btn btn-info btn-lg', onclick: 'delete_order_from_nested_form(this)' %>
             </div>
           </div>
           <hr style="margin: 5px;">
@@ -129,3 +130,19 @@ function getAgentInfo(obj){
   <%= f.submit '提交', class: 'btn btn-primary' %>
 </div>
 <% end %>
+<script type="text/javascript">
+function delete_order_from_nested_form(obj){
+  var order_fields = $(obj).parent().siblings(".col-sm-10");
+  var required_order_fields = order_fields.find("[required='required']");
+  // 动态删除子订单前，将必填项的值设为1
+  required_order_fields.each(function(){
+    var element = $(this);
+    if(element.is("select")){
+      element.children().last().attr("selected", "selected");
+    }else{
+      element.val("1");
+    }
+  });
+  $(obj).prev().click();
+}
+</script>

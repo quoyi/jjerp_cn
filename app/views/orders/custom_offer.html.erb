@@ -59,7 +59,8 @@
                 </div>
               </div>
               <div class="col-sm-1 text-center" style="margin: 30px 0;">
-                <%= unit_form.link_to_remove '删除', class:'btn btn-info' %>
+                <%= unit_form.link_to_remove '删除', class:'btn btn-info hidden' %>
+                <%= link_to "删除", "javascript:void(0);", class: 'btn btn-info', onclick: 'delete_separate_from_nested_form(this)' %>
               </div>
             </div>
             <hr style="margin: 5px 0;" />
@@ -104,7 +105,8 @@
                   </div>
                 </div>
                 <div class="col-sm-1 text-center" style="margin: 14px 0;">
-                  <%= part_form.link_to_remove '删除', class:'btn btn-info' %>
+                  <%= part_form.link_to_remove '删除', class:'btn btn-info hidden' %>
+                  <%= link_to "删除", "javascript:void(0);", class: 'btn btn-info', onclick: 'delete_separate_from_nested_form(this)' %>
                 </div>
               </div>
               <hr style="margin: 5px 0;" />
@@ -132,7 +134,7 @@
                     <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>名称</label>
                     <%= craft_form.collection_select :craft_category_id, CraftCategory.where(deleted: false), :id, :full_name, {include_blank: '请选择'}, {class: 'col-sm-3', required: true, onchange: 'setCraft(this)'}%>
                     <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单位</label>
-                    <%= craft_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {include_blank: '请选择'}, {class: 'col-sm-1 order_craft_uom'} %>
+                    <%= craft_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {include_blank: '请选择'}, {class: 'col-sm-1 order_craft_uom', required: true} %>
                     <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单价</label>
                     <%= craft_form.number_field :price, min: 0, step: 0.01, value: cf.new_record? ? 0 : cf.price, required: true, class: 'col-sm-1 order_craft_price' %>
                     <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>数量</label>
@@ -144,7 +146,8 @@
                   </div>
                 </div>
                 <div class="col-sm-1 text-center" style="margin: 12px 0;">
-                  <%= craft_form.link_to_remove '删除', class:'btn btn-info' %>
+                  <%= craft_form.link_to_remove '删除', class:'btn btn-info hidden' %>
+                  <%= link_to "删除", "javascript:void(0);", class: 'btn btn-info', onclick: 'delete_separate_from_nested_form(this)' %>
                 </div>
               </div>
               <hr style="margin: 5px 0;" />
@@ -167,3 +170,21 @@
 <%= render '/materials/new' %>
 <%= render '/part_categories/new' %>
 <%= render '/craft_categories/new' %>
+
+<script type="text/javascript">
+function delete_separate_from_nested_form(obj){
+  var order_fields = $(obj).parent().siblings(".col-sm-11");
+  var required_order_fields = order_fields.find("[required='required']");
+  console.log(required_order_fields);
+  // 动态删除子订单前，将必填项的值设为1
+  required_order_fields.each(function(){
+    var element = $(this);
+    if(element.is("select")){
+      element.children().last().attr("selected", "selected");
+    }else{
+      element.val("1");
+    }
+  });
+  $(obj).prev().click();
+}
+</script>
