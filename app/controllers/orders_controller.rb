@@ -17,13 +17,13 @@ class OrdersController < ApplicationController
     @end_at = Date.today.end_of_month.to_s
     
     @order_category_id = ''
-    search = ''
+    # search = ''
     if params[:province].present?
       @province = params[:province]
     else
       @province = '420000'
     end
-    search << ChinaCity.get(@province)
+    # search << ChinaCity.get(@province)
     @agents = Agent.where(province: @province)
 
     if params[:city].present?
@@ -31,7 +31,7 @@ class OrdersController < ApplicationController
     else
       @city = ''
     end
-    search << ChinaCity.get(@city)
+    # search << ChinaCity.get(@city)
     # @city 不为空时，才需要过滤
     @agents = @agents.where(city: @city) unless @city.blank?
 
@@ -40,11 +40,12 @@ class OrdersController < ApplicationController
     else
       @district = ''
     end
-    search << ChinaCity.get(@district)
+    # search << ChinaCity.get(@district)
     # @district 不为空时，才需要过滤
     @agents = @agents.where(district: @district) unless @district.blank?
+    @orders = @orders.where(agent_id: @agents)
 
-    @orders = @orders.where("delivery_address like :keyword", keyword: "%#{search}%")
+    # @orders = @orders.where("delivery_address like :keyword", keyword: "%#{search}%")
 
     # 判断搜索条件 起始时间 -- 结束时间
     if params[:start_at].present? && params[:end_at].present?
@@ -248,7 +249,6 @@ class OrdersController < ApplicationController
       # 修改子订单、总订单的状态
       update_order_status(@order.reload)
     end
-
     # 子订单列表页面更新后，应该返回到列表页面
     redirect_to :back, notice: '子订单编辑成功！'
   end
