@@ -26,7 +26,7 @@
             <% if !uf.new_record? && !uf.is_custom %>
             <% else %>
             <% if uf.new_record? %><!-- 自定义报价才填写这些字段 -->
-            <%= unit_form.hidden_field :full_name, value: '自定义' %>
+            <%#= unit_form.hidden_field :full_name, value: '自定义' %>
             <%= unit_form.hidden_field :size, value: '自定义' %>
             <%= unit_form.hidden_field :is_custom, value: true %>
             <% end %>
@@ -36,9 +36,9 @@
                   <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>名称</label>
                   <%= unit_form.text_field :full_name, value: uf.new_record? ? @order.note : uf.full_name, class:'col-sm-2', required: true, placeholder: '请填写部件名称' %>
                   <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>板料</label>
-                  <%= unit_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {selected: @order.ply}, {class: 'material-ply col-sm-1', onchange: 'getMaterialPrice(this)'} %>
-                  <%= unit_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]),:id, :name, {selected: @order.texture}, {class: 'material-texture col-sm-2', onchange: 'getMaterialPrice(this)'} %>
-                  <%= unit_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]),:id, :name, {selected: @order.color}, {class: 'material-color col-sm-2', onchange: 'getMaterialPrice(this)'} %>
+                  <%= unit_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {selected: uf.new_record? ? MaterialCategory.where(oftype: 0, name: '18mm').try(:id) : uf.ply}, {class: 'material-ply col-sm-1', onchange: 'getMaterialPrice(this)'} %>
+                  <%= unit_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]),:id, :name, {selected: uf.new_record? ? MaterialCategory.where(oftype: 1, name: '颗粒板').try(:id) : uf.texture}, {class: 'material-texture col-sm-2', onchange: 'getMaterialPrice(this)'} %>
+                  <%= unit_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]),:id, :name, {selected: uf.new_record? ? MaterialCategory.where(oftype: 2, name: '国色天香').try(:id) : uf.color}, {class: 'material-color col-sm-2', onchange: 'getMaterialPrice(this)'} %>
                   <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单位</label>
                   <%= unit_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {include_blank: '请选择', selected: '平方'}, {required: true, class: 'material-uom col-sm-2'} %>
                 </div>
@@ -172,8 +172,8 @@
 <%= render '/craft_categories/new' %>
 
 <script type="text/javascript">
-function delete_separate_from_nested_form(obj){
-  var order_fields = $(obj).parent().siblings(".col-sm-11");
+function delete_separate_from_nested_form(target){
+  var order_fields = $(target).parent().siblings(".col-sm-11");
   var required_order_fields = order_fields.find("[required='required']");
   console.log(required_order_fields);
   // 动态删除子订单前，将必填项的值设为1
@@ -185,6 +185,6 @@ function delete_separate_from_nested_form(obj){
       element.val("1");
     }
   });
-  $(obj).prev().click();
+  $(target).prev().click();
 }
 </script>

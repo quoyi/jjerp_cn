@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(version: 20160929035615) do
     t.string   "full_name",         limit: 255,                         default: ""
     t.string   "uom",               limit: 255
     t.decimal  "price",                         precision: 8, scale: 2, default: 0.0,   null: false
-    t.integer  "number",            limit: 4,                           default: 1,     null: false
+    t.decimal  "number",                        precision: 8, scale: 2, default: 1.0,   null: false
     t.string   "note",              limit: 255
     t.boolean  "status"
     t.boolean  "deleted",                                               default: false
@@ -300,7 +300,7 @@ ActiveRecord::Schema.define(version: 20160929035615) do
     t.decimal  "price",                        precision: 8, scale: 2
     t.integer  "store",            limit: 4,                           default: 1,     null: false
     t.string   "uom",              limit: 255
-    t.integer  "number",           limit: 4,                           default: 1,     null: false
+    t.decimal  "number",                       precision: 8, scale: 2, default: 1.0,   null: false
     t.string   "brand",            limit: 255
     t.string   "note",             limit: 255
     t.integer  "supply_id",        limit: 4,                                           null: false

@@ -148,7 +148,9 @@ class OrdersController < ApplicationController
         m = Material.find_or_create_by(ply: unit.ply, texture: unit.texture, color: unit.color)
         m.full_name = "#{unit.ply_name}-#{unit.texture_name}-#{unit.color_name}" unless m.full_name.present?
         m.buy = 0 unless m.buy.present?
+        m.uom = Uom.first.try(:name) if Uom.count > 0
         m.price = unit.price unless m.price.present?
+        m.save!
       end
 
       # 更新子订单金额、代理商余额、收入记录
