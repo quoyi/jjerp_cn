@@ -4,6 +4,10 @@ $("[data-provide=datepicker]").datepicker({
   language: 'zh-CN',
   autoclose: true
 });
+// $(".indent_orders_name").click(function(){
+//   var order_name = $(this).text();
+//   $(this).replaceWith("<input type='text' name='indent[orders_attributes][0][name]' value='" + order_name + "' required='required' style='width: 90%;'/>");
+// });
 /**
 * 获取指定代理商信息
 * @param  {[type]} obj [description]
@@ -83,7 +87,9 @@ function getAgentInfo(obj){
               <% if of.new_record? %>
               <h4>子订单</h4>
               <% else %>
-              <%=order_form.text_field :name, value: of.name, required: true, style: 'width: 95%' %>
+              <h4 style="padding-top: 0px;">子订单</h4>
+              <p class="indent_orders_name"><%= of.name %></p>
+              <%#=order_form.text_field :name, value: of.name, required: true, style: 'width: 95%' %>
               <% end %>
             </div>
             <div class="col-sm-10">

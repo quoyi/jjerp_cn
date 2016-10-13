@@ -82,7 +82,7 @@ class Order < ActiveRecord::Base
 
   def generate_order_code
     self.agent_id = self.indent.agent_id
-    self.delivery_address = self.agent.delivery_address if self.delivery_address.blank?
+    self.delivery_address = self.indent.address || self.agent.delivery_address
     current_year = Time.now.year.to_s
     current_month = Time.now.mon.to_s
     agent_order = Order.where("name like '#{current_year}%-#{current_month}-%'").last

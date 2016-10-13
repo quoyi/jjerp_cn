@@ -20,10 +20,10 @@ Role.register_permission class: 'AgentsController',
   name: '代理商',
   actions: {
     '新建' => [:new, :create],
-    '列表' => [:index, :search],
+    '列表' => [:index],
     '修改' => [:edit, :update],
     '删除' => [:destroy],
-    '详细' => [:show, :search]
+    '详细' => [:show]
 }
 Role.register_permission class: 'SuppliesController',
   name: '供应商',
@@ -56,10 +56,10 @@ Role.register_permission class: 'PartCategoriesController',
   name: '配件类型',
   actions: {
     '新建' => [:new, :create],
-    '列表' => [:index, :find],
+    '列表' => [:index],
     '修改' => [:edit, :update],
     '删除' => [:destroy],
-    '详细' => [:show, :find]
+    '详细' => [:show]
 }
 
 Role.register_permission class: 'PartsController',

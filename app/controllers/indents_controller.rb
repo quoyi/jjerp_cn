@@ -105,8 +105,8 @@ class IndentsController < ApplicationController
       agent = @indent.agent
       agent.update!(arrear: agent.arrear - @indent.amount, 
                     history: agent.history - @indent.amount)
-      # 删除所有子订单
-      @indent.orders.destroy_all
+      # # 删除所有子订单
+      # @indent.orders.destroy_all
       @indent.destroy!
     end
     redirect_to indents_path, notice: '订单已删除。'

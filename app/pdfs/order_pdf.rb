@@ -27,19 +27,19 @@ class OrderPdf < Prawn::Document
       if i != 0
         start_new_page
       end
-      text "高端定制橱柜衣柜", :align => :center, :size => 20
-      text "编    号: #{@order.name}", :size => 14
-      text "代 理 商: #{@order.indent.agent.full_name}", :size => 14
-      text "终端客户: #{@order.indent.customer}", :size => 14
-      text "产    品: #{@order.order_category.try(:name)}", :size => 14
-      text "备    注: #{@order.note.truncate(12)}", size: 14
+      text "高端定制橱柜衣柜", :align => :center, :size => 20, styles: :bold
+      text "编    号: #{@order.name}", :size => 14, styles: :bold
+      text "代 理 商: #{@order.indent.agent.full_name}", :size => 14, styles: :bold
+      text "终端客户: #{@order.indent.customer}", :size => 14, styles: :bold
+      text "产    品: #{@order.order_category.try(:name)}", :size => 14, styles: :bold
+      text "备    注: #{@order.note.truncate(12)}", size: 14, styles: :bold
       text " ", size: 5
-      text "货  到: #{@order.delivery_address}", :size => 18
+      text "货  到: #{@order.delivery_address}", :size => 18, styles: :bold
       # 二维码
       # image "#{Rails.root}/app/assets/images/d2code.png", at: [2, cursor], width: 38, height: 38
       # 条形码
-      image "#{Rails.root}/public/images/#{@order.name}.png", width: 80, height: 20, position: :left, vposition: :bottom
-      text "共 #{@ids} 件  第#{@ids}-#{i+1}件", :size => 14, align: :right, valign: :bottom
+      image "#{Rails.root}/public/images/#{@order.name}.png", width: 120, height: 20, position: :left, vposition: :bottom
+      text "共#{@ids}件 第#{@ids}-#{i+1}件", :size => 14, align: :right, valign: :bottom
       
     end
   end

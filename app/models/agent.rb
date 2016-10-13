@@ -11,20 +11,19 @@ class Agent < ActiveRecord::Base
     if self.city.present?
       tmp_address = ""
       city_name = ChinaCity.get(city)
-      if city_name =~ /(自治州|单位)$/
+      if (city_name =~ /(自治州|单位)$/).present?
         if self.district.present?
           tmp_address = ChinaCity.get(district)
         else
           tmp_address = city_name
         end
-      elsif city_name =~ /(市辖区|县)$/
+      elsif (city_name =~ /(市辖区|县)$/).present?
         tmp_address = ChinaCity.get(province)
       end
-      tmp_address.gsub("地区", "")
+      tmp_address = city_name.gsub("地区", "")
     else
       tmp_address = ChinaCity.get(province)
     end
-    binding.pry
     tmp_address
     # [ChinaCity.get(self.province), ChinaCity.get(self.city), ChinaCity.get(self.district), self.town, self.address].join('')
   end
