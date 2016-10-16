@@ -139,8 +139,8 @@ function print_pages(obj) {
   } else { // 未打包 & 已打包 中只要存在数据，就可以批量打印
     // 弹出模态框，获取输入的数据
     var number = prompt("请输入标签总数：", "");
-    if(number == null || number == 0){
-      jsNoty("请输入标签总数！", "error");
+    if(isNaN(parseInt(number)) || number == null || number == 0 || number < 0){
+      jsNoty("请输入正确的标签总数！", "error");
       return false;
     }else{
       $("#order_label_size").val(number);
@@ -169,7 +169,8 @@ function print_pages(obj) {
  * @return {[type]}     [description]
  */
 function reprint(obj){
-  var order_id = $(obj).data("oid");
+  var order_id = $(obj).data("oid"); 
+
   $.ajax({
     url: '/orders/' + order_id + "/reprint.pdf",
     type: 'POST',
@@ -228,3 +229,12 @@ $(function() {
 //     alert("点击确定按钮");
 //   }
 // }
+
+function reprint_set_label_size(){
+  var number = prompt("请输入标签总数：", "");
+  if(isNaN(parseInt(number)) || number == null || number == 0 || number < 0){
+    jsNoty("请输入正确的标签总数！", "error");
+    return false;
+  }
+  $("#label_size").val(number);
+}

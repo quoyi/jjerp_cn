@@ -57,14 +57,14 @@ class ExpendsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_expend
-      @expend = Expend.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_expend
+    @expend = Expend.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def expend_params
-      params.require(:expend).permit(:name, :reason, :money, :username, :expend_at, :status,
-                                    :note, :bank_id, :deleted)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def expend_params
+    params.require(:expend).permit(:name, :reason, :money, :username, :expend_at, :status,
+                                   :note, :bank_id, :deleted)
+  end
 end

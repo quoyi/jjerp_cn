@@ -474,6 +474,7 @@ class OrdersController < ApplicationController
           # package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','))
           package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','))
           package.label_size = label_size
+          package.label_size = 1 if package.label_size == 0
           package.save!
           # 更新包装状态（已打印）
           Unit.where(id: unit_ids.compact.uniq).update_all(is_printed: true)
@@ -528,7 +529,7 @@ class OrdersController < ApplicationController
   # POST /orders/1/reprint
   def reprint
     @order = Order.find_by_id(params[:id])
-    label_size = @order.packages.map(&:label_size).sum
+    label_size = params[:label_size].to_i
     # （打印）标签属性设置
     if params[:length].present? && params[:width].present?
       @length = params[:length].to_i
@@ -548,7 +549,7 @@ class OrdersController < ApplicationController
       format.html {redirect_to package_order_path(@order)}
       format.pdf do
         # 打印尺寸毫米（长宽）
-        pdf = OrderPdf.new(@length, @width, label_size <= 0 ? 1 : label_size , @order.id)
+        pdf = OrderPdf.new(@length, @width, label_size , @order.id)
         send_data pdf.render, filename: "order_#{@order.id}.pdf",
           type: "application/pdf",
           disposition: "inline"

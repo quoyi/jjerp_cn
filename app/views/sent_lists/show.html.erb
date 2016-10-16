@@ -3,6 +3,7 @@
     <div class="panel-title">
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 发货清单 <small>详细</small> </h2>
       <div class="pull-right panel-options">
+        <%= link_to '下载', download_sent_list_path(@sent_list, format: :csv), class: 'btn btn-danger' %>
         <%= link_to '返回', :back, class: 'btn btn-info', data: {toggle:'tooltip'}, title: '返回发货清单列表' %>
       </div>
     </div>
@@ -12,7 +13,7 @@
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
           <tr>
-            <td colspan="13" class="text-left"><%= @sent_list.name %>&nbsp;&nbsp;发货清单</td>
+            <td colspan="12" class="text-left"><%= @sent_list.name %>&nbsp;&nbsp;发货清单</td>
           </tr>
           <tr>
             <th>序号</th>
@@ -27,11 +28,10 @@
             <th>合计</th>
             <th>代收</th>
             <th>物流名称</th>
-            <th>备注</th>
           </tr>
         </thead>
         <tbody>
-          <% @sent_list.sents.each_with_index do |sent, index| %>
+<!--           <% @sent_list.sents.each_with_index do |sent, index| %>
           <tr>
             <td><%= index + 1 %></td>
             <td><%= sent.area %></td>
@@ -50,6 +50,40 @@
           <% end %>
           <tr>
             <td colspan="13" class="text-right">发货时间：[<%= @sent_list.created_by %>][数量合计：<%= @sent_list.sents.map{|sent| sent.cupboard + sent.robe + sent.door + sent.part}.flatten.sum %>]</td>
+          </tr> -->
+          <% index = 0 %>
+          <% @sent_list.sents.group_by{|s| [s.area, s.receiver, s.contact, s.logistics]}.each_pair do  |keys, values| %>
+            <tr>
+              <td><%= index += 1 %></td>
+              <td><%= keys[0] %></td>
+              <td><%= keys[1] %></td>
+              <td><%= keys[2] %></td>
+              <td><%= values.first.owner.name %></td>
+              <td><%= values.first.cupboard %></td>
+              <td><%= values.first.robe %></td>
+              <td><%= values.first.door %></td>
+              <td><%= values.first.part %></td>
+              <td rowspan="<%= values.size %>" ><%= values.map{|sent| sent.cupboard + sent.robe + sent.door + sent.part }.sum %></td>
+              <td rowspan="<%= values.size %>"><%= values.map(&:collection).sum %></td>
+              <td rowspan="<%= values.size %>"><%= keys[3] %></td>
+            </tr>
+            <% values.each_with_index do |v, i| %>
+            <% next if i == 0  %>
+            <tr>
+              <td><%=  %></td>
+              <td><%=  %></td>
+              <td><%=  %></td>
+              <td><%=  %></td>
+              <td><%= v.owner.name %></td>
+              <td><%= v.cupboard %></td>
+              <td><%= v.robe %></td>
+              <td><%= v.door %></td>
+              <td><%= v.part %></td>            
+            </tr>              
+            <% end %>
+          <% end %>
+          <tr>
+            <td colspan="12" class="text-right">发货时间：[<%= @sent_list.created_by %>][数量合计：<%= @sent_list.sents.map{|sent| sent.cupboard + sent.robe + sent.door + sent.part}.flatten.sum %>]</td>
           </tr>
         </tbody>
       </table>

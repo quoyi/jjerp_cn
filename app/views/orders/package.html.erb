@@ -53,7 +53,8 @@ $(function(){
           <%= form_tag("/orders/#{@order.id}/reprint.pdf", method: :post) do |reprint_form| %>
             <%= hidden_field_tag :length, "80" %>
             <%= hidden_field_tag :width, "60" %>
-            <button type="submit" class="btn btn-primary" style="margin-top: 2px;" <%= disabled='disabled' unless @order.packages.map(&:label_size).sum > 0 %>>重新打印</button>
+            <%= hidden_field_tag :label_size %>
+            <button type="submit" class="btn btn-primary" style="margin-top: 2px;" <%= disabled='disabled' unless @order.packages.map(&:label_size).sum > 0 %> onclick="return reprint_set_label_size();">重新打印</button>
           <% end %>
           </div>
         </div>
