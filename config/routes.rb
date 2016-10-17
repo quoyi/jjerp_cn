@@ -5,7 +5,11 @@ Rails.application.routes.draw do
     end
   end
   resources :uoms
-  resources :sent_lists
+  resources :sent_lists do
+    member do
+      get :download
+    end
+  end
   resources :banks
   resources :sents do
     collection do

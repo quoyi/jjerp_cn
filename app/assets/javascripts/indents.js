@@ -46,11 +46,15 @@ $(function() {
    */
   $("#addIndent").on('shown.bs.modal', function(){
     var agent_id = $("#indent_agent_id").val();
-    getAgentLogistics(agent_id);
+    if(agent_id != ''){
+      getAgentLogistics(agent_id);
+    }
   });
   $("#editIndent").on('shown.bs.modal', function(){
     var agent_id = $("#indent_agent_id").val();
-    getAgentLogistics(agent_id);
+    if(agent_id != ''){
+      getAgentLogistics(agent_id);
+    }
   });
 
   /**
