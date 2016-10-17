@@ -64,7 +64,7 @@
             <% end %>
           </td>
           <td>
-            <% if Order.statuses[o.status] < 1 %>
+            <% if Order.statuses[o.status] < 1 || o.units.count > 0 || o.parts.count > 0 || o.crafts.count > 0 %>
             <%= link_to '生产', '#', class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip', confirm: '订单报价中，无法生产!'}, title: '订单报价中，无法生产!' %>
             <% elsif Order.statuses[o.status] == 1 %>
             <%= link_to '生产', order_path(id: o.id, order: {status: 'producing'}),method: :put,class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
