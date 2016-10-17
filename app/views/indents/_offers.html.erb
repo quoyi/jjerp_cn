@@ -18,13 +18,13 @@
             <p class="pull-right">
               <% 
                 order = offers.first.order
-                order_total = offers.map{|o| o.price * o.number}.sum()
+                order_total = offers.map(&:total).sum()
                 order_number = order.number
                 orders_total = order_total * order_number
               %>
-              单套￥：<%= order_total.round(2) %>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              单套￥：<%= order_total %>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               套数：<%= order_number %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              合计：<%= orders_total.round(2) %>&nbsp;元</p>
+              合计：<%= orders_total %>&nbsp;元</p>
           </div>
         </div>
         <div id="collapse<%=order_id%>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%=order_id%>">

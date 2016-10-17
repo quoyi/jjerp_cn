@@ -24,7 +24,7 @@ class Offer < ActiveRecord::Base
   end
 
   def calculate_total
-    self.total = self.price * self.number
+    self.total = (self.price * self.number).round
     @order = self.order
 
     # 更新子订单金额

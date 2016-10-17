@@ -166,7 +166,7 @@ class OrdersController < ApplicationController
       # 计算 工艺 金额
       sum_crafts = @order.crafts.map{|c| c.number * c.price}.sum()
       # 新子订单总金额
-      new_order_amount = sum_units + sum_parts + sum_crafts
+      new_order_amount = (sum_units + sum_parts + sum_crafts).round
       # 原金额 >= 新金额 时，金额差 返回到 代理商余额，更新总订单的金额、欠款
       # 原金额 < 新金额  时，从代理商余额中扣除 金额差： 余额 > 金额差，更新总订单金额、欠款； 余额 < 金额差，更新子订单欠款，代理商余额为0
 
@@ -325,7 +325,7 @@ class OrdersController < ApplicationController
       # 计算 工艺 金额
       sum_crafts = @order.crafts.map{|c| c.number * c.price}.sum()
       # 新子订单总金额
-      new_order_amount = sum_units + sum_parts + sum_crafts
+      new_order_amount = (sum_units + sum_parts + sum_crafts).round
       # 子订单金额 = 子订单部件合计 + 子订单配件合计 + 子订单工艺费合计
       @order.update!(price: new_order_amount)
       # 原金额 >= 新金额 时，金额差 返回到 代理商余额，更新总订单的金额、欠款
@@ -386,7 +386,7 @@ class OrdersController < ApplicationController
       # 计算 工艺 金额
       sum_crafts = @order.crafts.map{|c| c.number * c.price}.sum()
       # 子订单金额 = 子订单部件合计 + 子订单配件合计 + 子订单工艺费合计
-      @order.update!(price: sum_units + sum_parts + sum_crafts)
+      @order.update!(price: (sum_units + sum_parts + sum_crafts).round)
 
       # 更新总订单金额
       indent = @order.indent
