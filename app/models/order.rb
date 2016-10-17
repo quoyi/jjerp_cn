@@ -105,7 +105,9 @@ class Order < ActiveRecord::Base
   end
 
   def order_money_to_int
-    self.price = self.price.to_i
+    self.arrear = self.arrear.round
+    self.price = self.price.round
+
   end
 
   def caseType(type, str)
