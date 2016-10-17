@@ -50,6 +50,7 @@ module IndentsHelper
       # 必须存在配件，才显示总订单信息
       if num_cupboard > 0 || num_others > 0
         indent_num += 1
+
         ws.write_row("A" + indent_num.to_s, ["总订单号", value["indent"].name, 
                                                    "代理商", value["indent"].agent.try(:full_name), 
                                                    "终端客户", value["indent"].customer],
@@ -58,7 +59,7 @@ module IndentsHelper
 
         if num_cupboard > 0
           indent_num += 1
-          ws.merge_range("A" + indent_num.to_s + ":F" + indent_num.to_s, "橱柜配件清单", table_title_format)
+          ws.merge_range("A" + indent_num.to_s + ":F" + indent_num.to_s, "橱柜配件清单#{value["cupboard_orders_name"].join("，")}", table_title_format)
           ws.set_row(indent_num - 1 , 28) # 设置行高
           indent_num += 1
 
@@ -77,7 +78,7 @@ module IndentsHelper
 
         if num_others > 0
           indent_num += 1
-          ws.merge_range("A" + indent_num.to_s + ":F" + indent_num.to_s, "衣柜配件清单", table_title_format)
+          ws.merge_range("A" + indent_num.to_s + ":F" + indent_num.to_s, "衣柜配件清单#{value["other_orders_name"].join("，")}", table_title_format)
           ws.set_row(indent_num - 1 , 28) # 设置行高
           indent_num += 1
 
