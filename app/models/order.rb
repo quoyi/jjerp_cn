@@ -94,9 +94,9 @@ class Order < ActiveRecord::Base
     temp_hash = {'1': 'w', '2': 'y', '3': 'm', '4': 'p', '5': 'q'}
 
     tmp = case Order.oftypes[oftype]
-          when 1 then "补#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
-          when 2 then "急#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
-          when 3 then "批#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
+          when 1 then "b#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
+          when 2 then "j#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
+          when 3 then "p#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
           else
             "#{temp_hash[order_category_id.to_s.to_sym].try(:upcase)}"
           end

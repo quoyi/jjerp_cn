@@ -22,7 +22,11 @@ class MaterialsController < ApplicationController
           total_number += unit.number.to_f
         else
           size = unit.size.split(/[xX*×]/).map(&:to_i)
-          total_number += ((unit.number.to_f * size[0] * size[1])/(1000*1000))
+          if size.length > 1
+            total_number += ((unit.number.to_f * size[0] * size[1])/(1000*1000))
+          else
+            total_number += unit.number.to_f
+          end
         end
       end
       obj[:name] = materail.try(:full_name)
