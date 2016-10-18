@@ -26,9 +26,9 @@
             <td><%= u.email %></td>
             <td><%= u.roles.map(&:name).join('，') %></td>
             <td>
-              <%unless u.roles.map(&:nick).include?('super_admin')%>
+              <%# unless u.roles.map(&:nick).include?('super_admin')%>
                 <%= link_to '修改', edit_user_path(u), class: 'btn btn-info btn-xs'%>
-              <% end %>
+              <%# end %>
             </td>
           </tr>
           <% end %>
