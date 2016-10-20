@@ -460,7 +460,6 @@ class OrdersController < ApplicationController
       # 打印尺寸需存在users表的default_print_size
       if params[:order_unit_ids].present? &&  params[:order_unit_ids] != "{}"
         label_size = params[:order_label_size].to_i if params[:order_label_size]
-        binding.pry
         logger.debug "自定义日志：" + label_size.to_s
         ids = ActiveSupport::JSON.decode(params[:order_unit_ids])
 
