@@ -34,7 +34,7 @@
                   <%= unit_form.number_field :length, min: 0, step: 0.01, value: uf.new_record? ? 1 : uf.length, class: 'order-unit-length col-sm-1', onchange: 'setOrderUnitSize(this)', onblur: 'setOrderUnitSize(this)', required: true %>
                   <%= unit_form.number_field :width, min: 0, step: 0.01, value: uf.new_record? ? 1 : uf.width, class: 'order-unit-width col-sm-1', onchange: 'setOrderUnitSize(this)', onblur: 'setOrderUnitSize(this)', required: true %>
                   <!-- <label class="col-sm-1 text-right" style="margin: 7px 0;">尺寸</label> -->
-                  <%= unit_form.text_field :size, value: uf.new_record? ? '' : uf.size, class: 'order-unit-size col-sm-3', placeholder: '请填写成型尺寸', onchange: 'setOrderUnitLengthWidth(this)', onblur: 'setOrderUnitLengthWidth(this)' %>
+                  <%= unit_form.text_field :size, value: uf.new_record? ? '' : uf.size, class: 'order-unit-size col-sm-3', required: true, placeholder: '请填写成型尺寸', onchange: 'setOrderUnitLengthWidth(this)', onblur: 'setOrderUnitLengthWidth(this)' %>
                   <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>数量</label>
                   <%= unit_form.text_field :number, value: uf.new_record? ? 1 : uf.number, class: 'col-sm-2', required: true  %>
                 </div>

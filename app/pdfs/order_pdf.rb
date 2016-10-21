@@ -10,7 +10,7 @@ class OrderPdf < Prawn::Document
     @order = Order.find_by_id(order_id)
     @ids = ids
     # @length = mm2pt(length) - 4
-    # 
+    #
     # 生成条码
     tmp_code = @order.name.split("-")
     barcode = Barby::Code39.new(tmp_code[1] + "-" + tmp_code[2])
@@ -41,7 +41,7 @@ class OrderPdf < Prawn::Document
       # 条形码
       image "#{Rails.root}/public/images/#{@order.name}.png", width: 120, height: 20, position: :left, vposition: :bottom
       text "共#{@ids}件 第#{@ids}-#{i+1}件", :size => 14, align: :right, valign: :bottom
-      
+
     end
   end
 

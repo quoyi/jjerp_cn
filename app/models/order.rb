@@ -102,6 +102,7 @@ class Order < ActiveRecord::Base
           end
     self.index = agent_orders_count + 1
     self.name =  current_year + tmp + "-#{current_month}-" + self.index.to_s
+    # self.serial = current_year + "-" + current_month + self.index.to_s
   end
 
   def order_money_to_int
