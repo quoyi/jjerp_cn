@@ -12,7 +12,8 @@ class OrderPdf < Prawn::Document
     # @length = mm2pt(length) - 4
     # 
     # 生成条码
-    barcode = Barby::Code39.new(@order.name)
+    tmp_code = @order.name.split("-")
+    barcode = Barby::Code39.new(tmp_code[1] + "-" + tmp_code[2])
     File.open("#{Rails.root}/public/images/#{@order.name}.png", 'wb'){|f| f.write barcode.to_png }
 
     # order_units_parts
@@ -29,10 +30,10 @@ class OrderPdf < Prawn::Document
       end
       text "高端定制橱柜衣柜", :align => :center, :size => 20, styles: :bold
       text "编    号: #{@order.name}", :size => 14, styles: :bold
-      text "代 理 商: #{@order.indent.agent.full_name}", :size => 14, styles: :bold
+      text "下单展厅: #{@order.indent.agent.full_name}", :size => 14, styles: :bold
       text "终端客户: #{@order.indent.customer}", :size => 14, styles: :bold
       text "产    品: #{@order.order_category.try(:name)}", :size => 14, styles: :bold
-      text "备    注: #{@order.note.truncate(12)}", size: 14, styles: :bold
+      text "备    注: #{@order.note.truncate(10)}", size: 14, styles: :bold
       text " ", size: 5
       text "货  到: #{@order.delivery_address}", :size => 18, styles: :bold
       # 二维码
