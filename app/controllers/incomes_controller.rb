@@ -121,9 +121,24 @@ class IncomesController < ApplicationController
   # DELETE /incomes/1
   # DELETE /incomes/1.json
   def destroy
-    @income.update(deleted: true)
-    # @income.destroy
-    redirect_to incomes_path, notice: '收入记录已删除。'
+    Income.transaction do 
+      order = @income.order
+      indent = @income.indent
+      bank = @income.bank
+      order.update!(arrear: order.arrear + @income.money)
+      indent.update!(arrear: indent.arrear + @income.money)
+      if bank.balance > @income.money
+        bank.update!(balance: bank.balance - @income.money, incomes: bank.incomes - @income.money)
+      else
+        msg = "银行卡余额不足，无法删除收入记录！"
+        raise ActiveRecord::Rollback
+      end
+      @income.destroy
+      msg = '收入记录已删除。'
+    end
+
+    # @income.update(deleted: true)
+    redirect_to incomes_path, notice: msg
   end
 
 

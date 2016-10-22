@@ -67,7 +67,7 @@
                 <td>
                   <input type="checkbox" class="checkbox" value="<%=i.id%>">
                 </td>
-                <td><%= link_to i.name, i, data: {toggle:'tooltip'}, title: '总订单详细' %></td>
+                <td><%= link_to i.name, i, data: {toggle:'tooltip'}, title: '总订单详细', target: '_blank' %></td>
                 <td><%= i.agent.try(:full_name) %></td>
                 <td><%= i.customer %></td>
                 <td><%= i.verify_at.strftime('%Y-%m-%d') %></td>
