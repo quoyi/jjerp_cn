@@ -6,13 +6,13 @@
         <%= f.label '编号' %>
       </td>
       <td>
-        <%= f.text_field :name,value: "GY"+(Supply.count+1).to_s.rjust(4,"0"),readOnly: true, required: true %>
+        <%= f.text_field :name,value: "GY"+(Supply.count+1).to_s.rjust(4,"0"),readOnly: true, required: true , class: 'form-control' %>
       </td>
       <td>
 	<label><span class="require">*</span>名称</label>
       </td>
       <td>
-        <%= f.text_field :full_name, required: true %>
+        <%= f.text_field :full_name, required: true, class: 'form-control' %>
       </td>
     </tr>
     <tr>
@@ -20,13 +20,13 @@
         <%= f.label '电话' %>
       </td>
       <td>
-        <%= f.text_field :mobile %>
+        <%= f.text_field :mobile, class: 'form-control' %>
       </td>
       <td>
         <%= f.label '账户' %>
       </td>
       <td>
-        <%= f.text_field :bank_account %>
+        <%= f.text_field :bank_account, class: 'form-control' %>
       </td>
     </tr>
     <tr>
@@ -34,7 +34,7 @@
         <%= f.label '地址' %>
       </td>
       <td colspan="3">
-        <%= f.text_field :address %>
+        <%= f.text_field :address, class: 'form-control' %>
       </td>
       </tr>
       <tr>
@@ -42,7 +42,7 @@
         <%= f.label '备注' %>
       </td>
       <td colspan="3">
-        <%= f.text_field :note %>
+        <%= f.text_field :note, class: 'form-control' %>
       </td>
     </tr>
   </table>

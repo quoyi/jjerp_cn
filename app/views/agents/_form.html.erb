@@ -6,13 +6,13 @@
         <%= f.label '编号' %>
       </td>
       <td>
-        <%= f.text_field :name, value: @agent.name, required: true, readOnly: true %>
+        <%= f.text_field :name, value: @agent.name, required: true, readOnly: true, class: 'form-control' %>
       </td>
       <td data-toggle="tooltip" title="必填项">
         <label><span class="require">*</span>店面</label>
       </td>
       <td>
-        <%= f.text_field :full_name, required: true %>
+        <%= f.text_field :full_name, required: true, class: 'form-control' %>
       </td>
     </tr>
     <tr>
@@ -20,13 +20,13 @@
         <label><span class="require">*</span>电话</label>
       </td>
       <td>
-        <%= f.text_field :mobile, required: true %>
+        <%= f.text_field :mobile, required: true, class: 'form-control' %>
       </td>
       <td data-toggle="tooltip" title="必填项">
         <label><span class="require">*</span>负责人</label>
       </td>
       <td>
-        <%= f.text_field :contacts, required: true %>
+        <%= f.text_field :contacts, required: true, class: 'form-control' %>
       </td>
     </tr>
     <tr>
@@ -35,14 +35,12 @@
       </td>
       <td colspan="3">
         <div class="city-group">
+          <%= f.collection_select :province, Province.all, :id, :name, {include_blank: '--省份--', selected: @agent.new_record? ? Province.find_by_name("湖北省").try(:id) : @agent.province} ,{required: true, onchange: 'getChinaCity(this);'} %>
+          <%= f.collection_select :city, City.where(province_id: Province.find_by_name("湖北省").try(:id)), :id, :name, {include_blank: '--城市--', selected: @agent.new_record? ? City.find_by_name("武汉市").try(:id) : @agent.city}, {onchange: 'getChinaCity(this);', onclick: 'validateCities(this);'} %>
           <% if @agent.new_record? %>
-          <%= f.select :province, options_for_select(ChinaCity.list, "420000"), {prompt: '--省份--'} ,{:class => "city-select", required: true} %>
-          <%= f.select :city, options_for_select(ChinaCity.list("420000")), {prompt: '--城市--'},{:class => "city-select"} %>
-          <%= f.select :district, options_for_select([]),{prompt: '--地区--'},{ :class => "city-select"} %>
+          <%= f.collection_select :district, District.where(city_id: City.find_by_name("武汉市").try(:id)), :id, :name, {include_blank: '--地区--', selected: ""},{onclick: 'validateCities(this);'} %>
           <% else %>
-          <%= f.select :province, options_for_select(ChinaCity.list, @agent.province), {prompt: '--省份--'},{ :class => "city-select", required: true} %>
-          <%= f.select :city, options_for_select(ChinaCity.list(@agent.province), @agent.city), {prompt: '--城市--'},{:class => "city-select"} %>
-          <%= f.select :district, options_for_select(ChinaCity.list(@agent.city), @agent.district), {prompt: '--地区--'},{ :class => "city-select"} %>
+          <%= f.collection_select :district, District.where(city_id: @agent.city), :id, :name, {include_blank: '--地区--', selected: @agent.district},{onclick: 'validateCities(this);'} %>
           <% end %>
         </div>
       </td>
@@ -52,27 +50,27 @@
         <%= f.label '城镇' %>
       </td>
       <td>
-        <%= f.text_field :town %>
+        <%= f.text_field :town, maxlength: 5, class: 'form-control' %>
       </td>
       <td data-toggle="tooltip" title="请填写详细地址（除省市县镇外的信息）">
         <label>详细地址</label>
       </td>
       <td data-toggle="tooltip" title="请填写详细地址（除省市县镇外的信息）">
-        <%= f.text_field :address, maxlength: 20, data: {toggle: 'tooltip'}, title: '详细地址(不包含省市县)' %>
+        <%= f.text_field :address, maxlength: 20, data: {toggle: 'tooltip'}, title: '详细地址(不包含省市县)', class: 'form-control' %>
       </td>
     </tr>
     <tr>
       <td>
-      <label for="agent_e_account">QQ</label>
+        <label for="agent_e_account">QQ</label>
       </td>
       <td>
-        <%= f.text_field :e_account %>
+        <%= f.text_field :e_account, class: 'form-control' %>
       </td>
       <td>
         <%= f.label '传真' %>
       </td>
       <td>
-        <%= f.text_field :fax %>
+        <%= f.text_field :fax, class: 'form-control' %>
       </td>
     </tr>
     <tr>
@@ -80,13 +78,13 @@
         <%= f.label '邮箱' %>
       </td>
       <td>
-        <%= f.text_field :email %>
+        <%= f.text_field :email, class: 'form-control' %>
       </td>
       <td>
         <%= f.label '微信' %>
       </td>
       <td>
-        <%= f.text_field :wechar %>
+        <%= f.text_field :wechar, class: 'form-control' %>
       </td>
     </tr>
     <tr>
@@ -94,13 +92,13 @@
         <label><span class="require">*</span>物流</label>
       </td>
       <td>
-        <%= f.text_field :logistics, required: true %>
+        <%= f.text_field :logistics, required: true, class: 'form-control' %>
       </td>
       <td>
         <%= f.label '结账周期(天)' %>
       </td>
       <td>
-        <%= f.text_field :cycle %>
+        <%= f.text_field :cycle, class: 'form-control' %>
       </td>
     </tr>
     <tr>
@@ -108,13 +106,13 @@
         <%= f.label '下单条件' %>
       </td>
       <td>
-        <%= f.text_field :order_condition %>
+        <%= f.text_field :order_condition, class: 'form-control' %>
       </td>
       <td>
         <%= f.label '发货条件' %>
       </td>
       <td>
-        <%= f.text_field :send_condition %>
+        <%= f.text_field :send_condition, class: 'form-control' %>
       </td>
     </tr>
     <tr>
@@ -122,7 +120,7 @@
         <%= f.label '备注' %>
       </td>
       <td colspan="3">
-        <%= f.text_field :note, width: '100%' %>
+        <%= f.text_field :note, class: 'form-control' %>
       </td>
     </tr>
   </table>

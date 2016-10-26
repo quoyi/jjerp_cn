@@ -21,11 +21,13 @@ function getAgentInfo(obj){
     success: function(data){
       var panels = $(obj).parents(".panel-heading");
       panels.find("#indent_logistics").val(data.logistics);
-      //$("#indent_address").val(data.province + data.city + data.district + data.town + data.address)
-      panels.find("#indent_address").val(data.address)
+      var address = panels.find("#indent_delivery_address").val();
+      if(address == "" || address == null){
+        panels.find("#indent_delivery_address").val(data.delivery_address);
+      }
     },
     error: function(data){
-      alert("Error");
+      jsNoty("网络错误！","error");
     }
   });
 }
@@ -68,7 +70,7 @@ function getAgentInfo(obj){
         </div>
         <%= f.label '收货地址', class:'col-sm-1 control-label' %>
         <div class="col-sm-2">
-          <%= f.text_field :address, class: 'form-control' %>
+          <%= f.text_field :delivery_address, class: 'form-control' %>
         </div>
       </div>
     </div>

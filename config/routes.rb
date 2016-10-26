@@ -90,6 +90,7 @@ Rails.application.routes.draw do
     confirmations: 'users/confirmations',
     unlocks: 'users/unlocks'
   }
+  get 'areas/find'
   get 'statics/home'
 
   root 'statics#index'

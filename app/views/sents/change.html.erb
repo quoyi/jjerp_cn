@@ -25,7 +25,7 @@
   <table class="text-center" style="width: 100%;">
     <tr>
       <td><label>地&nbsp;&nbsp;&nbsp;&nbsp;区</label></td>
-      <td><%= f.text_field :area, class: 'form-control', value: "#{indent.address}" %></td>
+      <td><%= f.text_field :area, class: 'form-control', value: "#{indent.delivery_address}" %></td>
       <td><label><span class="require">*</span>收货人</label></td>
       <td><%= f.text_field :receiver, value: "#{indent.customer}", class: 'form-control', required: true %></td>
       <td><label><span class="require">*</span>联系方式</label></td>

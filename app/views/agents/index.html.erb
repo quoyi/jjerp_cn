@@ -22,8 +22,9 @@
             <th>邮箱</th>
             <th>微信</th>
             <th>物流</th>
-            <th>发货地址</th>
-            <th>发货条件</th>
+            <th>地址</th>
+            <th>收货地址</th>
+            <!-- <th>发货条件</th> -->
             <th>结账周期(天)</th>
             <th>备注</th>
           </tr>
@@ -41,8 +42,9 @@
             <td><%= a.email %></td>
             <td><%= a.wechar %></td>
             <td><%= a.logistics %></td>
-            <td class="danger" data-toggle="tooltip" title="收货地址格式必须是省市县中的数据，且格式为: xx省xx市xx县，否则无法查询"><%= a.address %></td>
-            <td><%= a.send_condition %></td>
+            <td><%= a.address %></td>
+            <td class="danger" data-toggle="tooltip" title="收货地址格式必须是省市县中的数据，且格式为: xx省xx市xx县，否则无法查询"><%= a.delivery_address %></td>
+            <!-- <td><%#= a.send_condition %></td> -->
             <td><%= a.cycle %></td>
             <td style="max-width: 200px;"><%= a.note %></td>
           </tr>

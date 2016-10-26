@@ -245,7 +245,7 @@ class IndentsController < ApplicationController
     #     v[:status] = Order.statuses[v[:status]]
     #   end
     # end
-    params.require(:indent).permit(:id, :name, :offer_id, :agent_id, :customer, :verify_at, :require_at, :note, :address,
+    params.require(:indent).permit(:id, :name, :offer_id, :agent_id, :customer, :verify_at, :require_at, :note, :delivery_address,
                                    :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted, :status,
                                    orders_attributes: [:id, :order_category_id, :customer, :number, :ply, :material_price,
                                                        :texture, :color, :price, :length, :width, :height, :oftype,
