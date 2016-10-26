@@ -14,13 +14,13 @@
               <label><span class="require">*</span>编号</label>
             </td>
             <td>
-              <%= f.text_field :name, required: true %>
+              <%= f.text_field :name, required: true, class: 'form-control' %>
             </td>
             <td data-toggle="tooltip" title="必填项">
               <label><span class="require">*</span>开户银行</label>
             </td>
             <td>
-              <%= f.text_field :bank_name, required: true %>
+              <%= f.text_field :bank_name, maxlength: 25, required: true, class: 'form-control' %>
             </td>
           </tr>
           <tr>
@@ -28,13 +28,13 @@
               <label><span class="require">*</span>卡号</label>
             </td>
             <td>
-              <%= f.text_field :bank_card, required: true %>
+              <%= f.number_field :bank_card, required: true, class: 'form-control' %>
             </td>
             <td data-toggle="tooltip" title="必填项">
               <label><span class="require">*</span>余额</label>
             </td>
             <td>
-              <%= f.number_field :balance, min: 0, step: 0.01, default: 0, required: true %>
+              <%= f.number_field :balance, min: 0, step: 0.01, default: 0, required: true, class: 'form-control' %>
             </td>
           </tr>
         </table>

@@ -47,7 +47,7 @@ class BanksController < ApplicationController
   # DELETE /banks/1
   # DELETE /banks/1.json
   def destroy
-    @bank.destroy
+    # @bank.destroy
     redirect_to banks_path, notice: '银行卡已删除！'
   end
 

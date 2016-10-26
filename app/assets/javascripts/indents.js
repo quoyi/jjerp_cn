@@ -25,21 +25,23 @@ $(function() {
   /**
    * Ajax 获取指定 agent_id 的 agent 对象，并设置indent.logistics
    */
-  // function getAgentLogistics(agent_id){
-  //   $.ajax({
-  //     url: "/agents/" + agent_id,
-  //     dataType: 'json',
-  //     type: 'GET',
-  //     success: function(data){
-  //       $("#indent_logistics").val(data.logistics);
-  //       //$("#indent_address").val(data.province + data.city + data.district + data.town + data.address)
-  //       $("#indent_address").val(data.address)
-  //     },
-  //     error: function(data){
-  //       jsNoty("网络错误！","error");
-  //     }
-  //   });
-  // }
+  function getAgentLogistics(agent_id){
+    $.ajax({
+      url: "/agents/" + agent_id,
+      dataType: 'json',
+      type: 'GET',
+      success: function(data){
+        $("#indent_logistics").val(data.logistics);
+        var address = $("#indent_delivery_address").val();
+        if(address == "" || address == null){
+          $("#indent_delivery_address").val(data.delivery_address);
+        }
+      },
+      error: function(data){
+        jsNoty("网络错误！","error");
+      }
+    });
+  }
 
   /**
    * 模态框显示时，初始化物流输入框
