@@ -33,6 +33,7 @@ $(function(){
               <%= form_tag("/orders/#{@order.id}/package.pdf", method: :post, class: 'form-inline') do |f| %>
               <%= hidden_field_tag 'order_unit_ids', '' %>
               <%= hidden_field_tag 'order_label_size', 0 %><!-- 标签数量 -->
+              <%= hidden_field_tag 'is_batch', 0, id: 'order_is_batch' %>
               <div class="col-sm-5">
                 <label>&nbsp;&nbsp;&nbsp;&nbsp;尺寸：</label>
                 <%= number_field_tag 'length', @length, value: "80", class: "form-control", style: "width: 30%", readOnly: true, id: 'package_label_length' %>
@@ -54,7 +55,8 @@ $(function(){
             <%= hidden_field_tag :length, "80" %>
             <%= hidden_field_tag :width, "60" %>
             <%= hidden_field_tag :label_size %>
-            <button type="submit" class="btn btn-primary" style="margin-top: 2px;" <%= disabled='disabled' unless @order.packages.map(&:label_size).sum > 0 %> onclick="return reprint_set_label_size();">重新打印</button>
+            <%= hidden_field_tag :is_batch, 1 %>
+            <button type="submit" class="btn btn-primary" style="margin-top: 2px;" <%= disabled='disabled' unless @order.packages.pluck(:label_size).sum > 0 %> onclick="return reprint_set_label_size();">重新打印</button>
           <% end %>
           </div>
         </div>
@@ -69,11 +71,6 @@ $(function(){
                   <th class="col-xs-2">条码</th>
                   <th class="col-xs-2">类型</th>
                   <th class="col-xs-2">名称</th>
-                  <!-- <th class="col-xs-1">长</th>
-                  <th class="col-xs-1">宽</th>
-                  <th class="col-xs-1">厚</th>
-                  <th class="col-xs-2">颜色</th>
-                  <th class="col-xs-1">部件尺寸</th> -->
                 </tr>
               </thead>
               <tbody>
@@ -83,21 +80,8 @@ $(function(){
                   <td><%= order_unit.name%></td>
                   <td>部件</td>
                   <td><%= order_unit.full_name%></td>
-                  <!-- <td><%#= order_unit.length%></td>
-                  <td><%#= order_unit.width%></td>
-                  <td><%#= MaterialCategory.find_by_id(order_unit.ply).try(:name)%></td>
-                  <td><%#= MaterialCategory.find_by_id(order_unit.color).try(:name)%></td>
-                  <td><%= order_unit.size%></td> -->
                 </tr>
                 <%end%>
-                <%# @order_parts.each do |order_part|%>
-                <%# next if order_part.is_printed %>
-                <!-- <tr onclick="remove_order(this)" id="order_part_<%#=order_part.id%>">
-                  <td><%#= order_part.name%></td>
-                  <td>配件</td>
-                  <td><%#= order_part.part_category.name%></td>
-                </tr> -->
-                <%# end %>
               </tbody>
             </table>
           </div>
@@ -109,11 +93,6 @@ $(function(){
                   <th class="col-xs-2">条码</th>
                   <th class="col-xs-2">类型</th>
                   <th class="col-xs-2">名称</th>
-                  <!-- <th class="col-xs-1">长</th>
-                  <th class="col-xs-1">宽</th>
-                  <th class="col-xs-1">厚</th>
-                  <th class="col-xs-2">颜色</th>
-                  <th class="col-xs-1">部件尺寸</th> -->
                 </tr>
               </thead>
               <tbody>
@@ -128,11 +107,6 @@ $(function(){
                   <th class="col-xs-2">条码</th>
                   <th class="col-xs-1">类型</th>
                   <th class="col-xs-2">名称</th>
-                  <!-- <th class="col-xs-1">长</th>
-                  <th class="col-xs-1">宽</th>
-                  <th class="col-xs-1">厚</th>
-                  <th class="col-xs-2">颜色</th>
-                  <th class="col-xs-1">部件尺寸</th> -->
                 </tr>
               </thead>
               <tbody>
@@ -143,21 +117,8 @@ $(function(){
                   <td><%= order_unit.name%></td>
                   <td>部件</td>
                   <td><%= order_unit.full_name%></td>
-                  <!-- <td><%= order_unit.length%></td>
-                  <td><%= order_unit.width%></td>
-                  <td><%= MaterialCategory.find_by_id(order_unit.ply).try(:name)%></td>
-                  <td><%= MaterialCategory.find_by_id(order_unit.color).try(:name)%></td>
-                  <td><%= order_unit.size%></td> -->
                 </tr>
                 <% end %>
-                <%# Part.where(id: p.part_ids.split(',')).each do |order_part|%>
-                <%# next unless order_part.is_printed %>
-                <!-- <tr>
-                  <td><%#= order_part.name%></td>
-                  <td>配件</td>
-                  <td><%#= order_part.part_category.name%></td>
-                </tr> -->
-                <%# end %>
                 <% end %>
               </tbody>
             </table>

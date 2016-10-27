@@ -23,6 +23,7 @@ function next() {
   if (val.trim() != '') {
     pack[current_index] = val;
     localStorage.setItem("pack", JSON.stringify(pack));
+    $("#order_is_batch").val(0);
     set_ids(pack, current_index);
 
     if (old_table != "" || pack[current_index + 1]) {
@@ -68,6 +69,7 @@ function previous() {
   if (pack && pack[current_index - 1]) {
     pack[current_index] = val;
     localStorage.setItem("pack", JSON.stringify(pack));
+    $("#order_is_batch").val(0);
     set_ids(pack, current_index);
     $("#new_table").find("tbody").empty();
     localStorage.setItem("index", current_index - 1);
@@ -139,8 +141,8 @@ function print_pages(obj) {
   } else { // 未打包 & 已打包 中只要存在数据，就可以批量打印
     // 弹出模态框，获取输入的数据
     var number = prompt("请输入标签总数：", "");
-    if(isNaN(parseInt(number)) || number == null || number == 0 || number < 0){
-      jsNoty("请输入正确的标签总数！", "error");
+    if(isNaN(parseInt(number)) || number == null || number == 0 || number < 0 || number > 50){
+      jsNoty("标签总数范围：1～50 张！", "error");
       return false;
     }else{
       $("#order_label_size").val(number);
@@ -156,6 +158,7 @@ function print_pages(obj) {
         pack[current_index] = val + old_val;
         localStorage.setItem("pack", JSON.stringify(pack));
       }
+      $("#order_is_batch").val(1);
       // print
       set_ids(pack, current_index);
     }
@@ -168,19 +171,26 @@ function print_pages(obj) {
  * @param  {[type]} obj [description]
  * @return {[type]}     [description]
  */
-function reprint(obj){
-  var order_id = $(obj).data("oid"); 
-
-  $.ajax({
-    url: '/orders/' + order_id + "/reprint.pdf",
-    type: 'POST',
-    dataType: 'json',
-    data: {length: $("#package_label_length").val(), width: $("#package_label_width").val()},
-    success: function(data){
-      jsNoty("重新打印成功！", "success");
-    }
-  });
+function reprint_set_label_size(){
+  var number = prompt("请输入标签总数：", "");
+  if(isNaN(parseInt(number)) || number == null || number == 0 || number < 0 || number > 50){
+    jsNoty("标签总数范围：1～50 张！", "error");
+    return false;
+  }
+  $("#label_size").val(number);
 }
+// function reprint(obj){
+//   var order_id = $(obj).data("oid"); 
+//   $.ajax({
+//     url: '/orders/' + order_id + "/reprint.pdf",
+//     type: 'POST',
+//     dataType: 'json',
+//     data: {length: $("#package_label_length").val(), width: $("#package_label_width").val()},
+//     success: function(data){
+//       jsNoty("重新打印成功！", "success");
+//     }
+//   });
+// }
 
 
 function set_ids(pack, current_index) {
@@ -230,11 +240,3 @@ $(function() {
 //   }
 // }
 
-function reprint_set_label_size(){
-  var number = prompt("请输入标签总数：", "");
-  if(isNaN(parseInt(number)) || number == null || number == 0 || number < 0){
-    jsNoty("请输入正确的标签总数！", "error");
-    return false;
-  }
-  $("#label_size").val(number);
-}

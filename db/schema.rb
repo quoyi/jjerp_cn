@@ -11,33 +11,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160929035615) do
+ActiveRecord::Schema.define(version: 20161027042300) do
 
   create_table "agents", force: :cascade do |t|
-    t.string   "name",            limit: 255,                         default: "",    null: false
-    t.string   "province",        limit: 255
-    t.string   "city",            limit: 255
-    t.string   "district",        limit: 255
-    t.string   "town",            limit: 255
-    t.string   "address",         limit: 255
-    t.string   "full_name",       limit: 255,                                         null: false
-    t.string   "contacts",        limit: 255
-    t.string   "mobile",          limit: 255
-    t.string   "e_account",       limit: 255
-    t.string   "fax",             limit: 255
-    t.string   "email",           limit: 255
-    t.string   "wechar",          limit: 255
-    t.decimal  "balance",                     precision: 8, scale: 2, default: 0.0,   null: false
-    t.decimal  "arrear",                      precision: 8, scale: 2, default: 0.0,   null: false
-    t.decimal  "history",                     precision: 8, scale: 2, default: 0.0,   null: false
-    t.string   "logistics",       limit: 255
-    t.integer  "order_condition", limit: 4
-    t.integer  "send_condition",  limit: 4
-    t.string   "cycle",           limit: 255
-    t.string   "note",            limit: 255
-    t.boolean  "deleted",                                             default: false
-    t.datetime "created_at",                                                          null: false
-    t.datetime "updated_at",                                                          null: false
+    t.string   "name",             limit: 255,                         default: "",    null: false
+    t.string   "province",         limit: 255
+    t.string   "city",             limit: 255
+    t.string   "district",         limit: 255
+    t.string   "town",             limit: 255
+    t.string   "address",          limit: 255
+    t.string   "full_name",        limit: 255,                                         null: false
+    t.string   "contacts",         limit: 255
+    t.string   "mobile",           limit: 255
+    t.string   "e_account",        limit: 255
+    t.string   "fax",              limit: 255
+    t.string   "email",            limit: 255
+    t.string   "wechar",           limit: 255
+    t.decimal  "balance",                      precision: 8, scale: 2, default: 0.0,   null: false
+    t.decimal  "arrear",                       precision: 8, scale: 2, default: 0.0,   null: false
+    t.decimal  "history",                      precision: 8, scale: 2, default: 0.0,   null: false
+    t.string   "logistics",        limit: 255
+    t.integer  "order_condition",  limit: 4
+    t.integer  "send_condition",   limit: 4
+    t.string   "cycle",            limit: 255
+    t.string   "note",             limit: 255
+    t.boolean  "deleted",                                              default: false
+    t.datetime "created_at",                                                           null: false
+    t.datetime "updated_at",                                                           null: false
+    t.string   "delivery_address", limit: 255,                         default: "",    null: false
   end
 
   add_index "agents", ["full_name"], name: "index_agents_on_full_name", using: :btree
@@ -58,12 +59,11 @@ ActiveRecord::Schema.define(version: 20160929035615) do
   add_index "banks", ["is_default"], name: "index_banks_on_is_default", using: :btree
 
   create_table "cities", force: :cascade do |t|
-    t.integer "province_id", limit: 4
-    t.string  "name",        limit: 255
+    t.string "province_id", limit: 45
+    t.string "name",        limit: 255
+    t.string "area_code",   limit: 45
+    t.string "index",       limit: 45
   end
-
-  add_index "cities", ["province_id", "name"], name: "index_cities_on_province_id_and_name", unique: true, using: :btree
-  add_index "cities", ["province_id"], name: "index_cities_on_province_id", using: :btree
 
   create_table "craft_categories", force: :cascade do |t|
     t.string   "full_name",  limit: 255,                         default: "",    null: false
@@ -108,12 +108,10 @@ ActiveRecord::Schema.define(version: 20160929035615) do
   add_index "departments", ["name"], name: "index_departments_on_name", using: :btree
 
   create_table "districts", force: :cascade do |t|
-    t.integer "city_id", limit: 4
-    t.string  "name",    limit: 255
+    t.string "city_id",   limit: 45
+    t.string "name",      limit: 255
+    t.string "area_code", limit: 45
   end
-
-  add_index "districts", ["city_id", "name"], name: "index_districts_on_city_id_and_name", unique: true, using: :btree
-  add_index "districts", ["city_id"], name: "index_districts_on_city_id", using: :btree
 
   create_table "expends", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -152,22 +150,22 @@ ActiveRecord::Schema.define(version: 20160929035615) do
   add_index "incomes", ["order_id"], name: "index_incomes_on_order_id", using: :btree
 
   create_table "indents", force: :cascade do |t|
-    t.string   "name",          limit: 255,                                         null: false
-    t.integer  "agent_id",      limit: 4,                                           null: false
-    t.string   "customer",      limit: 255
+    t.string   "name",             limit: 255,                                         null: false
+    t.integer  "agent_id",         limit: 4,                                           null: false
+    t.string   "customer",         limit: 255
     t.date     "verify_at"
     t.date     "require_at"
-    t.string   "logistics",     limit: 255
-    t.string   "address",       limit: 255
-    t.integer  "status",        limit: 4,                           default: 0
-    t.string   "note",          limit: 255
-    t.decimal  "amount",                    precision: 8, scale: 2, default: 0.0
-    t.decimal  "arrear",                    precision: 8, scale: 2, default: 0.0
-    t.decimal  "total_history",             precision: 8, scale: 2, default: 0.0
-    t.decimal  "total_arrear",              precision: 8, scale: 2, default: 0.0
-    t.boolean  "deleted",                                           default: false, null: false
-    t.datetime "created_at",                                                        null: false
-    t.datetime "updated_at",                                                        null: false
+    t.string   "logistics",        limit: 255
+    t.string   "delivery_address", limit: 255
+    t.integer  "status",           limit: 4,                           default: 0
+    t.string   "note",             limit: 255
+    t.decimal  "amount",                       precision: 8, scale: 2, default: 0.0
+    t.decimal  "arrear",                       precision: 8, scale: 2, default: 0.0
+    t.decimal  "total_history",                precision: 8, scale: 2, default: 0.0
+    t.decimal  "total_arrear",                 precision: 8, scale: 2, default: 0.0
+    t.boolean  "deleted",                                              default: false, null: false
+    t.datetime "created_at",                                                           null: false
+    t.datetime "updated_at",                                                           null: false
   end
 
   add_index "indents", ["agent_id"], name: "index_indents_on_agent_id", using: :btree
@@ -270,6 +268,7 @@ ActiveRecord::Schema.define(version: 20160929035615) do
     t.string  "part_ids",   limit: 255, default: ""
     t.string  "print_size", limit: 255
     t.integer "label_size", limit: 4,   default: 0
+    t.boolean "is_batch"
   end
 
   add_index "packages", ["order_id"], name: "index_packages_on_order_id", using: :btree
@@ -325,8 +324,12 @@ ActiveRecord::Schema.define(version: 20160929035615) do
   end
 
   create_table "provinces", force: :cascade do |t|
-    t.string "name", limit: 255
+    t.string "name",      limit: 255
+    t.string "area_code", limit: 45
+    t.string "index",     limit: 45
   end
+
+  add_index "provinces", ["id"], name: "id_UNIQUE", unique: true, using: :btree
 
   create_table "role_permissions", force: :cascade do |t|
     t.integer  "role_id",       limit: 4
@@ -527,8 +530,6 @@ ActiveRecord::Schema.define(version: 20160929035615) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", using: :btree
 
-  add_foreign_key "cities", "provinces"
-  add_foreign_key "districts", "cities"
   add_foreign_key "materials", "supplies"
   add_foreign_key "tasks", "orders"
 end

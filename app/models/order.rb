@@ -108,6 +108,7 @@ class Order < ActiveRecord::Base
   def order_money_to_int
     self.arrear = self.arrear.round
     self.price = self.price.round
+    self.status = Order.statuses[:offering] if self.units.count < 1 && self.parts.count < 1 && self.crafts.count < 1
   end
 
   def caseType(type, str)

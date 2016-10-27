@@ -447,7 +447,8 @@ class OrdersController < ApplicationController
   def package
     # 按照顺序查找： 指定编号、指定ID、第一个（防止打印页面报错）
     if params[:name].present?
-      @order = Order.where("name like '%#{params[:name]}'").first
+      date = params[:date].presence || {year: Date.today.year.to_s, month: Date.today.month.to_s}
+      @order =  Order.where("name like '#{date[:year]}%-#{date[:month]}-#{params[:name]}'").first # Order.where("name like '%#{params[:name]}'").first
     elsif params[:id].present?
       @order = Order.find_by_id(params[:id])
     else
@@ -463,32 +464,6 @@ class OrdersController < ApplicationController
         logger.debug "自定义日志：" + label_size.to_s
         ids = ActiveSupport::JSON.decode(params[:order_unit_ids])
 
-        ids.each_pair do |key,values|
-          # package.print_size =
-          unit_ids = values.map  do |v|
-            if v =~ /order_unit/
-              id = v.gsub(/order_unit_/,'')
-              id
-            end
-          end
-          # 保存包装记录
-          # package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','))
-          package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','))
-          package.label_size = label_size
-          package.label_size = 1 if package.label_size == 0
-          package.save!
-          # 更新包装状态（已打印）
-          Unit.where(id: unit_ids.compact.uniq).update_all(is_printed: true)
-          # 查出已打包（已保存）的部件、配件id，用于界面显示
-          packaged_unit_ids = @order.packages.map(&:unit_ids).join(',').split(',').uniq.map(&:to_i)
-          unit_ids = @order_units.map(&:id)
-          # 订单的所有部件、配件均已打包，修改订单的状态为“已打包”
-          if (unit_ids - packaged_unit_ids).empty?
-            @order.packaged!
-            update_order_status(@order)
-          end
-        end
-
         # （打印）标签属性设置
         if params[:length].present? && params[:width].present?
           @length = params[:length].to_i
@@ -502,6 +477,36 @@ class OrdersController < ApplicationController
           @length = 80
           @width = 60
         end
+
+        ids.each_pair do |key,values|
+          # package.print_size =
+          unit_ids = values.map  do |v|
+            if v =~ /order_unit/
+              id = v.gsub(/order_unit_/,'')
+              id
+            end
+          end
+          # 保存包装记录
+          # package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','), part_ids: part_ids.compact.join(','))
+          package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','))
+          package.label_size = label_size
+          package.label_size = 1 if package.label_size == 0
+          package.print_size = @length.to_s + "*" + @width.to_s
+          package.is_batch = params[:is_batch].to_i if params[:is_batch].present?
+          package.save!
+          # 更新包装状态（已打印）
+          Unit.where(id: unit_ids.compact.uniq).update_all(is_printed: true)
+          # 查出已打包（已保存）的部件、配件id，用于界面显示
+          packaged_unit_ids = @order.packages.map(&:unit_ids).join(',').split(',').uniq.map(&:to_i)
+          unit_ids = @order_units.map(&:id)
+          # 订单的所有部件、配件均已打包，修改订单的状态为“已打包”
+          if (unit_ids - packaged_unit_ids).empty?
+            @order.packaged!
+            update_order_status(@order)
+          end
+        end
+
+        
 
         # 返回结果
         respond_to do |format|
@@ -531,6 +536,9 @@ class OrdersController < ApplicationController
   def reprint
     @order = Order.find_by_id(params[:id])
     label_size = params[:label_size].to_i
+    binding.pry
+    batch_package = @order.packages.where(is_batch: 1).first
+    batch_package.update(label_size: label_size) if batch_package.present?
     # （打印）标签属性设置
     if params[:length].present? && params[:width].present?
       @length = params[:length].to_i
