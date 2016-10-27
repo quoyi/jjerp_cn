@@ -1,28 +1,23 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
     <div class="panel-title">
-      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 总订单 <small>详细</small> </h2>
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 总订单
+      <small>
+      总订单号：<code><%= @indent.name %></code>&nbsp;&nbsp;&nbsp;&nbsp;
+      代理商:&nbsp;&nbsp;<code><%= @indent.agent.try(:full_name) %></code>&nbsp;&nbsp;&nbsp;&nbsp;
+      终端客户:&nbsp;&nbsp;<code><%= @indent.customer %></code>&nbsp;&nbsp;&nbsp;&nbsp;
+      状态:&nbsp;&nbsp;<code><%= @indent.status_name %></code>
+      </small>
+      </h2>
       <div class="pull-right panel-options">
+        <%= link_to '管理子订单', edit_indent_path(@indent), data: { toggle: 'modal', target: '#editIndent'}, class: 'btn-primary btn' %>
+          <%= link_to '生成报价', generate_indents_path(id: @indent.id), class: 'btn-primary btn', data: {toggle: 'tooltip'}, title: '生成总订单的报价单' %>
         <%= link_to '返回', indents_path, class: 'btn btn-info', data: {toggle:'tooltip'}, title: '返回到订单列表' %>
       </div>
     </div>
   </div>
   <div class="content-box-large box-with-header">
     <div class="row">
-      <div style="font-size: 18px;">
-        <p class="pull-left">总订单号：
-          <code><%= @indent.name %></code>&nbsp;&nbsp;&nbsp;&nbsp;
-          <small class="indent-add-order-btn">
-          代理商:&nbsp;&nbsp;<code><%= @indent.agent.try(:full_name) %></code>&nbsp;&nbsp;&nbsp;&nbsp;
-          终端客户:&nbsp;&nbsp;<code><%= @indent.customer %></code>&nbsp;&nbsp;&nbsp;&nbsp;
-          状态:&nbsp;&nbsp;<code><%= @indent.status_name %></code>
-          </small>
-        </p>
-        <p class="pull-right">
-          <%= link_to '管理子订单', edit_indent_path(@indent), data: { toggle: 'modal', target: '#editIndent'}, class: 'btn-primary btn-sm' %>
-          <%= link_to '生成报价', generate_indents_path(id: @indent.id), class: 'btn-primary btn-sm', data: {toggle: 'tooltip'}, title: '生成总订单的报价单' %>
-        </p>
-      </div>
       <table class="table table-hover table-striped table-bordered table-condensed indent-show-table">
         <tr>
           <th>子订单号</th>

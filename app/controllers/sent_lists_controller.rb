@@ -1,4 +1,6 @@
 class SentListsController < ApplicationController
+  include OrdersHelper
+  include SentListsHelper
   before_action :set_sent_list, only: [:show, :edit, :update, :destroy, :download]
 
   # GET /sent_lists
@@ -25,12 +27,31 @@ class SentListsController < ApplicationController
   # POST /sent_lists
   # POST /sent_lists.json
   def create
-    @sent_list = SentList.new(sent_list_params)
+    if params[:sent][:ids].present?
+      sents = Sent.where(id: params[:sent][:ids].split(','))
+      label_size = sents.map{|s| s.cupboard.to_i + s.robe.to_i + s.door.to_i + s.part.to_i}.sum
+      @sent_list = SentList.create(total: label_size, created_by: Time.new.strftime('%Y-%m-%d %H:%M:%S'))
+      sents.each do |s|
+        s.sent_list_id = @sent_list.id
+        s.save!
+        s.owner.sending!
+        update_order_status(s.owner)
+      end
+      export_sent_list(@sent_list)
+    else
+      @sent_list = SentList.new(sent_list_params)
+    end
 
     respond_to do |format|
       if @sent_list.save
-        format.html { redirect_to @sent_list, notice: 'Sent list was successfully created.' }
-        format.json { render :show, status: :created, location: @sent_list }
+        format.html { redirect_to @sent_list, notice: '发货清单创建成功！' }
+        format.pdf do
+          # 打印尺寸毫米（长宽）
+          pdf = SentListPdf.new(sent_list)
+          send_data pdf.render, filename: "发货清单#{sent_list.name}.pdf",
+            type: "application/pdf",
+            disposition: "inline"
+        end
       else
         format.html { render :new }
         format.json { render json: @sent_list.errors, status: :unprocessable_entity }
@@ -62,13 +83,19 @@ class SentListsController < ApplicationController
     end
   end
 
+  # GET /sent_lists/1/download.xls
+  # GET /sent_lists/1/download.pdf
   def download
     respond_to do |format|
-      format.csv do
-        filename = "发货清单－" + @sent_list.name
-        response.headers['Content-Type'] = "application/vnd.ms-excel"
-        response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
-        render text: to_csv(@sent_list)
+      format.xls do
+        send_file "#{Rails.root}/public/excels/sent_lists/" + @sent_list.name + ".xls", type: 'text/xls; charset=utf-8'
+      end
+      format.pdf do
+        # 打印尺寸毫米（长宽）
+        pdf = SentListPdf.new(@sent_list)
+        send_data pdf.render, filename: "发货清单#{@sent_list.name}.pdf",
+          type: "application/pdf",
+          disposition: "inline"
       end
     end
   end

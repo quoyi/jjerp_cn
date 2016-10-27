@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20161027042300) do
     t.string   "city",             limit: 255
     t.string   "district",         limit: 255
     t.string   "town",             limit: 255
-    t.string   "address",          limit: 255
+    t.string   "address",          limit: 255,                         default: "",    null: false
     t.string   "full_name",        limit: 255,                                         null: false
     t.string   "contacts",         limit: 255
     t.string   "mobile",           limit: 255
@@ -59,11 +59,12 @@ ActiveRecord::Schema.define(version: 20161027042300) do
   add_index "banks", ["is_default"], name: "index_banks_on_is_default", using: :btree
 
   create_table "cities", force: :cascade do |t|
-    t.string "province_id", limit: 45
-    t.string "name",        limit: 255
-    t.string "area_code",   limit: 45
-    t.string "index",       limit: 45
+    t.integer "province_id", limit: 4
+    t.string  "name",        limit: 255
   end
+
+  add_index "cities", ["province_id", "name"], name: "index_cities_on_province_id_and_name", unique: true, using: :btree
+  add_index "cities", ["province_id"], name: "index_cities_on_province_id", using: :btree
 
   create_table "craft_categories", force: :cascade do |t|
     t.string   "full_name",  limit: 255,                         default: "",    null: false
@@ -108,10 +109,12 @@ ActiveRecord::Schema.define(version: 20161027042300) do
   add_index "departments", ["name"], name: "index_departments_on_name", using: :btree
 
   create_table "districts", force: :cascade do |t|
-    t.string "city_id",   limit: 45
-    t.string "name",      limit: 255
-    t.string "area_code", limit: 45
+    t.integer "city_id", limit: 4
+    t.string  "name",    limit: 255
   end
+
+  add_index "districts", ["city_id", "name"], name: "index_districts_on_city_id_and_name", unique: true, using: :btree
+  add_index "districts", ["city_id"], name: "index_districts_on_city_id", using: :btree
 
   create_table "expends", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -263,12 +266,12 @@ ActiveRecord::Schema.define(version: 20161027042300) do
   add_index "orders", ["indent_id"], name: "index_orders_on_indent_id", using: :btree
 
   create_table "packages", force: :cascade do |t|
-    t.integer "order_id",   limit: 4,                null: false
+    t.integer "order_id",   limit: 4,                   null: false
     t.string  "unit_ids",   limit: 255, default: ""
     t.string  "part_ids",   limit: 255, default: ""
     t.string  "print_size", limit: 255
     t.integer "label_size", limit: 4,   default: 0
-    t.boolean "is_batch"
+    t.boolean "is_batch",               default: false, null: false
   end
 
   add_index "packages", ["order_id"], name: "index_packages_on_order_id", using: :btree
@@ -324,12 +327,8 @@ ActiveRecord::Schema.define(version: 20161027042300) do
   end
 
   create_table "provinces", force: :cascade do |t|
-    t.string "name",      limit: 255
-    t.string "area_code", limit: 45
-    t.string "index",     limit: 45
+    t.string "name", limit: 255
   end
-
-  add_index "provinces", ["id"], name: "id_UNIQUE", unique: true, using: :btree
 
   create_table "role_permissions", force: :cascade do |t|
     t.integer  "role_id",       limit: 4
@@ -530,6 +529,8 @@ ActiveRecord::Schema.define(version: 20161027042300) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", using: :btree
 
+  add_foreign_key "cities", "provinces"
+  add_foreign_key "districts", "cities"
   add_foreign_key "materials", "supplies"
   add_foreign_key "tasks", "orders"
 end

@@ -14,14 +14,13 @@ class Agent < ActiveRecord::Base
 
   protected
   def generate_address
-    self.address = Province.find(self.province).try(:name) if self.province.present?
-    self.address += City.find(self.city).try(:name) if self.city.present?
-    self.address += District.find(self.district).try(:name) if self.district.present?
-    self.address += self.town
+    self.address = self.address.to_s + Province.find(self.province).try(:name) if self.province.present?
+    self.address = self.address.to_s + City.find(self.city).try(:name) if self.city.present?
+    self.address = self.address.to_s + District.find(self.district).try(:name) if self.district.present?
+    self.address = self.address.to_s + self.town.to_s
     # if self.city.present?
     #   tmp_address = ""
     #   city_name = ChinaCity.get(city)
-    #   binding.pry
     #   if (city_name =~ /(自治州|单位)$/).present?
     #     tmp_address = ChinaCity.get(province) + ChinaCity.get(district)
     #   elsif (city_name =~ /(市辖区|县)$/).present?

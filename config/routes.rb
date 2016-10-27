@@ -15,7 +15,6 @@ Rails.application.routes.draw do
     collection do
       get :change # 修改发货信息
       get :replenish # 补充发货信息
-      get :download # 下载发货信息
     end
   end
   resources :users, only: [:index, :edit, :update]

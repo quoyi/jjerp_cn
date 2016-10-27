@@ -7,7 +7,7 @@ class CreateAgents < ActiveRecord::Migration
       t.string :city # 市
       t.string :district # 县
       t.string :town # 镇
-      t.string :address # 地址
+      t.string :address, null: false, default: '' # 地址
       t.string :full_name, null: false, index: true # 代理商名称,需要查询
       t.string :contacts # 负责人姓名
       t.string :mobile # 手机

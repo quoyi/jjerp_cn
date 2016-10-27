@@ -1,40 +1,16 @@
 ####################################### 代理商 #######################################
-Agent.create(id: 1,name: 'JX0001',address: '湖北省武汉市', full_name: '小秦代理', contacts: '王xx', mobile: '18610086121', logistics: '顺丰')
-Agent.create(id: 2,name: 'JX0002',address: '贵州省贵阳市', full_name: '傣家代理', contacts: '岳xx', mobile: '18610086122', logistics: '圆通')
-Agent.create(id: 3,name: 'JX0003',address: '河南省郑州市', full_name: '小孙代理', contacts: '孙x', mobile: '18610086123', logistics: '韵达')
+Agent.create(id: 1,name: 'JX0001', province: 17, full_name: '小秦代理', contacts: '王xx', mobile: '18610086121', logistics: '顺丰')
+Agent.create(id: 2,name: 'JX0002', province: 17, full_name: '傣家代理', contacts: '岳xx', mobile: '18610086122', logistics: '圆通')
+Agent.create(id: 3,name: 'JX0003', province: 17, full_name: '小孙代理', contacts: '孙x', mobile: '18610086123', logistics: '韵达')
 puts 'created Agent success ! '
 
 ####################################### 供应商 #######################################
-Supply.create(id: 1,name: 'GY0001', full_name: '小胡供应', mobile: '15215211521', bank_account: '627001702381000001', address: '重庆市', note: '优质代理商')
-Supply.create(id: 2,name: 'GY0002', full_name: '小李供应', mobile: '18618611861', bank_account: '627402709342020582', address: '成都市', note: '一级代理商')
-Supply.create(id: 3,name: 'GY0003', full_name: '小杨供应', mobile: '18318311831', bank_account: '600807920384014023', address: '贵阳市', note: '普通代理商')
+Supply.create(id: 1,name: 'GY0001', full_name: '小胡供应', mobile: '15215211521', bank_account: '627001702381000001', note: '优质代理商')
+Supply.create(id: 2,name: 'GY0002', full_name: '小李供应', mobile: '18618611861', bank_account: '627402709342020582', note: '一级代理商')
+Supply.create(id: 3,name: 'GY0003', full_name: '小杨供应', mobile: '18318311831', bank_account: '600807920384014023', note: '普通代理商')
 puts 'created Supplier success ! '
 
-####################################### 用户类型 #######################################
-UserCategory.create(id: 1, serial: 'UC0001', name: '普通用户', nick: 'normal', visible: true)
-UserCategory.create(id: 2, serial: 'UC0002', name: '企业用户', nick: 'employe', visible: true)
-UserCategory.create(id: 3, serial: 'UC0003', name: '代理商', nick: 'agent', visible: true)
-UserCategory.create(id: 4, serial: 'UC0004', name: '供应商', nick: 'supply', visible: true)
-UserCategory.create(id: 5, serial: 'UC0005', name: '管理员', nick: 'admin', visible: true)
-UserCategory.create(id: 6, serial: 'UC0006', name: '超级管理员', nick: 'super', visible: false)
-puts 'created UserCategory success ! '
-
-####################################### 用户 #######################################
-user = User.find_or_create_by!(email: Rails.application.secrets.admin_email) do |user|
-  user.name = Rails.application.secrets.admin_name
-  user.password = Rails.application.secrets.admin_password
-  user.password_confirmation = Rails.application.secrets.admin_password
-  super_admin = Role.find_or_create_by!(nick: 'super_admin', name: '超级管理员')
-  financial = Role.find_or_create_by!(nick: 'financial', name: '财务')
-  user.add_role!(super_admin.nick)
-  user.add_role!(financial.nick)
-end
-puts 'created User success ! '
-
 ####################################### 配件种类 #######################################
-PartCategory.create(id: 1, parent_id: 0, name:'拉篮')
-PartCategory.create(id: 2, parent_id: 0, name:'滑轨')
-PartCategory.create(id: 3, parent_id: 0, name:'角线')
 PartCategory.create(id: 4, parent_id: 1, name: '100侧拉篮', buy: 100.00, uom: '个', price: 110.00, store: 100, brand: '耐用牌', supply_id: 1)
 PartCategory.create(id: 5, parent_id: 1, name: '200侧拉篮', buy: 200.00, uom: '个', price: 210.00, store: 50, brand: '坚固牌', supply_id: 1)
 PartCategory.create(id: 6, parent_id: 1, name: '400侧拉篮', buy: 300.00, uom: '个', price: 310.00, store: 10, brand: '无敌牌', supply_id: 3)
@@ -86,19 +62,6 @@ Material.create(id: 18, ply: 6, texture: 9, color: 15, store: 50, buy: 100.00, p
 Material.create(id: 19, ply: 6, texture: 10, color: 14, store: 50, buy: 100.00, price: 290.00, name: '39fd6s', full_name: '国色天香密度板18mm', uom: '平方', supply_id: 1);
 puts 'created Material success ! '
 
-####################################### 订单类型 #######################################
-OrderCategory.create(:name => "橱柜")
-OrderCategory.create(:name => "衣柜")
-OrderCategory.create(:name => "门")
-OrderCategory.create(:name => "配件")
-OrderCategory.create(:name => "其他")
-puts 'created OrderCategory success ! '
-
-####################################### 部件类型 #######################################
-UnitCategory.create(:name => "板料")
-UnitCategory.create(:name => "配件")
-UnitCategory.create(:name => "工艺")
-puts 'created UnitCategory success ! '
 
 ####################################### 银行卡 #######################################
 Bank.create(name: '张三', bank_name: '中国银行', bank_card: '627001702381000001', balance: 0, is_default: 1)
@@ -106,12 +69,6 @@ Bank.create(name: '李四', bank_name: '工商银行', bank_card: '6270017023810
 Bank.create(name: '王五', bank_name: '招商银行', bank_card: '627001702381000003', balance: 0)
 Bank.create(name: '刘六', bank_name: '建设银行', bank_card: '627001702381000004', balance: 0)
 puts 'created Bank success ! '
-
-####################################### 单位 #######################################
-Uom.create(name: '平方')
-Uom.create(name: '个')
-Uom.create(name: '次')
-Uom.create(name: '米')
 
 ######################################## 工艺 #######################################
 CraftCategory.create(full_name: '异形', uom: '次', price: 100)
