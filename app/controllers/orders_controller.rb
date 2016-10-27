@@ -287,6 +287,7 @@ class OrdersController < ApplicationController
 
   # 未发货
   def not_sent
+    # binding.pry
     @orders = Order.where(status: Order.statuses[:packaged])
     @indents = @orders.group(:indent_id).map(&:indent)
     @sent = Sent.new()
@@ -536,7 +537,6 @@ class OrdersController < ApplicationController
   def reprint
     @order = Order.find_by_id(params[:id])
     label_size = params[:label_size].to_i
-    binding.pry
     batch_package = @order.packages.where(is_batch: 1).first
     batch_package.update(label_size: label_size) if batch_package.present?
     # （打印）标签属性设置

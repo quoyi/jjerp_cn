@@ -144,40 +144,41 @@ class SentsController < ApplicationController
   # 下载发货清单
   # GET /sent_list
   # GET /sent_list.xls
-  def download
-    if params[:id].present?
-      sent_list = SentList.find_by_id(params[:id])
-    else
-      sents = Sent.where(id: params[:sent][:ids].split(','))
-      sent = sents.first
-      label_size = sent.cupboard + sent.robe + sent.door + sent.part
-      sent_list = SentList.create(total: label_size, created_by: Time.new.strftime('%Y-%m-%d %H:%M:%S'))
-      sents.each do |s|
-        s.sent_list_id = sent_list.id
-        s.save!
-        s.owner.sending!
-        update_order_status(s.owner)
-      end
+  # def download
+  #   binding.pry
+  #   if params[:id].present?
+  #     sent_list = SentList.find_by_id(params[:id])
+  #   # else
+  #   #   sents = Sent.where(id: params[:sent][:ids].split(','))
+  #   #   sent = sents.first
+  #   #   label_size = sent.cupboard + sent.robe + sent.door + sent.part
+  #   #   sent_list = SentList.create(total: label_size, created_by: Time.new.strftime('%Y-%m-%d %H:%M:%S'))
+  #   #   sents.each do |s|
+  #   #     s.sent_list_id = sent_list.id
+  #   #     s.save!
+  #   #     s.owner.sending!
+  #   #     update_order_status(s.owner)
+  #   #   end
       
-    end
-    export_sent_list(sent_list)
-    respond_to do |format|
-      # 根据访问时是否指定后缀名，而返回不同结果(例如：访问/sents/download.xls 返回 xls 格式文件)
-      format.html {redirect_to not_sent_orders_path, notice: '发货清单创建成功！'}
-      format.xls do
-        send_file "#{Rails.root}/public/excels/sent_lists/" + sent_list.name + ".xls", type: 'text/xls; charset=utf-8'
-        #response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
-        #render text: to_csv(sents)
-      end
-      format.pdf do
-        # 打印尺寸毫米（长宽）
-        pdf = SentListPdf.new(sent_list)
-        send_data pdf.render, filename: "发货清单#{sent_list.name}.pdf",
-          type: "application/pdf",
-          disposition: "inline"
-      end
-    end
-  end
+  #   end
+  #   # export_sent_list(sent_list)
+  #   respond_to do |format|
+  #     # 根据访问时是否指定后缀名，而返回不同结果(例如：访问/sents/download.xls 返回 xls 格式文件)
+  #     format.html {redirect_to not_sent_orders_path, notice: '发货清单创建成功！'}
+  #     format.xls do
+  #       send_file "#{Rails.root}/public/excels/sent_lists/" + sent_list.name + ".xls", type: 'text/xls; charset=utf-8'
+  #       #response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
+  #       #render text: to_csv(sents)
+  #     end
+  #     # format.pdf do
+  #     #   # 打印尺寸毫米（长宽）
+  #     #   pdf = SentListPdf.new(sent_list)
+  #     #   send_data pdf.render, filename: "发货清单#{sent_list.name}.pdf",
+  #     #     type: "application/pdf",
+  #     #     disposition: "inline"
+  #     # end
+  #   end
+  # end
 
   # DELETE /sents/1
   # DELETE /sents/1.json

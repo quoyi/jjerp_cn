@@ -6,11 +6,21 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 ####################################### 用户种类 #######################################
-#require "#{Rails.root}/db/init/arear"
-require "#{Rails.root}/db/init/role"
-#require "#{Rails.root}/db/init/basic"
 
-
+# 根据不同环境，初始化数据
+if Rails.env.development?  # 开发环境
+  # 初始化开发环境数据
+  require "#{Rails.root}/db/init/area"
+  require "#{Rails.root}/db/init/role"
+  require "#{Rails.root}/db/init/basic"
+elsif Rails.env.production?  # 生产环境
+  # 初始化生产环境数据
+  require "#{Rails.root}/db/init/area"
+  require "#{Rails.root}/db/init/role"
+else # 其他（测试）环境
+  # 初始化测试环境数据
+  # require "#{Rails.root}/db/init/role"
+end
 
 ####################################### 权限 #######################################
 # Permission.find_or_create_by!(name: '用户', klass: 'UsersController', actions: 'index,edit,update')

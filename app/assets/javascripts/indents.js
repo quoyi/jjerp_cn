@@ -25,20 +25,20 @@ $(function() {
   /**
    * Ajax 获取指定 agent_id 的 agent 对象，并设置indent.logistics
    */
-  function getAgentLogistics(agent_id){
+  function getAgentLogistics(agent_id) {
     $.ajax({
       url: "/agents/" + agent_id,
       dataType: 'json',
       type: 'GET',
-      success: function(data){
+      success: function(data) {
         $("#indent_logistics").val(data.logistics);
         var address = $("#indent_delivery_address").val();
-        if(address == "" || address == null){
+        if (address == "" || address == null) {
           $("#indent_delivery_address").val(data.delivery_address);
         }
       },
-      error: function(data){
-        jsNoty("网络错误！","error");
+      error: function(data) {
+        jsNoty("网络错误！", "error");
       }
     });
   }
@@ -46,15 +46,15 @@ $(function() {
   /**
    * 模态框显示时，初始化物流输入框
    */
-  $("#addIndent").on('shown.bs.modal', function(){
+  $("#addIndent").on('shown.bs.modal', function() {
     var agent_id = $("#indent_agent_id").val();
-    if(agent_id != ''){
+    if (agent_id != '') {
       getAgentLogistics(agent_id);
     }
   });
-  $("#editIndent").on('shown.bs.modal', function(){
+  $("#editIndent").on('shown.bs.modal', function() {
     var agent_id = $("#indent_agent_id").val();
-    if(agent_id != ''){
+    if (agent_id != '') {
       getAgentLogistics(agent_id);
     }
   });
@@ -138,10 +138,10 @@ $(function() {
 
 
 /****** 总订单 新建 子订单 --- 价格 与 板料厚度、材质、颜色 的联动逻辑  开始 ******/
-  /**
-   * Ajax 获取指定 板料价格
-   */
-function getMaterialPrice(obj){
+/**
+ * Ajax 获取指定 板料价格
+ */
+function getMaterialPrice(obj) {
   var fields = $(obj).parents(".fields");
   var ply = fields.find(".material-ply").val();
   var texture = fields.find(".material-texture").val();
@@ -150,65 +150,63 @@ function getMaterialPrice(obj){
   $.ajax({
     url: "/materials/find/",
     dataType: 'json',
-    data: {ply: ply, texture: texture, color: color},
+    data: {
+      ply: ply,
+      texture: texture,
+      color: color
+    },
     type: 'POST',
-    success: function(data){
-      if(data != null){
+    success: function(data) {
+      if (data != null) {
         console.log(data);
         fields.find(".material-uom").val(data.uom);
         fields.find(".material-price").val(data.price);
-      }
-      else{
+      } else {
         fields.find(".material-price").val(0);
       }
     },
-    error: function(data){
-      jsNoty("网络错误！","error");
+    error: function(data) {
+      jsNoty("网络错误！", "error");
     }
   });
 }
 
 
 //全选和反选(未发货not_sent.html)
-function CheckSelect(id){
-  var check_boxes = $('.checkbox-'+id);
-  for ( var i = 0; i < check_boxes.length; i++)  
-  {  
+function CheckSelect(id) {
+  var check_boxes = $('.checkbox-' + id);
+  for (var i = 0; i < check_boxes.length; i++) {
     // 提取控件  
-    var checkbox = check_boxes[i];  
+    var checkbox = check_boxes[i];
     // 检查是否是指定的控件  
-    if (checkbox.checked === false)  
-    {  
+    if (checkbox.checked === false) {
       // 正选  
-      checkbox.checked = true;  
-    }  
-    else if (checkbox.checked === true)  
-    {  
+      checkbox.checked = true;
+    } else if (checkbox.checked === true) {
       // 反选  
-      checkbox.checked = false;  
+      checkbox.checked = false;
     }
-  }  
+  }
 }
 
 
-function download(){
+function sent_list() {
   var ids = new Array();
-  var sents_ids = $("#sents_ids");  
+  var sents_ids = $("#sents_ids");
   var check_boxes = $('.index_checkbox');
-  for ( var i = 0; i < $('.index_checkbox').length; i++){ 
-    if(check_boxes[i].checked){
+  for (var i = 0; i < $('.index_checkbox').length; i++) {
+    if (check_boxes[i].checked) {
       ids.push(check_boxes[i].value);
     }
   }
-  if(ids.length == 0){
-    jsNoty("请先选中所要下载的发货信息！","warning");
+  if (ids.length == 0) {
+    jsNoty("请先选中所要下载的发货信息！", "warning");
     return false;
   }
-
   sents_ids.val(ids);
 
-  url = "/sents/download";
-  $("#batch_set").attr('action', url);
+  // url = "/sent_lists";
+  // $("#batch_set").attr('action', url);
 }
 
 
