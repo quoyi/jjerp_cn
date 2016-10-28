@@ -18,14 +18,12 @@
     <%#= hidden_field_tag :is_custom, true%>
     <div class="modal-body" style="padding: 5px;">
       <!-- 部件 -->
-      <div class="panel panel-default" id="orderUnitsForm">
+      <div class="panel panel-default">
         <div class="panel-heading order-panel-header">
           <h3 class="panel-title order-panel-header">板料&nbsp;&nbsp;&nbsp;&nbsp;
-          <%= link_to '新建', '#', class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addMaterials'} %>
-          <%= f.link_to_add '添加板料', :units, data: {target: '#orderUnitsForm'}, class: 'btn btn-info btn-xs pull-right' %>
           </h3>
         </div>
-        <div class="panel-body" style="padding: 5px 0;">
+        <div class="panel-body" id="orderUnitsForm" style="padding: 5px 0;">
           <%= f.fields_for :units, wrapper: false do |unit_form| %>
           <div class="fields">
             <% uf = unit_form.object %>
@@ -63,16 +61,9 @@
                   <%= unit_form.text_field :note, value: uf.new_record? ? @order.note : uf.note, size: 15, class: 'col-sm-11', placeholder: '请填写备注信息' %>
                 </div>
               </div>
-              <div class="col-sm-1 text-center" >
+              <div class="col-sm-1 text-center" style="margin: 30px 0;">
                 <%= unit_form.link_to_remove '删除', class:'btn btn-info hidden' %>
-                <div class="row" style="padding: 10px;">
-                  <div class="col-sm-12">
-                  <%= f.link_to_add '添加', :units, data: {target: '#orderUnitsForm'}, class: 'btn btn-info' %>
-                  </div>
-                  <div class="col-sm-12">
-                  <%= link_to "删除", "javascript:void(0);", class: 'btn btn-info', onclick: 'delete_separate_from_nested_form(this)', style: 'margin-top: 5px;' %>
-                  </div>
-                </div>
+                <%= link_to "删除", "javascript:void(0);", class: 'btn btn-info', onclick: 'delete_separate_from_nested_form(this)', style: 'margin-top: 5px;' %>
               </div>
             </div>
             <hr style="margin: 5px 0;" />
@@ -80,106 +71,96 @@
           </div>
           <% end %>
         </div>
+        <div class="panel-footer" style="padding: 5px;">
+          <%= link_to '新建基础板料', '#', class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addMaterials'}, title: '创建新的基础板料' %>
+          <%= f.link_to_add '添加板料', :units, data: {target: '#orderUnitsForm'}, class: 'btn btn-info btn-xs pull-right', title: '报价单添加新板料到拆单数据' %>
+        </div>
       </div>
       <!-- 配件 -->
       <div class="panel panel-default">
         <div class="panel-heading order-panel-header">
           <h3 class="panel-title order-panel-header">配件&nbsp;&nbsp;&nbsp;&nbsp;
-          <%= link_to '新建', '#', class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addPartCategories'} %>
-          <%= f.link_to_add '添加配件', :parts, data: {target: '#orderPartsForm'}, class: 'btn btn-info btn-xs pull-right' %>
           </h3>
         </div>
-        <div class="panel-body" style="padding: 5px 0;">
-          <div id="orderPartsForm">
-            <%= f.fields_for :parts, wrapper: false do |part_form| %>
-            <div class="fields">
-              <div class="row">
-                <% pf = part_form.object %>
-                <div class="col-sm-11">
-                  <div class="row">
-                    <div class="">
-                      <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>类型</label>
-                      <%= part_form.collection_select :part_category_id, PartCategory.where(parent_id:0), :id, :name, {selected: PartCategory.find_by_id(pf.part_category_id).try(:parent_id), include_blank: "请选择"}, {required: true, class: 'parent-part-category col-sm-1', onchange: 'setChildPartCategory(this)'} %>
-                      <%= part_form.collection_select :part_category_id, PartCategory.where.not(parent_id:0), :id, :name, {selected: pf.part_category_id, include_blank: "请选择"}, {required: true, class: 'child-part-category col-sm-2', onchange: 'setPartCategoryPrice(this)'} %>
-                    </div>
-                    <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单位</label>
-                    <%= part_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {value: pf.uom, include_blank: "请选择"}, {required: true, class: 'part-category-uom col-sm-1'}%>
-                    <label class="col-sm-1 text-right" style="margin: 7px 0;">单价</label>
-                    <%= part_form.number_field :price, min: 0, step: 0.01, value: pf.new_record? ? 0 : pf.price, class: 'part-category-price col-sm-1', required: true  %>
-                    <label class="col-sm-1 text-right" style="margin: 7px 0;">数量</label>
-                    <%= part_form.number_field :number, min: 0, step: 0.01, value: pf.new_record? ? 1 : pf.number, required: true, class: "col-sm-1" %>
-                    <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>供应商</label>
-                    <%= part_form.collection_select :supply_id, Supply.all, :id, :full_name, {selected: pf.supply_id,include_blank: "请选择"}, {required: true, class: "part-category-supply col-sm-1"}%>
+        <div class="panel-body" id="orderPartsForm" style="padding: 5px 0;">
+          <%= f.fields_for :parts, wrapper: false do |part_form| %>
+          <div class="fields">
+            <% pf = part_form.object %>
+            <div class="row">
+              <div class="col-sm-11">
+                <div class="row">
+                  <div class="">
+                    <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>类型</label>
+                    <%= part_form.collection_select :part_category_id, PartCategory.where(parent_id:0), :id, :name, {selected: PartCategory.find_by_id(pf.part_category_id).try(:parent_id), include_blank: "请选择"}, {required: true, class: 'parent-part-category col-sm-1', onchange: 'setChildPartCategory(this)'} %>
+                    <%= part_form.collection_select :part_category_id, PartCategory.where.not(parent_id:0), :id, :name, {selected: pf.part_category_id, include_blank: "请选择"}, {required: true, class: 'child-part-category col-sm-2', onchange: 'setPartCategoryPrice(this)'} %>
                   </div>
-                  <div class="row">
-                    <label class="col-sm-1 text-right" style="margin: 7px 0;">备注</label>
-                    <%= part_form.text_field :note, value: pf.new_record? ? @order.note : pf.note, class: 'col-sm-11', placeholder: '请填写备注信息'%>
-                  </div>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单位</label>
+                  <%= part_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {value: pf.uom, include_blank: "请选择"}, {required: true, class: 'part-category-uom col-sm-1'}%>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;">单价</label>
+                  <%= part_form.number_field :price, min: 0, step: 0.01, value: pf.new_record? ? 0 : pf.price, class: 'part-category-price col-sm-1', required: true  %>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;">数量</label>
+                  <%= part_form.number_field :number, min: 0, step: 0.01, value: pf.new_record? ? 1 : pf.number, required: true, class: "col-sm-1" %>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>供应商</label>
+                  <%= part_form.collection_select :supply_id, Supply.all, :id, :full_name, {selected: pf.supply_id,include_blank: "请选择"}, {required: true, class: "part-category-supply col-sm-1"}%>
                 </div>
-                <div class="col-sm-1 text-center" style="padding: 6px;">
-                  <%= part_form.link_to_remove '删除', class:'btn btn-info hidden' %>
-                  <div class="row">
-                    <div class="col-sm-12">
-                      <%= f.link_to_add '添加', :parts, data: {target: '#orderPartsForm'}, class: 'btn btn-xs btn-info' %>
-                    </div>
-                    <div class="col-sm-12">
-                      <%= link_to "删除", "javascript:void(0);", class: 'btn btn-xs btn-info', onclick: 'delete_separate_from_nested_form(this)', style: "margin-top: 5px;" %>
-                    </div>
-                  </div>
+                <div class="row">
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;">备注</label>
+                  <%= part_form.text_field :note, value: pf.new_record? ? @order.note : pf.note, class: 'col-sm-11', placeholder: '请填写备注信息'%>
                 </div>
               </div>
-              <hr style="margin: 5px 0;" />
+              <div class="col-sm-1 text-center" style="margin: 14px 0;">
+                <%= part_form.link_to_remove '删除', class:'btn btn-info hidden' %>
+                <%= link_to "删除", "javascript:void(0);", class: 'btn btn-info', onclick: 'delete_separate_from_nested_form(this)' %>
+              </div>
             </div>
-            <% end %>
+            <hr style="margin: 5px 0;" />
           </div>
+          <% end %>
+        </div>
+        <div class="panel-footer" style="padding: 5px;">
+          <%= link_to '新建基础配件', '#', class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addPartCategories'}, title: '创建新的基础配件' %>
+          <%= f.link_to_add '添加配件', :parts, data: {target: '#orderPartsForm'}, class: 'btn btn-info btn-xs pull-right', title: '报价单添加新配件到拆单数据' %>
         </div>
       </div>
       <!-- 工艺 -->
       <div class="panel panel-default">
         <div class="panel-heading order-panel-header">
           <h3 class="panel-title order-panel-header">工艺&nbsp;&nbsp;&nbsp;&nbsp;
-          <%= link_to '新建', '#', class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addCraftCategory'}, title: '新建工艺' %>
-          <%= f.link_to_add '添加工艺', :crafts, data: {target: '#orderCraftsForm'}, class: 'btn btn-info btn-xs pull-right' %>
           </h3>
         </div>
-        <div class="panel-body" style="padding: 5px 0;">
-          <div id="orderCraftsForm">
-            <%= f.fields_for :crafts, wrapper: false do |craft_form| %>
-            <div class="fields">
-              <div class="row">
-                <% cf = craft_form.object %>
-                <div class="col-sm-11">
-                  <div class="row">
-                    <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>名称</label>
-                    <%= craft_form.collection_select :craft_category_id, CraftCategory.where(deleted: false), :id, :full_name, {include_blank: '请选择'}, {class: 'col-sm-3', required: true, onchange: 'setCraft(this)'}%>
-                    <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单位</label>
-                    <%= craft_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {include_blank: '请选择'}, {class: 'col-sm-1 order_craft_uom', required: true} %>
-                    <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单价</label>
-                    <%= craft_form.number_field :price, min: 0, step: 0.01, value: cf.new_record? ? 0 : cf.price, required: true, class: 'col-sm-1 order_craft_price' %>
-                    <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>数量</label>
-                    <%= craft_form.number_field :number, min: 0, step: 0.01, value: cf.new_record? ? 1 : cf.number, class: 'col-sm-1', required: true %>
-                  </div>
-                  <div class="row">
-                    <label class="col-sm-1 text-right">备注</label>
-                    <%= craft_form.text_field :note, value: cf.new_record? ? '' : cf.note, class: 'col-sm-11', placeholder: '请填写备注信息'%>
-                  </div>
+        <div class="panel-body" id="orderCraftsForm" style="padding: 5px 0;">
+          <%= f.fields_for :crafts, wrapper: false do |craft_form| %>
+          <div class="fields">
+            <% cf = craft_form.object %>
+            <div class="row">
+              <div class="col-sm-11">
+                <div class="row">
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>名称</label>
+                  <%= craft_form.collection_select :craft_category_id, CraftCategory.where(deleted: false), :id, :full_name, {include_blank: '请选择'}, {class: 'col-sm-3', required: true, onchange: 'setCraft(this)'}%>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单位</label>
+                  <%= craft_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {include_blank: '请选择'}, {class: 'col-sm-1 order_craft_uom', required: true} %>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单价</label>
+                  <%= craft_form.number_field :price, min: 0, step: 0.01, value: cf.new_record? ? 0 : cf.price, required: true, class: 'col-sm-1 order_craft_price' %>
+                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>数量</label>
+                  <%= craft_form.number_field :number, min: 0, step: 0.01, value: cf.new_record? ? 1 : cf.number, class: 'col-sm-1', required: true %>
                 </div>
-                <div class="col-sm-1 text-center" style="padding: 6px;">
-                  <%= craft_form.link_to_remove '删除', class:'btn btn-info hidden' %>
-                  <div class="row">
-                    <div class="col-sm-12">
-                      <%= f.link_to_add '添加', :crafts, data: {target: '#orderCraftsForm'}, class: 'btn btn-xs btn-info' %>
-                    </div>
-                    <div class="col-sm-12">
-                      <%= link_to "删除", "javascript:void(0);", class: 'btn btn-xs btn-info', onclick: 'delete_separate_from_nested_form(this)', style: 'margin-top: 5px;' %>
-                    </div>
-                  </div>
+                <div class="row">
+                  <label class="col-sm-1 text-right">备注</label>
+                  <%= craft_form.text_field :note, value: cf.new_record? ? '' : cf.note, class: 'col-sm-11', placeholder: '请填写备注信息'%>
                 </div>
               </div>
-              <hr style="margin: 5px 0;" />
+              <div class="col-sm-1 text-center" style="margin: 12px 0;">
+                <%= craft_form.link_to_remove '删除', class:'btn btn-info hidden' %>
+                <%= link_to "删除", "javascript:void(0);", class: 'btn btn-info', onclick: 'delete_separate_from_nested_form(this)' %>
+              </div>
             </div>
-            <% end %>
+            <hr style="margin: 5px 0;" />
           </div>
+          <% end %>
+        </div>
+        <div class="panel-footer" style="padding: 5px;">
+          <%= link_to '新建基础工艺', '#', class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addCraftCategory'}, title: '创建新的基础工艺' %>
+          <%= f.link_to_add '添加工艺', :crafts, data: {target: '#orderCraftsForm'}, class: 'btn btn-info btn-xs pull-right', title: '报价单添加新工艺到拆单数据' %>
         </div>
       </div>
     </div>
@@ -198,7 +179,7 @@
 <%= render '/craft_categories/new' %>
 <script type="text/javascript">
 function delete_separate_from_nested_form(target){
-  var order_fields = $(target).parent().parent().parent().siblings(".col-sm-11");
+  var order_fields = $(target).parent().siblings(".col-sm-11");
   var required_order_fields = order_fields.find("[required='required']");
   console.log(required_order_fields);
   // 动态删除子订单前，将必填项的值设为1
@@ -210,6 +191,6 @@ function delete_separate_from_nested_form(target){
       element.val("1");
     }
   });
-  $(target).parent().parent().prev().click();
+  $(target).prev().click();
 }
 </script>
