@@ -21,10 +21,10 @@ function getAgentInfo(obj){
     success: function(data){
       var panels = $(obj).parents(".panel-heading");
       panels.find("#indent_logistics").val(data.logistics);
-      var address = panels.find("#indent_delivery_address").val();
-      if(address == "" || address == null){
+      // var address = panels.find("#indent_delivery_address").val();
+      // if(address == "" || address == null){
         panels.find("#indent_delivery_address").val(data.delivery_address);
-      }
+      // }
     },
     error: function(data){
       jsNoty("网络错误！","error");

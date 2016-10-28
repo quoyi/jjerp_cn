@@ -32,10 +32,10 @@ $(function() {
       type: 'GET',
       success: function(data) {
         $("#indent_logistics").val(data.logistics);
-        var address = $("#indent_delivery_address").val();
-        if (address == "" || address == null) {
+        // var address = $("#indent_delivery_address").val();
+        // if (address == "" || address == null) {
           $("#indent_delivery_address").val(data.delivery_address);
-        }
+        // }
       },
       error: function(data) {
         jsNoty("网络错误！", "error");
