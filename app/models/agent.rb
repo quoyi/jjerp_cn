@@ -14,7 +14,7 @@ class Agent < ActiveRecord::Base
 
   protected
   def generate_address
-    self.address = self.address.to_s + Province.find(self.province).try(:name) if self.province.present?
+    self.address = Province.find(self.province).try(:name) if self.province.present?
     self.address = self.address.to_s + City.find(self.city).try(:name) if self.city.present?
     self.address = self.address.to_s + District.find(self.district).try(:name) if self.district.present?
     self.address = self.address.to_s + self.town.to_s
