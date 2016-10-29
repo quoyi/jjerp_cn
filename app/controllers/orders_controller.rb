@@ -17,35 +17,23 @@ class OrdersController < ApplicationController
     @end_at = Date.today.end_of_month.to_s
     
     @order_category_id = ''
+    
+    @province = Province.find_by_name("湖北省").try(:id)
+    @provinces = Province.all.order(:id)
+    @city = City.find_by_name("武汉市").try(:id)
+    @cities = City.where(province_id: @province).order(:id)
+    @district = ""
+    @districts = District.where(city_id: @city).order(:id)
     # search = ''
-    if params[:province].present?
-      @province = params[:province]
-    else
-      @province = '420000'
-    end
-    # search << ChinaCity.get(@province)
+    @province = params[:province].presence || @province
     @agents = Agent.where(province: @province)
-
-    if params[:city].present?
-      @city = params[:city]
-    else
-      @city = ''
-    end
-    # search << ChinaCity.get(@city)
+    @city = params[:city].presence || @city
     # @city 不为空时，才需要过滤
     @agents = @agents.where(city: @city) unless @city.blank?
-
-    if params[:district].present?
-      @district = params[:district]
-    else
-      @district = ''
-    end
-    # search << ChinaCity.get(@district)
+    @district = params[:district].presence || @district
     # @district 不为空时，才需要过滤
     @agents = @agents.where(district: @district) unless @district.blank?
     @orders = @orders.where(agent_id: @agents)
-
-    # @orders = @orders.where("delivery_address like :keyword", keyword: "%#{search}%")
 
     # 判断搜索条件 起始时间 -- 结束时间
     if params[:start_at].present? && params[:end_at].present?
