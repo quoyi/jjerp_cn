@@ -32,6 +32,10 @@ class IndentsController < ApplicationController
     end
 
     @indents = @indents.page(params[:page])
+    # respond_to do |format|
+    #   format.html
+    #   format.json { render json: {:indents => (@indents.map{|ac| {id: ac.id, text: (ac.name)}} << {id: nil, text: '全部'}).reverse, :total => @indents.size} }
+    # end
   end
 
   # GET /units/1
