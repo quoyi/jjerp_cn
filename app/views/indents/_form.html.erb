@@ -4,34 +4,56 @@ format: 'yyyy-mm-dd',
 language: 'zh-CN',
 autoclose: true
 });
-// $(".indent_orders_name").click(function(){
-//   var order_name = $(this).text();
-//   $(this).replaceWith("<input type='text' name='indent[orders_attributes][0][name]' value='" + order_name + "' required='required' style='width: 90%;'/>");
-// });
-/**
-* 获取指定代理商信息
-* @param  {[type]} obj [description]
-* @return {[type]}     [description]
-*/
-// function getAgentInfo(obj){
-//   $.ajax({
-//     url: "/agents/" + $(obj).val(),
-//     dataType: 'json',
-//     type: 'GET',
-//     success: function(data){
-//       var panels = $(obj).parents(".panel-heading");
-//       panels.find("#indent_logistics").val(data.logistics);
-//       // var address = panels.find("#indent_delivery_address").val();
-//       // if(address == "" || address == null){
-//         panels.find("#indent_delivery_address").val(data.delivery_address);
-//       // }
-//     },
-//     error: function(data){
-//       jsNoty("网络错误！","error");
-//     }
-//   });
-// }
-// $(".indent-new-select2-agent").select2();
+$('#indentAjaxSearchAgent').each((function(_this) {
+    return function(i, e) {
+      var options, select;
+      select = $(e);
+      options = {
+        placeholder: "搜索代理商名称",
+        minimumInputLength: 0
+      };
+      if (select.hasClass('ajax')) {
+        options.ajax = {
+          url: "/agents.json",
+          dataType: 'json',
+          data: function(term, page) {
+            return {
+              term: term,
+              page: page,
+              per: 25
+            };
+          },
+          results: function(data, page) {
+            return {
+              results: data.agents,
+              more: data.total > (page * 25)
+            };
+          }
+        };
+        options.dropdownCssClass = "bigdrop";
+      }
+      return select.select2(options).select2("data", {
+          "id": $("#indentAjaxSearchAgent").data("id"),
+          "text": (isNaN($("#indentAjaxSearchAgent").data("name")) ? $("#indentAjaxSearchAgent").data("name") : "搜索代理商名称")
+        } //初始化数据
+      );;
+    };
+  })(this)).change(function(){
+    var $select2 = $(this);
+    $.ajax({
+      url: "/agents/" + $select2.val(),
+      dataType: 'json',
+      type: 'GET',
+      success: function(data){
+        var $panels = $select2.parents(".panel-heading");
+        $panels.find("#indent_logistics").val(data.logistics);
+        $panels.find("#indent_delivery_address").val(data.delivery_address);
+      },
+      error: function(data){
+        jsNoty("网络错误！","error");
+      }
+    });
+  });
 </script>
 <%= nested_form_for @indent, url: @indent.new_record? ? indents_path : indent_path(@indent), html: {class: 'form-horizontal', multipart: true} do |f| %>
 <div class="modal-header">
@@ -48,14 +70,14 @@ autoclose: true
         <%= f.hidden_field :name, value: @indent.name %>
         <label for="indent_customer" class="col-sm-1 control-label"><span class="require">*</span>终端客户</label>
         <div class="col-sm-3">
-          <%= f.text_field :customer, class: 'form-control', required: true %>
+          <%= f.text_field :customer, maxlength: 10, class: 'form-control', required: true %>
         </div>
         <label for="indent_agent_id" class="col-sm-1 control-label"><span class="require">*</span>代理商</label>
         <div class="col-sm-3">
           <div class="col-sm-8" style="padding-left: 0px;">
             <%#= f.collection_select :agent_id, Agent.where(deleted: false), :id, :full_name, {include_blank: '请选择', selected: @indent.new_record? ? "" : @indent.agent_id}, {required: true, onchange: 'getAgentInfo(this)'} %>
             <%#= select_tag 'indent[agent_id]', nil, required: true, class: 'indent-new-select2-agent form-control' %>
-            <%= f.hidden_field :agent_id, id: 'indentAjaxSearchAgent', data: {id: @agent_search.try(:id), name: @agent_search.try(:full_name)}, class: 'select2 ajax form-control' %>
+            <%= f.hidden_field :agent_id, id: 'indentAjaxSearchAgent', data: {id: @indent.agent.try(:id), name: @indent.agent.try(:full_name)}, class: 'select2 ajax form-control' %>
           </div>
           <div class="col-sm-4" style="padding-right: 0px;">
             <%= link_to '新建', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm pull-right' %>
@@ -75,9 +97,9 @@ autoclose: true
         <div class="col-sm-3">
           <%= f.date_field :require_at, class: 'form-control', data: {provide: 'datepicker'}, required: true %>
         </div>
-        <%= f.label '收货地址', class:'col-sm-1 control-label' %>
+        <label for="indent_delivery_address" class="col-sm-1 control-label"><span class="require">*</span>收货地址</label>
         <div class="col-sm-2">
-          <%= f.text_field :delivery_address, class: 'form-control' %>
+          <%= f.text_field :delivery_address, maxlength: 10, class: 'form-control', required: true %>
         </div>
       </div>
     </div>
@@ -121,7 +143,7 @@ autoclose: true
               </div>
               <div class="row">
                 <label class="col-sm-1 text-right" style="margin-top: 8px;">货到</label>
-                <%= order_form.text_field :delivery_address, class: "col-sm-3", value: of.new_record? ? '' : of.delivery_address, placeholder: '不填则默认为代理商地址' %>
+                <%= order_form.text_field :delivery_address, maxlength: 10, class: "col-sm-3", value: of.new_record? ? '' : of.delivery_address, placeholder: '不填则默认为代理商地址' %>
                 <label class="col-sm-1 text-right" style="margin-top: 8px;">备注</label>
                 <%= order_form.text_field :note, value: of.new_record? ? '' : of.note, size: 15, class: 'col-sm-7', placeholder: '请填写备注信息' %>
               </div>

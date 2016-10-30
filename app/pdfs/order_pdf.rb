@@ -30,12 +30,12 @@ class OrderPdf < Prawn::Document
       end
       text "高端定制橱柜衣柜", :align => :center, :size => 20, styles: :bold
       text "编    号: #{@order.name}", :size => 14, styles: :bold
-      text "下单展厅: #{@order.indent.agent.full_name}", :size => 14, styles: :bold
-      text "终端客户: #{@order.indent.customer}", :size => 14, styles: :bold
+      text "下单展厅: #{@order.indent.agent.full_name[0,6]}", :size => 14, styles: :bold
+      text "终端客户: #{@order.indent.customer[0,8]}", :size => 14, styles: :bold
       text "产    品: #{@order.order_category.try(:name)}", :size => 14, styles: :bold
-      text "备    注: #{@order.note.truncate(10)}", size: 14, styles: :bold
+      text "备    注: #{@order.note[0,10]}", size: 14, styles: :bold
       text " ", size: 5
-      text "货  到: #{@order.delivery_address}", :size => 18, styles: :bold
+      text "货  到: #{@order.delivery_address[0,7]}", :size => 18, styles: :bold
       # 二维码
       # image "#{Rails.root}/app/assets/images/d2code.png", at: [2, cursor], width: 38, height: 38
       # 条形码
