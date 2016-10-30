@@ -22,50 +22,57 @@ $(function() {
 
 
   /****** 总订单 新建 --- 代理商 与 物流 的联动逻辑  开始 ******/
-  /**
-   * Ajax 获取指定 agent_id 的 agent 对象，并设置indent.logistics
-   */
-  function getAgentLogistics(agent_id) {
+  //ajax动态搜索组团社联系人
+  $('#indentAjaxSearchAgent').each((function(_this) {
+    return function(i, e) {
+      var options, select;
+      select = $(e);
+      options = {
+        placeholder: "搜索代理商名称",
+        minimumInputLength: 0
+      };
+      if (select.hasClass('ajax')) {
+        options.ajax = {
+          url: "/agents.json",
+          dataType: 'json',
+          data: function(term, page) {
+            return {
+              term: term,
+              page: page,
+              per: 25
+            };
+          },
+          results: function(data, page) {
+            return {
+              results: data.agents,
+              more: data.total > (page * 25)
+            };
+          }
+        };
+        options.dropdownCssClass = "bigdrop";
+      }
+      return select.select2(options).select2("data", {
+          "id": $("#indentAjaxSearchAgent").data("id"),
+          "text": (isNaN($("#indentAjaxSearchAgent").data("name")) ? $("#indentAjaxSearchAgent").data("name") : "搜索代理商名称")
+        } //初始化数据
+      );;
+    };
+  })(this)).change(function(){
+    var $select2 = $(this);
     $.ajax({
-      url: "/agents/" + agent_id,
+      url: "/agents/" + $select2.val(),
       dataType: 'json',
       type: 'GET',
-      success: function(data) {
-        $("#indent_logistics").val(data.logistics);
-        // var address = $("#indent_delivery_address").val();
-        // if (address == "" || address == null) {
-          $("#indent_delivery_address").val(data.delivery_address);
-        // }
+      success: function(data){
+        var $panels = $select2.parents(".panel-heading");
+        $panels.find("#indent_logistics").val(data.logistics);
+        $panels.find("#indent_delivery_address").val(data.delivery_address);
       },
-      error: function(data) {
-        jsNoty("网络错误！", "error");
+      error: function(data){
+        jsNoty("网络错误！","error");
       }
     });
-  }
-
-  /**
-   * 模态框显示时，初始化物流输入框
-   */
-  $("#addIndent").on('shown.bs.modal', function() {
-    var agent_id = $("#indent_agent_id").val();
-    if (agent_id != '') {
-      getAgentLogistics(agent_id);
-    }
   });
-  $("#editIndent").on('shown.bs.modal', function() {
-    var agent_id = $("#indent_agent_id").val();
-    if (agent_id != '') {
-      getAgentLogistics(agent_id);
-    }
-  });
-
-  /**
-   * 监听选择代理商事件，级联改变indent.logistics值
-   */
-  // $("#indent_agent_id").change(function(){
-  //   var agent_id = $(this).val();
-  //   getAgentLogistics(agent_id);
-  // });
   /****** 总订单 新建 --- 代理商 与 物流 的联动逻辑  结束 ******/
 
 
@@ -97,7 +104,7 @@ $(function() {
   });
 
   //ajax动态搜索组团社联系人
-  return $('#remoteDataAgent').each((function(_this) {
+  $('#remoteDataAgent').each((function(_this) {
     return function(i, e) {
       var options, select;
       select = $(e);
@@ -138,6 +145,56 @@ $(function() {
 
 
 /****** 总订单 新建 子订单 --- 价格 与 板料厚度、材质、颜色 的联动逻辑  开始 ******/
+// $('#indentAjaxSearchMaterial').each((function(_this) {
+//     return function(i, e) {
+//       var options, select;
+//       select = $(e);
+//       options = {
+//         placeholder: "搜索代理商名称",
+//         minimumInputLength: 0
+//       };
+//       if (select.hasClass('ajax')) {
+//         options.ajax = {
+//           url: "/material_categories.json",
+//           dataType: 'json',
+//           data: function(term, page) {
+//             return {
+//               term: term,
+//               page: page,
+//               per: 25
+//             };
+//           },
+//           results: function(data, page) {
+//             return {
+//               results: data.agents,
+//               more: data.total > (page * 25)
+//             };
+//           }
+//         };
+//         options.dropdownCssClass = "bigdrop";
+//       }
+//       return select.select2(options).select2("data", {
+//           "id": $("#indentAjaxSearchMaterial").data("id"),
+//           "text": (isNaN($("#indentAjaxSearchMaterial").data("name")) ? $("#indentAjaxSearchMaterial").data("name") : "搜索代理商名称")
+//         } //初始化数据
+//       );;
+//     };
+//   })(this));//.change(function(){
+  //   var $select2 = $(this);
+  //   $.ajax({
+  //     url: "/agents/" + $select2.val(),
+  //     dataType: 'json',
+  //     type: 'GET',
+  //     success: function(data){
+  //       var $panels = $select2.parents(".panel-heading");
+  //       $panels.find("#indent_logistics").val(data.logistics);
+  //       $panels.find("#indent_delivery_address").val(data.delivery_address);
+  //     },
+  //     error: function(data){
+  //       jsNoty("网络错误！","error");
+  //     }
+  //   });
+  // });
 /**
  * Ajax 获取指定 板料价格
  */

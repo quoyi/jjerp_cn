@@ -1,8 +1,8 @@
 <script type="text/javascript">
 $("[data-provide=datepicker]").datepicker({
-  format: 'yyyy-mm-dd',
-  language: 'zh-CN',
-  autoclose: true
+format: 'yyyy-mm-dd',
+language: 'zh-CN',
+autoclose: true
 });
 // $(".indent_orders_name").click(function(){
 //   var order_name = $(this).text();
@@ -13,24 +13,25 @@ $("[data-provide=datepicker]").datepicker({
 * @param  {[type]} obj [description]
 * @return {[type]}     [description]
 */
-function getAgentInfo(obj){
-  $.ajax({
-    url: "/agents/" + $(obj).val(),
-    dataType: 'json',
-    type: 'GET',
-    success: function(data){
-      var panels = $(obj).parents(".panel-heading");
-      panels.find("#indent_logistics").val(data.logistics);
-      // var address = panels.find("#indent_delivery_address").val();
-      // if(address == "" || address == null){
-        panels.find("#indent_delivery_address").val(data.delivery_address);
-      // }
-    },
-    error: function(data){
-      jsNoty("网络错误！","error");
-    }
-  });
-}
+// function getAgentInfo(obj){
+//   $.ajax({
+//     url: "/agents/" + $(obj).val(),
+//     dataType: 'json',
+//     type: 'GET',
+//     success: function(data){
+//       var panels = $(obj).parents(".panel-heading");
+//       panels.find("#indent_logistics").val(data.logistics);
+//       // var address = panels.find("#indent_delivery_address").val();
+//       // if(address == "" || address == null){
+//         panels.find("#indent_delivery_address").val(data.delivery_address);
+//       // }
+//     },
+//     error: function(data){
+//       jsNoty("网络错误！","error");
+//     }
+//   });
+// }
+// $(".indent-new-select2-agent").select2();
 </script>
 <%= nested_form_for @indent, url: @indent.new_record? ? indents_path : indent_path(@indent), html: {class: 'form-horizontal', multipart: true} do |f| %>
 <div class="modal-header">
@@ -51,8 +52,14 @@ function getAgentInfo(obj){
         </div>
         <label for="indent_agent_id" class="col-sm-1 control-label"><span class="require">*</span>代理商</label>
         <div class="col-sm-3">
-          <%= f.collection_select :agent_id, Agent.where(deleted: false), :id, :full_name, {include_blank: '请选择', selected: @indent.new_record? ? "" : @indent.agent_id}, {required: true, onchange: 'getAgentInfo(this)'} %>
-          <%= link_to '新建代理商', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm' %>
+          <div class="col-sm-8" style="padding-left: 0px;">
+            <%#= f.collection_select :agent_id, Agent.where(deleted: false), :id, :full_name, {include_blank: '请选择', selected: @indent.new_record? ? "" : @indent.agent_id}, {required: true, onchange: 'getAgentInfo(this)'} %>
+            <%#= select_tag 'indent[agent_id]', nil, required: true, class: 'indent-new-select2-agent form-control' %>
+            <%= f.hidden_field :agent_id, id: 'indentAjaxSearchAgent', data: {id: @agent_search.try(:id), name: @agent_search.try(:full_name)}, class: 'select2 ajax form-control' %>
+          </div>
+          <div class="col-sm-4" style="padding-right: 0px;">
+            <%= link_to '新建', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm pull-right' %>
+          </div>
         </div>
         <label for="indent_logistics" class="col-sm-1 control-label"><span class="require">*</span>要求物流</label>
         <div class="col-sm-2">
@@ -104,6 +111,8 @@ function getAgentInfo(obj){
                   <%#= order_form.number_field :number, value: 1, min: 0, step: 0.01, style: "width: 50%;", readOnly: true, data: {toggle: 'tooltip'}, title: '暂不可用' %>
                 </div> -->
                 <label class="col-sm-1 text-right" style="margin-top: 8px;">板料</label>
+                <%#= order_form.hidden_field :ply, id: 'indentAjaxSearchMaterial', data: {id: @material_search.try(:id), name: @material_search.try(:name)}, class: 'select2 ajax form-control' %>
+
                 <%= order_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {selected: of.new_record? ? init_ply_id : of.ply}, {class: 'col-sm-1 material-ply', onchange: 'getMaterialPrice(this)'} %>
                 <%= order_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]), :id, :name, {selected: of.new_record? ? init_texture_id : of.texture}, {class: 'col-sm-2 material-texture', onchange: 'getMaterialPrice(this)'} %>
                 <%= order_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]), :id, :name,  {selected: of.new_record? ? init_color_id : of.color}, {class: 'col-sm-2 material-color',  onchange: 'getMaterialPrice(this)'} %>
@@ -140,17 +149,17 @@ function getAgentInfo(obj){
 <% end %>
 <script type="text/javascript">
 function delete_order_from_nested_form(obj){
-  var order_fields = $(obj).parent().siblings(".col-sm-10");
-  var required_order_fields = order_fields.find("[required='required']");
-  // 动态删除子订单前，将必填项的值设为1
-  required_order_fields.each(function(){
-    var element = $(this);
-    if(element.is("select")){
-      element.children().last().attr("selected", "selected");
-    }else{
-      element.val("1");
-    }
-  });
-  $(obj).prev().click();
+var order_fields = $(obj).parent().siblings(".col-sm-10");
+var required_order_fields = order_fields.find("[required='required']");
+// 动态删除子订单前，将必填项的值设为1
+required_order_fields.each(function(){
+var element = $(this);
+if(element.is("select")){
+element.children().last().attr("selected", "selected");
+}else{
+element.val("1");
+}
+});
+$(obj).prev().click();
 }
 </script>

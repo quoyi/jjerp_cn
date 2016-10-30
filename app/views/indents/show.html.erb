@@ -3,15 +3,15 @@
     <div class="panel-title">
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 总订单
       <small>
-      总订单号：<code><%= @indent.name %></code>&nbsp;&nbsp;&nbsp;&nbsp;
-      代理商:&nbsp;&nbsp;<code><%= @indent.agent.try(:full_name) %></code>&nbsp;&nbsp;&nbsp;&nbsp;
-      终端客户:&nbsp;&nbsp;<code><%= @indent.customer %></code>&nbsp;&nbsp;&nbsp;&nbsp;
-      状态:&nbsp;&nbsp;<code><%= @indent.status_name %></code>
+      总订单号：<code><%= @indent.name %></code>&nbsp;&nbsp;
+      代理商:&nbsp;<code><%= @indent.agent.try(:full_name).truncate(4) %></code>&nbsp;&nbsp;
+      终端客户:&nbsp;<code><%= @indent.customer.truncate(4) %></code>&nbsp;&nbsp;
+      状态:&nbsp;<code><%= @indent.status_name %></code>
       </small>
       </h2>
       <div class="pull-right panel-options">
-        <%= link_to '管理子订单', edit_indent_path(@indent), data: { toggle: 'modal', target: '#editIndent'}, class: 'btn-primary btn' %>
-          <%= link_to '生成报价', generate_indents_path(id: @indent.id), class: 'btn-primary btn', data: {toggle: 'tooltip'}, title: '生成总订单的报价单' %>
+        <%= link_to '管理', edit_indent_path(@indent), data: { toggle: 'modal', target: '#editIndent'}, class: 'btn-primary btn' %>
+          <%= link_to '报价', generate_indents_path(id: @indent.id), class: 'btn-primary btn', data: {toggle: 'tooltip'}, title: '生成总订单的报价单' %>
         <%= link_to '返回', indents_path, class: 'btn btn-info', data: {toggle:'tooltip'}, title: '返回到订单列表' %>
       </div>
     </div>

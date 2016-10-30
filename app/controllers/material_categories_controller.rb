@@ -7,6 +7,10 @@ class MaterialCategoriesController < ApplicationController
     @material_category = MaterialCategory.new
     @material_categories = MaterialCategory.all
     @material_categories = MaterialCategory.where(oftype:  MaterialCategory.oftypes[params[:oftype]]) if params[:oftype].present?
+    # respond_to do |format|
+    #   format.html
+    #   format.json { render json: {:material_categories => (@material_categories.map{|ac| {id: ac.id, text: (ac.name)}} << {id: nil, text: '全部'}).reverse, :total => @material_categories.size} }
+    # end
   end
 
   # POST /material_categories

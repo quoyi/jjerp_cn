@@ -11,12 +11,11 @@ class AgentsController < ApplicationController
       search = params[:term]
       @agents = @agents.where("full_name like :keyword", keyword: "%#{search}%")
     end
-
+    @agents = @agents.page(params[:page])
     respond_to do |format|
       format.html
       format.json { render json: {:agents => (@agents.map{|ac| {id: ac.id, text: (ac.full_name)}} << {id: nil, text: '全部'}).reverse, :total => @agents.size} }
     end
-
   end
 
   # GET /agents/1
