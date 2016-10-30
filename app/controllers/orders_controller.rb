@@ -27,7 +27,7 @@ class OrdersController < ApplicationController
     # search = ''
     @province = params[:province].presence || @province
     @agents = Agent.where(province: @province)
-    @city = params[:city].presence || @city
+    @city = params[:city] unless params[:city].nil?
     # @city 不为空时，才需要过滤
     @agents = @agents.where(city: @city) unless @city.blank?
     @district = params[:district].presence || @district
