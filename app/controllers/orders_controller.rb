@@ -17,7 +17,7 @@ class OrdersController < ApplicationController
     @end_at = Date.today.end_of_month.to_s
     
     @order_category_id = ''
-    
+    @agents = Agent.all.order(:id)
     @province = Province.find_by_name("湖北省").try(:id)
     @provinces = Province.all.order(:id)
     @city = City.find_by_name("武汉市").try(:id)
@@ -25,8 +25,8 @@ class OrdersController < ApplicationController
     @district = ""
     @districts = District.where(city_id: @city).order(:id)
     # search = ''
-    @province = params[:province].presence || @province
-    @agents = Agent.where(province: @province)
+    @province = params[:province] unless params[:province].nil?
+    @agents = @agents.where(province: @province) unless @province.blank?
     @city = params[:city] unless params[:city].nil?
     # @city 不为空时，才需要过滤
     @agents = @agents.where(city: @city) unless @city.blank?

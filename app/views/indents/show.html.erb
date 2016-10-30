@@ -4,8 +4,8 @@
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 总订单
       <small>
       总订单号：<code><%= @indent.name %></code>&nbsp;&nbsp;
-      代理商:&nbsp;<code><%= @indent.agent.try(:full_name).truncate(4) %></code>&nbsp;&nbsp;
-      终端客户:&nbsp;<code><%= @indent.customer.truncate(4) %></code>&nbsp;&nbsp;
+      代理商:&nbsp;<code><%= @indent.agent.try(:full_name)[0,4] %></code>&nbsp;&nbsp;
+      终端客户:&nbsp;<code><%= @indent.customer[0,4] %></code>&nbsp;&nbsp;
       状态:&nbsp;<code><%= @indent.status_name %></code>
       </small>
       </h2>

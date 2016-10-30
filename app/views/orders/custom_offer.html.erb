@@ -3,8 +3,8 @@
     <div class="panel-title">
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 自定义报价单 <small>
       订单号：<code><%= @order.name %></code>&nbsp;&nbsp;
-      代理商:&nbsp;&nbsp;<code><%= @indent.agent.try(:full_name) %></code>&nbsp;&nbsp;
-      终端客户:&nbsp;&nbsp;<code><%= @indent.customer %></code>&nbsp;&nbsp;
+      代理商:&nbsp;&nbsp;<code><%= @indent.agent.try(:full_name)[0,4] %></code>&nbsp;&nbsp;
+      终端客户:&nbsp;&nbsp;<code><%= @indent.customer[0,4] %></code>&nbsp;&nbsp;
       状态:&nbsp;&nbsp;<code><%= @indent.status_name %></code>
       </small>
       </h2>

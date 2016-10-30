@@ -37,7 +37,7 @@
               <div class="row">
                 <label class="col-sm-2 text-right" style="margin-top: 5px;">地区</label>
                 <div class="col-sm-5 city-group">
-                  <%= select_tag :province, options_from_collection_for_select(@provinces, :id, :name, @province), include_blank: '--省份--', class: 'col-sm-3 orders-search-province', onchange: 'getChinaCity(this);' %>
+                  <%= select_tag :province, options_from_collection_for_select(@provinces, :id, :name, @province), class: 'col-sm-3 orders-search-province', onchange: 'getChinaCity(this);' %>
                   <%= select_tag :city, options_from_collection_for_select(@cities, :id, :name, @city), include_blank: '--城市--', class: 'col-sm-5 orders-search-city', onchange: 'getChinaCity(this);', onclick: 'validateCities(this);' %>
                   <%= select_tag :district, options_from_collection_for_select(@districts, :id, :name, @district), include_blank: '--地区--', class: 'col-sm-4 orders-search-district' %>
                 </div>
@@ -71,6 +71,7 @@
           <th>类型</th>
           <th>代理商</th>
           <th>终端客户</th>
+          <th>收货地址</th>
           <!-- <th>长</th>
           <th>宽</th>
           <th>高</th> -->
@@ -84,9 +85,10 @@
         <% @orders.each do |o| %>
         <tr class="<%= 'danger' if (o.indent.require_at.to_date - Date.today) < 0%>">
           <td class="text-left" class="col-sm-1"><%= link_to o.name, o, data: {toggle: 'tooltip'}, title: '查看子订单详细信息' %></td>
-          <td class="col-sm-1"><%= o.order_category.try(:name) %></td>
-          <td class="col-sm-1"><%= o.indent.agent.try(:full_name) %></td>
-          <td class="col-sm-1"><%= o.indent.customer %></td>
+          <td><%= o.order_category.try(:name) %></td>
+          <td><%= o.indent.agent.try(:full_name) %></td>
+          <td><%= o.indent.customer %></td>
+          <td><%= o.delivery_address %></td>
           <!-- <td class="col-sm-1"><%= o.length %></td>
           <td class="col-sm-1"><%= o.width %></td>
           <td class="col-sm-1"><%= o.height %></td> -->
@@ -94,8 +96,8 @@
           <td><%= o.number %></td>
           <td><%= o.status_name %></td>
           <td class="<%= 'success' if o.income_status == '全款' %>"><%= o.income_status %></td>
-          <td class="col-sm-3"><%= o.note %></td>
-          <td class="col-sm-1">
+          <td><%= o.note %></td>
+          <td>
             <% if o.income_status == '全款' %>
             <button class="btn btn-primary btn-xs" disabled="true">到款</button>
             <% else %>
