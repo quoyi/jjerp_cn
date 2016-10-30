@@ -3,7 +3,7 @@
     <div class="panel-title">
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 发货清单 <small>详细</small> </h2>
       <div class="pull-right panel-options">
-        <%= link_to '下载', download_sent_list_path(@sent_list, format: :csv), class: 'btn btn-danger' %>
+        <%= link_to '下载', download_sent_list_path(@sent_list, format: :xls), class: 'btn btn-danger' %>
         <%= link_to '返回', :back, class: 'btn btn-info', data: {toggle:'tooltip'}, title: '返回发货清单列表' %>
       </div>
     </div>
