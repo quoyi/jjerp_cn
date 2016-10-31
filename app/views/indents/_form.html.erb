@@ -4,56 +4,49 @@ format: 'yyyy-mm-dd',
 language: 'zh-CN',
 autoclose: true
 });
-$('#indentAjaxSearchAgent').each((function(_this) {
-    return function(i, e) {
-      var options, select;
-      select = $(e);
-      options = {
-        placeholder: "搜索代理商名称",
-        minimumInputLength: 0
+$(".remoteDataAgent").select2({
+  language: 'zh-CN',
+  theme: 'bootstrap',
+  // placeholder: "搜索代理商名称",
+  minimumInputLength: 0,
+  // width: '100%',
+  ajax: {
+    url: '/agents.json',
+    dataType: 'json',
+    delay: 250,
+    cache: true,
+    data: function(params){
+      return {
+        term: params.term,
+        page: params.page || 1
       };
-      if (select.hasClass('ajax')) {
-        options.ajax = {
-          url: "/agents.json",
-          dataType: 'json',
-          data: function(term, page) {
-            return {
-              term: term,
-              page: page,
-              per: 25
-            };
-          },
-          results: function(data, page) {
-            return {
-              results: data.agents,
-              more: data.total > (page * 25)
-            };
-          }
-        };
-        options.dropdownCssClass = "bigdrop";
-      }
-      return select.select2(options).select2("data", {
-          "id": $("#indentAjaxSearchAgent").data("id"),
-          "text": (isNaN($("#indentAjaxSearchAgent").data("name")) ? $("#indentAjaxSearchAgent").data("name") : "搜索代理商名称")
-        } //初始化数据
-      );;
-    };
-  })(this)).change(function(){
-    var $select2 = $(this);
-    $.ajax({
-      url: "/agents/" + $select2.val(),
-      dataType: 'json',
-      type: 'GET',
-      success: function(data){
-        var $panels = $select2.parents(".panel-heading");
-        $panels.find("#indent_logistics").val(data.logistics);
-        $panels.find("#indent_delivery_address").val(data.delivery_address);
-      },
-      error: function(data){
-        jsNoty("网络错误！","error");
-      }
-    });
+    },
+    processResults: function(data, params){
+      params.page = params.page || 1;
+      return {
+        results: data.agents,
+        pagination: {
+          more: (params.page * 6) < data.total
+        }
+      };
+    }
+  }
+}).on("select2:select", function(e){
+  var $select2 = $(this);
+  $.ajax({
+    url: "/agents/" + $select2.val(),
+    dataType: 'json',
+    type: 'GET',
+    success: function(data){
+      var $panels = $select2.parents(".panel-heading");
+      $panels.find("#indent_logistics").val(data.logistics);
+      $panels.find("#indent_delivery_address").val(data.delivery_address);
+    },
+    error: function(data){
+      jsNoty("网络错误！","error");
+    }
   });
+});
 </script>
 <%= nested_form_for @indent, url: @indent.new_record? ? indents_path : indent_path(@indent), html: {class: 'form-horizontal', multipart: true} do |f| %>
 <div class="modal-header">
@@ -77,7 +70,11 @@ $('#indentAjaxSearchAgent').each((function(_this) {
           <div class="col-sm-8" style="padding-left: 0px;">
             <%#= f.collection_select :agent_id, Agent.where(deleted: false), :id, :full_name, {include_blank: '请选择', selected: @indent.new_record? ? "" : @indent.agent_id}, {required: true, onchange: 'getAgentInfo(this)'} %>
             <%#= select_tag 'indent[agent_id]', nil, required: true, class: 'indent-new-select2-agent form-control' %>
-            <%= f.hidden_field :agent_id, id: 'indentAjaxSearchAgent', data: {id: @indent.agent.try(:id), name: @indent.agent.try(:full_name)}, class: 'select2 ajax form-control' %>
+            <%#= f.hidden_field :agent_id, id: 'indentAjaxSearchAgent', data: {id: @indent.agent.try(:id), name: @indent.agent.try(:full_name)}, class: 'select2 ajax form-control' %>
+            <select name="indent[agent_id]" class="remoteDataAgent" required="required">
+              <option value="<%= @indent.agent.try(:id) %>" selected="selected"><%= @indent.agent.try(:full_name) %></option>
+            </select>
+            <%#= select_tag :agent_id, nil, data: {id: @indent.agent.try(:id), name: @indent.agent.try(:full_name)}, class: 'editRemoteDataAgent form-control' %>
           </div>
           <div class="col-sm-4" style="padding-right: 0px;">
             <%= link_to '新建', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm pull-right' %>

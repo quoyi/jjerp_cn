@@ -104,44 +104,82 @@ $(function() {
   });
 
   //ajax动态搜索组团社联系人
-  $('#remoteDataAgent').each((function(_this) {
-    return function(i, e) {
-      var options, select;
-      select = $(e);
-      options = {
-        placeholder: "代理商名称",
-        minimumInputLength: 0
-      };
-      if (select.hasClass('ajax')) {
-        options.ajax = {
-          url: "/agents.json",
-          dataType: 'json',
-          data: function(term, page) {
-            return {
-              term: term,
-              page: page,
-              per: 25
-            };
-          },
-          results: function(data, page) {
-            return {
-              results: data.agents,
-              more: data.total > (page * 25)
-            };
+  // $(".remoteDataAgent").select2({
+  //   language: 'zh-CN',
+  //   theme: 'bootstrap',
+  //   // allowClear: true,
+  //   placeholder: "全部",
+  //   minimumInputLength: 0,
+  //   ajax: {
+  //     url: '/agents.json',
+  //     dataType: 'json',
+  //     delay: 250,
+  //     cache: true,
+  //     data: function(params){
+  //       return {
+  //         term: params.term,
+  //         page: params.page || 1
+  //       };
+  //     },
+  //     processResults: function(data, params){
+  //       params.page = params.page || 1;
+  //       return {
+  //         results: data.agents,
+  //         pagination: {
+  //           more: (params.page * 6) < data.total
+  //         }
+  //       };
+  //     }
+  //   }
+  // });
+
+
+
+  $(".remoteDataAgent").select2({
+    language: 'zh-CN',
+    theme: 'bootstrap',
+    placeholder: "全部",
+    minimumInputLength: 0,
+    allowClear: true,
+    ajax: {
+      url: '/agents.json',
+      dataType: 'json',
+      delay: 250,
+      cache: true,
+      data: function(params){
+        return {
+          term: params.term,
+          page: params.page || 1
+        };
+      },
+      processResults: function(data, params){
+        params.page = params.page || 1;
+        return {
+          results: data.agents,
+          pagination: {
+            more: (params.page * 6) < data.total
           }
         };
-        options.dropdownCssClass = "bigdrop";
       }
-      return select.select2(options).select2("data", {
-          "id": $("#remoteDataAgent").data("id"),
-          "text": (isNaN($("#remoteDataAgent").data("name")) ? $("#remoteDataAgent").data("name") : "搜索代理商名称")
-        } //初始化数据
-      );;
-    };
-  })(this));
+    }
+  }).on("select2:select", function(e){
+    var $select2 = $(this);
+    $.ajax({
+      url: "/agents/" + $select2.val(),
+      dataType: 'json',
+      type: 'GET',
+      success: function(data){
+        var $panels = $select2.parents(".panel-heading");
+        $panels.find("#indent_logistics").val(data.logistics);
+        $panels.find("#indent_delivery_address").val(data.delivery_address);
+      },
+      error: function(data){
+        jsNoty("网络错误！","error");
+      }
+    });
+  });
 
 });
-
 
 
 /****** 总订单 新建 子订单 --- 价格 与 板料厚度、材质、颜色 的联动逻辑  开始 ******/

@@ -32,7 +32,11 @@
             </div>
             <div class="col-sm-3">
               <label>代理商: </label>
-              <input type="hidden" id="remoteDataAgent" name='agent_id' data-id="<%=@agent_search.try(:id)%>" data-name="<%=@agent_search.try(:full_name)%>" style="width: 60%" class="select2 ajax"/>
+              <select name="agent_id" class="remoteDataAgent" style="width: 50%;">
+                <option value="<%= @agent_search.try(:id) %>" selected="selected"><%= @agent_search.try(:full_name) %></option>
+                <option value="">全部</option>
+              </select>
+              <!-- <input type="hidden" id="remoteDataAgent" name='agent_id' data-id="<%#=@agent_search.try(:id)%>" data-name="<%#=@agent_search.try(:full_name)%>" style="width: 60%" class="select2 ajax"/> -->
             </div>
           </div>
         </div>

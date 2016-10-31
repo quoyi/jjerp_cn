@@ -7,9 +7,9 @@
   <div class="content-box-large box-with-header">
     <!-- <div class="row content-title">
       <div class="btn-group" role="group" aria-label="">
-        <% PartCategory.group(:name).map(&:name).push('所有').each do |k| %>
+        <#% PartCategory.group(:name).map(&:name).push('所有').each do |k| %>
         <%#= link_to k, parts_path(name: k), class: "btn btn-default #{'btn-primary' if params[:name].presence == k}" %>
-        <% end %>
+        <%# end %>
       </div>
     </div> -->
     <% if params[:start_at] || params[:end_at] || params[:agent_id]%>
