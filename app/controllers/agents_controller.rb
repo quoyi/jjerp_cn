@@ -11,10 +11,19 @@ class AgentsController < ApplicationController
       search = params[:term]
       @agents = @agents.where("full_name like :keyword", keyword: "%#{search}%")
     end
-    @agents = @agents.page(params[:page])
+
     respond_to do |format|
-      format.html
-      format.json { render json: {:agents => (@agents.map{|ac| {id: ac.id, text: (ac.full_name)}} << {id: nil, text: '全部'}).reverse, :total => @agents.size} }
+      format.html { @agents = @agents.page(params[:page]) }
+      format.json {
+        if params[:page]
+          per = 6
+          size = @agents.offset((params[:page].to_i - 1) * per).size  # 剩下的记录条数
+          result = @agents.offset((params[:page].to_i - 1) * per).limit(per)  # 当前显示的所有记录
+          result = result.map{|ac| {id: ac.id, text: (ac.full_name)}}
+          # result = result << {id: "", text: '全部'} if params[:page].to_i == 1
+        end
+        render json: {:agents => result.reverse, :total => size} 
+      }
     end
   end
 

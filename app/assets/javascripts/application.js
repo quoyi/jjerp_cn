@@ -15,7 +15,7 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require turbolinks
-//= require select2
+//= require select2-full
 //= require select2_locale_zh-CN
 //= require jquery.serializejson.min
 //= require jquery.noty.packaged.min
