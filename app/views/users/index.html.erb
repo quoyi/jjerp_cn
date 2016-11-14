@@ -11,11 +11,11 @@
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
           <tr>
-            <th>账号</th>
+            <th>用户名</th>
             <th>电话</th>
             <th>邮箱</th>
             <th>角色</th>
-            <th>修改角色</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
@@ -26,9 +26,9 @@
             <td><%= u.email %></td>
             <td><%= u.roles.map(&:name).join('，') %></td>
             <td>
-              <%# unless u.roles.map(&:nick).include?('super_admin')%>
+              <% unless u.roles.map(&:nick).include?('super_admin')%>
                 <%= link_to '修改', edit_user_path(u), class: 'btn btn-info btn-xs'%>
-              <%# end %>
+              <% end %>
             </td>
           </tr>
           <% end %>

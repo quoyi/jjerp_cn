@@ -10,14 +10,28 @@
       <div class="col-md-12">
         <div class="panel panel-inverse">
           <div class="panel-body">
-            <div class="form-horizontal">
-              <%= form_for(@user, wrapper: :horizontal_form, url: user_path(@user)) do |f| %>
-              <%= f.label '用户名：' %>
-              <%= f.text_field :email, disabled: true %>
-              <%= f.label '角色' %>
-              <%= f.collection_select :role_ids, Role.all, :id, :name, prompt: '请选择' %>
-              <%= f.submit value: "保存", class: "btn btn-sm btn-primary", style: 'margin-left:50px;' %>
-              <%= link_to '返回', users_path, class: 'btn btn-sm btn-default' %>
+            <div class="">
+              <%= form_for @user, html: {class: 'form-inline'} do |f| %>
+              <div class="form-group">
+                <label class="control-label" style="margin: 7px 0;" for="user[username]"><span class="require">*</span>用户名</label>
+                <%= f.text_field :username, maxlength: 20, required: true, class: 'form-control', placeholder: '请输入用户名' %>
+              </div>
+              <div class="form-group">
+              <label class="control-label" style="margin: 7px 0;" for="user[role_ids]"><span class="require">*</span>角色</label>
+                <%= f.select :role_ids, Role.all.collect{|r| [r.name, r.id]}, {include_blank: '请选择'}, required: true, class: 'form-control' %>
+              </div>
+              <div class="form-group">
+                <%= f.label '邮箱/账号：', class: 'control-label' %>
+                <%= f.text_field :email, disabled: true, class: 'form-control' %>
+              </div>
+              <div class="form-group">
+                <%= f.label '电话', for: 'user[mobile]', class: 'control-label' %>
+                <%= f.phone_field :mobile, class: 'form-control', placeholder: '请输入联系电话' %>
+              </div>
+              <div class="form-group">
+                <%= f.submit "保存", class: "btn btn-sm btn-primary", style: 'margin-left:50px;' %>
+                <%= link_to '返回', users_path, class: 'btn btn-sm btn-default' %>
+              </div>
               <% end %>
             </div>
           </div>

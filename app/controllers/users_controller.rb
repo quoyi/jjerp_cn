@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:role_ids, :name, :email)
+      params.require(:user).permit(:role_ids, :name, :email, :username, :mobile)
     end
 
     def change_role
