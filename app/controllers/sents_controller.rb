@@ -122,14 +122,15 @@ class SentsController < ApplicationController
             o_sent.save!
           end
         end
-
         # 发货单的发货时间、物流回执单号不为空时，更新订单状态
         if @sent.sent_at.present? && @sent.logistics_code.present?
           if @sent.owner_type == Indent.name
             indent = Indent.find_by_id(@sent.owner_id)
             indent.sent!
           elsif @sent.owner_type == Order.name
-            Order.find_by_id(@sent.owner_id).sent!
+            order = Order.find_by_id(@sent.owner_id)
+            order.over!
+            update_order_status(order)
           else
             # 更新订单状态错误
           end

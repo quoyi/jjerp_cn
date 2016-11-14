@@ -22,7 +22,11 @@
             <td><%= sent_list.total %></td>
             <td><%= sent_list.created_by %></td>
             <td>
+              <% if sent_list.sents.pluck(:logistics_code).join().blank? %>
               <%= link_to '编辑', edit_sent_list_path(sent_list), class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '编辑发货清单' %>
+              <% else %>
+              <%= link_to '编辑', '#', class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '编辑发货清单', disabled: 'disabled' %>
+              <% end %>
               <%= link_to '下载', "/sent_lists/#{sent_list.id}/download.xls", class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '下载此清单' %>
               <%= link_to '打印', "/sent_lists/#{sent_list.id}/download.pdf", class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '重新打印此清单' %>
             </td>

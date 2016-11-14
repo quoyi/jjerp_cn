@@ -10,8 +10,13 @@
       </small>
       </h2>
       <div class="pull-right panel-options">
-        <%= link_to '管理', edit_indent_path(@indent), data: { toggle: 'modal', target: '#editIndent'}, class: 'btn-primary btn' %>
+        <% if @indent.over? %>
+          <%= link_to '管理', '#', class: 'btn-primary btn', disabled: 'disabled' %>
+          <%= link_to '报价', '#', class: 'btn-primary btn', disabled: 'disabled' %>
+        <% else %>
+          <%= link_to '管理', edit_indent_path(@indent), data: { toggle: 'modal', target: '#editIndent'}, class: 'btn-primary btn' %>
           <%= link_to '报价', generate_indents_path(id: @indent.id), class: 'btn-primary btn', data: {toggle: 'tooltip'}, title: '生成总订单的报价单' %>
+        <% end %>
         <%= link_to '返回', indents_path, class: 'btn btn-info', data: {toggle:'tooltip'}, title: '返回到订单列表' %>
       </div>
     </div>
@@ -22,7 +27,7 @@
         <tr>
           <th>子订单号</th>
           <th>类型</th>
-          <th>数量</th>
+          <th>负责人</th>
           <th>厚度</th>
           <th>材质</th>
           <th>颜色</th>
@@ -40,7 +45,7 @@
         <tr>
           <td><%= link_to o.name, o, data: {toggle:'tooltip'}, title: '子订单详细' %></td>
           <td><%= o.order_category.try(:name) %></td>
-          <td><%= o.number %></td>
+          <td><%= User.find_by(id: o.handler).try(:email).presence || "无" %></td>
           <td><%= MaterialCategory.find(o.ply).try(:name) %></td>
           <td><%= MaterialCategory.find(o.texture).try(:name) %></td>
           <td><%= MaterialCategory.find(o.color).try(:name) %></td>
@@ -50,8 +55,13 @@
           <td><%= o.height %></td>-->
           <td><%= o.status_name %></td>
           <td class="<%= 'success' if o.income_status == '全款' %>"><%= o.income_status %></td>
-          <td style="max-width: 300px;word-break:break-all;word-wrap:break-word;"><%= o.note %></td>
-          <td><%= link_to '自定报价', custom_offer_order_path(o), class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '自定义报价' %>
+          <td><%= o.note %></td>
+          <td>
+            <% if o.over? %>
+              <%= link_to '自定报价', '#', class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '自定义报价', disabled: 'disabled' %>
+            <% else %>
+              <%= link_to '自定报价', custom_offer_order_path(o), class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '自定义报价' %>
+            <% end %>
             <% if o.income_status == '全款' %>
             <button class="btn btn-primary btn-xs" disabled="true">到款</button>
             <% else %>
