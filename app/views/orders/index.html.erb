@@ -76,8 +76,10 @@
           <th>宽</th>
           <th>高</th> -->
           <th data-toggle="tooltip" title="子订单金额">金额</th>
-          <th>数量</th>
+          <th>板料数量</th>
+          <th>负责人</th>
           <th>状态</th>
+          <th>件数</th>
           <th>到款状态</th>
           <th>备注</th>
           <th>操作</th>
@@ -90,11 +92,13 @@
           <td><%= o.indent.customer %></td>
           <td><%= o.delivery_address %></td>
           <!-- <td class="col-sm-1"><%= o.length %></td>
-          <td class="col-sm-1"><%= o.width %></td>
-          <td class="col-sm-1"><%= o.height %></td> -->
+          <td class="col-sm-1"><%#= o.width %></td>
+          <td class="col-sm-1"><%#= o.height %></td> -->
           <td data-toggle="tooltip" title="子订单金额"><%= o.price %></td>
-          <td><%= o.number %></td>
+          <td><%= o.material_number %></td>
+          <td><%= User.find_by(id: o.handler).try(:email).presence || "无" %></td>
           <td><%= o.status_name %></td>
+          <td><%= o.packages.pluck(:label_size).sum %></td>
           <td class="<%= 'success' if o.income_status == '全款' %>"><%= o.income_status %></td>
           <td><%= o.note %></td>
           <td>

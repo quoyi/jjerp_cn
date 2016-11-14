@@ -119,6 +119,8 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
+    handler = @order.handler.to_i
+    return redirect_to :back, error: '没有权限编辑此订单！' if handler != 0 && handler != current_user.id
     return redirect_to @order, error: '请求无效！请检查数据是否有效。' unless params[:order]
     Order.transaction do
       indent = @order.indent
@@ -194,9 +196,9 @@ class OrdersController < ApplicationController
           new_order_arrear = new_order_amount - @order.incomes.pluck(:money).sum
           tmp_agent_arrear -= (origin_order_arrear - new_order_arrear)
           agent.update!(balance: tmp_agent_balance, arrear: tmp_agent_arrear, history: agent.history - order_remain)
-          @order.update!(price: new_order_amount, arrear: 0)
+          @order.update!(price: new_order_amount, arrear: 0, handler: current_user.id)
         else # 收入金额不够时(因为不能同时存在余额和欠款，而且已收金额小于订单总金额)
-          @order.update!(price: new_order_amount, arrear: new_order_amount - @order.incomes.pluck(:money).sum)
+          @order.update!(price: new_order_amount, arrear: new_order_amount - @order.incomes.pluck(:money).sum, handler: current_user.id)
           agent.update!(arrear: agent.arrear - order_remain, history: agent.history - order_remain)
         end
       else # 添加部件、配件、工艺操作
@@ -212,7 +214,7 @@ class OrdersController < ApplicationController
             income.save!
             agent.update!(balance: agent.balance - order_remain.abs, history: agent.history + order_remain.abs)
           else # 收入金额不够时(因为不能同时存在余额和欠款，而且已收金额小于订单总金额)
-            @order.update(price: new_order_amount, arrear: income_remain.abs)
+            @order.update(price: new_order_amount, arrear: income_remain.abs, handler: current_user.id)
             income = @order.incomes.new(indent_id: indent.id, bank_id: Bank.find_by(is_default: 1).id, money: agent.balance,
                                         username: current_user.name, income_at: Time.now, note: "从代理商余额中扣款#{agent.balance}")
             income.save!
@@ -220,7 +222,7 @@ class OrdersController < ApplicationController
                           history: agent.history + order_remain.abs)
           end
         else
-          @order.update!(price: new_order_amount, arrear: @order.arrear +  order_remain.abs)
+          @order.update!(price: new_order_amount, arrear: @order.arrear +  order_remain.abs, handler: current_user.id)
           agent.update!(arrear: agent.arrear + order_remain.abs, history: agent.history + order_remain.abs)
         end
       end

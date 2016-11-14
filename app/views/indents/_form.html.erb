@@ -82,7 +82,7 @@ $(".remoteDataAgent").select2({
         </div>
         <label for="indent_logistics" class="col-sm-1 control-label"><span class="require">*</span>要求物流</label>
         <div class="col-sm-2">
-          <%= f.text_field :logistics, class: 'form-control', required: true %>
+          <%= f.text_field :logistics, class: 'form-control', maxlength: 15, required: true %>
         </div>
       </div>
       <div class="form-group">
@@ -142,7 +142,7 @@ $(".remoteDataAgent").select2({
                 <label class="col-sm-1 text-right" style="margin-top: 8px;">货到</label>
                 <%= order_form.text_field :delivery_address, maxlength: 10, class: "col-sm-3", value: of.new_record? ? '' : of.delivery_address, placeholder: '不填则默认为代理商地址' %>
                 <label class="col-sm-1 text-right" style="margin-top: 8px;">备注</label>
-                <%= order_form.text_field :note, value: of.new_record? ? '' : of.note, size: 15, class: 'col-sm-7', placeholder: '请填写备注信息' %>
+                <%= order_form.text_field :note, value: of.new_record? ? '' : of.note, maxlength: 25, class: 'col-sm-7', placeholder: '请填写备注信息' %>
               </div>
             </div>
             <div class="col-sm-1 text-center indent-orders-delete">

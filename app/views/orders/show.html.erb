@@ -101,7 +101,11 @@
               <%= form_tag import_orders_path, multipart: true, id: 'import-form' do %>
               <%= hidden_field_tag :id, @order.id, id: 'import-field-id', class: 'hidden' %>
               <%= file_field_tag :file, accept: 'csv', multiple: false, id: 'import-field-file', class: 'hidden' %>
-              <%= link_to '导入拆单', '#', id: 'import-btn', class: 'btn-xs btn-primary', data: {toggle:'tooltip'}, title: '从外部文件导入拆单信息' %>
+              <% if @order.over? %>
+                <%= link_to '导入拆单', '#', class: 'btn btn-xs btn-primary', data: {toggle:'tooltip'}, title: '从外部文件导入拆单信息', disabled: 'disabled', style: 'padding: 0;' %>
+              <% else %>
+                <%= link_to '导入拆单', '#', id: 'import-btn', class: 'btn-xs btn-primary', data: {toggle:'tooltip'}, title: '从外部文件导入拆单信息' %>
+              <% end %>
               <% end %>
             </div>
           </div>
@@ -152,7 +156,11 @@
             <tr>
               <th colspan="12">
                 部件信息
+                <% if @order.over? %>
+                <%= link_to '手动编辑', '#', class: 'btn btn-xs btn-primary pull-right', disabled: 'disabled', style: 'padding: 0;' %>
+                <% else %>
                 <%= link_to '手动编辑', '#', data: {toggle:'modal', target: '#addOrderUnits'}, class: 'pull-right btn-xs btn-primary' %>
+                <% end %>
               </th>
             </tr>
             <tr>
@@ -199,7 +207,11 @@
             <tr>
               <th colspan="12">
                 配件信息
+                <% if @order.over? %>
+                <%= link_to '手动编辑', '#', class: 'btn btn-xs btn-primary pull-right', disabled: 'disabled', style: 'padding: 0;' %>
+                <% else %>
                 <%= link_to '手动编辑', '#', data: {toggle:'modal', target: '#addOrderParts'}, class: 'pull-right btn-xs btn-primary' %>
+                <% end %>
               </th>
             </tr>
             <tr>
@@ -234,7 +246,11 @@
             <tr>
               <th colspan="12">
                 工艺
+                <% if @order.over? %>
+                <%= link_to '手动编辑', '#', class: 'btn btn-xs btn-primary pull-right', disabled: 'disabled', style: 'padding: 0;' %>
+                <% else %>
                 <%= link_to '手动编辑', '#', data: {toggle:'modal', target: '#addOrderCrafts'}, class: 'pull-right btn-xs btn-primary' %>
+                <% end %>
               </th>
             </tr>
             <tr>
