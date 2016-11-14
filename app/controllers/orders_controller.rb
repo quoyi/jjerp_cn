@@ -15,6 +15,12 @@ class OrdersController < ApplicationController
     @orders = Order.all.order(created_at: :desc, index: :desc)
     @start_at = Date.today.beginning_of_month.to_s
     @end_at = Date.today.end_of_month.to_s
+    @role = (params[:role] || '').to_i
+    # if @role == Role.find_by(name: ['超级管理员', '管理员']).try(:id)
+    if @role == Role.find_by(name: '下单员').try(:id)
+      @orders = @orders.where(handler: current_user.id) if current_user.roles.pluck(:id).include?(@role)
+    # else
+    end
     
     @order_category_id = ''
     @agents = Agent.all.order(:id)
@@ -613,7 +619,7 @@ class OrdersController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def order_params
     params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture, :material_price, :agent_id,
-                                  :color, :length, :width, :height, :number, :price, :customer, :delivery_address,
+                                  :color, :length, :width, :height, :number, :price, :customer, :delivery_address, :role,
                                   :status, :oftype, :note, :deleted, :file, :_destroy, :is_use_order_material, :arrear,
                                   units_attributes: [:id, :full_name, :number, :ply, :texture, :color, :is_custom,
                                                      :length, :width, :size, :uom, :price, :note, :_destroy],
