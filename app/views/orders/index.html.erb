@@ -30,6 +30,7 @@
                   <%= date_field_tag :start_at, @start_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择起始日期',required: true  %>
                   <span class="text-center" style="margin-top: 5px;font-weight: bold;">--</span>
                   <%= date_field_tag :end_at, @end_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',required: true  %>
+                  <%= select_tag :role, options_for_select(Role.where(display: true).map{|r|[r.name, r.id]}, @role), prompt: '全部' %>
                 </div>
                 <label class="col-sm-2 text-right" style="margin-top: 5px;">订单类型</label>
                 <%= select_tag :order_category_id, options_from_collection_for_select(OrderCategory.all, :id, :name, @order_category_id), include_blank: '请选择', class: 'col-sm-3' %>
