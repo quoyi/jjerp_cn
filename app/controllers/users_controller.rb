@@ -8,6 +8,10 @@ class UsersController < ApplicationController
   def edit
   end
 
+  def profile
+    @user = User.find_by(id: params[:user_id]) if params[:user_id].present?
+  end
+
   def update
     if @user.update(user_params)
       @user.roles.delete(@user.roles.first) if @user.roles.any?
@@ -25,7 +29,7 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:role_ids, :name, :email, :username, :mobile)
+      params.require(:user).permit(:id, :role_ids, :name, :email, :username, :mobile)
     end
 
     def change_role

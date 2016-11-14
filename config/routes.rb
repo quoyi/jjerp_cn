@@ -17,7 +17,9 @@ Rails.application.routes.draw do
       get :replenish # 补充发货信息
     end
   end
-  resources :users, only: [:index, :edit, :update]
+  resources :users, only: [:index, :edit, :update] do
+    get :profile
+  end
 
   resources :offers
   resources :expends

@@ -18,24 +18,24 @@
       <% if current_user.role?("super_admin") || current_user.role?("admin") %>
       <div class="text-center"><h2>欢迎登陆，管理员！</h2></div>
       <% elsif current_user.role?("employee") %>
-        <% searh_order = Order.where("created_at >= ? AND created_at <= ?", Date.today.beginning_of_month, Date.today.end_of_month).order(created_at: :asc).first %>
-<% if searh_order.present? %>        
-<%= form_tag package_order_path(searh_order), class: 'form-inline', method: 'get' do %>
-        <div class="panel panel-info">
-          <div class="panel-heading">
-            <span>查询订单</span>
-          </div>
-          <div class="panel-body">
-            <div class="row">
-              <%= text_field_tag :name, '', autofocus:true, class:'col-sm-offset-3 col-sm-6', placeholder: '请输入订单号', style: 'font-size: 18px; font-weight: bold;', data: {toggle: 'tooltip'}, title: '请输入需要查找、打包的订单号' %>
-              <div class="col-sm-3 text-left">
+      <% searh_order = Order.where("created_at >= ? AND created_at <= ?", Date.today.beginning_of_month, Date.today.end_of_month).order(created_at: :asc).first %>
+      <% if searh_order.present? %>
+      <%= form_tag package_order_path(searh_order), class: 'form-inline', method: 'get' do %>
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <span>查询订单</span>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <%= text_field_tag :name, '', autofocus:true, class:'col-sm-offset-3 col-sm-6', placeholder: '请输入订单号', style: 'font-size: 18px; font-weight: bold;', data: {toggle: 'tooltip'}, title: '请输入需要查找、打包的订单号' %>
+            <div class="col-sm-3 text-left">
               <%= submit_tag '查询', class: 'btn btn-primary', data: {toggle: "tooltip"}, title: '填写订单后，按 Enter 键（或点此按钮）查询' %>
-              </div>
             </div>
           </div>
         </div>
-	<% end %>
-        <% end %>
+      </div>
+      <% end %>
+      <% end %>
       <% else %>
       <!-- <div class="col-md-8" style="padding: 0 5px;">
         <div class="content-box-header">
