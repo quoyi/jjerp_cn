@@ -30,7 +30,7 @@
                   <%= date_field_tag :start_at, @start_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择起始日期',required: true  %>
                   <span class="text-center" style="margin-top: 5px;font-weight: bold;">--</span>
                   <%= date_field_tag :end_at, @end_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',required: true  %>
-                  <%= select_tag :role, options_for_select(Role.where(display: true).map{|r|[r.name, r.id]}, @role), prompt: '全部' %>
+                  <%= select_tag :user_id, options_for_select(User.all.map{|r|[r.username, r.id]}, @user_id), prompt: '全部' %>
                 </div>
                 <label class="col-sm-2 text-right" style="margin-top: 5px;">订单类型</label>
                 <%= select_tag :order_category_id, options_from_collection_for_select(OrderCategory.all, :id, :name, @order_category_id), include_blank: '请选择', class: 'col-sm-3' %>
@@ -97,7 +97,7 @@
           <td class="col-sm-1"><%#= o.height %></td> -->
           <td data-toggle="tooltip" title="子订单金额"><%= o.price %></td>
           <td><%= o.material_number %></td>
-          <td><%= User.find_by(id: o.handler).try(:email).presence || "无" %></td>
+          <td><%= User.find_by(id: o.handler).try(:username).presence || "无" %></td>
           <td><%= o.status_name %></td>
           <td><%= o.packages.pluck(:label_size).sum %></td>
           <td class="<%= 'success' if o.income_status == '全款' %>"><%= o.income_status %></td>
