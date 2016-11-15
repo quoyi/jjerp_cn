@@ -1,5 +1,5 @@
 body {
-  font-size: 12px !important;
+  // font-size: 12px !important;
 
   & .container-fluid {
     min-height: 768px;
@@ -127,6 +127,19 @@ body {
 //   }
 // }
 
+input[type='select'], input[type='phone'], input[type='password']{
+  padding: 6px 3px !important;
+}
+select {
+  padding: 3px !important;
+}
+input[type='text'], input[type='number'] {
+  padding: 3px !important;
+}
+label {
+  margin: 7px 0;
+  padding: 0px 3px !important;
+}
 // table 统一样式
 .table {
   text-align: center;

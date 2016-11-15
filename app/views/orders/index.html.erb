@@ -27,8 +27,8 @@
               <div class="form-group" style="width: 100%;">
                 <label class="col-sm-1 control-label text-right" for="start_at" style="margin-top: 8px; padding: 0px;">下单时间</label>
                 <div class="col-sm-6" style="padding-right: 0px;">
-                  <%= date_field_tag :start_at, @start_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择起始日期',required: true, class: 'form-control', style: 'width: 49%; padding: 3px;' %>
-                  <%= date_field_tag :end_at, @end_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',required: true, class: 'form-control', style: 'width: 49%; padding: 3px;' %>
+                  <%= date_field_tag :start_at, @start_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择起始日期',required: true, class: 'form-control', style: 'width: 49%;' %>
+                  <%= date_field_tag :end_at, @end_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',required: true, class: 'form-control', style: 'width: 49%;' %>
                 </div>
                 <div class="col-sm-2" style="padding-left: 0px;">
                   <%= select_tag :user_id, options_for_select(User.all.map{|r|[r.username, r.id]}, @user_id), prompt: '全部', class: 'form-control', style: 'width: 96%;' %>
