@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  # skip_before_action :authenticate_user!
   before_action :set_current_user, only: [:edit, :update]
 
   def index
@@ -6,6 +7,8 @@ class UsersController < ApplicationController
   end
 
   def edit
+    return redirect_to statics_home_path, error: '没有权限访问该页面！' if current_user.id != @user.id || !current_user.has_role?('super_admin') || !current_user.has_role?('admin')
+    @role = @user.roles.first
   end
 
   def profile
@@ -13,14 +16,21 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update(user_params)
+    # 管理员更新用户角色
+    if user_params[:role_ids]
       @user.roles.delete(@user.roles.first) if @user.roles.any?
-      @user.add_role! change_role.nick if change_role
-      flash[:notice] = '用户修改成功.'
-    else
-      flash[:alert] = '修改过程中出现错误'
+      @role = Role.find(user_params[:role_ids].to_i)
+      @user.add_role! @role.nick
+      flash[:success] = "用户#{@user.username}角色已改为#{@role.name}!"
     end
-    redirect_to edit_user_path(@user)
+    # 用户修改自己的账号信息
+    if (current_user.id == @user.id || current_user.has_role?('super_admin') || current_user.has_role?('admin')) && @user.update(user_params)
+      @role = @user.roles.first
+      flash[:success] = "您的信息已修改！"
+    else
+      flash[:error] = "个人信息修改失败！"
+    end
+    redirect_to :back
   end
 
   private

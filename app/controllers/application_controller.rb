@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   add_flash_types :warning, :error
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!
+  before_action :store_history
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -12,6 +13,10 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
    return statics_home_path
   end
+
+  # def after_sign_up_path_for(resource)
+  #   redirect_to user_profile_path
+  # end
 
   protected
 
@@ -25,5 +30,9 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:account_update) do |u|
       u.permit(:name, :email, :password, :password_confirmation, :current_password)
     end
+  end
+
+  def store_history
+    # request.referer = request.referer || root_path
   end
 end

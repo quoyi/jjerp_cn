@@ -13,33 +13,38 @@
   <% end%>
   <div class="content-box-large box-with-header">
     <div class="row content-table">
-      <%= form_tag indents_path, class: 'form-inline', method: 'get' do %>
       <div class="panel panel-info">
         <div class="panel-heading">
           <span>查询条件</span>
         </div>
         <div class="panel-body">
-          <div class="row">
-            <div class="col-sm-10">
-              <div class="row">
-                <label class="col-sm-2 text-right" style="margin-top: 5px;">下单时间</label>
-                <%= date_field_tag :start_at, @start_at, class: 'col-sm-2 form-control', data: {provide: 'datepicker'}, placeholder: '请选择起始日期',required: true  %>
-                <span class="col-sm-1 text-center" style="margin-top: 5px;font-weight: bold;">----</span>
-                <%= date_field_tag :end_at, @end_at, class: 'col-sm-2 form-control', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',required: true %>
-                <label class="col-sm-2 text-right" style="margin-top: 5px;">代理商</label>
-                <select name="agent_id" class="remoteDataAgent col-sm-2">
-                  <option value="<%= @agent_search.try(:id) %>" selected="selected"><%= @agent_search.try(:full_name) %></option>
-                  <option value="">全部</option>
-                </select>
-              </div>
+          <%= form_tag indents_path, method: 'get', class: 'form-inline', role: 'form' do %>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="start_at" style="margin-top: 5px;">下单时间</label>
+            <div class="col-sm-5">
+              <%= date_field_tag :start_at, @start_at, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择起始日期',required: true  %>
             </div>
-            <div class="col-sm-2">
-              <%= submit_tag '查询', class: 'btn btn-primary' %>
+            <!-- <span class="col-sm-1 text-center" style="margin-top: 5px;font-weight: bold;">----</span> -->
+            <div class="col-sm-5">
+              <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',required: true %>
             </div>
           </div>
+          <div class="form-group" style="width: 40%;">
+            <label class="col-sm-3 control-label" for="agent_id" style="margin-top: 5px;">代理商</label>
+            <div class="col-sm-9">
+              <%= select_tag :agent_id, nil, class: 'form-control remoteDataAgent', style: 'width:100%;' %>
+              <!-- <select name="agent_id" class="remoteDataAgent">
+                <option value="<%#= @agent_search.try(:id) %>" selected="selected"><%#= @agent_search.try(:full_name) %></option>
+                <option value="">全部</option>
+              </select> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <%= submit_tag '查询', class: 'btn btn-primary' %>
+          </div>
+          <% end %>
         </div>
       </div>
-      <% end %>
     </div>
     <div class="row content-table">
       <div class="col-sm-12" style="padding: 0 0 0 5px;">
@@ -92,7 +97,7 @@
                   <% else %>
                   <%= link_to '删除', indent_path(i), method: :delete, class: 'btn btn-primary btn-xs', data: { confirm: '即将删除此订单及所有子订单数据，操作不可逆转，确认删除？'}, title:'删除总订单' %>
                   <% end %>
-                  <%= link_to '到款详细', incomes_indents_path(id: i), class: 'btn-primary btn-xs' %>
+                  <%= link_to '到款详细', incomes_indents_path(id: i), class: 'btn btn-primary btn-xs' %>
                   <%#= link_to '生产', indent_path(id: i.id, indent: {status: 'producing'}),method: :put,class: 'btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
                 </td>
               </tr>
@@ -193,69 +198,67 @@
 </div>
 <script type="text/javascript">
 $(function(){
-  // 存储总订单ids
-  localStorage.removeItem("indent_ids");
-  localStorage.setItem('indent_ids', "");
+// 存储总订单ids
+localStorage.removeItem("indent_ids");
+localStorage.setItem('indent_ids', "");
 });
-
 $("#editIndent").on("hidden.bs.modal", function(e){
-  $(this).removeData("bs.modal");
+$(this).removeData("bs.modal");
 });
 $("#previewPartList").on("hidden.bs.modal", function(e){
-  $(this).removeData("bs.modal");
+$(this).removeData("bs.modal");
+});
+/**
+* 全选 & 反选
+*/
+$("#checkAll").click(function(){
+var ids = new Array();
+var href = "/indents/preview";
+// jQuery 1.6.1 以上版本，必须使用 prop 替换 attr 设置 checked、disabled 等属性，否则 UI 显示不正常
+if ($(this).prop("checked")){ // 全选
+$('.checkbox').each(function(){
+$(this).prop("checked", true);
+ids.push($(this).val());
 });
 
-/**
- * 全选 & 反选
- */
-$("#checkAll").click(function(){
-  var ids = new Array();
-  var href = "/indents/preview";
-  // jQuery 1.6.1 以上版本，必须使用 prop 替换 attr 设置 checked、disabled 等属性，否则 UI 显示不正常
-  if ($(this).prop("checked")){ // 全选
-    $('.checkbox').each(function(){
-      $(this).prop("checked", true);
-      ids.push($(this).val());
-    });
-    
-    if(ids.length > 0){
-      // 修改链接按钮为 可用状态、URL
-      $("#preview-link").removeClass("disabled");
-      $("#preview-link").attr("href", href + "?ids=" + ids);
-    }
-  } else { // 全不选
-    $('.checkbox').each(function(){
-      $(this).prop("checked", false);
-    });
-    // 修改链接按钮为 不可用状态、URL
-    $("#preview-link").addClass("disabled");
-    $("#preview-link").attr("href", "#");
-  }
-  // 将选 indent.id 存储在本地存储 indent_ids 中
-  localStorage.setItem("indent_ids", ids)
+if(ids.length > 0){
+// 修改链接按钮为 可用状态、URL
+$("#preview-link").removeClass("disabled");
+$("#preview-link").attr("href", href + "?ids=" + ids);
+}
+} else { // 全不选
+$('.checkbox').each(function(){
+$(this).prop("checked", false);
+});
+// 修改链接按钮为 不可用状态、URL
+$("#preview-link").addClass("disabled");
+$("#preview-link").attr("href", "#");
+}
+// 将选 indent.id 存储在本地存储 indent_ids 中
+localStorage.setItem("indent_ids", ids)
 });
 $(".checkbox").click(function(){
-  var ids = localStorage.getItem("indent_ids").split(",");
-  $(".checkbox").each(function(){
-    var id = $(this).val();
-    if ($(this).prop("checked")){
-      // ids 中不包含 id 时，才将 id 添加到 ids 中
-      if(ids.indexOf(id) < 0){
-        ids.push(id);
-      }
-    } else {
-      ids.remove(id);
-    }
-  });
-  var href = "/indents/preview";
-  if (ids.length > 0){
-    // 修改链接按钮为 可用状态、URL
-    $("#preview-link").removeClass("disabled");
-    $("#preview-link").attr("href", href + "?ids=" + ids);
-  } else {
-    // 修改链接按钮为 不可用状态、URL
-    $("#preview-link").addClass("disabled");
-    $("#preview-link").attr("href", "#");
-  }
+var ids = localStorage.getItem("indent_ids").split(",");
+$(".checkbox").each(function(){
+var id = $(this).val();
+if ($(this).prop("checked")){
+// ids 中不包含 id 时，才将 id 添加到 ids 中
+if(ids.indexOf(id) < 0){
+ids.push(id);
+}
+} else {
+ids.remove(id);
+}
+});
+var href = "/indents/preview";
+if (ids.length > 0){
+// 修改链接按钮为 可用状态、URL
+$("#preview-link").removeClass("disabled");
+$("#preview-link").attr("href", href + "?ids=" + ids);
+} else {
+// 修改链接按钮为 不可用状态、URL
+$("#preview-link").addClass("disabled");
+$("#preview-link").attr("href", "#");
+}
 });
 </script>

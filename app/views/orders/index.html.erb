@@ -24,30 +24,34 @@
           <div class="row">
             <%= form_tag orders_path, class: 'form-inline', method: 'get' do %>
             <div class="col-sm-10">
-              <div class="row">
-                <label class="col-sm-2 text-right" style="margin-top: 5px;">下单时间</label>
-                <div class="col-sm-5">
-                  <%= date_field_tag :start_at, @start_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择起始日期',required: true  %>
-                  <span class="text-center" style="margin-top: 5px;font-weight: bold;">--</span>
-                  <%= date_field_tag :end_at, @end_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',required: true  %>
-                  <%= select_tag :user_id, options_for_select(User.all.map{|r|[r.username, r.id]}, @user_id), prompt: '全部' %>
+              <div class="form-group" style="width: 100%;">
+                <label class="col-sm-1 control-label text-right" for="start_at" style="margin-top: 8px; padding: 0px;">下单时间</label>
+                <div class="col-sm-6" style="padding-right: 0px;">
+                  <%= date_field_tag :start_at, @start_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择起始日期',required: true, class: 'form-control', style: 'width: 49%; padding: 3px;' %>
+                  <%= date_field_tag :end_at, @end_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',required: true, class: 'form-control', style: 'width: 49%; padding: 3px;' %>
                 </div>
-                <label class="col-sm-2 text-right" style="margin-top: 5px;">订单类型</label>
-                <%= select_tag :order_category_id, options_from_collection_for_select(OrderCategory.all, :id, :name, @order_category_id), include_blank: '请选择', class: 'col-sm-3' %>
+                <div class="col-sm-2" style="padding-left: 0px;">
+                  <%= select_tag :user_id, options_for_select(User.all.map{|r|[r.username, r.id]}, @user_id), prompt: '全部', class: 'form-control', style: 'width: 96%;' %>
+                </div>
+                <label class="col-sm-1 control-label text-right" style="margin-top: 8px; padding: 0px;">订单类型</label>
+                <div class="col-sm-2" style="padding-right: 0px;">
+                  <%= select_tag :order_category_id, options_from_collection_for_select(OrderCategory.all, :id, :name, @order_category_id), include_blank: '请选择', class: 'form-control', style: 'width: 100%; padding: 5px;' %>
+                </div>
               </div>
-              <div class="row">
-                <label class="col-sm-2 text-right" style="margin-top: 5px;">地区</label>
-                <div class="col-sm-5 city-group">
-                  <%= select_tag :province, options_from_collection_for_select(@provinces, :id, :name, @province), class: 'col-sm-3 orders-search-province', onchange: 'getChinaCity(this);' %>
-                  <%= select_tag :city, options_from_collection_for_select(@cities, :id, :name, @city), include_blank: '--城市--', class: 'col-sm-5 orders-search-city', onchange: 'getChinaCity(this);', onclick: 'validateCities(this);' %>
-                  <%= select_tag :district, options_from_collection_for_select(@districts, :id, :name, @district), include_blank: '--地区--', class: 'col-sm-4 orders-search-district' %>
+              <div class="form-group" style="width: 100%; margin-top: 5px;">
+                <label class="col-sm-1 control-label text-right" for="provide" style="margin-top: 8px; padding: 0px;">地区</label>
+                <div class="col-sm-8 city-group">
+                  <%= select_tag :province, options_from_collection_for_select(@provinces, :id, :name, @province), class: 'form-control orders-search-province', onchange: 'getChinaCity(this);', style: 'width: 30%; padding: 3px;' %>
+                  <%= select_tag :city, options_from_collection_for_select(@cities, :id, :name, @city), include_blank: '--城市--', class: 'form-control orders-search-city', onchange: 'getChinaCity(this);', onclick: 'validateCities(this);', style: 'width: 30%; padding: 3px;' %>
+                  <%= select_tag :district, options_from_collection_for_select(@districts, :id, :name, @district), include_blank: '--地区--', class: 'form-control orders-search-district', style: 'width: 38%; padding: 3px;' %>
                 </div>
-                <label class="col-sm-2 text-right" style="margin-top: 5px;">店面名称</label>
-                <!-- <input type="hidden" id="remoteDataAgent" name='agent_id' data-id="<%#=@agent_search.try(:id)%>" data-name="<%#=@agent_search.try(:full_name)%>" class="select2 ajax"/> -->
-                <%= select_tag :agent_id, options_from_collection_for_select(@agents, :id, :full_name), include_blank: '请选择', class: 'col-sm-3 orders-search-agent' %>
+                <label class="col-sm-1 control-label text-right" style="margin-top: 8px; padding: 0px;">店名</label>
+                <div class="col-sm-2" style="padding-right: 0px;">
+                  <%= select_tag :agent_id, options_from_collection_for_select(@agents, :id, :full_name), include_blank: '请选择', class: 'form-control orders-search-agent', style: 'width: 100%; padding: 5px;' %>
+                </div>
               </div>
             </div>
-            <div class="col-sm-2 text-center" style="padding: 13px 0;">
+            <div class="col-sm-2 text-center" style="padding: 19px 0;">
               <%= submit_tag '查询', class: 'btn btn-primary', data: {toggle: 'tooltip'}, title: '修改查询条件后，需先点此查询，否则导出结果依然为上次查询结果！' %>
               <%= link_to '导出结果', orders_path(format: "xls", province: params[:province], city: params[:city], district: params[:district], order_category_id: params[:order_category_id], start_at: params[:start_at], end_at: params[:end_at], agent_id: params[:agent_id]), class: 'btn btn-primary', data: {toggle: 'tooltip'}, title: '将查询结果导出到Excel文件' %>
             </div>

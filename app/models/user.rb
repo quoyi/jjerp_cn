@@ -16,11 +16,11 @@ class User < ActiveRecord::Base
   #   self.roles << Role.find_by_nick("other") if self.roles.nil?
   # end
 
-  # def has_role?(nick)
-  #   # self.roles.exists?(nick: nick)
-  #   # roles.any? { |r| r.nick.underscore.to_sym == role_sym }
-  #   self.roles.pluck(:id).include?(Role.find_by(nick: nick).try(:id))
-  # end
+  def has_role?(nick)
+    # self.roles.exists?(nick: nick)
+    # roles.any? { |r| r.nick.underscore.to_sym == role_sym }
+    self.roles.pluck(:id).include?(Role.find_by(nick: nick).try(:id))
+  end
 
   # def append_role(nick)
   #   return true if has_role?(nick)

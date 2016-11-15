@@ -1,28 +1,26 @@
-<div class="col-md-2">
+<div class="col-xs-2">
     <div class="sidebar content-box" style="display: block;">
         <ul class="nav">
-            <!-- Main menu -->
-            <li class='<%= 'open' if controller_name == 'statics' %>'><a href="<%= statics_home_path %>"><i class="fa fa-home"></i> 个人首页 </a></li>
-            <!-- <li  class="submenu">
-                <a href="#">
-                <i class="fa fa-sitemap"></i> 部门信息 </span>
-            </a>
-        </li> -->
-        <% if current_user.permission?("RolesController", "index") ||
-        current_user.permission?("UsersController", "index")
-        %>
-        <li  class="submenu <%= 'current open' if ['users', 'roles'].include?(controller_name)%>">
+          <!-- Main menu -->
+          <li class='<%= 'open' if controller_name == 'statics' %>'><a href="<%= statics_home_path %>"><i class="fa fa-home"></i> 个人首页 </a></li>
+          <!-- <li  class="submenu <%#= 'open' if controller_name == 'users' && action_name == 'profile' %>">
             <a href="#">
-                <i class="fa fa-user"></i> 员工权限 <span class="caret pull-right"></span>
+              <i class="fa fa-sitemap"></i> 个人设置 </span>
             </a>
-            <ul>
-                <% if current_user.permission?("UsersController", "index")%>
-                <li class="<%="#{'active' if controller_name == 'users'}" %>"><%= link_to '员工信息', users_path %></li>
-                <% end %>
-                <% if current_user.permission?("RolesController", "index")%>
-                <li class="<%="#{'active' if controller_name == 'roles'}" %>"><%= link_to '角色权限', roles_path %></li>
-                <%end%>
-            </ul>
+          </li> -->
+        <% if current_user.permission?("RolesController", "index") || current_user.permission?("UsersController", "index") %>
+        <li class="submenu <%= 'current open' if ['users', 'roles'].include?(controller_name)%>">
+          <a href="#">
+            <i class="fa fa-user"></i> 员工权限 <span class="caret pull-right"></span>
+          </a>
+          <ul>
+            <% if current_user.permission?("UsersController", "index")%>
+            <li class="<%="#{'active' if controller_name == 'users'}" %>"><%= link_to '员工信息', users_path %></li>
+            <% end %>
+            <% if current_user.permission?("RolesController", "index")%>
+            <li class="<%="#{'active' if controller_name == 'roles'}" %>"><%= link_to '角色权限', roles_path %></li>
+            <%end%>
+          </ul>
         </li>
         <%end%>
         <% if current_user.permission?("AgentsController", "index") ||
@@ -79,7 +77,7 @@
         </li>
         <%end%>
         <% if current_user.permission?("IncomesController", "index") ||
-        current_user.permission?("ExpendsController", "index") || 
+        current_user.permission?("ExpendsController", "index") ||
         current_user.permission?("BanksController", "index")
         %>
         <li  class="submenu <%= 'open' if ['banks', 'incomes', 'expends'].include?(controller_name)%>">
@@ -88,16 +86,16 @@
             </a>
             <ul>
                 <% if current_user.permission?("IncomesController", "index") %>
-                    <li class='<%="#{'active' if controller_name == 'incomes' && action_name == 'index' }" %>'><%= link_to '收入', incomes_path %></li>
+                <li class='<%="#{'active' if controller_name == 'incomes' && action_name == 'index' }" %>'><%= link_to '收入', incomes_path %></li>
                 <% end %>
                 <% if current_user.permission?("ExpendsController", "index") %>
-                    <li class='<%="#{'active' if controller_name == 'expends'}" %>'><%= link_to '支出', expends_path %></li>
-                 <% end %>
-                 <% if current_user.permission?("IncomesController", "stat") %>
-                    <li class='<%="#{'active' if controller_name == 'incomes' && action_name == 'stat'}" %>'><%= link_to '收支统计', stat_incomes_path %></li>
-                 <% end %>
-                 <% if current_user.permission?("BanksController", "index") %>
-                    <li class='<%="#{'active' if controller_name == 'banks' && action_name == 'index' }" %>'><%= link_to '银行账户', banks_path %></li>
+                <li class='<%="#{'active' if controller_name == 'expends'}" %>'><%= link_to '支出', expends_path %></li>
+                <% end %>
+                <% if current_user.permission?("IncomesController", "stat") %>
+                <li class='<%="#{'active' if controller_name == 'incomes' && action_name == 'stat'}" %>'><%= link_to '收支统计', stat_incomes_path %></li>
+                <% end %>
+                <% if current_user.permission?("BanksController", "index") %>
+                <li class='<%="#{'active' if controller_name == 'banks' && action_name == 'index' }" %>'><%= link_to '银行账户', banks_path %></li>
                 <% end %>
             </ul>
         </li>
@@ -121,47 +119,47 @@
         <% end %>
         <% if current_user.permission?("OrdersController", "unpack") ||
         current_user.permission?("OrdersController", "package") ||
-        current_user.permission?("OrdersController", "producing") || 
+        current_user.permission?("OrdersController", "producing") ||
         current_user.permission?("OrdersController", "packaged")
         %>
-            <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name) && ['unpack', 'producing', 'package', 'packaged'].include?(action_name) %>">
-                <a href="#">
-                    <i class="fa fa-wrench"></i> 生产任务 <span class="caret pull-right"></span>
-                </a>
-                <ul>
-                    <% if current_user.permission?("OrdersController", "producing") %>
-                    <li class='<%="#{'active' if controller_name == 'orders' and action_name == 'producing'}" %>'><a href="/orders/producing">生产中</a></li>
-                    <% end %>
-                    <% if current_user.permission?("OrdersController", "unpack") || 
-                          current_user.permission?("OrdersController", "package") %>
-                    <li class='<%="#{'active' if controller_name == 'orders' and ['unpack', 'package'].include?(action_name) }" %>'><a href="/orders/unpack">未打包</a></li>
-                    <% end %>
-                    <% if current_user.permission?("OrdersController", "packaged") %>
-                    <li class='<%="#{'active' if controller_name == 'orders' and ['packaged'].include?(action_name) }" %>'><a href="/orders/packaged">已打包</a></li>
-                    <% end %>
-                </ul>
-            </li>
+        <li  class="submenu <%= 'open' if ['indents', 'orders'].include?(controller_name) && ['unpack', 'producing', 'package', 'packaged'].include?(action_name) %>">
+            <a href="#">
+                <i class="fa fa-wrench"></i> 生产任务 <span class="caret pull-right"></span>
+            </a>
+            <ul>
+                <% if current_user.permission?("OrdersController", "producing") %>
+                <li class='<%="#{'active' if controller_name == 'orders' and action_name == 'producing'}" %>'><a href="/orders/producing">生产中</a></li>
+                <% end %>
+                <% if current_user.permission?("OrdersController", "unpack") ||
+                current_user.permission?("OrdersController", "package") %>
+                <li class='<%="#{'active' if controller_name == 'orders' and ['unpack', 'package'].include?(action_name) }" %>'><a href="/orders/unpack">未打包</a></li>
+                <% end %>
+                <% if current_user.permission?("OrdersController", "packaged") %>
+                <li class='<%="#{'active' if controller_name == 'orders' and ['packaged'].include?(action_name) }" %>'><a href="/orders/packaged">已打包</a></li>
+                <% end %>
+            </ul>
+        </li>
         <% end %>
         <% if current_user.permission?("OrdersController", "not_sent") ||
         current_user.permission?("SentListsController", "index") ||
         current_user.permission?("OrdersController", "index")
         %>
-            <li  class="submenu <%= 'open' if ('orders' == controller_name && 'not_sent' == action_name) || ('sents' == controller_name && 'index' == action_name || 'sent_lists' == controller_name && ['index', 'show', 'edit'].include?(action_name) ) %>">
-                <a href="#">
-                    <i class="fa fa-truck"></i> 物流发货 <span class="caret pull-right"></span>
-                </a>
-                <ul>
-                    <% if current_user.permission?("OrdersController", "not_sent") %>
-                    <li class='<%="#{'active' if controller_name == 'orders' and action_name == 'not_sent'}" %>'><a href="/orders/not_sent">待发货</a></li>
-                    <% end %>
-                    <% if current_user.permission?("SentListsController", "index") %>
-                    <li class='<%="#{'active' if controller_name == 'sent_lists' and ['index', 'show', 'edit'].include?(action_name)}" %>'><a href="/sent_lists">发货清单</a></li>
-                    <% end %>
-                    <% if current_user.permission?("SentsController", "index") %>
-                    <li class='<%="#{'active' if controller_name == 'sents' and action_name == 'index'}" %>'><a href="/sents">发货/确认</a></li>
-                    <% end %>
-                </ul>
-            </li>
+        <li  class="submenu <%= 'open' if ('orders' == controller_name && 'not_sent' == action_name) || ('sents' == controller_name && 'index' == action_name || 'sent_lists' == controller_name && ['index', 'show', 'edit'].include?(action_name) ) %>">
+            <a href="#">
+                <i class="fa fa-truck"></i> 物流发货 <span class="caret pull-right"></span>
+            </a>
+            <ul>
+                <% if current_user.permission?("OrdersController", "not_sent") %>
+                <li class='<%="#{'active' if controller_name == 'orders' and action_name == 'not_sent'}" %>'><a href="/orders/not_sent">待发货</a></li>
+                <% end %>
+                <% if current_user.permission?("SentListsController", "index") %>
+                <li class='<%="#{'active' if controller_name == 'sent_lists' and ['index', 'show', 'edit'].include?(action_name)}" %>'><a href="/sent_lists">发货清单</a></li>
+                <% end %>
+                <% if current_user.permission?("SentsController", "index") %>
+                <li class='<%="#{'active' if controller_name == 'sents' and action_name == 'index'}" %>'><a href="/sents">发货/确认</a></li>
+                <% end %>
+            </ul>
+        </li>
         <%end%>
     </ul>
 </div>
