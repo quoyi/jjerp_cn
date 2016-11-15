@@ -26,10 +26,10 @@ $(function(){
       <div class="panel-heading">
         <div class="row">
           <div class="col-sm-3">
-            <%= text_field_tag :unit_part_craft_name, '', autofocus:true, style: 'font-size: 18px; font-weight: bold;', placeholder: '请扫描或者输入条码号' %>
+            <%= text_field_tag :unit_part_craft_name, '', autofocus:true, class: 'form-control', style: 'font-size: 18px; font-weight: bold; padding: 5px;', placeholder: '请扫描或者输入条码号' %>
           </div>
           <div class="col-sm-7">
-            <div class="row" style="margin-top: 2px;">
+            <div class="row">
               <%= form_tag("/orders/#{@order.id}/package.pdf", method: :post, class: 'form-inline') do |f| %>
               <%= hidden_field_tag 'order_unit_ids', '' %>
               <%= hidden_field_tag 'order_label_size', 0 %><!-- 标签数量 -->
@@ -56,7 +56,7 @@ $(function(){
             <%= hidden_field_tag :width, "60" %>
             <%= hidden_field_tag :label_size %>
             <%= hidden_field_tag :is_batch, 1 %>
-            <button type="submit" class="btn btn-primary" style="margin-top: 2px;" <%= disabled='disabled' unless @order.packages.pluck(:label_size).sum > 0 %> onclick="return reprint_set_label_size();">重新打印</button>
+            <button type="submit" class="btn btn-primary" <%= disabled='disabled' unless @order.packages.pluck(:label_size).sum > 0 %> onclick="return reprint_set_label_size();">重新打印</button>
           <% end %>
           </div>
         </div>
@@ -64,13 +64,13 @@ $(function(){
       <div class="panel-body">
         <div class="row" style="box-sizing: border-box;">
           <div class="col-md-4 col-sm-4">
-            <table class="table table-striped table-condensed" id="old_table" style="page-break-before:always;">
+            <table class="table table-hover table-striped table-bordered table-condensed text-center" id="old_table" style="page-break-before:always;border: 1px solid #DDD;">
               <caption style="text-align:center; font-weight: bold; font-size: 20px;">未打包</caption>
               <thead>
                 <tr class="info">
-                  <th class="col-xs-2">条码</th>
-                  <th class="col-xs-2">类型</th>
-                  <th class="col-xs-2">名称</th>
+                  <th>条码</th>
+                  <th>类型</th>
+                  <th>名称</th>
                 </tr>
               </thead>
               <tbody>
@@ -86,13 +86,13 @@ $(function(){
             </table>
           </div>
           <div class="col-md-4 col-sm-4">
-            <table class="table table-striped table-condensed" id="new_table" style="page-break-before:always;">
+            <table class="table table-hover table-striped table-bordered table-condensed text-center" id="new_table" style="page-break-before:always;">
               <caption style="text-align:center; font-weight: bold; font-size: 20px;">已打包</caption>
               <thead>
                 <tr class="success">
-                  <th class="col-xs-2">条码</th>
-                  <th class="col-xs-2">类型</th>
-                  <th class="col-xs-2">名称</th>
+                  <th>条码</th>
+                  <th>类型</th>
+                  <th>名称</th>
                 </tr>
               </thead>
               <tbody>
@@ -100,13 +100,13 @@ $(function(){
             </table>
           </div>
           <div class="col-md-4 col-sm-4">
-            <table class="table table-striped table-condensed" id="printed_table" style="page-break-before:always;">
+            <table class="table table-hover table-striped table-bordered table-condensed text-center" id="printed_table" style="page-break-before:always;border: 1px solid #DDD;">
               <caption style="text-align:center; font-weight: bold; font-size: 20px;">已打印</caption>
               <thead>
                 <tr class="info">
-                  <th class="col-xs-2">条码</th>
-                  <th class="col-xs-1">类型</th>
-                  <th class="col-xs-2">名称</th>
+                  <th>条码</th>
+                  <th>类型</th>
+                  <th>名称</th>
                 </tr>
               </thead>
               <tbody>

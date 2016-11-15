@@ -110,7 +110,7 @@ user = User.find_or_create_by!(email: Rails.application.secrets.admin_email) do 
   super_admin = Role.find_or_create_by!(nick: 'super_admin', name: '超级管理员')
   financial = Role.find_or_create_by!(nick: 'financial', name: '财务')
   user.add_role!(super_admin.nick)
-  user.add_role!(financial.nick)
+  # user.add_role!(financial.nick)
 end
 puts 'created User success !'
 

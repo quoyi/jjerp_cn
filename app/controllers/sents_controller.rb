@@ -25,7 +25,8 @@ class SentsController < ApplicationController
       if orders.present?
         @sents = @sents.where(owner_id: orders.map(&:id))
       else
-        @sents = []
+        # 指定代理商没有订单时，利用数据库主键不可能为 -1 过滤所有记录
+        @sents = @sents.where(owner_id: -1)
       end
     end
     @sents = @sents.page(params[:page])
@@ -186,15 +187,17 @@ class SentsController < ApplicationController
   def destroy
     order = @sent.owner
     sent_list = @sent.sent_list
-    @sent.destroy
-    order.packaged! # 将子订单状态改回上一步“已打包”
-    update_order_status(order)
-    if sent_list.sents.size == 0
+    Sent.transaction do
+      @sent.destroy
+      order.packaged! # 将子订单状态改回上一步“已打包”
+      update_order_status(order)
+      if sent_list.sents.size == 0
       sent_list.destroy!
       File.delete("#{Rails.root}/public/excels/sent_lists/" + sent_list.name + ".xls")
       redirect_to sent_lists_path, notice: '发货记录已删除！'
-    else
-      redirect_to :back, notice: '发货记录已删除！'
+      else
+        redirect_to :back, notice: '发货记录已删除！'
+      end
     end
   end
 

@@ -10,6 +10,7 @@
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 个人首页 </h2>
       <div class="pull-right panel-options">
         <%= link_to '刷新', statics_home_path, class: 'btn btn-info' %>
+        <%= link_to '个人设置', user_profile_path(current_user), class: 'btn btn-default' %>
       </div>
     </div>
   </div>
