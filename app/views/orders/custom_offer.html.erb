@@ -40,7 +40,7 @@
                   <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>名称</label>
                   <%= unit_form.text_field :full_name, maxlength: 15, value: uf.new_record? ? @order.note : uf.full_name, class:'col-sm-2', required: true, placeholder: '请填写部件名称' %>
                   <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>板料</label>
-                  <%= unit_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {selected: uf.new_record? ? @order.ply : uf.ply}, {class: 'material-ply col-sm-1', onchange: 'getMaterialPrice(this)'} %>
+                  <%= unit_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {selected: uf.new_record? ? @order.ply : uf.ply}, {class: 'material-ply col-sm-1', onchange: 'getMaterialPrice(this)', style: 'padding: 5px 3px !important;'} %>
                   <%= unit_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]),:id, :name, {selected: uf.new_record? ? @order.texture : uf.texture}, {class: 'material-texture col-sm-2', onchange: 'getMaterialPrice(this)'} %>
                   <%= unit_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]),:id, :name, {selected: uf.new_record? ? @order.color : uf.color}, {class: 'material-color col-sm-2', onchange: 'getMaterialPrice(this)'} %>
                   <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单位</label>
