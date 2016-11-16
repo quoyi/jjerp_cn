@@ -48,7 +48,7 @@ $(".remoteDataAgent").select2({
   });
 });
 </script>
-<%= nested_form_for @indent, url: @indent.new_record? ? indents_path : indent_path(@indent), html: {class: 'form-horizontal', multipart: true} do |f| %>
+<%= nested_form_for @indent, url: @indent.new_record? ? indents_path : indent_path(@indent), html: {class: 'form-inline', multipart: true, id: 'indent_form_fields'} do |f| %>
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
   <h4 class="modal-title" id="addIndentLabel"> 订单
@@ -59,44 +59,40 @@ $(".remoteDataAgent").select2({
 <div class="modal-body" style="padding-bottom: 0px;">
   <div class="panel panel-default" style="margin-bottom: 0px;">
     <div class="panel-heading">
-      <div class="form-group">
+      <div class="row">
         <%= f.hidden_field :name, value: @indent.name %>
-        <label for="indent_customer" class="col-sm-1 control-label" style="margin: 7px 0;"><span class="require">*</span>终端客户</label>
-        <div class="col-sm-3">
-          <%= f.text_field :customer, maxlength: 10, class: 'form-control', required: true %>
+        <label for="indent_customer" class="col-sm-1 control-label text-right"><span class="require">*</span>终端客户</label>
+        <div class="col-sm-3" style="padding: 0px">
+          <%= f.text_field :customer, maxlength: 10, class: 'form-control', required: true, style: 'width: 100%;' %>
         </div>
-        <label for="indent_agent_id" class="col-sm-1 control-label" style="margin: 7px 0;"><span class="require">*</span>代理商</label>
-        <div class="col-sm-3">
-          <div class="col-sm-8" style="padding-left: 0px;">
-            <%#= f.collection_select :agent_id, Agent.where(deleted: false), :id, :full_name, {include_blank: '请选择', selected: @indent.new_record? ? "" : @indent.agent_id}, {required: true, onchange: 'getAgentInfo(this)'} %>
-            <%#= select_tag 'indent[agent_id]', nil, required: true, class: 'indent-new-select2-agent form-control' %>
-            <%#= f.hidden_field :agent_id, id: 'indentAjaxSearchAgent', data: {id: @indent.agent.try(:id), name: @indent.agent.try(:full_name)}, class: 'select2 ajax form-control' %>
-            <select name="indent[agent_id]" class="remoteDataAgent" required="required">
+        <label for="indent_agent_id" class="col-sm-1 control-label text-right"><span class="require">*</span>代理商</label>
+        <div class="col-sm-3" style="padding: 0px;">
+          <div class="col-sm-8" style="padding: 0px;">
+            <select name="indent[agent_id]" class="remoteDataAgent" required="required" style="width: 100%;">
               <option value="<%= @indent.agent.try(:id) %>" selected="selected"><%= @indent.agent.try(:full_name) %></option>
             </select>
-            <%#= select_tag :agent_id, nil, data: {id: @indent.agent.try(:id), name: @indent.agent.try(:full_name)}, class: 'editRemoteDataAgent form-control' %>
           </div>
-          <div class="col-sm-4" style="padding-right: 0px;">
+          <div class="col-sm-4" style="padding: 2px 0px 2px 0px;">
             <%= link_to '新建', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm pull-right' %>
           </div>
         </div>
-        <label for="indent_logistics" class="col-sm-1 control-label" style="margin: 7px 0;"><span class="require">*</span>要求物流</label>
-        <div class="col-sm-3">
-          <%= f.text_field :logistics, class: 'form-control', maxlength: 15, required: true %>
+        <label for="indent_logistics" class="col-sm-1 control-label text-right"><span class="require">*</span>要求物流</label>
+        <div class="col-sm-3" style="padding-left: 0px;">
+          <%= f.text_field :logistics, class: 'form-control', maxlength: 15, required: true, style: 'width: 100%;' %>
         </div>
       </div>
-      <div class="form-group">
-        <label for="indent_verify_at" class="col-sm-1 control-label" style="margin: 7px 0;"><span class="require">*</span>下单时间</label>
-        <div class="col-sm-3">
-          <%= f.date_field :verify_at, class: 'form-control', data: {provide: 'datepicker'}, required: true %>
+      <div class="row" style="margin-top: 5px;">
+        <label for="indent_verify_at" class="col-sm-1 control-label text-right"><span class="require">*</span>下单时间</label>
+        <div class="col-sm-3" style="padding: 0px;">
+          <%= f.date_field :verify_at, class: 'form-control', data: {provide: 'datepicker'}, required: true, style: 'width: 100%;' %>
         </div>
-        <label for="indent_require_at" class="col-sm-1 control-label" style="margin: 7px 0;"><span class="require">*</span>要求时间</label>
-        <div class="col-sm-3">
-          <%= f.date_field :require_at, class: 'form-control', data: {provide: 'datepicker'}, required: true %>
+        <label for="indent_require_at" class="col-sm-1 control-label text-right"><span class="require">*</span>要求时间</label>
+        <div class="col-sm-3" style="padding: 0px;">
+          <%= f.date_field :require_at, class: 'form-control', data: {provide: 'datepicker'}, required: true, style: 'width: 100%;' %>
         </div>
-        <label for="indent_delivery_address" class="col-sm-1 control-label" style="margin: 7px 0;"><span class="require">*</span>收货地址</label>
-        <div class="col-sm-3">
-          <%= f.text_field :delivery_address, maxlength: 10, class: 'form-control', required: true %>
+        <label for="indent_delivery_address" class="col-sm-1 control-label text-right"><span class="require">*</span>收货地址</label>
+        <div class="col-sm-3" style="padding-left: 0px;">
+          <%= f.text_field :delivery_address, maxlength: 10, class: 'form-control', required: true, style: 'width: 100%;' %>
         </div>
       </div>
     </div>
@@ -111,11 +107,11 @@ $(".remoteDataAgent").select2({
             <% init_texture_id = MaterialCategory.find_by(name: '颗粒板').try(:id) %>
             <% init_color_id = MaterialCategory.find_by(name: '国色天香').try(:id) %>
             <% init_price = Material.find_by(ply: init_ply_id, texture: init_texture_id, color: init_color_id).try(:price) %>
-            <div class="col-sm-1 text-center indent-orders-title" style="margin: 9px 0; padding: 0px;">
+            <div class="col-sm-1 text-center indent-orders-title" style="margin: 0; padding: 0px;">
               <% if of.new_record? %>
-              <h4>子订单</h4>
+              <h4 style="padding: 16px 0;">子订单</h4>
               <% else %>
-              <h4 style="padding-top: 0px;">子订单</h4>
+              <h4 style="padding-top: 1px;">子订单</h4>
               <p class="indent_orders_name"><%= of.name %></p>
               <%#=order_form.text_field :name, value: of.name, required: true, style: 'width: 95%' %>
               <% end %>
@@ -123,20 +119,33 @@ $(".remoteDataAgent").select2({
             <div class="col-sm-10" style="padding-left: 0px;">
               <div class="row">
                 <label class="col-sm-1 text-right" style="margin: 8px 0;"><span class="require">*</span>类型</label>
-                <%= order_form.collection_select :order_category_id, OrderCategory.all, :id, :name, {include_blank: '请选择', selected: of.new_record? ? "" : of.order_category_id}, {required: true, class:'col-sm-2'} %>
-                <%= order_form.collection_select :oftype, Order.oftype, :last, :first, {}, {class: 'col-sm-1'} %>
+                <div class="col-sm-3" style="padding: 0px;">
+                  <%= order_form.collection_select :order_category_id, OrderCategory.all, :id, :name, {include_blank: '请选择', selected: of.new_record? ? "" : of.order_category_id}, {required: true, class:'form-control', style: 'width: 49%;'} %>
+                  <%= order_form.collection_select :oftype, Order.oftype, :last, :first, {}, {class: 'form-control', style: 'width: 49%;'} %>
+                </div>
                 <label class="col-sm-1 text-right" style="margin: 8px 0;">板料</label>
-                <%= order_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {selected: of.new_record? ? init_ply_id : of.ply}, {class: 'col-sm-1 material-ply', onchange: 'getMaterialPrice(this)', style: 'padding: 5px 3px !important;'} %>
-                <%= order_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]), :id, :name, {selected: of.new_record? ? init_texture_id : of.texture}, {class: 'col-sm-2 material-texture', onchange: 'getMaterialPrice(this)'} %>
-                <%= order_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]), :id, :name,  {selected: of.new_record? ? init_color_id : of.color}, {class: 'col-sm-2 material-color',  onchange: 'getMaterialPrice(this)'} %>
+                <div class="col-sm-5" style="padding: 0px;">
+                  <select class="material-ply" style="width: 20%;"></select>
+                  <select class="material-texture" style="width: 38%;"></select>
+                  <select class="material-color" style="width: 38%;"></select>
+                </div>
+                <%#= order_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {selected: of.new_record? ? init_ply_id : of.ply}, {class: 'col-sm-1 material-ply', onchange: 'getMaterialPrice(this)', style: 'padding: 5px 3px !important;'} %>
+                <%#= order_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]), :id, :name, {selected: of.new_record? ? init_texture_id : of.texture}, {class: 'col-sm-2 material-texture', onchange: 'getMaterialPrice(this)'} %>
+                <%#= order_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]), :id, :name,  {selected: of.new_record? ? init_color_id : of.color}, {class: 'col-sm-2 material-color',  onchange: 'getMaterialPrice(this)'} %>
                 <label class="col-sm-1 text-right" style="margin: 8px 0;">价格</label>
-                <%= order_form.number_field :material_price, min: 0, step: 0.01, value: of.new_record? ? init_price : of.material_price, class: 'col-sm-1 material-price' %>
+                <div class="col-sm-1" style="padding: 0px;">
+                  <%= order_form.number_field :material_price, min: 0, step: 0.01, value: of.new_record? ? init_price : of.material_price, class: 'form-control material-price', style: 'width: 100%;' %>
+                </div>
               </div>
               <div class="row">
                 <label class="col-sm-1 text-right" style="margin: 8px 0;">货到</label>
-                <%= order_form.text_field :delivery_address, maxlength: 10, class: "col-sm-3", value: of.new_record? ? '' : of.delivery_address, placeholder: '不填则默认为代理商地址' %>
+                <div class="col-sm-3" style="padding: 0px;">
+                  <%= order_form.text_field :delivery_address, maxlength: 10, class: "form-control", value: of.new_record? ? '' : of.delivery_address, placeholder: '不填则默认为代理商地址', style: 'width: 100%;' %>
+                </div>
                 <label class="col-sm-1 text-right" style="margin: 8px 0;">备注</label>
-                <%= order_form.text_field :note, value: of.new_record? ? '' : of.note, maxlength: 25, class: 'col-sm-7', placeholder: '请填写备注信息' %>
+                <div class="col-sm-7" style="padding: 0px;">
+                  <%= order_form.text_field :note, value: of.new_record? ? '' : of.note, maxlength: 25, class: 'form-control', placeholder: '请填写备注信息', style:'width: 100%;' %>
+                </div>
               </div>
             </div>
             <div class="col-sm-1 text-center indent-orders-delete">

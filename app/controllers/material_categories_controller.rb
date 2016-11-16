@@ -7,10 +7,21 @@ class MaterialCategoriesController < ApplicationController
     @material_category = MaterialCategory.new
     @material_categories = MaterialCategory.all
     @material_categories = MaterialCategory.where(oftype:  MaterialCategory.oftypes[params[:oftype]]) if params[:oftype].present?
-    # respond_to do |format|
-    #   format.html
-    #   format.json { render json: {:material_categories => (@material_categories.map{|ac| {id: ac.id, text: (ac.name)}} << {id: nil, text: '全部'}).reverse, :total => @material_categories.size} }
-    # end
+    respond_to do |format|
+      format.html
+      format.json {
+        # @material_categories.where(oftype: MaterialCategory.oftypes[params[:type]]) if params[:type].present?
+        
+        if params[:page]
+          per = 6
+          size = @material_categories.offset((params[:page].to_i - 1) * per).size  # 剩下的记录条数
+          result = @material_categories.offset((params[:page].to_i - 1) * per).limit(per)  # 当前显示的所有记录
+          result = result.map{|mc| {id: mc.id, text: mc.name}}
+          # result = result << {id: "", text: '全部'} if params[:page].to_i == 1
+        end
+        render json: {:material_categories => result, :total => size} 
+      }
+    end
   end
 
   # POST /material_categories
