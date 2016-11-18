@@ -1,53 +1,3 @@
-<script type="text/javascript">
-$("[data-provide=datepicker]").datepicker({
-format: 'yyyy-mm-dd',
-language: 'zh-CN',
-autoclose: true
-});
-$(".remoteDataAgent").select2({
-  language: 'zh-CN',
-  theme: 'bootstrap',
-  // placeholder: "搜索代理商名称",
-  minimumInputLength: 0,
-  // width: '100%',
-  ajax: {
-    url: '/agents.json',
-    dataType: 'json',
-    delay: 250,
-    cache: true,
-    data: function(params){
-      return {
-        term: params.term,
-        page: params.page || 1
-      };
-    },
-    processResults: function(data, params){
-      params.page = params.page || 1;
-      return {
-        results: data.agents,
-        pagination: {
-          more: (params.page * 6) < data.total
-        }
-      };
-    }
-  }
-}).on("select2:select", function(e){
-  var $select2 = $(this);
-  $.ajax({
-    url: "/agents/" + $select2.val(),
-    dataType: 'json',
-    type: 'GET',
-    success: function(data){
-      var $panels = $select2.parents(".panel-heading");
-      $panels.find("#indent_logistics").val(data.logistics);
-      $panels.find("#indent_delivery_address").val(data.delivery_address);
-    },
-    error: function(data){
-      jsNoty("网络错误！","error");
-    }
-  });
-});
-</script>
 <%= nested_form_for @indent, url: @indent.new_record? ? indents_path : indent_path(@indent), html: {class: 'form-inline', multipart: true, id: 'indent_form_fields'} do |f| %>
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -120,14 +70,35 @@ $(".remoteDataAgent").select2({
               <div class="row">
                 <label class="col-sm-1 text-right" style="margin: 8px 0;"><span class="require">*</span>类型</label>
                 <div class="col-sm-3" style="padding: 0px;">
-                  <%= order_form.collection_select :order_category_id, OrderCategory.all, :id, :name, {include_blank: '请选择', selected: of.new_record? ? "" : of.order_category_id}, {required: true, class:'form-control', style: 'width: 49%;'} %>
+                  <%= order_form.collection_select :order_category_id, OrderCategory.all, :id, :name, {include_blank: '请选择', selected: of.new_record? ? "" : of.order_category_id}, {required: true, class:'form-control indent_nested_form_first_select_field', style: 'width: 49%;'} %>
                   <%= order_form.collection_select :oftype, Order.oftype, :last, :first, {}, {class: 'form-control', style: 'width: 49%;'} %>
                 </div>
                 <label class="col-sm-1 text-right" style="margin: 8px 0;">板料</label>
                 <div class="col-sm-5" style="padding: 0px;">
-                  <select class="material-ply" style="width: 20%;"></select>
-                  <select class="material-texture" style="width: 38%;"></select>
-                  <select class="material-color" style="width: 38%;"></select>
+                  <%#= order_form.select :ply, options_for_select([]), class: 'material-ply', style: 'width: 20%;' %>
+                  <%#= order_form.select :texture, {}, class: 'material-texture', style: 'width: 38%;' %>
+                  <%#= order_form.select :color, {}, class: 'material-color', style: 'width: 38%;' %>
+                  <select class="material-ply" style="width: 20%;">
+                    <% if of.new_record? %>
+                      <option value="<%= init_ply_id %>"><%= MaterialCategory.find(init_ply_id).try(:name) %></option>
+                    <% else %>
+                      <option value="<%= of.ply %>"><%= MaterialCategory.find(of.ply).try(:name) %></option>
+                    <% end %>
+                  </select>
+                  <select class="material-texture" style="width: 38%;">
+                    <% if of.new_record? %>
+                      <option value="<%= init_texture_id %>"><%= MaterialCategory.find(init_texture_id).try(:name) %></option>
+                    <% else %>
+                      <option value="<%= of.texture %>"><%= MaterialCategory.find(of.texture).try(:name) %></option>
+                    <% end %>
+                  </select>
+                  <select class="material-color" style="width: 38%;">
+                    <% if of.new_record? %>
+                      <option value="<%= init_color_id %>"><%= MaterialCategory.find(init_color_id).try(:name) %></option>
+                    <% else %>
+                      <option value="<%= of.color %>"><%= MaterialCategory.find(of.color).try(:name) %></option>
+                    <% end %>
+                  </select>
                 </div>
                 <%#= order_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {selected: of.new_record? ? init_ply_id : of.ply}, {class: 'col-sm-1 material-ply', onchange: 'getMaterialPrice(this)', style: 'padding: 5px 3px !important;'} %>
                 <%#= order_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]), :id, :name, {selected: of.new_record? ? init_texture_id : of.texture}, {class: 'col-sm-2 material-texture', onchange: 'getMaterialPrice(this)'} %>
@@ -171,17 +142,250 @@ $(".remoteDataAgent").select2({
 <% end %>
 <script type="text/javascript">
 function delete_order_from_nested_form(obj){
-var order_fields = $(obj).parent().siblings(".col-sm-10");
-var required_order_fields = order_fields.find("[required='required']");
-// 动态删除子订单前，将必填项的值设为1
-required_order_fields.each(function(){
-var element = $(this);
-if(element.is("select")){
-element.children().last().attr("selected", "selected");
-}else{
-element.val("1");
+  var order_fields = $(obj).parent().siblings(".col-sm-10");
+  var required_order_fields = order_fields.find("[required='required']");
+  // 动态删除子订单前，将必填项的值设为1
+  required_order_fields.each(function(){
+    var element = $(this);
+    if(element.is("select")){
+      element.children().last().attr("selected", "selected");
+    }else{
+      element.val("1");
+    }
+  });
+  $(obj).prev().click();
 }
+
+$("[data-provide=datepicker]").datepicker({
+format: 'yyyy-mm-dd',
+language: 'zh-CN',
+autoclose: true
 });
-$(obj).prev().click();
-}
+$(".remoteDataAgent").select2({
+  language: 'zh-CN',
+  theme: 'bootstrap',
+  // placeholder: "搜索代理商名称",
+  minimumInputLength: 0,
+  // width: '100%',
+  ajax: {
+    url: '/agents.json',
+    dataType: 'json',
+    delay: 250,
+    cache: true,
+    data: function(params){
+      return {
+        term: params.term,
+        page: params.page || 1
+      };
+    },
+    processResults: function(data, params){
+      params.page = params.page || 1;
+      return {
+        results: data.agents,
+        pagination: {
+          more: (params.page * 6) < data.total
+        }
+      };
+    }
+  }
+}).on("select2:select", function(e){
+  var $select2 = $(this);
+  $.ajax({
+    url: "/agents/" + $select2.val(),
+    dataType: 'json',
+    type: 'GET',
+    success: function(data){
+      var $panels = $select2.parents(".panel-heading");
+      $panels.find("#indent_logistics").val(data.logistics);
+      $panels.find("#indent_delivery_address").val(data.delivery_address);
+    },
+    error: function(data){
+      jsNoty("网络错误！","error");
+    }
+  });
+});
+$(".material-ply").select2({
+  language: 'zh-CN',
+  theme: 'bootstrap',
+  placeholder: "板厚",
+  minimumInputLength: 0,
+  allowClear: true,
+  ajax: {
+    url: '/material_categories.json',
+    dataType: 'json',
+    delay: 2500,
+    cache: true,
+    data: function(params){
+      return {
+        oftype: 'ply',
+        term: params.term,
+        page: params.page || 1
+      };
+    },
+    processResults: function(data, params){
+      params.page = params.page || 1;
+      return {
+        results: data.material_categories,
+        pagination: {
+          more: (params.page * 6) < data.total
+        }
+      };
+    }
+  }
+});
+$(".material-texture").select2({
+  language: 'zh-CN',
+  theme: 'bootstrap',
+  placeholder: "材质",
+  minimumInputLength: 0,
+  allowClear: true,
+  ajax: {
+    url: '/material_categories.json',
+    dataType: 'json',
+    delay: 2500,
+    cache: true,
+    data: function(params){
+      return {
+        oftype: 'texture',
+        term: params.term,
+        page: params.page || 1
+      };
+    },
+    processResults: function(data, params){
+      params.page = params.page || 1;
+      return {
+        results: data.material_categories,
+        pagination: {
+          more: (params.page * 6) < data.total
+        }
+      };
+    }
+  }
+});
+$(".material-color").select2({
+  language: 'zh-CN',
+  theme: 'bootstrap',
+  placeholder: "颜色",
+  minimumInputLength: 0,
+  allowClear: true,
+  ajax: {
+    url: '/material_categories.json',
+    dataType: 'json',
+    delay: 2500,
+    cache: true,
+    data: function(params){
+      return {
+        oftype: 'color',
+        term: params.term,
+        page: params.page || 1
+      };
+    },
+    processResults: function(data, params){
+      params.page = params.page || 1;
+      return {
+        results: data.material_categories,
+        pagination: {
+          more: (params.page * 6) < data.total
+        }
+      };
+    }
+  }
+});
+$("#indent_form_fields").on("nested:fieldAdded", function(e){
+  var fields = e.field;
+  var order_category_id_field_name = fields.find(".indent_nested_form_first_select_field").attr("name");
+  var ply_field = fields.find(".material-ply");
+  var texture_field = fields.find(".material-texture");
+  var color_field = fields.find(".material-color");
+  ply_field.attr("name", order_category_id_field_name.replace("order_category_id", "ply"));
+  texture_field.attr("name", order_category_id_field_name.replace("order_category_id", "texture"));
+  color_field.attr("name", order_category_id_field_name.replace("order_category_id", "color"));
+  ply_field.select2({
+    language: 'zh-CN',
+    theme: 'bootstrap',
+    placeholder: "板厚",
+    minimumInputLength: 0,
+    allowClear: true,
+    ajax: {
+      url: '/material_categories.json',
+      dataType: 'json',
+      delay: 2500,
+      cache: true,
+      data: function(params){
+        return {
+          oftype: 'ply',
+          term: params.term,
+          page: params.page || 1
+        };
+      },
+      processResults: function(data, params){
+        params.page = params.page || 1;
+        return {
+          results: data.material_categories,
+          pagination: {
+            more: (params.page * 6) < data.total
+          }
+        };
+      }
+    }
+  });
+  texture_field.select2({
+    language: 'zh-CN',
+    theme: 'bootstrap',
+    placeholder: "材质",
+    minimumInputLength: 0,
+    allowClear: true,
+    ajax: {
+      url: '/material_categories.json',
+      dataType: 'json',
+      delay: 2500,
+      cache: true,
+      data: function(params){
+        return {
+          oftype: 'texture',
+          term: params.term,
+          page: params.page || 1
+        };
+      },
+      processResults: function(data, params){
+        params.page = params.page || 1;
+        return {
+          results: data.material_categories,
+          pagination: {
+            more: (params.page * 6) < data.total
+          }
+        };
+      }
+    }
+  });
+  color_field.select2({
+    language: 'zh-CN',
+    theme: 'bootstrap',
+    placeholder: "颜色",
+    minimumInputLength: 0,
+    allowClear: true,
+    ajax: {
+      url: '/material_categories.json',
+      dataType: 'json',
+      delay: 2500,
+      cache: true,
+      data: function(params){
+        return {
+          oftype: 'color',
+          term: params.term,
+          page: params.page || 1
+        };
+      },
+      processResults: function(data, params){
+        params.page = params.page || 1;
+        return {
+          results: data.material_categories,
+          pagination: {
+            more: (params.page * 6) < data.total
+          }
+        };
+      }
+    }
+  });
+});
 </script>

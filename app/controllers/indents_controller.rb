@@ -63,6 +63,7 @@ class IndentsController < ApplicationController
   # POST /indents
   # POST /indents.json
   def create
+    binding.pry
     # 新建总订单时，修改代理商欠款
     Indent.transaction do
       @indent = Indent.new(indent_params)

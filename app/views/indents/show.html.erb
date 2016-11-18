@@ -97,6 +97,16 @@
 </div>
 <script type="text/javascript">
 $("#editIndent").on("hidden.bs.modal", function(e){
-$(this).removeData("bs.modal");
+  $(this).removeData("bs.modal");
+}).on("shown.bs.modal", function(e){
+  all_fields = $(e.target).find(".fields");
+  all_fields.each(function(index) {
+    var field = $(this)
+    var order_category_id_field_name = field.find(".indent_nested_form_first_select_field").attr("name");
+    field.find(".material-ply").attr("name", order_category_id_field_name.replace("order_category_id", "ply"));
+    field.find(".material-texture").attr("name", order_category_id_field_name.replace("order_category_id", "texture"));
+    field.find(".material-color").attr("name", order_category_id_field_name.replace("order_category_id", "color"));
+  });
+
 });
 </script>
