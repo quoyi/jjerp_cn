@@ -13,30 +13,22 @@
   <% end%>
   <div class="content-box-large box-with-header">
     <div class="row content-table">
-        <%= form_tag stat_incomes_path, class: 'form-inline', method: 'get' do %>
-        <div class="panel panel-info">
-          <div class="panel-heading">
-            <span>查询条件</span>
-          </div>
-          <div class="panel-body">
-            <div class="col-sm-6">
-              <label>收支时间：</label>
-              <%= date_field_tag :start_at, @start_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择起始日期' %>
-              &nbsp;&nbsp;--&nbsp;&nbsp;
-              <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, style: "width: 35%;", placeholder: '请选择终止日期' %>
-            </div>
-            <div class="col-sm-4">
-
-              <label>财务类别: </label>
-
-              <%= select_tag :bank_id, options_from_collection_for_select(Bank.all, "id", "bank_card",:selected=>@bank_id), :include_blank => "请选择", class: "form-control" %>
-            </div>
-            <div class="col-sm-2">
-              <%= submit_tag '查询', class: 'btn btn-primary' %>
-            </div>
-          </div>
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <span>查询条件</span>
         </div>
-        <% end %>
+        <div class="panel-body">
+          <%= form_tag stat_incomes_path, class: 'form-inline', method: 'get' do %>
+          <%= label_tag :start_at, '收支时间', class: 'control-label', style: 'margin: 0px;' %>
+          <%= date_field_tag :start_at, @start_at, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择起始日期' %>
+          &nbsp;&nbsp;--&nbsp;&nbsp;
+          <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择终止日期' %>
+          <%= label_tag :bank_id, '银行卡号', class: 'control-label', style: 'margin: 0px 0px 0px 10px;' %>
+          <%= select_tag :bank_id, options_from_collection_for_select(Bank.all, "id", "bank_card",:selected=>@bank_id), :include_blank => "请选择银行卡号", class: "form-control", style: 'min-width: 200px;' %>
+          <%= submit_tag '查询', class: 'btn btn-primary', style: 'margin: 0 0 0 10px;' %>
+          <% end %>
+        </div>
+      </div>
     </div>
     <div class="row content-table">
       <div class="col-sm-4" style="padding: 0 0;">

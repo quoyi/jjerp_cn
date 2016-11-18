@@ -9,10 +9,41 @@
   </div>
   <div class="content-box-large box-with-header">
     <div class="row content-table">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <span>查询条件</span>
+        </div>
+        <div class="panel-body">
+          <%= form_tag agents_path, class: 'form-inline', method: 'get' do %>
+          <%= label_tag :full_name, '店名', class: 'control-label', style: 'margin: 0px;' %>
+          <div class="form-group">
+            <select name="full_name" id="full_name" class="form-control agents_search_form_full_name" style='min-width: 150px;'>
+              <option value="<%= @search_agent.id %>"><%= @search_agent.full_name %></option>
+            </select>
+            <%#= select_tag :full_name, nil, class: 'form-control agents_search_form_full_name', placeholder: '请输入店名', style: 'min-width: 150px;' %>
+          </div>
+          <%= label_tag :contacts, '负责人', class: 'control-label', style: 'margin: 0 0 0 10px;' %>
+          <div class="form-group">
+            <select name="contacts" id="contacts" class="form-control agents_search_form_contacts" style='min-width: 150px;'>
+              <option value="<%= @search_agent.id %>"><%= @search_agent.contacts %></option>
+            </select>
+            <%#= select_tag :contacts, nil, class: 'form-control agents_search_form_contacts', placeholder: '请输入负责人', style: 'min-width: 150px;' %>
+          </div>
+          <%= label_tag :mobile, '电话', class: 'control-label', style: 'margin: 0 0 0 10px;' %>
+          <div class="form-group">
+            <select name="mobile" id="mobile" class="form-control agents_search_form_mobile" style='min-width: 160px;'>
+              <option value="<%= @search_agent.id %>"><%= @search_agent.mobile %></option>
+            </select>
+            <%#= select_tag :mobile, nil, class: 'form-control agents_search_form_mobile', placeholder: '请输入联系电话', style: 'min-width: 160px;' %>
+          </div>
+          <%= submit_tag '查询', class: 'btn btn-primary', data: {toggle: 'tooltip'}, title: '修改查询条件后，需先点此查询，否则导出结果依然为上次查询结果！', style: 'margin: 0 0 0 10px;' %>
+          <% end %>
+        </div>
+      </div>
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
           <tr>
-            <th>名称</th>
+            <th>店名</th>
             <th>电话</th>
             <th>负责人</th>
             <th>欠款</th>

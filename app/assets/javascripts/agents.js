@@ -1,3 +1,94 @@
+$(function(){
+  $(".agents_search_form_full_name").select2({
+    language: 'zh-CN',
+    theme: 'bootstrap',
+    placeholder: "店名",
+    minimumInputLength: 0,
+    allowClear: true,
+    ajax: {
+      url: '/agents.json',
+      dataType: 'json',
+      delay: 2500,
+      cache: true,
+      data: function(params){
+        return {
+          oftype: 'full_name',
+          term: params.term,
+          page: params.page || 1
+        };
+      },
+      processResults: function(data, params){
+        params.page = params.page || 1;
+        return {
+          results: data.agents,
+          pagination: {
+            more: (params.page * 6) < data.total
+          }
+        };
+      }
+    }
+  });
+  $(".agents_search_form_contacts").select2({
+    language: 'zh-CN',
+    theme: 'bootstrap',
+    placeholder: "联系人",
+    minimumInputLength: 0,
+    allowClear: true,
+    ajax: {
+      url: '/agents.json',
+      dataType: 'json',
+      delay: 2500,
+      cache: true,
+      data: function(params){
+        return {
+          oftype: 'contacts',
+          term: params.term,
+          page: params.page || 1
+        };
+      },
+      processResults: function(data, params){
+        params.page = params.page || 1;
+        return {
+          results: data.agents,
+          pagination: {
+            more: (params.page * 6) < data.total
+          }
+        };
+      }
+    }
+  });
+  $(".agents_search_form_mobile").select2({
+    language: 'zh-CN',
+    theme: 'bootstrap',
+    placeholder: "电话",
+    minimumInputLength: 0,
+    allowClear: true,
+    ajax: {
+      url: '/agents.json',
+      dataType: 'json',
+      delay: 2500,
+      cache: true,
+      data: function(params){
+        return {
+          oftype: 'mobile',
+          term: params.term,
+          page: params.page || 1
+        };
+      },
+      processResults: function(data, params){
+        params.page = params.page || 1;
+        return {
+          results: data.agents,
+          pagination: {
+            more: (params.page * 6) < data.total
+          }
+        };
+      }
+    }
+  });
+});
+
+
 function getChinaCity(obj) {
   var element_name = $(obj).attr("name").replace("agent[", "").replace("]", "");
   var data = {};
