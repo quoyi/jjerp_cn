@@ -4,13 +4,24 @@ class AgentsController < ApplicationController
   # GET /agents
   # GET /agents.json
   def index
-    @agent = Agent.new(name: "DL".upcase() + (Agent.count+1).to_s.rjust(4, "0"))
+    @agent = Agent.new(name: "DL".upcase() + (Agent.count + 1).to_s.rjust(4, "0"))
     @agents = Agent.where(deleted: false)
-
-    if params[:term]
-      search = params[:term]
-      @agents = @agents.where("full_name like :keyword", keyword: "%#{search}%")
+    # binding.pry
+    # 代理商列表页面查询用
+    @search_agent = Agent.new
+    if params[:full_name].present?
+      @search_agent = Agent.find(params[:full_name])
+      @agents = @agents.where(id: params[:full_name])
     end
+    if params[:contacts].present?
+      @search_agent = Agent.find(params[:contacts])
+      @agents = @agents.where(id: params[:contacts])
+    end
+    if params[:mobile].present?
+      @search_agent = Agent.find(params[:mobile])
+      @agents = @agents.where(id: params[:mobile])
+    end
+    # @agents = @agents.where("full_name like :keyword", keyword: "%#{params[:term]}%") if params[:term].present?
 
     respond_to do |format|
       format.html { @agents = @agents.page(params[:page]) }
@@ -19,7 +30,11 @@ class AgentsController < ApplicationController
           per = 6
           size = @agents.offset((params[:page].to_i - 1) * per).size  # 剩下的记录条数
           result = @agents.offset((params[:page].to_i - 1) * per).limit(per)  # 当前显示的所有记录
-          result = result.map{|ac| {id: ac.id, text: (ac.full_name)}}
+          if params[:oftype].present?
+            result = result.map{|ac| {id: ac.id, text: (ac.full_name)}}  if params[:oftype] == 'full_name'
+            result = result.map{|ac| {id: ac.id, text: (ac.contacts)}}  if params[:oftype] == 'contacts'
+            result = result.map{|ac| {id: ac.id, text: (ac.mobile)}}  if params[:oftype] == 'mobile'
+          end
           # result = result << {id: "", text: '全部'} if params[:page].to_i == 1
         end
         render json: {:agents => result.reverse, :total => size} 

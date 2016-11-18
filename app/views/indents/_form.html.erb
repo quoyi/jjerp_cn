@@ -75,24 +75,21 @@
                 </div>
                 <label class="col-sm-1 text-right" style="margin: 8px 0;">板料</label>
                 <div class="col-sm-5" style="padding: 0px;">
-                  <%#= order_form.select :ply, options_for_select([]), class: 'material-ply', style: 'width: 20%;' %>
-                  <%#= order_form.select :texture, {}, class: 'material-texture', style: 'width: 38%;' %>
-                  <%#= order_form.select :color, {}, class: 'material-color', style: 'width: 38%;' %>
-                  <select class="material-ply" style="width: 20%;">
+                  <select class="material-ply" style="width: 20%;" required="required">
                     <% if of.new_record? %>
                       <option value="<%= init_ply_id %>"><%= MaterialCategory.find(init_ply_id).try(:name) %></option>
                     <% else %>
                       <option value="<%= of.ply %>"><%= MaterialCategory.find(of.ply).try(:name) %></option>
                     <% end %>
                   </select>
-                  <select class="material-texture" style="width: 38%;">
+                  <select class="material-texture" style="width: 38%;" required="required">
                     <% if of.new_record? %>
                       <option value="<%= init_texture_id %>"><%= MaterialCategory.find(init_texture_id).try(:name) %></option>
                     <% else %>
                       <option value="<%= of.texture %>"><%= MaterialCategory.find(of.texture).try(:name) %></option>
                     <% end %>
                   </select>
-                  <select class="material-color" style="width: 38%;">
+                  <select class="material-color" style="width: 38%;" required="required">
                     <% if of.new_record? %>
                       <option value="<%= init_color_id %>"><%= MaterialCategory.find(init_color_id).try(:name) %></option>
                     <% else %>
@@ -164,7 +161,7 @@ autoclose: true
 $(".remoteDataAgent").select2({
   language: 'zh-CN',
   theme: 'bootstrap',
-  // placeholder: "搜索代理商名称",
+  placeholder: "店名/代理商名称",
   minimumInputLength: 0,
   // width: '100%',
   ajax: {
@@ -174,6 +171,7 @@ $(".remoteDataAgent").select2({
     cache: true,
     data: function(params){
       return {
+        oftype: 'full_name',
         term: params.term,
         page: params.page || 1
       };

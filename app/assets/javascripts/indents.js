@@ -135,49 +135,49 @@ $(function() {
 
 
 
-  $(".remoteDataAgent").select2({
-    language: 'zh-CN',
-    theme: 'bootstrap',
-    placeholder: "全部",
-    minimumInputLength: 0,
-    allowClear: true,
-    ajax: {
-      url: '/agents.json',
-      dataType: 'json',
-      delay: 250,
-      cache: true,
-      data: function(params){
-        return {
-          term: params.term,
-          page: params.page || 1
-        };
-      },
-      processResults: function(data, params){
-        params.page = params.page || 1;
-        return {
-          results: data.agents,
-          pagination: {
-            more: (params.page * 6) < data.total
-          }
-        };
-      }
-    }
-  }).on("select2:select", function(e){
-    var $select2 = $(this);
-    $.ajax({
-      url: "/agents/" + $select2.val(),
-      dataType: 'json',
-      type: 'GET',
-      success: function(data){
-        var $panels = $select2.parents(".panel-heading");
-        $panels.find("#indent_logistics").val(data.logistics);
-        $panels.find("#indent_delivery_address").val(data.delivery_address);
-      },
-      error: function(data){
-        jsNoty("网络错误！","error");
-      }
-    });
-  });
+  // $(".remoteDataAgent").select2({
+  //   language: 'zh-CN',
+  //   theme: 'bootstrap',
+  //   placeholder: "全部",
+  //   minimumInputLength: 0,
+  //   allowClear: true,
+  //   ajax: {
+  //     url: '/agents.json',
+  //     dataType: 'json',
+  //     delay: 250,
+  //     cache: true,
+  //     data: function(params){
+  //       return {
+  //         term: params.term,
+  //         page: params.page || 1
+  //       };
+  //     },
+  //     processResults: function(data, params){
+  //       params.page = params.page || 1;
+  //       return {
+  //         results: data.agents,
+  //         pagination: {
+  //           more: (params.page * 6) < data.total
+  //         }
+  //       };
+  //     }
+  //   }
+  // }).on("select2:select", function(e){
+  //   var $select2 = $(this);
+  //   $.ajax({
+  //     url: "/agents/" + $select2.val(),
+  //     dataType: 'json',
+  //     type: 'GET',
+  //     success: function(data){
+  //       var $panels = $select2.parents(".panel-heading");
+  //       $panels.find("#indent_logistics").val(data.logistics);
+  //       $panels.find("#indent_delivery_address").val(data.delivery_address);
+  //     },
+  //     error: function(data){
+  //       jsNoty("网络错误！","error");
+  //     }
+  //   });
+  // });
 });
 
 

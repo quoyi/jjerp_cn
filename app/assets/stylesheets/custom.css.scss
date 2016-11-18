@@ -137,16 +137,16 @@ input[type='text'], input[type='number'] {
   padding: 3px !important;
 }
 label {
-  margin: 7px 0;
+  margin: 6px 0;
   padding: 0px 3px !important;
 }
 //修改 select2 样式 开始
-.select2.select2-container.select2-container--default {
+.select2.select2-container {
   & .select2-selection.select2-selection--single {
     height: 34px !important;
     // 文字内补
     & .select2-selection__rendered {
-      padding: 4px 20px 4px 5px!important;
+      // padding: 4px 20px 4px 5px!important;
     }
     // 箭头内补
     & .select2-selection__arrow {
