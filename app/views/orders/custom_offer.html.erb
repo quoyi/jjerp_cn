@@ -14,7 +14,7 @@
     </div>
   </div>
   <div class="content-box-large box-with-header" style="padding: 0px;">
-    <%= nested_form_for @order, html: {class: 'form-inline', multipart: true} do |f| %>
+    <%= nested_form_for @order, html: {class: 'form-inline', multipart: true, id: 'custom-offer-fields'} do |f| %>
     <%#= hidden_field_tag :is_custom, true%>
     <div class="modal-body" style="padding: 5px;">
       <!-- 部件 -->
@@ -38,29 +38,41 @@
             <%= unit_form.hidden_field :is_custom, value: true %>
             <% end %>
             <div class="row">
-              <div class="col-sm-11">
+              <div class="col-sm-11"> 
                 <div class="row">
-                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>名称</label>
-                  <%= unit_form.text_field :full_name, maxlength: 15, value: uf.new_record? ? @order.note : uf.full_name, class:'col-sm-2', required: true, placeholder: '请填写部件名称' %>
-                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>板料</label>
-                  <%= unit_form.collection_select :ply, MaterialCategory.where(oftype:MaterialCategory.oftypes[:ply]),:id, :name, {selected: uf.new_record? ? @order.ply : uf.ply}, {class: 'material-ply col-sm-1', onchange: 'getMaterialPrice(this)', style: 'padding: 5px 3px !important;'} %>
-                  <%= unit_form.collection_select :texture, MaterialCategory.where(oftype:MaterialCategory.oftypes[:texture]),:id, :name, {selected: uf.new_record? ? @order.texture : uf.texture}, {class: 'material-texture col-sm-2', onchange: 'getMaterialPrice(this)'} %>
-                  <%= unit_form.collection_select :color, MaterialCategory.where(oftype:MaterialCategory.oftypes[:color]),:id, :name, {selected: uf.new_record? ? @order.color : uf.color}, {class: 'material-color col-sm-2', onchange: 'getMaterialPrice(this)'} %>
-                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单位</label>
+                  <label class="col-sm-1 text-right control-label" style="margin: 7px 0;"><span class="require">*</span>名称</label>
+                  <%= unit_form.text_field :full_name, maxlength: 15, value: uf.new_record? ? @order.note : uf.full_name, class:'col-sm-2 custom-offer-full-name', required: true, placeholder: '请填写部件名称' %>
+                  <label class="col-sm-1 text-right control-label" style="margin: 7px 0;"><span class="require">*</span>板料</label>
+                  <div class="col-sm-5" style="padding: 0px;">
+                    <%# binding.pry %>
+                    <%= unit_form.select :ply, raw("<option value='#{uf.new_record? ? @order.ply : uf.ply}' selected='selected'>#{MaterialCategory.find_by_id(uf.new_record? ? @order.ply : uf.ply).try(:name)}</option>"), {}, class: "custom-offer-material-ply", style: 'width: 20%;', required: true %>
+                    <%= unit_form.select :texture, raw("<option value='#{uf.new_record? ? @order.texture : uf.texture}' selected='selected'>#{MaterialCategory.find_by_id(uf.new_record? ? @order.texture : uf.texture).try(:name)}</option>"), {}, class: "custom-offer-material-texture", style: 'width: 38%;', required: true %>
+                    <%= unit_form.select :color, raw("<option value='#{uf.new_record? ? @order.color : uf.color}' selected='selected'>#{MaterialCategory.find_by_id(uf.new_record? ? @order.color : uf.color).try(:name)}</option>"), {}, class: "custom-offer-material-color", style: 'width: 38%;', required: true %>
+                    <!-- <select class="custom-offer-material-ply" style="width: 20%;" required="required">
+                      <option value="<%#= uf.new_record? ? @order.ply : uf.ply %>"><%#= MaterialCategory.find_by_id(uf.new_record? ? @order.ply : uf.ply).try(:name) %></option>
+                    </select> -->
+                   <!--  <select class="custom-offer-material-texture" style="width: 38%;" required="required">
+                      <option value="<%#= uf.new_record? ? @order.texture : uf.texture %>"><%#= MaterialCategory.find_by_id(uf.new_record? ? @order.texture : uf.texture).try(:name) %></option>
+                    </select>
+                    <select class="custom-offer-material-color" style="width: 38%;" required="required">
+                      <option value="<%#= uf.new_record? ? @order.color : uf.color %>"><%#= MaterialCategory.find_by_id(uf.new_record? ? @order.color : uf.color).try(:name) %></option>
+                    </select> -->
+                  </div>
+                  <label class="col-sm-1 text-right control-label" style="margin: 7px 0;"><span class="require">*</span>单位</label>
                   <%= unit_form.collection_select :uom, Uom.where(deleted: false), :name, :name, {include_blank: '请选择', selected: '平方'}, {required: true, class: 'material-uom col-sm-2'} %>
                 </div>
                 <div class="row">
-                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>单价</label>
+                  <label class="col-sm-1 text-right control-label" style="margin: 7px 0;"><span class="require">*</span>单价</label>
                   <%= unit_form.number_field :price, min: 0, step: 0.01, value: uf.new_record? ? @order.material_price : uf.price, required: true, class: 'material-price col-sm-2'  %>
-                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>长宽</label>
+                  <label class="col-sm-1 text-right control-label" style="margin: 7px 0;"><span class="require">*</span>长宽</label>
                   <%= unit_form.number_field :length, min: 0, max: 999999, step: 0.01, value: uf.new_record? ? 1 : uf.length, class: 'order-unit-length col-sm-1', onchange: 'setOrderUnitSize(this)', onblur: 'setOrderUnitSize(this)', required: true %>
                   <%= unit_form.number_field :width, min: 0, max: 999999, step: 0.01, value: uf.new_record? ? 1 : uf.width, class: 'order-unit-width col-sm-1', onchange: 'setOrderUnitSize(this)', onblur: 'setOrderUnitSize(this)', required: true %>
                   <%= unit_form.text_field :size, maxlength: 15, value: uf.new_record? ? '' : uf.size, class: 'order-unit-size col-sm-3', placeholder: '请填写成型尺寸', onchange: 'setOrderUnitLengthWidth(this)', onblur: 'setOrderUnitLengthWidth(this)' %>
-                  <label class="col-sm-1 text-right" style="margin: 7px 0;"><span class="require">*</span>数量</label>
+                  <label class="col-sm-1 text-right control-label" style="margin: 7px 0;"><span class="require">*</span>数量</label>
                   <%= unit_form.text_field :number, min: 0, max: 999999, step: 0.01, value: uf.new_record? ? 1 : uf.number, class: 'col-sm-2', required: true  %>
                 </div>
                 <div class="row">
-                  <label class="col-sm-1 text-right" style="margin: 7px 0;">备注</label>
+                  <label class="col-sm-1 text-right control-label" style="margin: 7px 0;">备注</label>
                   <%= unit_form.text_field :note, value: uf.new_record? ? @order.note : uf.note, maxlength: 25, class: 'col-sm-11', placeholder: '请填写备注信息' %>
                 </div>
               </div>
@@ -234,18 +246,18 @@
 <%= render '/craft_categories/new' %>
 <script type="text/javascript">
 function delete_separate_from_nested_form(target){
-var order_fields = $(target).parent().siblings(".col-sm-11");
-var required_order_fields = order_fields.find("[required='required']");
-// console.log(required_order_fields);
-// 动态删除子订单前，将必填项的值设为1
-required_order_fields.each(function(){
-var element = $(this);
-if(element.is("select")){
-element.children().last().attr("selected", "selected");
-}else{
-element.val("1");
-}
-});
-$(target).prev().click();
+  var order_fields = $(target).parent().siblings(".col-sm-11");
+  var required_order_fields = order_fields.find("[required='required']");
+  // console.log(required_order_fields);
+  // 动态删除子订单前，将必填项的值设为1
+  required_order_fields.each(function(){
+    var element = $(this);
+    if(element.is("select")){
+      element.children().last().attr("selected", "selected");
+    }else{
+      element.val("1");
+    }
+  });
+  $(target).prev().click();
 }
 </script>
