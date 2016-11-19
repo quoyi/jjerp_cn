@@ -12,4 +12,17 @@ class PartCategory < ActiveRecord::Base
     # 设置基本类型的 parent_id
     self.parent_id = 0 unless self.parent_id
   end
+
+  def children
+    PartCategory.where(parent_id: id)
+  end
+
+  def parent
+    PartCategory.where(id: parent_id)
+  end
+
+  def self.root
+    self.where(parent_id: 0)
+  end
+
 end
