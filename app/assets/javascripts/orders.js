@@ -44,6 +44,193 @@ $(function() {
     var data = {province: $(this).siblings(".orders-search-province").val(), city: $(this).siblings(".orders-search-city").val(), district: $(this).val()};
     ajaxGetAgent(data);
   });
+
+  // 子订单 - 自定义报价 - 板料 select2
+  $(".custom-offer-material-ply").select2({
+    language: 'zh-CN',
+    theme: 'bootstrap',
+    placeholder: "板厚",
+    minimumInputLength: 0,
+    allowClear: true,
+    ajax: {
+      url: '/material_categories.json',
+      dataType: 'json',
+      delay: 2500,
+      cache: true,
+      data: function(params){
+        return {
+          oftype: 'ply',
+          term: params.term,
+          page: params.page || 1
+        };
+      },
+      processResults: function(data, params){
+        params.page = params.page || 1;
+        return {
+          results: data.material_categories,
+          pagination: {
+            more: (params.page * 6) < data.total
+          }
+        };
+      }
+    }
+  });
+  $(".custom-offer-material-texture").select2({
+    language: 'zh-CN',
+    theme: 'bootstrap',
+    placeholder: "材质",
+    minimumInputLength: 0,
+    allowClear: true,
+    ajax: {
+      url: '/material_categories.json',
+      dataType: 'json',
+      delay: 2500,
+      cache: true,
+      data: function(params){
+        return {
+          oftype: 'texture',
+          term: params.term,
+          page: params.page || 1
+        };
+      },
+      processResults: function(data, params){
+        params.page = params.page || 1;
+        return {
+          results: data.material_categories,
+          pagination: {
+            more: (params.page * 6) < data.total
+          }
+        };
+      }
+    }
+  });
+  $(".custom-offer-material-color").select2({
+    language: 'zh-CN',
+    theme: 'bootstrap',
+    placeholder: "颜色",
+    minimumInputLength: 0,
+    allowClear: true,
+    ajax: {
+      url: '/material_categories.json',
+      dataType: 'json',
+      delay: 2500,
+      cache: true,
+      data: function(params){
+        return {
+          oftype: 'color',
+          term: params.term,
+          page: params.page || 1
+        };
+      },
+      processResults: function(data, params){
+        params.page = params.page || 1;
+        return {
+          results: data.material_categories,
+          pagination: {
+            more: (params.page * 6) < data.total
+          }
+        };
+      }
+    }
+  });
+  $("#custom-offer-fields").on("nested:fieldAdded", function(e){
+    var fields = e.field;
+    // var custom_offer_full_name = fields.find(".custom-offer-full-name").attr("name");
+    var ply_field = fields.find(".custom-offer-material-ply");
+    var texture_field = fields.find(".custom-offer-material-texture");
+    var color_field = fields.find(".custom-offer-material-color");
+    // ply_field.attr("name", custom_offer_full_name.replace("full_name", "ply"));
+    // texture_field.attr("name", custom_offer_full_name.replace("full_name", "texture"));
+    // color_field.attr("name", custom_offer_full_name.replace("full_name", "color"));
+    // 子订单 - 自定义报价 - 板料 select2
+    ply_field.select2({
+      language: 'zh-CN',
+      theme: 'bootstrap',
+      placeholder: "板厚",
+      minimumInputLength: 0,
+      allowClear: true,
+      ajax: {
+        url: '/material_categories.json',
+        dataType: 'json',
+        delay: 2500,
+        cache: true,
+        data: function(params){
+          return {
+            oftype: 'ply',
+            term: params.term,
+            page: params.page || 1
+          };
+        },
+        processResults: function(data, params){
+          params.page = params.page || 1;
+          return {
+            results: data.material_categories,
+            pagination: {
+              more: (params.page * 6) < data.total
+            }
+          };
+        }
+      }
+    });
+    texture_field.select2({
+      language: 'zh-CN',
+      theme: 'bootstrap',
+      placeholder: "材质",
+      minimumInputLength: 0,
+      allowClear: true,
+      ajax: {
+        url: '/material_categories.json',
+        dataType: 'json',
+        delay: 2500,
+        cache: true,
+        data: function(params){
+          return {
+            oftype: 'texture',
+            term: params.term,
+            page: params.page || 1
+          };
+        },
+        processResults: function(data, params){
+          params.page = params.page || 1;
+          return {
+            results: data.material_categories,
+            pagination: {
+              more: (params.page * 6) < data.total
+            }
+          };
+        }
+      }
+    });
+    color_field.select2({
+      language: 'zh-CN',
+      theme: 'bootstrap',
+      placeholder: "颜色",
+      minimumInputLength: 0,
+      allowClear: true,
+      ajax: {
+        url: '/material_categories.json',
+        dataType: 'json',
+        delay: 2500,
+        cache: true,
+        data: function(params){
+          return {
+            oftype: 'color',
+            term: params.term,
+            page: params.page || 1
+          };
+        },
+        processResults: function(data, params){
+          params.page = params.page || 1;
+          return {
+            results: data.material_categories,
+            pagination: {
+              more: (params.page * 6) < data.total
+            }
+          };
+        }
+      }
+    });
+  });
 });
 
 

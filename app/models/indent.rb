@@ -32,7 +32,6 @@ class Indent < ActiveRecord::Base
     end
   end
 
-
   #状态：0.报价中 1.已报价 2.生产中 3.已入库 4.已发货
   enum status: [:offering, :offered, :producing, :packaged, :sending, :sent, :over]
 
@@ -52,4 +51,13 @@ class Indent < ActiveRecord::Base
       "未知状态"
     end
   end
+
+
+  def order_parts
+    orders.where("order_category_id = 4 and ply = 0 and texture = 0 and color = 0")
+  end
+
+  # def orders
+  #   orders.where.not("ply = 0 and texture = 0 and color = 0")
+  # end
 end

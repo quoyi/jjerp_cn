@@ -6,8 +6,8 @@ class CreateOffers < ActiveRecord::Migration
       t.references :order, index: true
       t.integer :display # 显示序号
       t.integer :item_id # 项目ID
-      t.integer :item_type, default: 0 # 项目类型
-      t.string :item_name # 项目名称
+      t.integer :item_type, default: 0 # 项目类型( 0.部件 1.配件 2.工艺 )
+      t.string :item_name # 项目名称( 板料名称 )
       t.string :uom # 单位
       t.decimal :number, precision: 10, scale: 6, default: 0 # 数量
       t.decimal :price, precision: 8, scale: 2, default: 0 # 单价（默认为材料价格）

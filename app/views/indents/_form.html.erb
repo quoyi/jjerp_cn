@@ -49,9 +49,11 @@
     <div class="panel-body">
       <div id="<%= @indent.new_record? ? 'indentOrders' : 'editIndentOrders' %>">
         <%= f.fields_for :orders, :wrapper => false do |order_form| %>
+        <% of = order_form.object %>
+        <% next if !of.new_record? && of.ply == 0 && of.texture == 0 && of.color == 0 %>
         <div class="fields">
+          <%# if !of.new_record? && (of.ply != 0 && of.texture != 0 && of.color != 0) %>
           <div class="row">
-            <% of = order_form.object %>
             <!-- 初始下拉框默认选中项 -->
             <% init_ply_id = MaterialCategory.find_by(name: '18mm').try(:id) %>
             <% init_texture_id = MaterialCategory.find_by(name: '颗粒板').try(:id) %>
@@ -122,6 +124,7 @@
             </div>
           </div>
           <hr style="margin: 5px 0;">
+          <%# end %>
         </div>
         <% end %>
       </div>
@@ -194,9 +197,9 @@ function delete_order_from_nested_form(obj){
 }
 
 $("[data-provide=datepicker]").datepicker({
-format: 'yyyy-mm-dd',
-language: 'zh-CN',
-autoclose: true
+  format: 'yyyy-mm-dd',
+  language: 'zh-CN',
+  autoclose: true
 });
 $(".remoteDataAgent").select2({
   language: 'zh-CN',
@@ -335,6 +338,7 @@ $("#indent_form_fields").on("nested:fieldAdded:orders", function(e){
   var ply_field = fields.find(".material-ply");
   var texture_field = fields.find(".material-texture");
   var color_field = fields.find(".material-color");
+  // 设置 select 的 name 属性（因为 select2 为每个对象添加了一个随机种子，需要先获取，再手动添加 select 的 name 属性）
   ply_field.attr("name", order_category_id_field_name.replace("order_category_id", "ply"));
   texture_field.attr("name", order_category_id_field_name.replace("order_category_id", "texture"));
   color_field.attr("name", order_category_id_field_name.replace("order_category_id", "color"));
@@ -426,6 +430,6 @@ $("#indent_form_fields").on("nested:fieldAdded:orders", function(e){
     }
   });
 }).on("nested:fieldAdded:order_parts", function(e){
-
+  
 });
 </script>
