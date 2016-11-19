@@ -148,7 +148,6 @@ class OrdersController < ApplicationController
       origin_order_amount = @order.price
       origin_order_arrear = @order.arrear
       origin_agent_balance = agent.balance
-
       @order.update!(order_params_process_parts_attributes)
       # 自定义报价时，查找或创建板料，防止找不到板料
       @order.units.where(is_custom: true).each do |unit|
