@@ -77,23 +77,23 @@
                 <div class="col-sm-5" style="padding: 0px;">
                   <select class="material-ply" style="width: 20%;" required="required">
                     <% if of.new_record? %>
-                      <option value="<%= init_ply_id %>"><%= MaterialCategory.find(init_ply_id).try(:name) %></option>
+                      <option value="<%= init_ply_id %>"><%= MaterialCategory.find_by_id(init_ply_id).try(:name) %></option>
                     <% else %>
-                      <option value="<%= of.ply %>"><%= MaterialCategory.find(of.ply).try(:name) %></option>
+                      <option value="<%= of.ply %>"><%= MaterialCategory.find_by_id(of.ply).try(:name) %></option>
                     <% end %>
                   </select>
                   <select class="material-texture" style="width: 38%;" required="required">
                     <% if of.new_record? %>
-                      <option value="<%= init_texture_id %>"><%= MaterialCategory.find(init_texture_id).try(:name) %></option>
+                      <option value="<%= init_texture_id %>"><%= MaterialCategory.find_by_id(init_texture_id).try(:name) %></option>
                     <% else %>
-                      <option value="<%= of.texture %>"><%= MaterialCategory.find(of.texture).try(:name) %></option>
+                      <option value="<%= of.texture %>"><%= MaterialCategory.find_by_id(of.texture).try(:name) %></option>
                     <% end %>
                   </select>
                   <select class="material-color" style="width: 38%;" required="required">
                     <% if of.new_record? %>
-                      <option value="<%= init_color_id %>"><%= MaterialCategory.find(init_color_id).try(:name) %></option>
+                      <option value="<%= init_color_id %>"><%= MaterialCategory.find_by_id(init_color_id).try(:name) %></option>
                     <% else %>
-                      <option value="<%= of.color %>"><%= MaterialCategory.find(of.color).try(:name) %></option>
+                      <option value="<%= of.color %>"><%= MaterialCategory.find_by_id(of.color).try(:name) %></option>
                     <% end %>
                   </select>
                 </div>
@@ -117,9 +117,48 @@
               </div>
             </div>
             <div class="col-sm-1 text-center indent-orders-delete">
-              <!-- 位置不对 -->
               <%= order_form.link_to_remove '删除', class: 'btn btn-info btn-lg hidden' %>
               <%= link_to "删除", 'javascript:void(0);', class: 'btn btn-info btn-lg', onclick: 'delete_order_from_nested_form(this)' %>
+            </div>
+          </div>
+          <hr style="margin: 5px 0;">
+        </div>
+        <% end %>
+      </div>
+      <div id="<%= @indent.new_record? ? 'indentOrderRepairParts' : 'editIndentOrderRepairParts' %>">
+        <%= f.fields_for :order_parts, :wrapper => false do |part_form| %>
+        <div class="fields">
+          <% pf = part_form.object %>
+          <div class="row">
+            <div class="col-sm-1 text-center indent-orders-title" style="margin: 0; padding: 0px;">
+              <% if pf.new_record? %>
+              <h4 style="padding: 16px 0;">子订单</h4>
+              <% else %>
+              <h4 style="padding-top: 1px;">子订单</h4>
+              <p class="indent_orders_name"><%= pf.name %></p>
+              <% end %>
+            </div>
+            <div class="col-sm-10" style="padding-left: 0px;">
+              <div class="row" style="padding: 18px 0;">
+                <label class="col-sm-1 text-right" style="margin: 8px 0;"><span class="require">*</span>类型</label>
+                <div class="col-sm-3" style="padding: 0px;">
+                  <p class="form-control-static" style="background-color: #EEE; vertical-align: middle; display: block; text-align: center; border-radius: 4px; border: 1px solid #CCC; font-weight: bold;">配件补单</p>
+                  <%= part_form.hidden_field :order_category_id, value: OrderCategory.find_by(name: '配件').try(:id) %>
+                  <%= part_form.hidden_field :oftype, value: Order.oftype.select{|o| o.first == '补单'}.flatten.last %>
+                </div>
+                <label class="col-sm-1 text-right" style="margin: 8px 0;">货到</label>
+                <div class="col-sm-3" style="padding: 0px;">
+                  <%= part_form.text_field :delivery_address, maxlength: 10, class: "form-control", value: pf.new_record? ? '' : pf.delivery_address, placeholder: '不填则默认为代理商地址', style: 'width: 100%;' %>
+                </div>
+                <label class="col-sm-1 text-right" style="margin: 8px 0;">备注</label>
+                <div class="col-sm-3" style="padding: 0px;">
+                  <%= part_form.text_field :note, value: pf.new_record? ? '' : pf.note, maxlength: 25, class: 'form-control', placeholder: '请填写备注信息', style:'width: 100%;' %>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-1 text-center indent-orders-delete">
+              <%= part_form.link_to_remove '删除', class: 'btn btn-info btn-lg' %>
+              <%#= link_to "删除", 'javascript:void(0);', class: 'btn btn-info btn-lg', onclick: 'delete_order_from_nested_form(this)' %>
             </div>
           </div>
           <hr style="margin: 5px;">
@@ -131,7 +170,8 @@
 </div>
 <div class="modal-footer">
   <div class="pull-left">
-    <%= f.link_to_add '添加子订单', :orders, data: { target: @indent.new_record? ? '#indentOrders' : '#editIndentOrders'}, class: 'btn btn-info' %>
+    <%= f.link_to_add '添加子订单', :orders, data: {target: @indent.new_record? ? '#indentOrders' : '#editIndentOrders'}, class: 'btn btn-info' %>
+    <%= f.link_to_add '添加配件补单', :order_parts, data: {target: @indent.new_record? ? '#indentOrderRepairParts' : '#editIndentOrderRepairParts'}, class: 'btn btn-info' %>
   </div>
   <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
   <%= f.submit '提交', class: 'btn btn-primary' %>
@@ -289,7 +329,7 @@ $(".material-color").select2({
     }
   }
 });
-$("#indent_form_fields").on("nested:fieldAdded", function(e){
+$("#indent_form_fields").on("nested:fieldAdded:orders", function(e){
   var fields = e.field;
   var order_category_id_field_name = fields.find(".indent_nested_form_first_select_field").attr("name");
   var ply_field = fields.find(".material-ply");
@@ -385,5 +425,7 @@ $("#indent_form_fields").on("nested:fieldAdded", function(e){
       }
     }
   });
+}).on("nested:fieldAdded:order_parts", function(e){
+
 });
 </script>

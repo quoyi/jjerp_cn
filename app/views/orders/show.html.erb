@@ -97,14 +97,14 @@
         <div class="panel panel-info">
           <div class="panel-heading">
             <span>订单详细</span> <small><%= @order.status_name %></small>
-            <div class="pull-right" style="padding: 3px 0;">
+            <div class="pull-right" style="padding: 1px 0;">
               <%= form_tag import_orders_path, multipart: true, id: 'import-form' do %>
               <%= hidden_field_tag :id, @order.id, id: 'import-field-id', class: 'hidden' %>
               <%= file_field_tag :file, accept: 'csv', multiple: false, id: 'import-field-file', class: 'hidden' %>
-              <% if @order.over? %>
-                <%= link_to '导入拆单', '#', class: 'btn btn-xs btn-primary', data: {toggle:'tooltip'}, title: '从外部文件导入拆单信息', disabled: 'disabled', style: 'padding: 0;' %>
+              <% if @order.over? || (@order.order_category.name == '配件' && @order.ply == 0 && @order.texture == 0 && @order.color == 0) %>
+                <%= link_to '导入拆单', '#', class: 'btn btn-xs btn-primary', data: {toggle:'tooltip'}, title: '从外部文件导入拆单信息', disabled: 'disabled' %>
               <% else %>
-                <%= link_to '导入拆单', '#', id: 'import-btn', class: 'btn-xs btn-primary', data: {toggle:'tooltip'}, title: '从外部文件导入拆单信息' %>
+                <%= link_to '导入拆单', '#', id: 'import-btn', class: 'btn btn-xs btn-primary', data: {toggle:'tooltip'}, title: '从外部文件导入拆单信息' %>
               <% end %>
               <% end %>
             </div>
@@ -137,13 +137,13 @@
               <td><%= OrderCategory.find_by_id(@order.order_category_id).try(:name) %></td>
             </tr>
             <tr>
-              <th style="vertical-align: middle;">厚度</th>
+              <th>厚度</th>
               <td><%= MaterialCategory.find_by_id(@order.ply).try(:name) %></td>
-              <th style="vertical-align: middle;">材质</th>
+              <th>材质</th>
               <td><%= MaterialCategory.find_by_id(@order.texture).try(:name) %></td>
-              <th style="vertical-align: middle;">颜色</th>
+              <th>颜色</th>
               <td><%= MaterialCategory.find_by_id(@order.color).try(:name) %></td>
-              <th style="vertical-align: middle;">备注</th>
+              <th>备注</th>
               <td colspan="5" style="max-width:200px;word-break:break-all;word-wrap:break-word;"><%= @order.note %></td>
             </tr>
             <tr>
@@ -156,7 +156,7 @@
             <tr>
               <th colspan="12">
                 部件信息
-                <% if @order.over? %>
+                <% if @order.over? || (@order.order_category.name == '配件' && @order.ply == 0 && @order.texture == 0 && @order.color == 0) %>
                 <%= link_to '手动编辑', '#', class: 'btn btn-xs btn-primary pull-right', disabled: 'disabled', style: 'padding: 0;' %>
                 <% else %>
                 <%= link_to '手动编辑', '#', data: {toggle:'modal', target: '#addOrderUnits'}, class: 'pull-right btn-xs btn-primary' %>

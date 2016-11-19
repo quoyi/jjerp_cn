@@ -252,7 +252,7 @@ function getMaterialPrice(obj) {
     type: 'POST',
     success: function(data) {
       if (data != null) {
-        console.log(data);
+        // console.log(data);
         fields.find(".material-uom").val(data.uom);
         fields.find(".material-price").val(data.price);
       } else {

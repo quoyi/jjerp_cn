@@ -46,9 +46,9 @@
           <td><%= link_to o.name, o, data: {toggle:'tooltip'}, title: '子订单详细' %></td>
           <td><%= o.order_category.try(:name) %></td>
           <td><%= User.find_by(id: o.handler).try(:username).presence || "无" %></td>
-          <td><%= MaterialCategory.find(o.ply).try(:name) %></td>
-          <td><%= MaterialCategory.find(o.texture).try(:name) %></td>
-          <td><%= MaterialCategory.find(o.color).try(:name) %></td>
+          <td><%= MaterialCategory.find_by_id(o.ply).try(:name) || '无' %></td>
+          <td><%= MaterialCategory.find_by_id(o.texture).try(:name) || '无' %></td>
+          <td><%= MaterialCategory.find_by_id(o.color).try(:name) || '无' %></td>
           <td><%= o.material_price %></td>
           <!-- <td><%= o.length %></td>
           <td><%= o.width %></td>

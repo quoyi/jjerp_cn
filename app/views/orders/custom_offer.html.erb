@@ -18,6 +18,9 @@
     <%#= hidden_field_tag :is_custom, true%>
     <div class="modal-body" style="padding: 5px;">
       <!-- 部件 -->
+      <% if @order.order_category.name == '配件' && @order.ply == 0 && @order.texture == 0 && @order.color == 0 %>
+      <!-- 子订单为“配件补单” 时，不显示添加配件选项，保留此区域以备添加逻辑 -->
+      <% else %>
       <div class="panel panel-default">
         <div class="panel-heading order-panel-header">
           <h3 class="panel-title order-panel-header">板料&nbsp;&nbsp;&nbsp;&nbsp;
@@ -76,6 +79,7 @@
           <%= f.link_to_add '添加板料', :units, data: {target: '#orderUnitsForm'}, class: 'btn btn-info btn-xs pull-right', title: '报价单添加新板料到拆单数据' %>
         </div>
       </div>
+      <% end %>
       <!-- 配件 -->
       <div class="panel panel-default">
         <div class="panel-heading order-panel-header">
@@ -181,7 +185,7 @@
 function delete_separate_from_nested_form(target){
   var order_fields = $(target).parent().siblings(".col-sm-11");
   var required_order_fields = order_fields.find("[required='required']");
-  console.log(required_order_fields);
+  // console.log(required_order_fields);
   // 动态删除子订单前，将必填项的值设为1
   required_order_fields.each(function(){
     var element = $(this);

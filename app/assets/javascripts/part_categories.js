@@ -12,7 +12,7 @@ $(function(){
 
   $("#part_category_form").on('submit', function(e){
     e.preventDefault();
-    console.log($(this));
+    // console.log($(this));
     var fData = $(this).serializeJSON();
     $.ajax({
       url: "/part_categories/" + fData.id,

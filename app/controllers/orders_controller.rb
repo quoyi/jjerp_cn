@@ -131,7 +131,7 @@ class OrdersController < ApplicationController
   def update
     handler = @order.handler.to_i
     return redirect_to :back, error: '没有权限编辑此订单！' if handler != 0 && handler != current_user.id
-    return redirect_to @order, error: '请求无效！请检查数据是否有效。' unless params[:order]
+    return redirect_to :back, error: '请求无效！请检查数据是否有效。' unless params[:order]
     Order.transaction do
       indent = @order.indent
       agent = indent.agent
@@ -423,16 +423,16 @@ class OrdersController < ApplicationController
   # 未打包
   # GET /orders/unpack
   def unpack
-    @orders = Order.where(status: Order.statuses[:producing])
-    @orders.each do |order|
-      # 子订单状态为 未打包，且部件数量为0
-      if order.status == "producing" && order.units.size == 0
-        order.packaged!
-        order.update_attributes(package_num: 0) # 打包数为0
-        update_order_status(order)
-      end
-    end
-    @orders = @orders.reload#.where(status: Order.statuses[:producing])
+    # @orders = Order.where(status: Order.statuses[:producing])
+    # @orders.each do |order|
+    #   # 子订单状态为 未打包，且部件数量为0
+    #   if order.status == "producing" && order.units.size == 0
+    #     order.packaged!
+    #     order.update_attributes(package_num: 0) # 打包数为0
+    #     update_order_status(order)
+    #   end
+    # end
+    # @orders = @orders.reload#.where(status: Order.statuses[:producing])
     # @orders = @orders.page(params[:page])
   end
 
@@ -445,6 +445,7 @@ class OrdersController < ApplicationController
 
   # GET 打包页面
   # orders/1/package
+  # # orders/1/package.pdf
   def package
     # 按照顺序查找： 指定编号、指定ID、第一个（防止打印页面报错）
     if params[:name].present?
@@ -458,6 +459,7 @@ class OrdersController < ApplicationController
     if @order.present?
       @order_units = @order.units
       @packages = @order.packages
+      # 批量打印
       # 这些值需存在数据库表package中
       # 打印尺寸需存在users表的default_print_size
       if params[:order_unit_ids].present? &&  params[:order_unit_ids] != "{}"
@@ -507,8 +509,6 @@ class OrdersController < ApplicationController
           end
         end
 
-        
-
         # 返回结果
         respond_to do |format|
           format.html {render :layout => false}
@@ -528,7 +528,7 @@ class OrdersController < ApplicationController
         end
       end
     else
-      redirect_to unpack_orders_path, warning: '未找到订单！'
+      redirect_to :back, warning: '未找到订单！'
     end
   end
 
