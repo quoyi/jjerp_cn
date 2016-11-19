@@ -13,7 +13,7 @@ $(function(){
       <small style="font-size: 14px;">
       订单号：<%= link_to @order.name, indent_path(@order.indent), class: 'detail-link' %>&nbsp;&nbsp;&nbsp;&nbsp;
       下单客户：<%= link_to @order.indent.agent.full_name, agents_path, class: 'detail-link' %>&nbsp;&nbsp;&nbsp;&nbsp;
-      终端客户：<%= @order.indent.customer %>
+      终端客户：<%= @order.indent.customer %>&nbsp;&nbsp;&nbsp;&nbsp;
       件数：<%= @order.packages.pluck(:label_size).sum %>
       </small>
       <div class="pull-right panel-options">

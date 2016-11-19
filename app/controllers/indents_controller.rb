@@ -63,7 +63,7 @@ class IndentsController < ApplicationController
   # POST /indents
   # POST /indents.json
   def create
-    # binding.pry
+    binding.pry
     # 新建总订单时，修改代理商欠款
     Indent.transaction do
       @indent = Indent.new(indent_params)
@@ -85,6 +85,7 @@ class IndentsController < ApplicationController
   # PATCH/PUT /indents/1
   # PATCH/PUT /indents/1.json
   def update
+    binding.pry
     Indent.transaction do
       # 获取删除的 orders
       # 更新总订单之前，先获取总订单 （原）金额，后面需要减 （原）金额
@@ -253,6 +254,10 @@ class IndentsController < ApplicationController
     params.require(:indent).permit(:id, :name, :offer_id, :agent_id, :customer, :verify_at, :require_at, :note, :delivery_address,
                                    :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted, :status,
                                    orders_attributes: [:id, :order_category_id, :customer, :number, :ply, :material_price,
+                                                       :texture, :color, :price, :length, :width, :height, :oftype,
+                                                       :agent_id, :name, :status, :deleted, :customer,
+                                                       :note, :is_use_order_material, :delivery_address, :_destroy],
+                                   order_parts_attributes: [:id, :order_category_id, :customer, :number, :ply, :material_price,
                                                        :texture, :color, :price, :length, :width, :height, :oftype,
                                                        :agent_id, :name, :status, :deleted, :customer,
                                                        :note, :is_use_order_material, :delivery_address, :_destroy],

@@ -1,6 +1,7 @@
 class Indent < ActiveRecord::Base
   has_many :offers, dependent: :destroy
   has_many :orders, dependent: :destroy
+  has_many :order_parts # 虚构配件补单（ 实际为订单orders ）
   has_many :incomes, dependent: :destroy
   # has_many :packages, dependent: :destroy
   belongs_to :agent
@@ -11,6 +12,7 @@ class Indent < ActiveRecord::Base
 
   accepts_nested_attributes_for :orders, allow_destroy: true
   accepts_nested_attributes_for :offers, allow_destroy: true
+  accepts_nested_attributes_for :order_parts, allow_destroy: true
 
   #下单条件：1.正常单  2.补单  3.加急单 4.批量单
   enum oftype: [:normal, :repair, :instancy, :batch]

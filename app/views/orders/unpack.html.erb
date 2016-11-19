@@ -15,7 +15,7 @@
           <span>查询条件</span>
         </div>
         <div class="panel-body text-center">
-          <%= form_tag package_order_path(searh_order), class: 'form-inline', method: 'get' do %>
+          <%= form_tag package_order_path(searh_order), class: 'form-inline', method: 'post' do %>
           <div class="form-group">
             <%= select_year Date.today.year, {field_name: :year, start_year: 2010, end_year: Date.today.year}, {class: 'form-control'} %>
             <%= label_tag '年', nil, class: 'control-label', for: 'date_year', style: 'padding: 0 10px;' %>
