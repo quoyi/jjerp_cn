@@ -9,51 +9,51 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <%= f.label '厚度', for: 'material_ply', class: 'control-label col-sm-3' %>
+          <label for="material_ply" class="col-sm-3 control-label text-right"><span class="require">*</span>厚度</label>
           <div class="col-sm-9">
-            <%= select_tag 'material[ply]', options_for_select(MaterialCategory.where(oftype: 0).map{|mc|[mc.name, mc.id]}), class: 'form-control', required: true %>
+            <%= f.select :ply, MaterialCategory.where(oftype: 0).map{|mc|[mc.name, mc.id]}, {include_blank: '请选择厚度'}, {class: 'form-control', required: true} %>
           </div>
         </div>
         <div class="form-group">
-          <%= f.label '材质', for: 'material_texture', class: 'control-label col-sm-3' %>
+          <label for="material_texture" class="col-sm-3 control-label text-right"><span class="require">*</span>材质</label>
           <div class="col-sm-9">
-            <%= select_tag 'material[texture]', options_for_select(MaterialCategory.where(oftype: 1).map{|mc|[mc.name, mc.id]}), class: 'form-control', required: true %>
+            <%= f.select :texture, MaterialCategory.where(oftype: 1).map{|mc|[mc.name, mc.id]}, {include_blank: '请选择材质'}, {class: 'form-control', required: true} %>
           </div>
         </div>
         <div class="form-group">
-          <%= f.label '颜色', for: 'material_color', class: 'control-label col-sm-3' %>
+          <label for="material_color" class="col-sm-3 control-label text-right"><span class="require">*</span>颜色</label>
           <div class="col-sm-9">
-            <%= select_tag 'material[color]', options_for_select(MaterialCategory.where(oftype: 2).map{|mc|[mc.name, mc.id]}), class: 'form-control', required: true %>
+            <%= f.select :color, MaterialCategory.where(oftype: 2).map{|mc|[mc.name, mc.id]}, {include_blank: '请选择颜色'}, {class: 'form-control', required: true} %>
           </div>
         </div>
         <div class="form-group">
-          <%= f.label '进价', for: 'material_buy', class: 'control-label col-sm-3' %>
+          <label for="material_buy" class="col-sm-3 control-label text-right"><span class="require">*</span>进价</label>
           <div class="col-sm-9">
-            <%= f.number_field :buy, class: 'form-control', value: 1, min: 0, step: 0.01, required: true %>
+            <%= f.number_field :buy, class: 'form-control', value: 1, min: 0, max: 999999, step: 0.01, required: true %>
           </div>
         </div>
         <div class="form-group">
-          <%= f.label '售价', for: 'material_sell', class: 'control-label col-sm-3' %>
+          <label for="material_sell" class="col-sm-3 control-label text-right"><span class="require">*</span>售价</label>
           <div class="col-sm-9">
-            <%= f.number_field :price, class: 'form-control', value: 1, min: 0, step: 0.01, required: true %>
+            <%= f.number_field :price, class: 'form-control', value: 1, min: 0, max: 999999, step: 0.01, required: true %>
           </div>
         </div>
         <div class="form-group">
-          <%= f.label '单位', for: 'material_uom', class: 'control-label col-sm-3' %>
+          <label for="material_uom" class="col-sm-3 control-label text-right"><span class="require">*</span>单位</label>
           <div class="col-sm-9">
-            <%= f.select :uom, Uom.where(deleted: false).map{|u|[u.name,u.name]}, class: 'form-control', value: '平方', required: true %>
+            <%= f.select :uom, Uom.where(deleted: false).map{|u|[u.name,u.name]}, {selected: '平方'}, {class: 'form-control',  required: true }%>
           </div>
         </div>
         <div class="form-group">
           <%= f.label '库存', for: 'material_store', class: 'control-label col-sm-3' %>
           <div class="col-sm-9">
-            <%= f.number_field :store, class: 'form-control', value: 1, min: 0, step: 0.01, required: true %>
+            <%= f.number_field :store, class: 'form-control', value: 1, min: 0, step: 0.01 %>
           </div>
         </div>
         <div class="form-group">
-          <%= f.label '供应商', for: 'material_supply_id', class: 'control-label col-sm-3' %>
+        <label for="material_supply_id" class="col-sm-3 control-label text-right"><span class="require">*</span>供应商</label>
           <div class="col-sm-9">
-            <%= select_tag 'material[supply_id]', options_for_select(Supply.all.map{|s|[s.full_name,s.id]}), class: 'form-control', required: true %>
+            <%= f.select :supply_id, Supply.all.map{|s|[s.full_name,s.id]}, {include_blank: '请选择供应商'}, {class: 'form-control', required: true} %>
           </div>
         </div>
       </div>
