@@ -17,7 +17,7 @@ class Order < ActiveRecord::Base
   before_save :order_money_to_int
   # after_update :update_indent_and_agent # 更新子订单时，同步更新总订单、代理商金额
   accepts_nested_attributes_for :units, allow_destroy: true
-  accepts_nested_attributes_for :parts, allow_destroy: true
+  accepts_nested_attributes_for :parts, reject_if: :social_rejectable?, allow_destroy: true
   accepts_nested_attributes_for :crafts, allow_destroy: true
 
   #订单状态：0.报价中 1.已报价 2.生产中 3.已入库 4.已发货
@@ -114,6 +114,11 @@ class Order < ActiveRecord::Base
 
   def caseType(type, str)
 
+  end
+
+  private 
+  def social_rejectable?(att)
+    att['number'].blank? && !att["id"]
   end
 
   # # 更新订单时，同步更新代理商金额
