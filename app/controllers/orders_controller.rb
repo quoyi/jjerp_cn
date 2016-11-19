@@ -15,7 +15,7 @@ class OrdersController < ApplicationController
     @orders = Order.all.order(created_at: :desc, index: :desc)
     @start_at = Date.today.beginning_of_month.to_s
     @end_at = Date.today.end_of_month.to_s
-    
+
     if current_user.role?('super_admin') || current_user.role?('admin') || current_user.role?('financial')
       @user_id = params[:user_id].presence.to_i
       @orders = @orders.where(handler: @user_id) if @user_id != 0
@@ -77,7 +77,7 @@ class OrdersController < ApplicationController
     @orders = @orders.page(params[:page])
     # @orders = @orders.sort_by{|o|[o.name.split("-")[0].to_i,o.name.split('-')[1].to_i,o.name.split('-')[2].to_i]}
     respond_to do |format|
-      format.html 
+      format.html
       format.xls do
         filename = Time.now.strftime("%Y%m%d%H%M%S%L") + ".xls"
         export_orders(filename, @download, params[:start_at], params[:end_at])
@@ -100,7 +100,7 @@ class OrdersController < ApplicationController
     @indent = @order.indent
     @agent = @indent.agent
     respond_to do |format|
-      format.html 
+      format.html
       format.json { render json: @order }
     end
   end
@@ -118,7 +118,7 @@ class OrdersController < ApplicationController
   # POST /orders.json
   def create
     @order = Order.new(order_params)
-    
+
     if @order.save
       redirect_to :back, success: '子订单创建成功！'
     else
@@ -129,9 +129,16 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
+    # binding.pry
     handler = @order.handler.to_i
     return redirect_to :back, error: '没有权限编辑此订单！' if handler != 0 && handler != current_user.id
     return redirect_to :back, error: '请求无效！请检查数据是否有效。' unless params[:order]
+    order_params_process_parts_attributes = order_params
+    if order_params_process_parts_attributes[:parts_attributes]
+      order_params_process_parts_attributes[:parts_attributes].each do |k, v|
+        order_params_process_parts_attributes[:parts_attributes][k]["_destroy"] = "1" if v[:id] && v[:number].blank?
+      end
+    end
     Order.transaction do
       indent = @order.indent
       agent = indent.agent
@@ -142,7 +149,7 @@ class OrdersController < ApplicationController
       origin_order_arrear = @order.arrear
       origin_agent_balance = agent.balance
 
-      @order.update!(order_params)
+      @order.update!(order_params_process_parts_attributes)
       # 自定义报价时，查找或创建板料，防止找不到板料
       @order.units.where(is_custom: true).each do |unit|
         m = Material.find_or_create_by(ply: unit.ply, texture: unit.texture, color: unit.color)
@@ -275,12 +282,11 @@ class OrdersController < ApplicationController
       else
         agent.update!(arrear: agent.arrear - order.price, history: agent.history - order.price)
       end
-      
+
       # 生成报价单
       create_offer(order)
       # 修改子订单、总订单的状态
       update_order_status(order)
-      
     end
     redirect_to orders_url, notice: '子订单已删除。'
   end
@@ -372,8 +378,6 @@ class OrdersController < ApplicationController
       end
       # 更新子订单金额、代理商余额、收入记录  结束
 
-
-
       # 更新子订单金额
       sum_units = 0
       # 将子订单的所有部件按是否"自定义报价"分组 {true: 自定义报价部件; false: 正常拆单部件}
@@ -407,17 +411,7 @@ class OrdersController < ApplicationController
       # 修改子订单、总订单的状态
       update_order_status(@order.reload)
     end
-    
     redirect_to :back, notice: msg
-  end
-
-  # 自定义报价
-  def custom_offer
-    @indent = @order.indent
-    @unit = Unit.new
-    @material = Material.new
-    @part_category = PartCategory.new
-    @craft_category = CraftCategory.new
   end
 
   # 未打包
@@ -436,11 +430,13 @@ class OrdersController < ApplicationController
     # @orders = @orders.page(params[:page])
   end
 
-  # 已打包
-  # GET /orders/packaged
-  def packaged
-    @orders = Order.where(status: Order.statuses[:packaged])
-    @orders = @orders.page(params[:page])
+  # 自定义报价
+  def custom_offer
+    @indent = @order.indent
+    @unit = Unit.new
+    @material = Material.new
+    @part_category = PartCategory.new
+    @craft_category = CraftCategory.new
   end
 
   # GET 打包页面
@@ -459,7 +455,6 @@ class OrdersController < ApplicationController
     if @order.present?
       @order_units = @order.units
       @packages = @order.packages
-      # 批量打印
       # 这些值需存在数据库表package中
       # 打印尺寸需存在users表的default_print_size
       if params[:order_unit_ids].present? &&  params[:order_unit_ids] != "{}"
@@ -528,8 +523,15 @@ class OrdersController < ApplicationController
         end
       end
     else
-      redirect_to :back, warning: '未找到订单！'
+      redirect_to unpack_orders_path, warning: '未找到订单！'
     end
+  end
+
+  # 已打包
+  # GET /orders/packaged
+  def packaged
+    @orders = Order.where(status: Order.statuses[:packaged])
+    @orders = @orders.page(params[:page])
   end
 
   # 重新打印
@@ -565,7 +567,7 @@ class OrdersController < ApplicationController
       end
     end
   end
-
+  
   # GET 转款
   def change_income
     @order = Order.find_by_id(params[:id]) if params[:id].present?
@@ -612,7 +614,6 @@ class OrdersController < ApplicationController
       render layout: false
     end
   end
-
 
   private
   # Use callbacks to share common setup or constraints between actions.
