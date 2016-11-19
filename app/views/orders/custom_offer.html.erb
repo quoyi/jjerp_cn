@@ -125,12 +125,10 @@
           <%#= f.link_to_add '添加配件', :parts, data: {target: '#orderPartsForm'}, class: 'btn btn-info btn-xs pull-right', title: '报价单添加新配件到拆单数据' %>
         </div>
       </div> -->
-
       <!-- 工艺 -->
       <div class="panel panel-default">
         <div class="panel-heading order-panel-header">
-          <h3 class="panel-title order-panel-header">工艺&nbsp;&nbsp;&nbsp;&nbsp;
-          </h3>
+          <h3 class="panel-title order-panel-header">工艺</h3>
         </div>
         <div class="panel-body" id="orderCraftsForm" style="padding: 5px 0;">
           <%= f.fields_for :crafts, wrapper: false do |craft_form| %>
@@ -167,58 +165,54 @@
           <%= f.link_to_add '添加工艺', :crafts, data: {target: '#orderCraftsForm'}, class: 'btn btn-info btn-xs pull-right', title: '报价单添加新工艺到拆单数据' %>
         </div>
       </div>
-
       <!-- 配件 -->
       <div class="panel panel-default">
         <div class="panel-heading order-panel-header">
-          <h3 class="panel-title order-panel-header">配件&nbsp;&nbsp;&nbsp;&nbsp;
-          </h3>
+          <h3 class="panel-title order-panel-header">配件</h3>
         </div>
-        <div class="panel-body" id="orderPartsForm" style="padding: 5px 0;">
+        <div class="panel-body" id="orderPartsForm" style="padding: 0;">
           <!-- Nav tabs -->
           <% root_pcs = PartCategory.root %>
           <ul class="nav nav-tabs" role="tablist">
-            <% root_pcs.each_with_index do |root_pc,i| %>
-            <li role="presentation" class="<%= 'active' if i == 0 %>" style="width: 15%;">
-              <a href="#pc-<%= root_pc.id %>" role="tab" data-toggle="tab"><%= root_pc.name %>
-              </a>
+            <% root_pcs.each_with_index do |root_pc, index| %>
+            <li role="presentation" class="text-center <%= 'active' if index == 0 %>" style="width: 10%;">
+              <a href="#pc-<%= root_pc.id %>" role="tab" data-toggle="tab"><%= root_pc.name %></a>
             </li>
             <% end %>
           </ul>
-          <div class="table-responsive" style="height: 260px;">
+          <div class="table-responsive" style="height: 396px;">
             <!-- Tab panes -->
-            <div class="tab-content" >
-              <% root_pcs.each_with_index do |root_pc,i| %>
-                <div role="tabpanel" class="tab-pane <%= 'active' if i == 0 %>" id="pc-<%= root_pc.id %>">
-                  <div class="row">
-                    <% root_pc.children.each do |pc| %>
-                    <% part = Part.find_by(part_category_id: pc.id) || Part.new %>
-                    <div class="col-md-3" style="height: 120px;">
-                      <div style="border: 1px solid #eeefff; height: 100%;text-align: center;">
-                        <p><%= pc.name %></p>
-                        <%= f.fields_for :parts, part do |p| %>
-                          <%= p.hidden_field :part_category_id, value: pc.id %>
-                          <%= p.hidden_field :supply_id, value: pc.supply_id %>
-                        <div class="input-group">
-                          <%= p.number_field :number, value: part.new_record? ? nil : part.number, placeholder: '数量', class: 'form-control' %>
-                          <span class="input-group-addon">*</span>
-                          <%= p.number_field :price, placeholder: '价格', value: part.price || pc.price, class: 'form-control' %>
-                          <span class="input-group-addon">元</span>
-                        </div>
-                        <div class="input-group" style="margin-top: 5px;">
-                          <span class="input-group-addon">单位</span>
-                          <%= p.collection_select :uom, Uom.where(deleted: false), :name, :name, {selected: part.uom || pc.uom}, class: 'form-control' %>
-                        </div>
-                        <% end %>
+            <div class="tab-content" style="padding: 5px;">
+              <% root_pcs.each_with_index do |root_pc, index| %>
+              <div role="tabpanel" class="tab-pane <%= 'active' if index == 0 %>" id="pc-<%= root_pc.id %>">
+                <div class="row" style="margin: 0px;">
+                  <% root_pc.children.each do |pc| %>
+                  <% part = Part.find_by(part_category_id: pc.id, order_id: @order.id) || Part.new %>
+                  <div class="col-md-3" style="height: 120px; margin-bottom: 8px; padding: 0 8px;">
+                    <div style="border: 1px solid #A0A0A0; border-radius: 4px; padding: 4px; height: 100%;text-align: center; background-color: #fff;">
+                      <p style="width: 100%; font-weight: bold;"><%= pc.name %></p>
+                      <%= f.fields_for :parts, part do |p| %>
+                      <%= p.hidden_field :part_category_id, value: pc.id %>
+                      <%= p.hidden_field :supply_id, value: pc.supply_id %>
+                      <div class="input-group">
+                        <%= p.number_field :number, min: 0, max: 999999, step: 0.01, value: part.new_record? ? nil : part.number, placeholder: '数量', class: 'form-control' %>
+                        <span class="input-group-addon">×</span>
+                        <%= p.number_field :price, min: 0, max: 999999, step: 0.01, placeholder: '单价', value: part.price || pc.price, class: 'form-control' %>
+                        <span class="input-group-addon">元</span>
                       </div>
+                      <div class="input-group" style="margin-top: 5px; width: 100%;">
+                        <span class="input-group-addon" title="修改子订单配件单位时，数量不能为零。" style="width: 30%;">单位</span>
+                        <%= p.collection_select :uom, Uom.where(deleted: false), :name, :name, {selected: part.uom || pc.uom}, class: 'form-control' %>
+                      </div>
+                      <% end %>
                     </div>
-                    <% end %>
                   </div>
+                  <% end %>
                 </div>
+              </div>
               <% end %>
             </div>
           </div>
-
         </div>
         <div class="panel-footer" style="padding: 5px;">
           <%= link_to '新建基础配件', '#', class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addPartCategories'}, title: '创建新的基础配件' %>
@@ -240,18 +234,18 @@
 <%= render '/craft_categories/new' %>
 <script type="text/javascript">
 function delete_separate_from_nested_form(target){
-  var order_fields = $(target).parent().siblings(".col-sm-11");
-  var required_order_fields = order_fields.find("[required='required']");
-  // console.log(required_order_fields);
-  // 动态删除子订单前，将必填项的值设为1
-  required_order_fields.each(function(){
-    var element = $(this);
-    if(element.is("select")){
-      element.children().last().attr("selected", "selected");
-    }else{
-      element.val("1");
-    }
-  });
-  $(target).prev().click();
+var order_fields = $(target).parent().siblings(".col-sm-11");
+var required_order_fields = order_fields.find("[required='required']");
+// console.log(required_order_fields);
+// 动态删除子订单前，将必填项的值设为1
+required_order_fields.each(function(){
+var element = $(this);
+if(element.is("select")){
+element.children().last().attr("selected", "selected");
+}else{
+element.val("1");
+}
+});
+$(target).prev().click();
 }
 </script>
