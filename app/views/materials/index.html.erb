@@ -20,17 +20,17 @@
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
           <tr class="info">
-            <th  class="text-center">编码</th>
-            <th  class="text-center">名称</th>
-            <th  class="text-center">厚度</th>
-            <th  class="text-center">材质</th>
-            <th  class="text-center">颜色</th>
-            <th  class="text-center">库存</th>
-            <th  class="text-center">进价</th>
-            <th  class="text-center">售价</th>
-            <th  class="text-center">单位</th>
-            <th  class="text-center">供应商</th>
-            <!-- <th  class="text-center">操作</th> -->
+            <th>编码</th>
+            <th>名称</th>
+            <th>厚度</th>
+            <th>材质</th>
+            <th>颜色</th>
+            <th>库存</th>
+            <th>进价</th>
+            <th>售价</th>
+            <th>单位</th>
+            <th>供应商</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
@@ -46,7 +46,7 @@
             <td><%= m.price %></td>
             <td><%= m.uom %></td>
             <td><%= m.supply.try(:full_name) %></td>
-            <!-- <td><%#= link_to '编辑', edit_material_path(m)%></td> -->
+            <td><%= link_to '编辑', edit_material_path(m), class:'btn btn-xs btn-primary', data: { toggle: 'modal', target: '#editMaterial'}%></td>
           </tr>
           <% end %>
         </tbody>
@@ -93,3 +93,15 @@
     </div>
   </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="editMaterial" tabindex="-1" role="dialog" aria-labelledby="editMaterialLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$("#editMaterial").on("hidden.bs.modal", function(e){
+  $(this).removeData("bs.modal");
+});
+</script>

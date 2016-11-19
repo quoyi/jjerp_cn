@@ -70,6 +70,7 @@ class MaterialsController < ApplicationController
 
   # GET /materials/1/edit
   def edit
+    render layout: false
   end
 
   # POST /materials
@@ -86,12 +87,13 @@ class MaterialsController < ApplicationController
   # PATCH/PUT /materials/1
   # PATCH/PUT /materials/1.json
   def update
+    binding.pry
     respond_to do |format|
       if @material.update(material_params)
-        format.html { redirect_to materials_path, notice: "板料#{@material.name}更新成功！" }
+        format.html { redirect_to materials_path, notice: "板料 #{@material.full_name} 更新成功！" }
         format.json { render :show, status: :ok, location: @material }
       else
-        format.html { render :edit }
+        format.html { render :back, error: "板料编辑失败！" }
         format.json { render json: @material.errors, status: :unprocessable_entity }
       end
     end
