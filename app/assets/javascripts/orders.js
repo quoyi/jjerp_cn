@@ -46,7 +46,7 @@ $(function() {
   });
 
   // 子订单 - 自定义报价 - 板料 select2
-  $(".custom-offer-material-ply").select2({
+  $(".material-ply").select2({
     language: 'zh-CN',
     theme: 'bootstrap',
     placeholder: "板厚",
@@ -55,7 +55,7 @@ $(function() {
     ajax: {
       url: '/material_categories.json',
       dataType: 'json',
-      delay: 2500,
+      delay: 250,
       cache: true,
       data: function(params){
         return {
@@ -75,7 +75,7 @@ $(function() {
       }
     }
   });
-  $(".custom-offer-material-texture").select2({
+  $(".material-texture").select2({
     language: 'zh-CN',
     theme: 'bootstrap',
     placeholder: "材质",
@@ -84,7 +84,7 @@ $(function() {
     ajax: {
       url: '/material_categories.json',
       dataType: 'json',
-      delay: 2500,
+      delay: 250,
       cache: true,
       data: function(params){
         return {
@@ -104,7 +104,7 @@ $(function() {
       }
     }
   });
-  $(".custom-offer-material-color").select2({
+  $(".material-color").select2({
     language: 'zh-CN',
     theme: 'bootstrap',
     placeholder: "颜色",
@@ -113,7 +113,7 @@ $(function() {
     ajax: {
       url: '/material_categories.json',
       dataType: 'json',
-      delay: 2500,
+      delay: 250,
       cache: true,
       data: function(params){
         return {
@@ -136,9 +136,9 @@ $(function() {
   $("#custom-offer-fields").on("nested:fieldAdded", function(e){
     var fields = e.field;
     // var custom_offer_full_name = fields.find(".custom-offer-full-name").attr("name");
-    var ply_field = fields.find(".custom-offer-material-ply");
-    var texture_field = fields.find(".custom-offer-material-texture");
-    var color_field = fields.find(".custom-offer-material-color");
+    var ply_field = fields.find(".material-ply");
+    var texture_field = fields.find(".material-texture");
+    var color_field = fields.find(".material-color");
     // ply_field.attr("name", custom_offer_full_name.replace("full_name", "ply"));
     // texture_field.attr("name", custom_offer_full_name.replace("full_name", "texture"));
     // color_field.attr("name", custom_offer_full_name.replace("full_name", "color"));
@@ -152,7 +152,7 @@ $(function() {
       ajax: {
         url: '/material_categories.json',
         dataType: 'json',
-        delay: 2500,
+        delay: 250,
         cache: true,
         data: function(params){
           return {
@@ -181,7 +181,7 @@ $(function() {
       ajax: {
         url: '/material_categories.json',
         dataType: 'json',
-        delay: 2500,
+        delay: 250,
         cache: true,
         data: function(params){
           return {
@@ -210,7 +210,7 @@ $(function() {
       ajax: {
         url: '/material_categories.json',
         dataType: 'json',
-        delay: 2500,
+        delay: 250,
         cache: true,
         data: function(params){
           return {

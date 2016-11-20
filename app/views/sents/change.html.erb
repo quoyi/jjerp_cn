@@ -25,15 +25,15 @@
   <div class="form-group" style="width: 100%;">
     <%= f.label :area, '地区', class: 'col-xs-1 control-label text-right', style: 'margin-top: 8px;padding: 0;' %>
     <div class="col-xs-3">
-      <%= f.text_field :area, class: 'form-control' %>
+      <%= f.text_field :area, value: @indent_or_order.agent.delivery_address, class: 'form-control' %>
     </div>
     <label for="sent_receiver" class="col-xs-1 control-label text-right" style='margin-top: 8px; padding: 0;'><span class="require">*</span>收货人</label>
     <div class="col-xs-3">
-      <%= f.text_field :receiver, class: 'form-control', required: true %>
+      <%= f.text_field :receiver, value: @indent_or_order.agent.contacts, class: 'form-control', required: true %>
     </div>
-    <label for="sent_contact" class="col-xs-1 control-label text-right" style='margin-top: 8px;padding: 0;'><span class="require">*</span>联系方式</label>
+    <label for="sent_contact" class="col-xs-1 control-label text-right" style='margin-top: 8px;padding: 0 !important;'><span class="require">*</span>联系方式</label>
     <div class="col-xs-3">
-      <%= f.text_field :contact, class: 'form-control', required: true %>
+      <%= f.text_field :contact, value: @indent_or_order.agent.mobile, class: 'form-control', required: true, style: 'width: 100%;' %>
     </div>
   </div>
   <div class="form-group" style="width: 100%; margin-top: 5px;">

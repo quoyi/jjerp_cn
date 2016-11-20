@@ -8,7 +8,7 @@ $(function(){
     ajax: {
       url: '/agents.json',
       dataType: 'json',
-      delay: 2500,
+      delay: 250,
       cache: true,
       data: function(params){
         return {
@@ -37,7 +37,7 @@ $(function(){
     ajax: {
       url: '/agents.json',
       dataType: 'json',
-      delay: 2500,
+      delay: 250,
       cache: true,
       data: function(params){
         return {
@@ -66,7 +66,7 @@ $(function(){
     ajax: {
       url: '/agents.json',
       dataType: 'json',
-      delay: 2500,
+      delay: 250,
       cache: true,
       data: function(params){
         return {

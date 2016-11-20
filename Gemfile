@@ -46,8 +46,9 @@ gem 'chunky_png'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+# 这里不指定小于 5.0.0 时会导致左边菜单无法切换
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+gem 'turbolinks', '~> 2.5.3', '< 5.0.0'
 gem 'jquery-turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'

@@ -6,12 +6,16 @@ class MaterialCategoriesController < ApplicationController
   def index
     @material_category = MaterialCategory.new
     @material_categories = MaterialCategory.all
-    @material_categories = MaterialCategory.where(oftype:  MaterialCategory.oftypes[params[:oftype]]) if params[:oftype].present?
+    if params[:oftype].present?
+      @material_categories = MaterialCategory.where(oftype: MaterialCategory.oftypes[params[:oftype]])
+      if params[:term].present?
+        @material_categories = @material_categories.where("name like '%#{params[:term]}%'")
+      end
+    end
     respond_to do |format|
       format.html
       format.json {
         # @material_categories.where(oftype: MaterialCategory.oftypes[params[:type]]) if params[:type].present?
-        
         if params[:page]
           per = 6
           size = @material_categories.offset((params[:page].to_i - 1) * per).size  # 剩下的记录条数

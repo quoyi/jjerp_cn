@@ -6,19 +6,25 @@ class AgentsController < ApplicationController
   def index
     @agent = Agent.new(name: "DL".upcase() + (Agent.count + 1).to_s.rjust(4, "0"))
     @agents = Agent.where(deleted: false)
-    # binding.pry
     # 代理商列表页面查询用
-    @search_agent = Agent.new
+    @agent_full_name, @agent_contacts, @agent_mobile = 3.times.map{["", ""]}
+    if params[:term].present?
+      @agents = @agents.where("full_name like '%#{params[:term]}%'")
+    end
     if params[:full_name].present?
-      @search_agent = Agent.find(params[:full_name])
+      agent = Agent.find_by_id(params[:full_name])
+      @agent_full_name = [agent.id, agent.full_name]
+      # @agents = @agents.where("id = #{params[:full_name]} and full_name like '%#{params[:term]}%'}")
       @agents = @agents.where(id: params[:full_name])
     end
     if params[:contacts].present?
-      @search_agent = Agent.find(params[:contacts])
+      agent = Agent.find_by_id(params[:contacts])
+      @agent_contacts = [agent.id, agent.contacts]
       @agents = @agents.where(id: params[:contacts])
     end
     if params[:mobile].present?
-      @search_agent = Agent.find(params[:mobile])
+      agent = Agent.find_by_id(params[:mobile])
+      @agent_mobile = [agent.id, agent.mobile]
       @agents = @agents.where(id: params[:mobile])
     end
     # @agents = @agents.where("full_name like :keyword", keyword: "%#{params[:term]}%") if params[:term].present?

@@ -87,7 +87,6 @@ class MaterialsController < ApplicationController
   # PATCH/PUT /materials/1
   # PATCH/PUT /materials/1.json
   def update
-    # binding.pry
     respond_to do |format|
       if @material.update(material_params)
         format.html { redirect_to materials_path, notice: "板料 #{@material.full_name} 更新成功！" }

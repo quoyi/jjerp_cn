@@ -27,6 +27,7 @@ class OrdersController < ApplicationController
     end
 
     @order_category_id = ''
+    @order_oftype = ''
     @agents = Agent.all.order(:id)
     @province = Province.find_by_name("湖北省").try(:id)
     @provinces = Province.all.order(:id)
@@ -56,6 +57,10 @@ class OrdersController < ApplicationController
       @order_category_id = params[:order_category_id]
     end
     @orders = @orders.where(order_category_id: @order_category_id) unless @order_category_id.blank?
+    if params[:oftype].present?
+      @order_oftype = params[:oftype]
+    end
+    @orders = @orders.where(oftype: Order.oftypes[@order_oftype]) unless @order_oftype.blank?
     # 搜索条件 代理商ID(@agent_id是返回给view使用)
     if params[:agent_id].present?
       @agent_id = params[:agent_id]
@@ -129,7 +134,6 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
-    # binding.pry
     handler = @order.handler.to_i
     return redirect_to :back, error: '没有权限编辑此订单！' if handler != 0 && handler != current_user.id
     return redirect_to :back, error: '请求无效！请检查数据是否有效。' unless params[:order]
@@ -292,7 +296,6 @@ class OrdersController < ApplicationController
 
   # 未发货
   def not_sent
-    # binding.pry
     @orders = Order.where(status: Order.statuses[:packaged])
     @indents = @orders.group(:indent_id).map(&:indent)
     @sent = Sent.new()

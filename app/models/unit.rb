@@ -27,4 +27,16 @@ class Unit < ActiveRecord::Base
 
     self.name = (order_name + "-B-" + (last.to_i + 1).to_s).upcase() unless self.name.present?
   end
+
+  # 指定 ply 是否为背板
+  def is_backboard?
+    # 这里不能指定 self.where() 的原因： 实例对象调用此方法时会报错。
+    mc = MaterialCategory.find_by_id(ply)
+    if mc
+      # "3mm".to_i = 3 （取第一个数字类型转换为整数） ; 小于 10mm 的板料为背板
+      mc.name.to_i < 10
+    else
+      false
+    end
+  end
 end
