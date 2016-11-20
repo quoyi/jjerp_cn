@@ -77,21 +77,21 @@
                 </div>
                 <label class="col-sm-1 text-right" style="margin: 8px 0;">板料</label>
                 <div class="col-sm-5" style="padding: 0px;">
-                  <select class="material-ply" style="width: 20%;" required="required">
+                  <select class="material-ply" style="width: 20%;" required="required" onchange='getMaterialPrice(this)'>
                     <% if of.new_record? %>
                       <option value="<%= init_ply_id %>"><%= MaterialCategory.find_by_id(init_ply_id).try(:name) %></option>
                     <% else %>
                       <option value="<%= of.ply %>"><%= MaterialCategory.find_by_id(of.ply).try(:name) %></option>
                     <% end %>
                   </select>
-                  <select class="material-texture" style="width: 38%;" required="required">
+                  <select class="material-texture" style="width: 38%;" required="required" onchange='getMaterialPrice(this)'>
                     <% if of.new_record? %>
                       <option value="<%= init_texture_id %>"><%= MaterialCategory.find_by_id(init_texture_id).try(:name) %></option>
                     <% else %>
                       <option value="<%= of.texture %>"><%= MaterialCategory.find_by_id(of.texture).try(:name) %></option>
                     <% end %>
                   </select>
-                  <select class="material-color" style="width: 38%;" required="required">
+                  <select class="material-color" style="width: 38%;" required="required" onchange='getMaterialPrice(this)'>
                     <% if of.new_record? %>
                       <option value="<%= init_color_id %>"><%= MaterialCategory.find_by_id(init_color_id).try(:name) %></option>
                     <% else %>
@@ -254,7 +254,7 @@ $(".material-ply").select2({
   ajax: {
     url: '/material_categories.json',
     dataType: 'json',
-    delay: 2500,
+    delay: 250,
     cache: true,
     data: function(params){
       return {
@@ -283,7 +283,7 @@ $(".material-texture").select2({
   ajax: {
     url: '/material_categories.json',
     dataType: 'json',
-    delay: 2500,
+    delay: 250,
     cache: true,
     data: function(params){
       return {
@@ -312,7 +312,7 @@ $(".material-color").select2({
   ajax: {
     url: '/material_categories.json',
     dataType: 'json',
-    delay: 2500,
+    delay: 250,
     cache: true,
     data: function(params){
       return {
@@ -351,7 +351,7 @@ $("#indent_form_fields").on("nested:fieldAdded:orders", function(e){
     ajax: {
       url: '/material_categories.json',
       dataType: 'json',
-      delay: 2500,
+      delay: 250,
       cache: true,
       data: function(params){
         return {
@@ -380,7 +380,7 @@ $("#indent_form_fields").on("nested:fieldAdded:orders", function(e){
     ajax: {
       url: '/material_categories.json',
       dataType: 'json',
-      delay: 2500,
+      delay: 250,
       cache: true,
       data: function(params){
         return {
@@ -409,7 +409,7 @@ $("#indent_form_fields").on("nested:fieldAdded:orders", function(e){
     ajax: {
       url: '/material_categories.json',
       dataType: 'json',
-      delay: 2500,
+      delay: 250,
       cache: true,
       data: function(params){
         return {

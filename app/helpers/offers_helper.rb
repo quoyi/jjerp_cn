@@ -21,7 +21,7 @@ module OffersHelper
         offer.price = unit.price.to_f
         # 部件是自定义报价添加时，不需要计算尺寸
         if unit.is_custom
-          offer.number = offer.number.to_f + unit.number.to_f
+          offer.number = unit.number.to_f #不需要+ offer.number.to_f
         else # 部件不是自定义报价添加时，需要计算尺寸
           size = unit.size.split(/[xX*×]/).map(&:to_i)
           if size.present? && size.size == 2 # 填写尺寸时，按照切割后的数字计算

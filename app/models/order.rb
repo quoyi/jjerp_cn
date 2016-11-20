@@ -110,6 +110,14 @@ class Order < ActiveRecord::Base
     self.arrear = self.arrear.round
     self.price = self.price.round
     self.status = Order.statuses[:offering] if self.units.count < 1 && self.parts.count < 1 && self.crafts.count < 1
+    number = 0
+    self.units.each do |unit|
+      # 计算非背板板料面积
+      unless unit.is_backboard? || unit.size.blank?
+        number += unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+      end
+    end
+    self.material_number = number
   end
 
   def caseType(type, str)

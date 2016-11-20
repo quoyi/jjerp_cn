@@ -31,7 +31,8 @@
           <th>厚度</th>
           <th>材质</th>
           <th>颜色</th>
-          <th>板料价格</th>
+          <th>参考价</th>
+          <th>板料数</th>
           <!-- <th>长度</th>
           <th>宽度</th>
           <th>高度</th>-->
@@ -50,6 +51,7 @@
           <td><%= MaterialCategory.find_by_id(o.texture).try(:name) || '无' %></td>
           <td><%= MaterialCategory.find_by_id(o.color).try(:name) || '无' %></td>
           <td><%= o.material_price %></td>
+          <td><%= o.material_number %></td>
           <!-- <td><%= o.length %></td>
           <td><%= o.width %></td>
           <td><%= o.height %></td>-->

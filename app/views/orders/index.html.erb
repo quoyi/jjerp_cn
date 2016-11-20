@@ -34,7 +34,7 @@
             <div class="col-sm-10">
               <div class="form-group" style="width: 100%;">
                 <label class="col-sm-1 control-label text-right" for="start_at">下单时间</label>
-                <div class="col-sm-6" style="padding-right: 0px;">
+                <div class="col-sm-5" style="padding-right: 0px;">
                   <%= date_field_tag :start_at, @start_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择起始日期',required: true, class: 'form-control', style: 'width: 49%;' %>
                   <%= date_field_tag :end_at, @end_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',required: true, class: 'form-control', style: 'width: 49%;' %>
                 </div>
@@ -42,30 +42,38 @@
                   <%= select_tag :user_id, options_for_select(User.all.map{|r|[r.username, r.id]}, @user_id), prompt: '全部', class: 'form-control', style: 'width: 96%;' %>
                 </div>
                 <label class="col-sm-1 control-label text-right">订单类型</label>
-                <div class="col-sm-2" style="padding-right: 0px;">
-                  <%= select_tag :order_category_id, options_from_collection_for_select(OrderCategory.all, :id, :name, @order_category_id), include_blank: '请选择', class: 'form-control', style: 'width: 100%; padding: 5px;' %>
+                <div class="col-sm-3" style="padding-right: 0px;">
+                  <div class="input-group" style="width: 100%;">
+                    <%= select_tag :order_category_id, options_from_collection_for_select(OrderCategory.all, :id, :name, @order_category_id), {include_blank: '请选择', class: 'form-control'} %>
+                    <div class="input-group-addon">-</div>
+                    <%= select_tag :oftype, options_from_collection_for_select(Order.oftype, :last, :first, @order_oftype), {include_blank: '请选择', class: 'form-control'} %>
+                  </div>
                 </div>
               </div>
               <div class="form-group" style="width: 100%; margin-top: 5px;">
                 <label class="col-sm-1 control-label text-right" for="provide">地区</label>
-                <div class="col-sm-8 city-group">
+                <div class="col-sm-7 city-group">
                   <%= select_tag :province, options_from_collection_for_select(@provinces, :id, :name, @province), class: 'form-control orders-search-province', onchange: 'getChinaCity(this);', style: 'width: 30%; padding: 3px;' %>
                   <%= select_tag :city, options_from_collection_for_select(@cities, :id, :name, @city), include_blank: '--城市--', class: 'form-control orders-search-city', onchange: 'getChinaCity(this);', onclick: 'validateCities(this);', style: 'width: 30%; padding: 3px;' %>
                   <%= select_tag :district, options_from_collection_for_select(@districts, :id, :name, @district), include_blank: '--地区--', class: 'form-control orders-search-district', style: 'width: 38%; padding: 3px;' %>
                 </div>
                 <label class="col-sm-1 control-label text-right">店名</label>
-                <div class="col-sm-2" style="padding-right: 0px;">
+                <div class="col-sm-3" style="padding-right: 0px;">
                   <%= select_tag :agent_id, options_from_collection_for_select(@agents, :id, :full_name), include_blank: '请选择', class: 'form-control orders-search-agent', style: 'width: 100%; padding: 5px;' %>
                 </div>
               </div>
               <div class="form-group"  style="width: 100%; margin-top: 5px;">
                 <label class="col-sm-1 control-label text-right" for="provide">子订单号</label>
-                <div class="col-sm-8">
-                  <%= select_year Date.today.year, {field_name: :year, start_year: 2010, end_year: Date.today.year}, {class: 'form-control', style: 'width: 20%;'} %>
-                  <%= label_tag '年', nil, class: 'control-label', for: 'date_year', style: 'padding: 0 10px;' %>
-                  <%= select_month Date.today.month, {field_name: :month, use_month_numbers: true}, {class: 'form-control', style: 'width: 20%;'} %>
-                  <%= label_tag '月', nil, class: 'control-label', for: 'date_month', style: 'padding: 0 10px;' %>
-                  <%= text_field_tag :name, '', class:'form-control', placeholder: '订单号', data: {toggle: 'tooltip'}, title: '请输入需要查找、打包的订单号' %> <!-- autofocus:true -->
+                <div class="col-sm-7">
+                  <div class="input-group" style="width: 100%;">
+                    <%= select_year Date.today.year, {field_name: :year, start_year: 2010, end_year: Date.today.year}, {class: 'form-control'} %>
+                    <div class="input-group-addon">年</div>
+                    <%#= label_tag '年', nil, class: 'control-label', for: 'date_year', style: 'padding: 0 10px;' %>
+                    <%= select_month Date.today.month, {field_name: :month, use_month_numbers: true}, {class: 'form-control'} %>
+                    <div class="input-group-addon">月</div>
+                    <%#= label_tag '月', nil, class: 'control-label', for: 'date_month', style: 'padding: 0 10px;' %>
+                    <%= text_field_tag :name, '', class:'form-control', placeholder: '订单号', data: {toggle: 'tooltip'}, title: '请输入需要查找、打包的订单号' %> <!-- autofocus:true -->
+                  </div>
                 </div>
               </div>
             </div>
@@ -75,23 +83,14 @@
             </div>
             <% end %>
           </div>
-          <!-- <div class="row text-center" style="margin: 4px 0 -11px 0; font-size: 18px;">
-            <span>当前查询订单总数:<code><%= @orders_result[:total] %></code>单，其中</span>
-            <span>橱柜:<code><%= @orders_result[:cupboard] %></code>单</span>
-            <span>衣柜:<code><%= @orders_result[:robe] %></code>单</span>
-            <span>门:<code><%= @orders_result[:door] %></code>单</span>
-            <span>配件:<code><%= @orders_result[:part] %></code>单</span>
-            <span>其他:<code><%= @orders_result[:other] %></code>单</span>
-          </div> -->
         </div>
       </div>
-      
     </div>
     <div class="row content-table">
       <table class="table table-hover table-striped table-bordered table-condensed text-center order-index-table">
         <tr>
           <th>订单号</th>
-          <th>类型</th>
+          <th colspan="2">类型</th>
           <th>代理商</th>
           <th>终端客户</th>
           <th>收货地址</th>
@@ -109,8 +108,9 @@
         </tr>
         <% @orders.each do |o| %>
         <tr class="<%= 'danger' if (o.indent.require_at.to_date - Date.today) < 0%>">
-          <td class="text-left" class="col-sm-1"><%= link_to o.name, indent_path(o.indent.id), data: {toggle: 'tooltip'}, title: '查看子订单详细信息' %></td>
+          <td class="text-left"><%= link_to o.name, indent_path(o.indent.id), data: {toggle: 'tooltip'}, title: '查看子订单详细信息' %></td>
           <td><%= o.order_category.try(:name) %></td>
+          <td><%= o.oftype_name %></td>
           <td><%= o.indent.agent.try(:full_name) %></td>
           <td><%= o.indent.customer %></td>
           <td><%= o.delivery_address %></td>

@@ -147,7 +147,6 @@ class SentsController < ApplicationController
   # GET /sent_list
   # GET /sent_list.xls
   # def download
-  #   binding.pry
   #   if params[:id].present?
   #     sent_list = SentList.find_by_id(params[:id])
   #   # else

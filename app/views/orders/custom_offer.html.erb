@@ -41,13 +41,12 @@
               <div class="col-sm-11"> 
                 <div class="row">
                   <label class="col-sm-1 text-right control-label" style="margin: 7px 0;"><span class="require">*</span>名称</label>
-                  <%= unit_form.text_field :full_name, maxlength: 15, value: uf.new_record? ? @order.note : uf.full_name, class:'col-sm-2 custom-offer-full-name', required: true, placeholder: '请填写部件名称' %>
+                  <%= unit_form.text_field :full_name, maxlength: 15, value: uf.new_record? ? @order.note : uf.full_name, class:'col-sm-2', required: true, placeholder: '请填写部件名称' %>
                   <label class="col-sm-1 text-right control-label" style="margin: 7px 0;"><span class="require">*</span>板料</label>
                   <div class="col-sm-5" style="padding: 0px;">
-                    <%# binding.pry %>
-                    <%= unit_form.select :ply, raw("<option value='#{uf.new_record? ? @order.ply : uf.ply}' selected='selected'>#{MaterialCategory.find_by_id(uf.new_record? ? @order.ply : uf.ply).try(:name)}</option>"), {}, class: "custom-offer-material-ply", style: 'width: 20%;', required: true %>
-                    <%= unit_form.select :texture, raw("<option value='#{uf.new_record? ? @order.texture : uf.texture}' selected='selected'>#{MaterialCategory.find_by_id(uf.new_record? ? @order.texture : uf.texture).try(:name)}</option>"), {}, class: "custom-offer-material-texture", style: 'width: 38%;', required: true %>
-                    <%= unit_form.select :color, raw("<option value='#{uf.new_record? ? @order.color : uf.color}' selected='selected'>#{MaterialCategory.find_by_id(uf.new_record? ? @order.color : uf.color).try(:name)}</option>"), {}, class: "custom-offer-material-color", style: 'width: 38%;', required: true %>
+                    <%= unit_form.select :ply, raw("<option value='#{uf.new_record? ? @order.ply : uf.ply}' selected='selected'>#{MaterialCategory.find_by_id(uf.new_record? ? @order.ply : uf.ply).try(:name)}</option>"), {}, class: "material-ply", style: 'width: 20%;', required: true, onchange: 'getMaterialPrice(this)' %>
+                    <%= unit_form.select :texture, raw("<option value='#{uf.new_record? ? @order.texture : uf.texture}' selected='selected'>#{MaterialCategory.find_by_id(uf.new_record? ? @order.texture : uf.texture).try(:name)}</option>"), {}, class: "material-texture", style: 'width: 38%;', required: true, onchange: 'getMaterialPrice(this)' %>
+                    <%= unit_form.select :color, raw("<option value='#{uf.new_record? ? @order.color : uf.color}' selected='selected'>#{MaterialCategory.find_by_id(uf.new_record? ? @order.color : uf.color).try(:name)}</option>"), {}, class: "material-color", style: 'width: 38%;', required: true, onchange: 'getMaterialPrice(this)' %>
                     <!-- <select class="custom-offer-material-ply" style="width: 20%;" required="required">
                       <option value="<%#= uf.new_record? ? @order.ply : uf.ply %>"><%#= MaterialCategory.find_by_id(uf.new_record? ? @order.ply : uf.ply).try(:name) %></option>
                     </select> -->
