@@ -113,8 +113,12 @@ class Order < ActiveRecord::Base
     number = 0
     self.units.each do |unit|
       # 计算非背板板料面积
-      unless unit.is_backboard? || unit.size.blank?
-        number += unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+      unless unit.is_backboard?
+        if unit.size.blank?
+          number += unit.number
+        else
+          number += unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+        end
       end
     end
     self.material_number = number

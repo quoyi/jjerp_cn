@@ -119,7 +119,7 @@
           <td class="col-sm-1"><%#= o.height %></td> -->
           <td data-toggle="tooltip" title="子订单金额"><%= o.price %></td>
           <td><%= o.material_number %></td>
-          <td><%= User.find_by(id: o.handler).try(:username).presence || "无" %></td>
+          <td><%= User.find_by(id: o.handler).try(:username).presence || User.find_by(id: o.handler).try(:email) || "无" %></td>
           <td><%= o.status_name %></td>
           <td><%= o.packages.pluck(:label_size).sum %></td>
           <td class="<%= 'success' if o.income_status == '全款' %>"><%= o.income_status %></td>

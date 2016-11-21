@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   def has_role?(nick)
     # self.roles.exists?(nick: nick)
     # roles.any? { |r| r.nick.underscore.to_sym == role_sym }
-    self.roles.pluck(:id).include?(Role.find_by(nick: nick).try(:id))
+    self.roles.pluck(:nick).include?(nick)
   end
 
   # def append_role(nick)
