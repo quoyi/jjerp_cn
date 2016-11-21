@@ -4,6 +4,24 @@ class UsersController < ApplicationController
 
   def index
     @users = User.all
+    beginning_month = Date.today.beginning_of_month
+    end_month = Date.today.end_of_month
+    @users.each do |user|
+      orders = Order.where("handler = ? and (updated_at between ? and ?)", user.id, beginning_month, end_month)
+      number = 0
+      orders.each do |order|
+        order.units.each do |unit|
+          unless unit.is_backboard?
+            if unit.size.blank?
+              number += unit.number
+            else
+              number += unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+            end
+          end
+        end
+      end
+      user.update(material_number: number)
+    end
   end
 
   def edit
