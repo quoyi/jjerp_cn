@@ -35,12 +35,18 @@ end
 
 orders = Orders.all
 orders.each do |order|
+  number = 0
   Units.where(order_id: order.id).each do |unit|
     puts "订单：" + unit.name + " 的尺寸：" + unit.size.to_s + " 是否为背板：" + unit.is_backboard?.to_s
     # 不是背板，且填写了板料面积
-    unless unit.is_backboard? || unit.size.blank?
-      order.material_number += unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+    unless unit.is_backboard?
+      if unit.size.blank?
+        number += unit.number
+      else
+        number += unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+      end
     end
   end
-  order.save!
+  order.update(material_number: number)
+  # order.save!
 end

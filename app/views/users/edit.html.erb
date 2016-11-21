@@ -29,7 +29,7 @@
         <div class="form-group">
           <label class="col-xs-3 control-label text-right" style="margin-top: 8px; padding: 0px;" for="user[role_ids]"><span class="require">*</span>角色</label>
           <div class="col-xs-9">
-            <%= f.select :role_ids, Role.all.collect{|r| [r.name, r.id]}, {include_blank: '请选择', selected: "#{@role.id if @role.present?}"}, required: true, class: 'form-control' %>
+            <%= f.select :role_ids, Role.where.not(nick: 'super_admin').collect{|r| [r.name, r.id]}, {include_blank: '请选择', selected: "#{@role.id if @role.present?}"}, required: true, class: 'form-control' %>
           </div>
         </div>
       </div>

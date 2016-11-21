@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   end
 
   def edit
-    return redirect_to statics_home_path, error: '没有权限访问该页面！' if current_user.id != @user.id || !current_user.has_role?('super_admin') || !current_user.has_role?('admin')
+    return redirect_to statics_home_path, error: '没有权限访问该页面！' if (!current_user.has_role?('super_admin') && !current_user.has_role?('admin')) && current_user.id != @user.id
     @role = @user.roles.first
   end
 
@@ -17,7 +17,7 @@ class UsersController < ApplicationController
 
   def update
     # 管理员更新用户角色
-    if user_params[:role_ids]
+    if (current_user.id == @user.id || current_user.has_role?("super_admin")) && user_params[:role_ids]
       @user.roles.delete(@user.roles.first) if @user.roles.any?
       @role = Role.find(user_params[:role_ids].to_i)
       @user.add_role! @role.nick
