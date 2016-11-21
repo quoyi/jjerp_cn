@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   # 引入 devise 默认模块 :database_authenticatable, :registerable, :confirmable, :recoverable,
   #  :rememberable, :trackable, :validatable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
+  attr_accessor :material_number, :amount, :order_number
   # attr_accessor :email, :password, :password_confirmation
   # validates_presence_of :email, :password, :password_confirmation
   # validates :email, format: {with: /\A[^@]+@([^@\.]+\.)+[^@\.]+\z/ }

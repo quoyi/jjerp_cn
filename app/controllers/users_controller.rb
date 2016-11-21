@@ -6,22 +6,25 @@ class UsersController < ApplicationController
     @users = User.all
     @start_at = params[:start_at].presence || Date.today.beginning_of_month
     @end_at = params[:end_at].presence || Date.today.end_of_month
-    binding.pry
     @users.each do |user|
       orders = Order.where("handler = ? and (updated_at between ? and ?)", user.id, @start_at, @end_at)
-      number = 0
+      material_number = 0
+      amount = 0
       orders.each do |order|
         order.units.each do |unit|
           unless unit.is_backboard?
             if unit.size.blank?
-              number += unit.number
+              material_number += unit.number
             else
-              number += unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+              material_number += unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
             end
           end
         end
+        amount += order.price
       end
-      user.update(material_number: number)
+      user.material_number = material_number
+      user.amount = amount
+      user.order_number = orders.size
     end
   end
 
