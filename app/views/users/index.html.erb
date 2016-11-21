@@ -2,11 +2,34 @@
   <div class="content-box-header panel-heading">
     <div class="panel-title">
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 员工 <small>列表</small> </h2>
-    <div class="pull-right panel-options">
-    </div>
+      <div class="pull-right panel-options">
+      </div>
     </div>
   </div>
   <div class="content-box-large box-with-header">
+    <div class="row content-table">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <span>查询条件</span>
+        </div>
+        <div class="panel-body">
+          <%= form_tag users_path, method: 'get', class: 'form-inline', role: 'form' do %>
+          <div class="form-group">
+            <label class="col-sm-2 control-label text-right" for="start_at">下单时间</label>
+            <div class="col-sm-5">
+              <%= date_field_tag :start_at, @start_at, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择起始日期',required: true  %>
+            </div>
+            <div class="col-sm-5">
+              <%= date_field_tag :end_at, @end_at, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',required: true %>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= submit_tag '查询', class: 'btn btn-primary' %>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
     <div class="row content-table">
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
@@ -35,7 +58,7 @@
             <td><%= u.last_sign_in_ip %></td>
             <td>
               <% unless u.roles.map(&:nick).include?('super_admin')%>
-                <%= link_to '修改', edit_user_path(u), class: 'btn btn-info btn-xs'%>
+              <%= link_to '修改', edit_user_path(u), class: 'btn btn-info btn-xs'%>
               <% end %>
             </td>
           </tr>

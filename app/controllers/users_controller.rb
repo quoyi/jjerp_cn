@@ -4,10 +4,11 @@ class UsersController < ApplicationController
 
   def index
     @users = User.all
-    beginning_month = Date.today.beginning_of_month
-    end_month = Date.today.end_of_month
+    @start_at = params[:start_at].presence || Date.today.beginning_of_month
+    @end_at = params[:end_at].presence || Date.today.end_of_month
+    binding.pry
     @users.each do |user|
-      orders = Order.where("handler = ? and (updated_at between ? and ?)", user.id, beginning_month, end_month)
+      orders = Order.where("handler = ? and (updated_at between ? and ?)", user.id, @start_at, @end_at)
       number = 0
       orders.each do |order|
         order.units.each do |unit|
@@ -57,7 +58,7 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:id, :role_ids, :name, :email, :username, :mobile)
+      params.require(:user).permit(:id, :role_ids, :name, :email, :username, :mobile, :start_at, :end_at)
     end
 
     def change_role
