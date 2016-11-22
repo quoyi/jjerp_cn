@@ -19,14 +19,6 @@
       <div class="panel panel-info">
         <div class="panel-heading">
           <span>查询条件</span>
-          <div class="pull-right">
-            <span>订单共&nbsp;<code><%= @orders_result[:total] %></code>&nbsp;单：</span>
-            <span>橱柜&nbsp;<code><%= @orders_result[:cupboard] %></code>&nbsp;单，</span>
-            <span>衣柜&nbsp;<code><%= @orders_result[:robe] %></code>&nbsp;单，</span>
-            <span>门&nbsp;<code><%= @orders_result[:door] %></code>&nbsp;单，</span>
-            <span>配件&nbsp;<code><%= @orders_result[:part] %></code>&nbsp;单，</span>
-            <span>其他&nbsp;<code><%= @orders_result[:other] %></code>&nbsp;单</span>
-          </div>
         </div>
         <div class="panel-body">
           <div class="row">
@@ -57,9 +49,9 @@
                   <%= select_tag :city, options_from_collection_for_select(@cities, :id, :name, @city), include_blank: '--城市--', class: 'form-control orders-search-city', onchange: 'getChinaCity(this);', onclick: 'validateCities(this);', style: 'width: 30%; padding: 3px;' %>
                   <%= select_tag :district, options_from_collection_for_select(@districts, :id, :name, @district), include_blank: '--地区--', class: 'form-control orders-search-district', style: 'width: 38%; padding: 3px;' %>
                 </div>
-                <label class="col-sm-1 control-label text-right">店名</label>
+                <label class="col-sm-1 control-label text-right">代理/店名</label>
                 <div class="col-sm-3" style="padding-right: 0px;">
-                  <%= select_tag :agent_id, options_from_collection_for_select(@agents, :id, :full_name), include_blank: '请选择', class: 'form-control orders-search-agent', style: 'width: 100%; padding: 5px;' %>
+                  <%= select_tag :agent_id, options_from_collection_for_select(@agents, :id, :full_name, params[:agent_id].presence), include_blank: '请选择', class: 'form-control orders-search-agent', style: 'width: 100%; padding: 5px;' %>
                 </div>
               </div>
               <div class="form-group"  style="width: 100%; margin-top: 5px;">
@@ -82,6 +74,23 @@
               <%= link_to '导出结果', orders_path(format: "xls", province: params[:province], city: params[:city], district: params[:district], order_category_id: params[:order_category_id], start_at: params[:start_at], end_at: params[:end_at], agent_id: params[:agent_id]), class: 'btn btn-primary', data: {toggle: 'tooltip'}, title: '将查询结果导出到Excel文件' %>
             </div>
             <% end %>
+          </div>
+          <div class="row text-center" style="margin-top: 10px; font-weight: bold;">
+            <span title="<%= '柜体总面积：' + @orders_result[:cabinets].round(2).to_s + '，背板总面积：' + @orders_result[:backboard].round(2).to_s %>">订单共&nbsp;<code><%= @orders_result[:total] %></code>&nbsp;单：</span>
+            <span title="<%= '柜体总面积：' + @orders_result[:cupboard_cabinets].round(2).to_s + '，背板总面积：' + @orders_result[:cupboard_backboard].round(2).to_s %>">橱柜&nbsp;<code><%= @orders_result[:cupboard] %></code>&nbsp;单，</span>
+            <span title="<%= '柜体总面积：' + @orders_result[:robe_cabinets].round(2).to_s + '，背板总面积：' + @orders_result[:robe_backboard].round(2).to_s %>">衣柜&nbsp;<code><%= @orders_result[:robe] %></code>&nbsp;单，</span>
+            <span title="<%= '门板总面积：' + @orders_result[:door_count].round(2).to_s %>">门&nbsp;<code><%= @orders_result[:door] %></code>&nbsp;单，</span>
+            <span>配件&nbsp;<code><%= @orders_result[:part] %></code>&nbsp;单，</span>
+            <span>其他&nbsp;<code><%= @orders_result[:other] %></code>&nbsp;单</span>
+          </div>
+          <div class="row text-center" style="margin-top: 10px; font-weight: bold;">
+            <span>柜体总面积&nbsp;<code><%= @orders_result[:cabinets].round(2) %></code>&nbsp;</span>
+            <span>背板总面积&nbsp;<code><%= @orders_result[:backboard].round(2) %></code>&nbsp;；</span>
+            <span>橱柜柜体面积&nbsp;<code><%= @orders_result[:cupboard_cabinets].round(2) %></code>&nbsp;</span>
+            <span>橱柜背板面积&nbsp;<code><%= @orders_result[:cupboard_backboard].round(2) %></code>&nbsp;；</span>
+            <span>衣柜柜体面积&nbsp;<code><%= @orders_result[:robe_cabinets].round(2) %></code>&nbsp;</span>
+            <span>衣柜背板面积&nbsp;<code><%= @orders_result[:robe_backboard].round(2) %></code>&nbsp;；</span>
+            <span>门板面积&nbsp;<code><%= @orders_result[:door_count].round(2) %></code>&nbsp;</span>
           </div>
         </div>
       </div>

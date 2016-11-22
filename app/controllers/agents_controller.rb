@@ -4,6 +4,7 @@ class AgentsController < ApplicationController
   # GET /agents
   # GET /agents.json
   def index
+    # binding.pry
     @agent = Agent.new(name: "DL".upcase() + (Agent.count + 1).to_s.rjust(4, "0"))
     @agents = Agent.where(deleted: false)
     # 代理商列表页面查询用

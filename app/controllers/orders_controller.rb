@@ -72,9 +72,68 @@ class OrdersController < ApplicationController
     # 查询结果统计信息
     @orders_result = {}
     @orders_result[:total] = @orders.count
-    @orders_result[:cupboard] = @orders.where(order_category_id: OrderCategory.find_by(name: '橱柜').try(:id)).count
-    @orders_result[:robe] = @orders.where(order_category_id: OrderCategory.find_by(name: '衣柜').try(:id)).count
-    @orders_result[:door] = @orders.where(order_category_id: OrderCategory.find_by(name: '门').try(:id)).count
+    # 柜体总面积，背板总面积
+    @orders_result[:cabinets], @orders_result[:backboard] = 2.times.map{0}
+    @orders.each do |order|
+      order.units.each do |unit|
+        unit_number = 0
+        if unit.size.blank?
+          unit_number = unit.number
+          unit.is_backboard? ? @orders_result[:backboard] += unit_number : @orders_result[:cabinets] += unit_number
+        else
+          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+          unit.is_backboard? ? @orders_result[:backboard] += unit_number : @orders_result[:cabinets] += unit_number
+        end
+      end
+    end
+    # 橱柜
+    cupboards = @orders.where(order_category_id: OrderCategory.find_by(name: '橱柜').try(:id))
+    @orders_result[:cupboard] = cupboards.count
+    @orders_result[:cupboard_cabinets], @orders_result[:cupboard_backboard] = 2.times.map { 0 }
+    cupboards.each do |order|
+      order.units.each do |unit|
+        unit_number = 0
+        if unit.size.blank?
+          unit_number = unit.number
+          unit.is_backboard? ? @orders_result[:cupboard_backboard] += unit_number : @orders_result[:cupboard_cabinets] += unit_number
+        else
+          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+          unit.is_backboard? ? @orders_result[:cupboard_backboard] += unit_number : @orders_result[:cupboard_cabinets] += unit_number
+        end
+      end
+    end
+    # 衣柜
+    robes = @orders.where(order_category_id: OrderCategory.find_by(name: '衣柜').try(:id))
+    @orders_result[:robe] = robes.count
+    @orders_result[:robe_cabinets], @orders_result[:robe_backboard] = 2.times.map { 0 }
+    robes.each do |order|
+      order.units.each do |unit|
+        unit_number = 0
+        if unit.size.blank?
+          unit_number = unit.number
+          unit.is_backboard? ? @orders_result[:robe_backboard] += unit_number : @orders_result[:robe_cabinets] += unit_number
+        else
+          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+          unit.is_backboard? ? @orders_result[:robe_backboard] += unit_number : @orders_result[:robe_cabinets] += unit_number
+        end
+      end
+    end
+    # 门
+    doors = @orders.where(order_category_id: OrderCategory.find_by(name: '门').try(:id))
+    @orders_result[:door] = doors.count
+    @orders_result[:door_count] = 0
+    robes.each do |order|
+      order.units.each do |unit|
+        unit_number = 0
+        if unit.size.blank?
+          unit_number = unit.number
+          @orders_result[:door_count] += unit_number
+        else
+          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+          @orders_result[:door_count] += unit_number
+        end
+      end
+    end
     @orders_result[:part] = @orders.where(order_category_id: OrderCategory.find_by(name: '配件').try(:id)).count
     @orders_result[:other] = @orders.where(order_category_id: OrderCategory.find_by(name: '其他').try(:id)).count
     # 分页
