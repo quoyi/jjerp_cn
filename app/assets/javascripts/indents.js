@@ -103,35 +103,36 @@ $(function() {
     }
   });
 
-  //ajax动态搜索组团社联系人
-  // $(".remoteDataAgent").select2({
-  //   language: 'zh-CN',
-  //   theme: 'bootstrap',
-  //   // allowClear: true,
-  //   placeholder: "全部",
-  //   minimumInputLength: 0,
-  //   ajax: {
-  //     url: '/agents.json',
-  //     dataType: 'json',
-  //     delay: 250,
-  //     cache: true,
-  //     data: function(params){
-  //       return {
-  //         term: params.term,
-  //         page: params.page || 1
-  //       };
-  //     },
-  //     processResults: function(data, params){
-  //       params.page = params.page || 1;
-  //       return {
-  //         results: data.agents,
-  //         pagination: {
-  //           more: (params.page * 6) < data.total
-  //         }
-  //       };
-  //     }
-  //   }
-  // });
+  // 物流发货 - 发货/确认页面 使用
+  $(".remoteDataAgent").select2({
+    language: 'zh-CN',
+    theme: 'bootstrap',
+    placeholder: "店名/代理商名称",
+    minimumInputLength: 0,
+    // width: '100%',
+    ajax: {
+      url: '/agents.json',
+      dataType: 'json',
+      delay: 250,
+      cache: true,
+      data: function(params){
+        return {
+          oftype: 'full_name',
+          term: params.term,
+          page: params.page || 1
+        };
+      },
+      processResults: function(data, params){
+        params.page = params.page || 1;
+        return {
+          results: data.agents,
+          pagination: {
+            more: (params.page * 6) < data.total
+          }
+        };
+      }
+    }
+  });
 
 
 
