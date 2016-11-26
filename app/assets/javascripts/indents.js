@@ -35,6 +35,7 @@ $(function() {
         options.ajax = {
           url: "/agents.json",
           dataType: 'json',
+          cache: false,
           data: function(term, page) {
             return {
               term: term,
@@ -63,6 +64,7 @@ $(function() {
       url: "/agents/" + $select2.val(),
       dataType: 'json',
       type: 'GET',
+      cache: false,
       success: function(data){
         var $panels = $select2.parents(".panel-heading");
         $panels.find("#indent_logistics").val(data.logistics);
@@ -114,7 +116,7 @@ $(function() {
       url: '/agents.json',
       dataType: 'json',
       delay: 250,
-      cache: true,
+      cache: false,
       data: function(params){
         return {
           oftype: 'full_name',
@@ -146,7 +148,7 @@ $(function() {
   //     url: '/agents.json',
   //     dataType: 'json',
   //     delay: 250,
-  //     cache: true,
+  //     cache: false,
   //     data: function(params){
   //       return {
   //         term: params.term,
@@ -169,6 +171,7 @@ $(function() {
   //     url: "/agents/" + $select2.val(),
   //     dataType: 'json',
   //     type: 'GET',
+  //     cache: false,
   //     success: function(data){
   //       var $panels = $select2.parents(".panel-heading");
   //       $panels.find("#indent_logistics").val(data.logistics);
@@ -195,6 +198,7 @@ $(function() {
 //         options.ajax = {
 //           url: "/material_categories.json",
 //           dataType: 'json',
+//           cache: false,
 //           data: function(term, page) {
 //             return {
 //               term: term,
@@ -223,6 +227,7 @@ $(function() {
   //     url: "/agents/" + $select2.val(),
   //     dataType: 'json',
   //     type: 'GET',
+  //     cache: false,
   //     success: function(data){
   //       var $panels = $select2.parents(".panel-heading");
   //       $panels.find("#indent_logistics").val(data.logistics);
@@ -251,6 +256,7 @@ function getMaterialPrice(obj) {
       color: color
     },
     type: 'POST',
+    cache: false,
     success: function(data) {
       if (data != null) {
         // console.log(data);

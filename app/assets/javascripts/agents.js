@@ -9,7 +9,7 @@ $(function(){
       url: '/agents.json',
       dataType: 'json',
       delay: 250,
-      cache: true,
+      cache: false,
       data: function(params){
         return {
           oftype: 'full_name',
@@ -38,7 +38,7 @@ $(function(){
       url: '/agents.json',
       dataType: 'json',
       delay: 250,
-      cache: true,
+      cache: false,
       data: function(params){
         return {
           oftype: 'contacts',
@@ -67,7 +67,7 @@ $(function(){
       url: '/agents.json',
       dataType: 'json',
       delay: 250,
-      cache: true,
+      cache: false,
       data: function(params){
         return {
           oftype: 'mobile',
@@ -105,6 +105,7 @@ function getChinaCity(obj) {
         pid: $province.val()
       },
       type: 'get',
+      cache: false,
       success: function(data) {
         if (data != "" && data != null) {
           var options = "";
@@ -129,6 +130,7 @@ function getChinaCity(obj) {
         cid: $city.val()
       },
       type: 'get',
+      cache: false,
       success: function(data) {
         if (data != "" && data != null) {
           var options = "";
@@ -159,6 +161,7 @@ function validateCities(obj) {
           pid: pid
         },
         type: 'get',
+        cache: false,
         success: function(data) {
           if (data != "" && data != null) {
             var options = "";
@@ -184,6 +187,7 @@ function validateCities(obj) {
           cid: cid
         },
         type: 'get',
+        cache: false,
         success: function(data) {
           if (data != "" && data != null) {
             var options = "";
