@@ -13,8 +13,8 @@ class OrdersController < ApplicationController
     @order = Order.new(created_at: Time.now)
     @income = Income.new(username: current_user.name, income_at: Time.now)
     @orders = Order.all.order(created_at: :desc, index: :desc)
-    @start_at = Date.today.beginning_of_month.to_s
-    @end_at = Date.today.end_of_month.to_s
+    @start_at = params[:start_at].presence || Date.today.beginning_of_month.to_s
+    @end_at = params[:end_at].presence || Date.today.end_of_month.to_s
 
     if current_user.role?('super_admin') || current_user.role?('admin') || current_user.role?('financial')
       @user_id = params[:user_id].presence.to_i
@@ -72,6 +72,7 @@ class OrdersController < ApplicationController
     # 查询结果统计信息
     @orders_result = {}
     @orders_result[:total] = @orders.count
+    @orders_result[:money] = @orders.pluck(:price).sum
     # 柜体总面积，背板总面积
     @orders_result[:cabinets], @orders_result[:backboard] = 2.times.map{0}
     @orders.each do |order|
@@ -122,7 +123,7 @@ class OrdersController < ApplicationController
     doors = @orders.where(order_category_id: OrderCategory.find_by(name: '门').try(:id))
     @orders_result[:door] = doors.count
     @orders_result[:door_count] = 0
-    robes.each do |order|
+    doors.each do |order|
       order.units.each do |unit|
         unit_number = 0
         if unit.size.blank?
@@ -361,8 +362,10 @@ class OrdersController < ApplicationController
   end
 
   #生产任务
+  # GET
   def producing
     @orders = Order.where(status: Order.statuses[:producing])
+    search
     @orders = @orders.page(params[:page])
   end
 
@@ -592,6 +595,7 @@ class OrdersController < ApplicationController
   # GET /orders/packaged
   def packaged
     @orders = Order.where(status: Order.statuses[:packaged])
+    search
     @orders = @orders.page(params[:page])
   end
 
@@ -677,6 +681,22 @@ class OrdersController < ApplicationController
   end
 
   private
+  # 根据查询条件查询订单
+  def search
+    # 判断搜索条件 起始时间 -- 结束时间
+    if params[:start_at].present? && params[:end_at].present?
+      @start_at = params[:start_at]
+      @end_at = params[:end_at]
+      @orders = @orders.where("created_at between ? and ?", @start_at, @end_at).order(:id)
+    end
+    if params[:agent_id].present?
+      @agent_id = params[:agent_id]
+    else
+      @agent_id = ''
+    end
+    @orders = @orders.where("agent_id = ?", @agent_id) unless @agent_id.blank?
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_order
     @order = Order.find(params[:id])
