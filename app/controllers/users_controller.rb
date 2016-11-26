@@ -67,6 +67,4 @@ class UsersController < ApplicationController
     def change_role
       Role.find(params[:user][:role_ids].to_i) unless params[:user][:role_ids].blank?
     end
-
-
 end

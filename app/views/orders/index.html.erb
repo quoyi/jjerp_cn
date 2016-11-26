@@ -76,7 +76,7 @@
             <% end %>
           </div>
           <div class="row text-center" style="margin-top: 10px; font-weight: bold;">
-            <span title="<%= '柜体总面积：' + @orders_result[:cabinets].round(2).to_s + '，背板总面积：' + @orders_result[:backboard].round(2).to_s %>">订单共&nbsp;<code><%= @orders_result[:total] %></code>&nbsp;单：</span>
+            <span title="<%= '柜体总面积：' + @orders_result[:cabinets].round(2).to_s + '，背板总面积：' + @orders_result[:backboard].round(2).to_s %>">订单&nbsp;<code><%= @orders_result[:total] %></code>&nbsp;单（共 <%= @orders_result[:money].round(2) %> 元）其中：</span>
             <span title="<%= '柜体总面积：' + @orders_result[:cupboard_cabinets].round(2).to_s + '，背板总面积：' + @orders_result[:cupboard_backboard].round(2).to_s %>">橱柜&nbsp;<code><%= @orders_result[:cupboard] %></code>&nbsp;单，</span>
             <span title="<%= '柜体总面积：' + @orders_result[:robe_cabinets].round(2).to_s + '，背板总面积：' + @orders_result[:robe_backboard].round(2).to_s %>">衣柜&nbsp;<code><%= @orders_result[:robe] %></code>&nbsp;单，</span>
             <span title="<%= '门板总面积：' + @orders_result[:door_count].round(2).to_s %>">门&nbsp;<code><%= @orders_result[:door] %></code>&nbsp;单，</span>

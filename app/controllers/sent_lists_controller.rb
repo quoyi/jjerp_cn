@@ -7,6 +7,21 @@ class SentListsController < ApplicationController
   # GET /sent_lists.json
   def index
     @sent_lists = SentList.all.order(created_at: :desc)
+    # 判断搜索条件 起始时间 -- 结束时间
+    if params[:start_at].present? && params[:end_at].present?
+      @start_at = params[:start_at]
+      @end_at = params[:end_at]
+      @sent_lists = @sent_lists.where("created_at between ? and ?", @start_at, @end_at).order(:id)
+    end
+    
+    if params[:agent_id].present?
+      @agent_id = params[:agent_id]
+      @orders = Order.where(agent_id: @agent_id)
+      @indents = Indent.where(agent_id: @agent_id)
+      @sents = Sent.where(owner: @orders || @indents)
+      @sent_lists = @sent_lists.where(id: @sents.pluck(:sent_list_id))
+    end
+    
     @sent_lists = @sent_lists.page(params[:page])
   end
 
