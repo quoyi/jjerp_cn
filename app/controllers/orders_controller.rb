@@ -52,6 +52,7 @@ class OrdersController < ApplicationController
       @end_at = params[:end_at]
     end
     @orders = @orders.where("created_at between ? and ?", @start_at, @end_at)
+    @orders = @orders.where("name like '%-#{params[:name]}'") unless params[:name].blank?
     # 搜索条件 订单类型
     if params[:order_category_id].present?
       @order_category_id = params[:order_category_id]
