@@ -19,6 +19,7 @@ $(function(){
       data: fData,
       dataType: "json",
       type: 'PATCH',
+      cache: false,
       success: function(data){
         window.location.reload();
         jsNoty("更新成功！", "success");

@@ -15,6 +15,7 @@ $(function() {
       type: "get",
       dataType: "json",
       data: condition,
+      cache: false,
       success: function(data){
         // console.log(data);
         if(data != null){
@@ -56,7 +57,7 @@ $(function() {
       url: '/material_categories.json',
       dataType: 'json',
       delay: 250,
-      cache: true,
+      cache: false,
       data: function(params){
         return {
           oftype: 'ply',
@@ -85,7 +86,7 @@ $(function() {
       url: '/material_categories.json',
       dataType: 'json',
       delay: 250,
-      cache: true,
+      cache: false,
       data: function(params){
         return {
           oftype: 'texture',
@@ -114,7 +115,7 @@ $(function() {
       url: '/material_categories.json',
       dataType: 'json',
       delay: 250,
-      cache: true,
+      cache: false,
       data: function(params){
         return {
           oftype: 'color',
@@ -153,7 +154,7 @@ $(function() {
         url: '/material_categories.json',
         dataType: 'json',
         delay: 250,
-        cache: true,
+        cache: false,
         data: function(params){
           return {
             oftype: 'ply',
@@ -182,7 +183,7 @@ $(function() {
         url: '/material_categories.json',
         dataType: 'json',
         delay: 250,
-        cache: true,
+        cache: false,
         data: function(params){
           return {
             oftype: 'texture',
@@ -211,7 +212,7 @@ $(function() {
         url: '/material_categories.json',
         dataType: 'json',
         delay: 250,
-        cache: true,
+        cache: false,
         data: function(params){
           return {
             oftype: 'color',
@@ -246,6 +247,7 @@ function setChildPartCategory(obj){
     dataType: "json",
     data: {parent_id: $(obj).val()},
     type: "POST",
+    cache: false,
     success: function(data){
       if(data != null){
         var options = "";
@@ -278,6 +280,7 @@ function setPartCategoryPrice(obj){
     dataType: "json",
     data: {id: $(obj).val()},
     type: "POST",
+    cache: false,
     success: function(data){
       if(data != null){
         fields.find(".part-category-uom").val(data[0].uom);
@@ -301,6 +304,7 @@ function setCraft(obj){
     dataType: "json",
     data: {id: $(obj).val()},
     type: "POST",
+    cache: false,
     success: function(data){
       if(data != null){
         fields.find(".order_craft_uom").val(data.uom);
@@ -370,6 +374,7 @@ function changeIncomeOrder(obj){
       url: "/orders/" + order_id,
       type: "GET",
       dataType: "JSON",
+      cache: false,
       success: function(data){
         // console.log(data);
         price_field.val(data.arrear);

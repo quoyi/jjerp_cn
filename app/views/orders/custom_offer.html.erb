@@ -200,7 +200,7 @@
                   <% root_pc.children.each do |pc| %>
                   <% part = Part.find_by(part_category_id: pc.id, order_id: @order.id) || Part.new %>
                   <div class="col-md-3" style="height: 120px; margin-bottom: 8px; padding: 0 8px;">
-                    <div style="border: 1px solid #A0A0A0; border-radius: 4px; padding: 4px; height: 100%;text-align: center; background-color: #fff;">
+                    <div style="border: 1px solid #A0A0A0; border-radius: 4px; padding: 4px; height: 100%; text-align: center; background-color: #fff;">
                       <p style="width: 100%; font-weight: bold;"><%= pc.name %></p>
                       <%= f.fields_for :parts, part do |p| %>
                       <%= p.hidden_field :part_category_id, value: pc.id %>

@@ -46,7 +46,7 @@
         </div>
       </div>
     </div>
-    <div class="panel-body">
+    <div class="panel-body table-responsive" style="max-height: 400px;">
       <div id="<%= @indent.new_record? ? 'indentOrders' : 'editIndentOrders' %>">
         <%= f.fields_for :orders, :wrapper => false do |order_form| %>
         <% of = order_form.object %>
@@ -211,7 +211,7 @@ $(".remoteDataAgent").select2({
     url: '/agents.json',
     dataType: 'json',
     delay: 250,
-    cache: true,
+    cache: false,
     data: function(params){
       return {
         oftype: 'full_name',
@@ -235,6 +235,7 @@ $(".remoteDataAgent").select2({
     url: "/agents/" + $select2.val(),
     dataType: 'json',
     type: 'GET',
+    cache: false,
     success: function(data){
       var $panels = $select2.parents(".panel-heading");
       $panels.find("#indent_logistics").val(data.logistics);
@@ -255,7 +256,7 @@ $(".material-ply").select2({
     url: '/material_categories.json',
     dataType: 'json',
     delay: 250,
-    cache: true,
+    cache: false,
     data: function(params){
       return {
         oftype: 'ply',
@@ -284,7 +285,7 @@ $(".material-texture").select2({
     url: '/material_categories.json',
     dataType: 'json',
     delay: 250,
-    cache: true,
+    cache: false,
     data: function(params){
       return {
         oftype: 'texture',
@@ -313,7 +314,7 @@ $(".material-color").select2({
     url: '/material_categories.json',
     dataType: 'json',
     delay: 250,
-    cache: true,
+    cache: false,
     data: function(params){
       return {
         oftype: 'color',
@@ -352,7 +353,7 @@ $("#indent_form_fields").on("nested:fieldAdded:orders", function(e){
       url: '/material_categories.json',
       dataType: 'json',
       delay: 250,
-      cache: true,
+      cache: false,
       data: function(params){
         return {
           oftype: 'ply',
@@ -381,7 +382,7 @@ $("#indent_form_fields").on("nested:fieldAdded:orders", function(e){
       url: '/material_categories.json',
       dataType: 'json',
       delay: 250,
-      cache: true,
+      cache: false,
       data: function(params){
         return {
           oftype: 'texture',
@@ -410,7 +411,7 @@ $("#indent_form_fields").on("nested:fieldAdded:orders", function(e){
       url: '/material_categories.json',
       dataType: 'json',
       delay: 250,
-      cache: true,
+      cache: false,
       data: function(params){
         return {
           oftype: 'color',

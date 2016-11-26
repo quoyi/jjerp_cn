@@ -185,6 +185,7 @@ function reprint_set_label_size(){
 //     url: '/orders/' + order_id + "/reprint.pdf",
 //     type: 'POST',
 //     dataType: 'json',
+//     cache: false,
 //     data: {length: $("#package_label_length").val(), width: $("#package_label_width").val()},
 //     success: function(data){
 //       jsNoty("重新打印成功！", "success");
