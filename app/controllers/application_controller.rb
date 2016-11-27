@@ -1,9 +1,10 @@
 class ApplicationController < ActionController::Base
+  layout :layout_by_validity
   # 添加flash消息类型
   add_flash_types :warning, :error
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :authenticate_user!
-  before_action :store_history
+  before_action :authenticate!
+  # before_action :authenticate_user!
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -11,7 +12,11 @@ class ApplicationController < ActionController::Base
 
   # 重写用户登陆成功后跳转路径
   def after_sign_in_path_for(resource)
-   return statics_home_path
+    if validate_date?
+      return statics_home_path
+    else
+      return statics_about_path
+    end
   end
 
   # def after_sign_up_path_for(resource)
@@ -32,7 +37,23 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def store_history
-    # request.referer = request.referer || root_path
+  def authenticate!
+    if validate_date?
+      authenticate_user!
+    else
+      render statics_about_path
+    end
+  end
+
+  def layout_by_validity
+    if validate_date?
+      "application"
+    else
+      "validity"
+    end
+  end
+
+  def validate_date?
+    Date.today < Date.new(2017, 1, 1) ? true : false
   end
 end

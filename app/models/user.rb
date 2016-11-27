@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :roles, join_table: :user_roles
   # 引入 devise 默认模块 :database_authenticatable, :registerable, :confirmable, :recoverable,
   #  :rememberable, :trackable, :validatable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, :timeoutable
   attr_accessor :material_number, :amount, :order_number
   # attr_accessor :email, :password, :password_confirmation
   # validates_presence_of :email, :password, :password_confirmation

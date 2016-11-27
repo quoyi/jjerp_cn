@@ -3,6 +3,7 @@ body {
 
   & .container-fluid {
     min-height: 768px;
+    padding: 0px;
 
     & .static-index-page .row {
       margin-right: 0px;
@@ -14,6 +15,9 @@ body {
     & .row {
       margin-right: 0px;
       margin-left: 0px
+    }
+    & .logo h1{
+      padding: 7px 0;
     }
     & nav a {
       color: #fff
@@ -190,15 +194,16 @@ a {
 }
 // 调整首页轮播图片大小
 #carousel-example-generic {
-  width: 1000px;
+  width: 1366px;
+  height: 768px;
   text-align: center;
   vertical-align: middle;
   margin-left: auto;
   margin-right: auto;
 
   & img {
-    height: 600px;
-    width: 100%
+    height: 768px;
+    width: 1024px;
   }
 }
 .login-wrapper {
