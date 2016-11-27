@@ -1,47 +1,182 @@
-<div class="row">
-  <div class="col-lg-offset-2 col-lg-8">
-    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-      <!-- 图片下面的小导航 -->
-      <ol class="carousel-indicators">
-        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="3"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="4"></li>
-      </ol>
-      <!-- 滚动主体 -->
-      <div class="carousel-inner" role="listbox">
-        <div class="item active">
-          <%= image_tag asset_path('1.jpg') %>
-          <!-- <div class="carousel-caption">
-            图片1不能显示时，显示的文字注释
-          </div> -->
-        </div>
-        <div class="item">
-          <%= image_tag asset_path('2.jpg') %>
-          <!-- <div class="carousel-caption">
-            图片2不能显示时，显示的文字注释
-          </div> -->
-        </div>
-        <div class="item">
-          <%= image_tag asset_path('3.jpg') %>
-        </div>
-        <div class="item">
-          <%= image_tag asset_path('4.jpg') %>
-        </div>
-        <div class="item">
-          <%= image_tag asset_path('5.jpg') %>
-        </div>
-      </div>
-      <!-- 控制器 -->
-      <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">上一页</span>
-      </a>
-      <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">下一页</span>
-      </a>
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+  <!-- 图片下面的小导航 -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="5"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="6"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="7"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="8"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="9"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="10"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="11"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="12"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="13"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="14"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="15"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="16"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="17"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="18"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="19"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="20"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="21"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="22"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="23"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="24"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="25"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="26"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="27"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="28"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="29"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="30"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="31"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="32"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="33"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="34"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="35"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="36"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="37"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="38"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="39"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="40"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="41"></li>
+  </ol>
+  <!-- 滚动主体 -->
+  <div class="carousel-inner" role="listbox">
+    <div class="item active">
+      <%= image_tag asset_path('1.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('2.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('3.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('4.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('5.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('6.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('7.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('8.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('9.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('10.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('11.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('12.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('13.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('14.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('15.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('16.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('17.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('18.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('19.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('20.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('21.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('22.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('23.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('24.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('25.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('26.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('27.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('28.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('29.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('30.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('31.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('32.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('33.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('34.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('35.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('36.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('37.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('38.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('39.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('40.jpg'), class: 'img-responsive center-block' %>
+    </div>
+    <div class="item">
+      <%= image_tag asset_path('41.jpg'), class: 'img-responsive center-block' %>
     </div>
   </div>
+  <!-- 控制器 -->
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">上一页</span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">下一页</span>
+  </a>
 </div>

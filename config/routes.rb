@@ -93,10 +93,10 @@ Rails.application.routes.draw do
   }
   get 'areas/find'
   get 'statics/home'
-
+  get 'statics/about'
   root 'statics#index'
 
-  mount ChinaCity::Engine => '/china_city'
+  # mount ChinaCity::Engine => '/china_city'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>伊思尔生产管理</title>
-    <%= favicon_link_tag 'favicon.ico', rel: 'shortcut icon', type: 'image/png' %>
+    <%= favicon_link_tag 'cny.ico' %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
@@ -11,19 +11,11 @@
   <body>
     <%= render '/layouts/header' %>
     <div class="container-fluid">
-      <%= render '/layouts/message' %>
-      <% if current_user %>
       <div class="page-content">
         <div class="row">
-          <%= render '/layouts/sidebar' %>
-          <%= render '/layouts/content' %>
+          <%= yield %>
         </div>
       </div>
-      <% else %>
-      <div class="static-index-page text-center">
-        <%= yield %>
-      </div>
-      <% end %>
       <div class="clearfix"></div>
     </div>
     <%= render '/layouts/footer' %>
