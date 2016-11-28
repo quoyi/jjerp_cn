@@ -73,6 +73,11 @@ class Order < ActiveRecord::Base
     end
   end
 
+  # 判断订单的处理人是否为 user
+  def handler?(user)
+    handler != 0 && handler != user.id
+  end
+
   def validate_require_time
     # (Time.now.to_i - updated_at.to_i)/86400 <= 3
     time =  self.created_at || Time.now
