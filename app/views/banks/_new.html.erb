@@ -11,13 +11,13 @@
         <table class="table table-hover table-striped table-bordered table-condensed">
           <tr>
             <td data-toggle="tooltip" title="必填项">
-              <label><span class="require">*</span>编号</label>
+              <label><span class="require">*</span>姓名</label>
             </td>
             <td>
               <%= f.text_field :name, required: true, class: 'form-control' %>
             </td>
             <td data-toggle="tooltip" title="必填项">
-              <label><span class="require">*</span>开户银行</label>
+              <label><span class="require">*</span>银行</label>
             </td>
             <td>
               <%= f.text_field :bank_name, maxlength: 25, required: true, class: 'form-control' %>

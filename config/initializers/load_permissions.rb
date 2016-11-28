@@ -16,6 +16,15 @@ Role.register_permission class: 'UsersController',
     '删除' => [:destroy],
     '详细' => [:show]
 }
+Role.register_permission class: 'BanksController',
+  name: '银行账号',
+  actions: {
+    '新建' => [:new, :create],
+    '列表' => :index,
+    '修改' => [:edit, :update],
+    '删除' => [:destroy],
+    '详细' => [:show]
+}
 Role.register_permission class: 'AgentsController',
   name: '代理商',
   actions: {
