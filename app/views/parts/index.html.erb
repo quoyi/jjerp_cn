@@ -1,7 +1,9 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
-    <div class="panel-title">
-    <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 配件 <small>列表</small> </h2></div>
+    <div class="panel-title" style="margin-bottom: 2px; padding-bottom: 0px;">
+      <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 配件 <small>列表</small> </h2>
+      <%= link_to '查看统计', '#', class: "btn btn-primary", data: {toggle: 'modal', target: '#showPartStat'}, style:'margin-left: 20px; margin-buttom: 0px; color: #fff;' %>
+    </div>
     <div class="panel-options">
       <%#= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addParts'} %>
     </div>
@@ -18,8 +20,13 @@
           <%= date_field_tag :start_at, params[:start_at].presence || Date.today.beginning_of_month, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择起始日期', required: true %>
           &nbsp;&nbsp;--&nbsp;&nbsp;
           <%= date_field_tag :end_at, params[:end_at].presence || Date.today.end_of_month, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',  required: true %>
-          <label for="sort_asc" style="margin: 0px;"><%= radio_button_tag :sort_asc, 'asc', checked: true, id: 'sort_asc', style: 'margin-top: 5px;' %>升序</label>
-          <label for="sort_desc" style="margin: 0px;"><%= radio_button_tag :sort_desc, 'desc', nil, id: 'sort_desc' %>降序</label>
+          <% if params[:sort].present? %>
+          <label for="sort_asc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'asc', params[:sort] == 'asc' ? true : false, id: 'sort_asc' %>统计升序</label>
+          <label for="sort_desc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'desc', params[:sort] == 'desc' ? true : false, id: 'sort_desc' %>统计降序</label>
+          <% else %>
+          <label for="sort_asc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'asc', true, id: 'sort_asc' %>统计升序</label>
+          <label for="sort_desc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'desc', false, id: 'sort_desc' %>统计降序</label>
+          <% end %>
           <%= submit_tag '查询', class: 'btn btn-primary', style: 'margin: 0 0 0 10px;' %>
           <% end %>
         </div>
@@ -62,3 +69,36 @@
   </div>
 </div>
 <%= render 'new' %>
+<!-- 配件统计信息模态框 Modal -->
+<div class="modal fade" id="showPartStat" tabindex="-1" role="dialog" aria-labelledby="showPartStatLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="showPartStatLabel">配件统计信息</h4>
+      </div>
+      <div class="modal-body" style="padding: 4px;">
+        <div class="panel panel-info">
+          <table class="table table-hover table-striped table-bordered table-condensed text-center order-show-table">
+            <tr>
+              <th>排名</th>
+              <th>配件名称</th>
+              <th>使用数量</th>
+            </tr>
+            
+            <% @parts_arr.each_with_index do |m, i| %>
+            <tr>
+              <td><%= i+1 %></td>
+              <td><%= m[:name] %></td>
+              <td><%= m[:number].to_f.round(2) %></td>
+            </tr>
+            <% end %>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>

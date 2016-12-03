@@ -10,6 +10,17 @@ class PartsController < ApplicationController
     if params[:start_at].present? && params[:end_at].present?
       @parts = @parts.where("created_at between ? and ?", params[:start_at], params[:end_at])
     end
+
+    # 配件统计信息
+    parts_arr = []
+    @parts.group_by{|p| p.part_category_id}.each_pair do |key, value|
+      part_category = PartCategory.find_by(id: key)
+      total_number = 0 
+      value.each{|part| total_number += part.number}
+      parts_arr << {name: part_category.name, number: total_number}
+    end
+    @parts_arr = parts_arr.sort_by{|m| m[:number] }
+    @parts_arr = @parts_arr.reverse if params[:sort].present? && params[:sort] == 'desc'
   end
 
   # GET /parts/new

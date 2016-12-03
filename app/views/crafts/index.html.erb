@@ -1,7 +1,8 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
-    <div class="panel-title">
+    <div class="panel-title" style="margin-bottom: 2px; padding-bottom: 0px;">
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 工艺 <small>列表</small> </h2>
+      <%= link_to '查看统计', '#', class: "btn btn-primary", data: {toggle: 'modal', target: '#showCraftStat'}, style:'margin-left: 20px; margin-buttom: 0px; color: #fff;' %>
       <div class="pull-right panel-options">
         <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addCraft'} %>
       </div>
@@ -19,7 +20,13 @@
           <%= date_field_tag :start_at, params[:start_at].presence || Date.today.beginning_of_month, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择起始日期', required: true %>
           &nbsp;&nbsp;--&nbsp;&nbsp;
           <%= date_field_tag :end_at, params[:end_at].presence || Date.today.end_of_month, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',  required: true %>
-          
+          <% if params[:sort].present? %>
+          <label for="sort_asc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'asc', params[:sort] == 'asc' ? true : false, id: 'sort_asc' %>统计升序</label>
+          <label for="sort_desc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'desc', params[:sort] == 'desc' ? true : false, id: 'sort_desc' %>统计降序</label>
+          <% else %>
+          <label for="sort_asc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'asc', true, id: 'sort_asc' %>统计升序</label>
+          <label for="sort_desc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'desc', false, id: 'sort_desc' %>统计降序</label>
+          <% end %>
           <%= submit_tag '查询', class: 'btn btn-primary', style: 'margin: 0 0 0 10px;' %>
           <% end %>
         </div>
@@ -30,24 +37,22 @@
         <thead>
           <tr>
             <th>名称</th>
+            <th>单位</th>
+            <th>单价</th>
+            <th>数量</th>
+            <th>创建时间</th>
             <th>备注</th>
-            <th>状态</th>
-            <th>操作</th>
           </tr>
         </thead>
         <tbody>
           <% @crafts.each do |craft| %>
           <tr>
             <td><%= craft.full_name %></td>
+            <td><%= craft.uom %></td>
+            <td><%= craft.price %></td>
+            <td><%= craft.number %></td>
+            <td><%= craft.created_at.strftime("%Y-%m-%d") %></td>
             <td style="max-width: 200px;"><%= craft.note %></td>
-            <td><%= craft.deleted? ? '已删除' : '使用中' %></td>
-            <td>
-              <% if craft.deleted %>
-              <%= link_to '恢复', craft_path(craft, craft: {reset: true}), method: :patch, style: "color: green !important;" %>
-              <% else %>
-              <%= link_to '删除', craft, method: :delete, style: "color: red !important;", data: { confirm: '确认删除？' } %>
-              <% end %>
-            </td>
           </tr>
           <% end %>
         </tbody>
@@ -56,3 +61,36 @@
   </div>
 </div>
 <%= render 'new' %>
+<!-- 工艺统计信息模态框 Modal -->
+<div class="modal fade" id="showCraftStat" tabindex="-1" role="dialog" aria-labelledby="showCraftStatLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="showCraftStatLabel">工艺统计信息</h4>
+      </div>
+      <div class="modal-body" style="padding: 4px;">
+        <div class="panel panel-info">
+          <table class="table table-hover table-striped table-bordered table-condensed text-center order-show-table">
+            <tr>
+              <th>排名</th>
+              <th>工艺名称</th>
+              <th>使用数量</th>
+            </tr>
+            
+            <% @crafts_arr.each_with_index do |m, i| %>
+            <tr>
+              <td><%= i+1 %></td>
+              <td><%= m[:name] %></td>
+              <td><%= m[:number].to_f.round(2) %></td>
+            </tr>
+            <% end %>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>

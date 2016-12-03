@@ -12,22 +12,36 @@ class AgentsController < ApplicationController
       @agents = @agents.where("full_name like '%#{params[:term]}%'")
     end
     if params[:full_name].present?
-      agent = Agent.find_by_id(params[:full_name])
+      agent = Agent.find_by(id: params[:full_name])
       @agent_full_name = [agent.id, agent.full_name]
       # @agents = @agents.where("id = #{params[:full_name]} and full_name like '%#{params[:term]}%'}")
       @agents = @agents.where(id: params[:full_name])
     end
     if params[:contacts].present?
-      agent = Agent.find_by_id(params[:contacts])
+      agent = Agent.find_by(id: params[:contacts])
       @agent_contacts = [agent.id, agent.contacts]
       @agents = @agents.where(id: params[:contacts])
     end
     if params[:mobile].present?
-      agent = Agent.find_by_id(params[:mobile])
+      agent = Agent.find_by(id: params[:mobile])
       @agent_mobile = [agent.id, agent.mobile]
       @agents = @agents.where(id: params[:mobile])
     end
     # @agents = @agents.where("full_name like :keyword", keyword: "%#{params[:term]}%") if params[:term].present?
+    # 配件统计信息(将电话号码相同的所有代理商视为同一个代理商，分组统计)
+    agents_arr = []
+    @agents.group_by{|a| a.mobile}.each_pair do |key, value|
+      agent = Agent.find_by(mobile: key)
+      number = 0
+      total = 0
+      value.each do |agent|
+        number += agent.orders.count
+        total += agent.orders.pluck(:price).sum
+      end
+      agents_arr << {name: agent.full_name, number: number, money: total}
+    end
+    @agents_arr = agents_arr.sort_by{|m| m[:money] }
+    @agents_arr = @agents_arr.reverse if params[:sort].present? && params[:sort] == 'desc'
 
     respond_to do |format|
       format.html { @agents = @agents.page(params[:page]) }
