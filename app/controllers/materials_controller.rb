@@ -10,6 +10,9 @@ class MaterialsController < ApplicationController
     # else
     @materials = Material.where(deleted: false)
     # end
+    if params[:start_at].present? && params[:end_at].present?
+      @materials = @materials.where("created_at between ? and ?", params[:start_at], params[:end_at])
+    end
     
     materials_arr = []
  

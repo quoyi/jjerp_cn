@@ -9,13 +9,23 @@
     </div>
   </div>
   <div class="content-box-large box-with-header">
-    <!-- <div class="row content-title">
-      <div class="btn-group" role="group" aria-label="">
-        <%= select_tag :ply, options_for_select(MaterialCategory.where(oftype:0).map{|mc| [mc.name, mc.id]}), prompt: '选择厚度', id: 'search-material-by-ply' %>
-        <%= select_tag :texture, options_for_select(MaterialCategory.where(oftype:1).map{|mc| [mc.name, mc.id]}), prompt: '选择材质', id: 'search-material-by-texture' %>
-        <%= select_tag :color, options_for_select(MaterialCategory.where(oftype:2).map{|mc| [mc.name, mc.id]}), prompt: '选择颜色', id: 'search-material-by-color' %>
+    <div class="row content-table">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <span>查询条件</span>
+        </div>
+        <div class="panel-body">
+          <%= form_tag materials_path, class: 'form-inline', method: 'get' do %>
+          <%= label_tag :start_at, '查询时间', class: 'control-label', style: 'margin: 0px;' %>
+          <%= date_field_tag :start_at, params[:start_at].presence || Date.today.beginning_of_month, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择起始日期', required: true %>
+          &nbsp;&nbsp;--&nbsp;&nbsp;
+          <%= date_field_tag :end_at, params[:end_at].presence || Date.today.end_of_month, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',  required: true %>
+          
+          <%= submit_tag '查询', class: 'btn btn-primary', style: 'margin: 0 0 0 10px;' %>
+          <% end %>
+        </div>
       </div>
-    </div> -->
+    </div>
     <div class="row content-table">
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>

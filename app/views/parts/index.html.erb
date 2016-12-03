@@ -13,11 +13,13 @@
           <span>查询条件</span>
         </div>
         <div class="panel-body">
-          <%= form_tag stat_incomes_path, class: 'form-inline', method: 'get' do %>
+          <%= form_tag parts_path, class: 'form-inline', method: 'get' do %>
           <%= label_tag :start_at, '查询时间', class: 'control-label', style: 'margin: 0px;' %>
-          <%= date_field_tag :start_at, params[:start_at].presence || Date.today.begin_of_month, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择起始日期' %>
+          <%= date_field_tag :start_at, params[:start_at].presence || Date.today.beginning_of_month, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择起始日期', required: true %>
           &nbsp;&nbsp;--&nbsp;&nbsp;
-          <%= date_field_tag :end_at, params[:start_at].presence || @end_at, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择终止日期' %>
+          <%= date_field_tag :end_at, params[:end_at].presence || Date.today.end_of_month, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',  required: true %>
+          <label for="sort_asc" style="margin: 0px;"><%= radio_button_tag :sort_asc, 'asc', checked: true, id: 'sort_asc', style: 'margin-top: 5px;' %>升序</label>
+          <label for="sort_desc" style="margin: 0px;"><%= radio_button_tag :sort_desc, 'desc', nil, id: 'sort_desc' %>降序</label>
           <%= submit_tag '查询', class: 'btn btn-primary', style: 'margin: 0 0 0 10px;' %>
           <% end %>
         </div>
@@ -35,6 +37,7 @@
             <th>库存</th>
             <th>品牌</th>
             <th>供应商</th>
+            <th>创建时间</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -49,6 +52,7 @@
             <td><%= p.store %></td>
             <td><%= p.brand %></td>
             <td><%= p.supply.try(:full_name) %></td>
+            <td><%= p.created_at.strftime("%Y-%m-%d") %></td>
             <td><%= link_to '删除', p, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
           </tr>
           <% end %>
