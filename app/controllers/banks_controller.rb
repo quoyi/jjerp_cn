@@ -6,6 +6,9 @@ class BanksController < ApplicationController
   def index
     @banks = Bank.all
     @bank = Bank.new
+    respond_to do |format|
+      format.html { @banks = @banks.page(params[:page]) }
+    end
   end
 
   # GET /banks/1

@@ -7,6 +7,9 @@ class PartCategoriesController < ApplicationController
     @part_category = PartCategory.new
     @part_categories = PartCategory.order(parent_id: :asc)
     @part_categories = PartCategory.where(parent_id: params[:id]).order(created_at: :desc) if params[:id].present?
+    respond_to do |format|
+      format.html { @part_categories = @part_categories.page(params[:page]) }
+    end
   end
 
   # POST /part_categories/find.json

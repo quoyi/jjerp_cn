@@ -6,6 +6,9 @@ class UnitsController < ApplicationController
   def index
     @unit = Unit.new
     @units = Unit.all
+    respond_to do |format|
+      format.html { @units = @units.page(params[:page]) }
+    end
   end
 
   # GET /units/1

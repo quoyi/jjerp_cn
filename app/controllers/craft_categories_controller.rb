@@ -6,6 +6,9 @@ class CraftCategoriesController < ApplicationController
   def index
     @craft_categories = CraftCategory.all
     @craft_category = CraftCategory.new
+    respond_to do |format|
+      format.html { @craft_categories = @craft_categories.page(params[:page]) }
+    end
   end
 
   # GET /craft_categories/1

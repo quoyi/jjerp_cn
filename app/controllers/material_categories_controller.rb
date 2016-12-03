@@ -13,7 +13,7 @@ class MaterialCategoriesController < ApplicationController
       end
     end
     respond_to do |format|
-      format.html
+      format.html { @material_categories = @material_categories.page(params[:page]) }
       format.json {
         # @material_categories.where(oftype: MaterialCategory.oftypes[params[:type]]) if params[:type].present?
         if params[:page]

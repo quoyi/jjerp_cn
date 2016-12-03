@@ -26,6 +26,9 @@ class UsersController < ApplicationController
       user.amount = amount
       user.order_number = orders.size
     end
+    # respond_to do |format|
+    #   format.html { @users = @users.page(params[:page]).per(1) }
+    # end
   end
 
   def edit

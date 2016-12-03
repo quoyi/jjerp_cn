@@ -20,6 +20,9 @@ class CraftsController < ApplicationController
     end
     @crafts_arr = crafts_arr.sort_by{|m| m[:number] }
     @crafts_arr = @crafts_arr.reverse if params[:sort].present? && params[:sort] == 'desc'
+    respond_to do |format|
+      format.html { @crafts = @crafts.page(params[:page]) }
+    end
   end
 
   # GET /crafts/1
