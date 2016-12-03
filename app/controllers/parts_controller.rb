@@ -21,6 +21,9 @@ class PartsController < ApplicationController
     end
     @parts_arr = parts_arr.sort_by{|m| m[:number] }
     @parts_arr = @parts_arr.reverse if params[:sort].present? && params[:sort] == 'desc'
+    respond_to do |format|
+      format.html { @parts = @parts.page(params[:page]) }
+    end
   end
 
   # GET /parts/new

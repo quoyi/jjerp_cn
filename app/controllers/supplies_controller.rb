@@ -6,6 +6,10 @@ class SuppliesController < ApplicationController
   def index
     @supply = Supply.new
     @supplies = Supply.where(deleted: false)
+
+    respond_to do |format|
+      format.html { @supplies = @supplies.page(params[:page]) }
+    end
   end
 
   # GET /supplies/1

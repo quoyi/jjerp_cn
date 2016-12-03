@@ -6,6 +6,10 @@ class UnitCategoriesController < ApplicationController
   def index
     @unit_category = UnitCategory.new
     @unit_categories = UnitCategory.all
+
+    respond_to do |format|
+      format.html { @unit_categories = @unit_categories.page(params[:page]) }
+    end
   end
 
   # POST /unit_categories

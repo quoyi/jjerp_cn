@@ -169,6 +169,9 @@ class IncomesController < ApplicationController
 
     @incomes_expends = @incomes.to_a + @expends.to_a
     # @incomes_expends = @incomes_expends.page(params[:page])
+    # respond_to do |format|
+    #   format.html { @incomes_expends = @incomes_expends.page(params[:page]) }
+    # end
   end
 
   private

@@ -39,7 +39,7 @@ class MaterialsController < ApplicationController
     @materials_arr = materials_arr.sort_by{|m| m[:number] }
     @materials_arr = @materials_arr.reverse if params[:sort].present? && params[:sort] == 'desc'
     respond_to do |format|
-      format.html 
+      format.html { @materials = @materials.page(params[:page]) }
       format.json {render json: {flag: @materials.empty? ? "false" : "true"} }
     end
   end
