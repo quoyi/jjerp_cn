@@ -7,6 +7,9 @@ class PartsController < ApplicationController
     @part = Part.new
     @parts = Part.where(deleted: false)
     @parts = Part.joins(:part_category).where(part_categories: {name: params[:name]}) if params[:name].present? && params[:name] != '所有'
+    if params[:start_at].present? && params[:end_at].present?
+      @parts = @parts.where("created_at between ? and ?", params[:start_at], params[:end_at])
+    end
   end
 
   # GET /parts/new

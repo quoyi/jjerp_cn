@@ -6,6 +6,9 @@ class CraftsController < ApplicationController
   def index
     @crafts = Craft.all
     @craft = Craft.new
+    if params[:start_at].present? && params[:end_at].present?
+      @parts = @parts.where("created_at between ? and ?", params[:start_at], params[:end_at])
+    end
   end
 
   # GET /crafts/1

@@ -179,7 +179,7 @@
       <!-- 配件 -->
       <div class="panel panel-default">
         <div class="panel-heading order-panel-header">
-          <h3 class="panel-title order-panel-header">配件</h3>
+          <h3 class="panel-title order-panel-header">配件<span class="pull-right">如需修改配件信息，请在此处编辑配件数量（<code>不填表示删除配件</code>）、价格、单位、备注信息后提交即可！</span></h3>
         </div>
         <div class="panel-body" id="orderPartsForm" style="padding: 0;">
           <!-- Nav tabs -->
@@ -212,9 +212,9 @@
                         <span class="input-group-addon">元</span>
                       </div>
                       <div class="input-group" style="margin-top: 5px; width: 100%;">
-                        <span class="input-group-addon" title="修改子订单配件单位时，数量不能为零。" style="width: 30%;">单位</span>
-                        <%= p.collection_select :uom, Uom.where(deleted: false), :name, :name, {selected: part.uom || pc.uom}, class: 'form-control' %>
-                        <%= p.text_field :note, placeholder: '单位' %>
+                        <!-- <span class="input-group-addon" title="修改子订单配件单位时，数量不能为零。">单位</span> -->
+                        <%= p.collection_select :uom, Uom.where(deleted: false), :name, :name, {selected: part.uom || pc.uom}, class: 'form-control', style: 'width: 30%;' %>
+                        <%= p.text_field :note, value: part.note || pc.note, placeholder: '请输入备注信息', maxlength: 50, class: 'form-control', style: 'width: 70%;' %>
                       </div>
                       <% end %>
                     </div>
@@ -226,7 +226,7 @@
             </div>
           </div>
           <div class="table-responsive">
-          <table>
+          <table class="table table-hover table-striped table-bordered table-condensed text-center order-index-table">
             <tr>
               <th>名称</th>
               <th>数量</th>
