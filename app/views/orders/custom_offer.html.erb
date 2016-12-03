@@ -214,6 +214,7 @@
                       <div class="input-group" style="margin-top: 5px; width: 100%;">
                         <span class="input-group-addon" title="修改子订单配件单位时，数量不能为零。" style="width: 30%;">单位</span>
                         <%= p.collection_select :uom, Uom.where(deleted: false), :name, :name, {selected: part.uom || pc.uom}, class: 'form-control' %>
+                        <%= p.text_field :note, placeholder: '单位' %>
                       </div>
                       <% end %>
                     </div>
@@ -223,6 +224,26 @@
               </div>
               <% end %>
             </div>
+          </div>
+          <div class="table-responsive">
+          <table>
+            <tr>
+              <th>名称</th>
+              <th>数量</th>
+              <th>单价</th>
+              <th>单位</th>
+              <th>备注</th>
+            </tr>
+            <% @parts.each do |part| %>
+            <tr>
+              <td><%= part.part_category.name %></td>
+              <td><%= part.number %></td>
+              <td><%= part.price %></td>
+              <td><%= part.uom %></td>
+              <td><%= part.note %></td>
+            </tr>
+            <% end %>
+          </table>
           </div>
         </div>
         <div class="panel-footer" style="padding: 5px;">

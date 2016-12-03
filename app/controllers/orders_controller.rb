@@ -498,6 +498,7 @@ class OrdersController < ApplicationController
   # 自定义报价
   def custom_offer
     @indent = @order.indent
+    @parts = @order.parts
     @unit = Unit.new
     @material = Material.new
     @part_category = PartCategory.new
