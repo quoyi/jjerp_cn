@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161121102442) do
+ActiveRecord::Schema.define(version: 20161203111920) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",             limit: 255,                         default: "",    null: false
@@ -304,7 +304,7 @@ ActiveRecord::Schema.define(version: 20161121102442) do
     t.decimal  "price",                        precision: 8, scale: 2
     t.integer  "store",            limit: 4,                           default: 1,     null: false
     t.string   "uom",              limit: 255
-    t.decimal  "number",                       precision: 8, scale: 2, default: 1.0,   null: false
+    t.decimal  "number",                       precision: 8, scale: 4, default: 1.0,   null: false
     t.string   "brand",            limit: 255
     t.string   "note",             limit: 255
     t.integer  "supply_id",        limit: 4,                                           null: false

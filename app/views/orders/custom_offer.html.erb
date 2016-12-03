@@ -206,7 +206,7 @@
                       <%= p.hidden_field :part_category_id, value: pc.id %>
                       <%= p.hidden_field :supply_id, value: pc.supply_id %>
                       <div class="input-group">
-                        <%= p.number_field :number, min: 0, max: 999999, step: 0.01, value: part.new_record? ? nil : part.number, placeholder: '数量', class: 'form-control' %>
+                        <%= p.number_field :number, min: 0, max: 999999, step: 0.0001, value: part.new_record? ? nil : part.number, placeholder: '数量', class: 'form-control' %>
                         <span class="input-group-addon">×</span>
                         <%= p.number_field :price, min: 0, max: 999999, step: 0.01, placeholder: '单价', value: part.price || pc.price, class: 'form-control' %>
                         <span class="input-group-addon">元</span>
