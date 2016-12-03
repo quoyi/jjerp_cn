@@ -14,8 +14,8 @@ class MaterialsController < ApplicationController
       @materials = @materials.where("created_at between ? and ?", params[:start_at], params[:end_at])
     end
     
+    # 板料统计信息
     materials_arr = []
- 
     Unit.all.group_by{|u| [u.ply, u.texture, u.color]}.each_pair do |key, value|
       obj = {}
       materail = Material.find_by(ply: key.first, texture: key.second, color: key.last)
@@ -36,10 +36,8 @@ class MaterialsController < ApplicationController
       obj[:number] = total_number
       materials_arr << obj
     end
-
-
-    @materials_top_arr = materials_arr.sort_by{|m| m[:number] }.first(10)
-
+    @materials_arr = materials_arr.sort_by{|m| m[:number] }
+    @materials_arr = @materials_arr.reverse if params[:sort].present? && params[:sort] == 'desc'
     respond_to do |format|
       format.html 
       format.json {render json: {flag: @materials.empty? ? "false" : "true"} }

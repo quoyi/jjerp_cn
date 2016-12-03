@@ -1,7 +1,8 @@
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
-    <div class="panel-title">
+    <div class="panel-title" style="margin-bottom: 2px; padding-bottom: 0px;">
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 代理商 <small>列表</small> </h2>
+      <%= link_to '查看统计', '#', class: "btn btn-primary", data: {toggle: 'modal', target: '#showAgentStat'}, style:'margin-left: 20px; margin-buttom: 0px; color: #fff;' %>
       <div class="pull-right panel-options">
         <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addAgent'} %>
       </div>
@@ -36,6 +37,14 @@
             </select>
             <%#= select_tag :mobile, nil, class: 'form-control agents_search_form_mobile', placeholder: '请输入联系电话', style: 'min-width: 160px;' %>
           </div>
+          <%= label_tag :sort, '金额排序：', class: 'control-label', style: 'margin: 0 0 0 10px;' %>
+          <% if params[:sort].present? %>
+          <label for="sort_asc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'asc', params[:sort] == 'asc' ? true : false, id: 'sort_asc' %>升序</label>
+          <label for="sort_desc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'desc', params[:sort] == 'desc' ? true : false, id: 'sort_desc' %>降序</label>
+          <% else %>
+          <label for="sort_asc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'asc', true, id: 'sort_asc' %>升序</label>
+          <label for="sort_desc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'desc', false, id: 'sort_desc' %>降序</label>
+          <% end %>
           <%= submit_tag '查询', class: 'btn btn-primary', data: {toggle: 'tooltip'}, title: '修改查询条件后，需先点此查询，否则导出结果依然为上次查询结果！', style: 'margin: 0 0 0 10px;' %>
           <% end %>
         </div>
@@ -89,3 +98,39 @@
   </div>
 </div>
 <%= render 'new' %>
+
+<!-- 代理商统计信息模态框 Modal -->
+<div class="modal fade" id="showAgentStat" tabindex="-1" role="dialog" aria-labelledby="showAgentStatLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="showAgentStatLabel">代理商统计信息</h4>
+      </div>
+      <div class="modal-body" style="padding: 4px;">
+        <div class="panel panel-info">
+          <table class="table table-hover table-striped table-bordered table-condensed text-center order-show-table">
+            <tr>
+              <th>排名</th>
+              <th>代理商</th>
+              <th>订单数量</th>
+              <th>总金额</th>
+            </tr>
+            
+            <% @agents_arr.each_with_index do |m, i| %>
+            <tr>
+              <td><%= i+1 %></td>
+              <td><%= m[:name] %></td>
+              <td><%= m[:number].to_f.round(2) %></td>
+              <td><%= m[:money].to_i %></td>
+            </tr>
+            <% end %>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>

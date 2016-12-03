@@ -20,7 +20,13 @@
           <%= date_field_tag :start_at, params[:start_at].presence || Date.today.beginning_of_month, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择起始日期', required: true %>
           &nbsp;&nbsp;--&nbsp;&nbsp;
           <%= date_field_tag :end_at, params[:end_at].presence || Date.today.end_of_month, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',  required: true %>
-          
+          <% if params[:sort].present? %>
+          <label for="sort_asc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'asc', params[:sort] == 'asc' ? true : false, id: 'sort_asc' %>统计升序</label>
+          <label for="sort_desc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'desc', params[:sort] == 'desc' ? true : false, id: 'sort_desc' %>统计降序</label>
+          <% else %>
+          <label for="sort_asc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'asc', true, id: 'sort_asc' %>统计升序</label>
+          <label for="sort_desc" style="margin: 0px 5px;"><%= radio_button_tag :sort, 'desc', false, id: 'sort_desc' %>统计降序</label>
+          <% end %>
           <%= submit_tag '查询', class: 'btn btn-primary', style: 'margin: 0 0 0 10px;' %>
           <% end %>
         </div>
@@ -75,11 +81,8 @@
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" id="showMaterialStatLabel">板料统计信息</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="padding: 4px;">
         <div class="panel panel-info">
-          <div class="panel-heading">
-            <span>板料统计信息</span>
-          </div>
           <table class="table table-hover table-striped table-bordered table-condensed text-center order-show-table">
             <tr>
               <th>排名</th>
@@ -87,7 +90,7 @@
               <th>使用数量</th>
             </tr>
             
-            <% @materials_top_arr.each_with_index do |m,i| %>
+            <% @materials_arr.each_with_index do |m,i| %>
             <tr>
               <td><%= i+1 %></td>
               <td><%= m[:name] %></td>

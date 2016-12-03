@@ -7,8 +7,19 @@ class CraftsController < ApplicationController
     @crafts = Craft.all
     @craft = Craft.new
     if params[:start_at].present? && params[:end_at].present?
-      @parts = @parts.where("created_at between ? and ?", params[:start_at], params[:end_at])
+      @crafts = @crafts.where("created_at between ? and ?", params[:start_at], params[:end_at])
     end
+
+    # 配件统计信息
+    crafts_arr = []
+    @crafts.group_by{|c| c.craft_category_id}.each_pair do |key, value|
+      craft_category = CraftCategory.find_by(id: key)
+      total_number = 0 
+      value.each{|craft| total_number += craft.number}
+      crafts_arr << {name: craft_category.full_name, number: total_number}
+    end
+    @crafts_arr = crafts_arr.sort_by{|m| m[:number] }
+    @crafts_arr = @crafts_arr.reverse if params[:sort].present? && params[:sort] == 'desc'
   end
 
   # GET /crafts/1
