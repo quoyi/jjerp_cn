@@ -92,12 +92,17 @@
               <th>板料名称</th>
               <th>使用数量</th>
             </tr>
-            
+            <% if @materials_arr.present? %>
             <% @materials_arr.each_with_index do |m,i| %>
             <tr>
               <td><%= i+1 %></td>
               <td><%= m[:name] %></td>
               <td><%= m[:number].to_f.round(2) %></td>
+            </tr>
+            <% end %>
+            <% else %>
+            <tr>
+              <td>统计出错</td>
             </tr>
             <% end %>
           </table>
