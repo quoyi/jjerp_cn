@@ -10,7 +10,7 @@
       </small>
       </h2>
       <div class="pull-right panel-options">
-        <% if @indent.over? %>
+        <% if !@current_user.admin? && @indent.over? %>
           <%= link_to '管理', '#', class: 'btn-primary btn', disabled: 'disabled' %>
           <%= link_to '报价', '#', class: 'btn-primary btn', disabled: 'disabled' %>
         <% else %>

@@ -2,7 +2,7 @@ class Agent < ActiveRecord::Base
   has_many :indents
   has_many :orders
   validates :name, uniqueness: true
-  validates_uniqueness_of :full_name
+  validates_uniqueness_of :mobile
   before_save :generate_address
   #validates :full_name, uniqueness: {scope: :name}
   #

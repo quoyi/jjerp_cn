@@ -1,13 +1,19 @@
 module OffersHelper
   # 生成指定 indent 的报价单
   def create_offer(order)
-    unit_num = 0
-    part_num = 0
-    craft_num = 0
-    # 1.删除之前的报价单
-    order.offers.destroy_all
+    unit_num, unit_money, part_num, part_money, craft_num, craft_money = 6.times.map{ 0 }
+    
     # 开启事务，报价单生成要么成功，要么失败。成功时，才删除之前的报价记录。
     ActiveRecord::Base.transaction do
+      order_agent = order.agent
+      agent_origin_arrear = order_agent.arrear
+      agent_origin_history = order_agent.history
+      # 1.删除之前的报价单
+      tmp_arrear = agent_origin_arrear - order.arrear
+      tmp_history = agent_origin_history - order.price
+      order_origin_money = order.price
+      order_origin_arrear = order.arrear
+      order.offers.destroy_all
       # 2.进行新报价逻辑
       # 2.1 计算部件报价
       order.units.each do |unit|
@@ -31,6 +37,7 @@ module OffersHelper
           end
         end
         offer.total = offer.price * offer.number
+        unit_money += offer.total
         # mc_ids = [material.ply, material.texture, material.face, material.color]
         # offer.item_name = MaterialCategory.where(id: mc_ids).map(&:name).join("-")
         offer.item_name = [MaterialCategory.find(material.ply).name, MaterialCategory.find(material.texture).name,  MaterialCategory.find(material.color).name].join('-')
@@ -40,12 +47,14 @@ module OffersHelper
         offer.save!
         unit_num += 1
       end
+
       # 2.2 计算配件报价
       order.parts.each do |part|
         offer = Offer.find_or_create_by(item_id: part.id, item_type: Offer.item_types[:part], indent_id: order.indent.id, order_id: order.id)
         offer.price = part.price.to_f
         offer.number = offer.number.to_f + part.number.to_f
         offer.total = offer.price * offer.number
+        part_money += offer.total
         offer.item_name = part.part_category.try(:name)
         offer.item_type = Offer.item_types[:part]
         offer.uom = part.uom || '个'
@@ -53,12 +62,14 @@ module OffersHelper
         offer.save!
         part_num += 1
       end
+
       # 2.3 计算工艺报价
       order.crafts.each do |craft|
         offer = Offer.find_or_create_by(item_id: craft.id, item_type: Offer.item_types[:craft], indent_id: order.indent.id, order_id: order.id)
         offer.price = craft.price
         offer.number = offer.number.to_f + craft.number.to_f
         offer.total = offer.price * offer.number
+        craft_money += offer.total
         offer.item_name = craft.full_name
         offer.item_type = Offer.item_types[:craft]
         offer.uom = craft.uom || '次'
@@ -66,6 +77,16 @@ module OffersHelper
         offer.save!
         craft_num += 1
       end
+      # 修改总订单归属后，同时修改代理商金额
+      # 更新报价前的代理商 agent 
+      order_agent.update(arrear: agent_origin_arrear - order_origin_money, history: agent_origin_history - order_origin_money)
+      order_money = unit_money + part_money + craft_money
+      # 更新报价后的代理商 agent
+      indent_agent = order.indent.agent
+      indent_agent.update(arrear: indent_agent.arrear + order_money, history: indent_agent.history + order_money)
+      # 更新订单总金额和欠款
+      order.update(price: order_money, arrear: (order_money - (order_origin_money - order_origin_arrear)).abs,
+                   agent_id: indent_agent.id)
     end
     # order.offering! if unit_num == 0 && part_num == 0 && craft_num == 0
     # indent = indent.reload
