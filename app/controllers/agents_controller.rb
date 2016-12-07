@@ -8,26 +8,29 @@ class AgentsController < ApplicationController
     @agents = Agent.where(deleted: false)
     # 代理商列表页面查询用
     @agent_full_name, @agent_contacts, @agent_mobile = 3.times.map{""}
+    # 提供给 select2 查询
     if params[:term].present?
-      @agents = @agents.where("full_name like '%#{params[:term]}%'")
+      @agents = @agents.where("#{params[:oftype]} like '%#{params[:term]}%'")
+    else # 提供给 代理商 页面查询条件
+      if params[:full_name].present?
+        @agent_full_name = Agent.find_by(id: params[:full_name]).try(:full_name)
+        # agent = Agent.find_by(id: params[:full_name])
+        # @agent_full_name = [agent.id, agent.full_name]
+        # @agents = @agents.where("id = #{params[:full_name]} and full_name like '%#{params[:term]}%'}")
+        @agents = @agents.where("full_name like '%#{@agent_full_name}%'")
+      end
+      if params[:contacts].present?
+        # agent = Agent.find_by(id: params[:contacts])
+        @agent_contacts = Agent.find_by(id: params[:contacts]).try(:contacts)
+        @agents = @agents.where("contacts like '%#{@agent_contacts}%'")
+      end
+      if params[:mobile].present?
+        # agent = Agent.find_by(id: params[:mobile])
+        @agent_mobile = Agent.find_by(id: params[:mobile]).try(:mobile)
+        @agents = @agents.where("mobile like '%#{@agent_mobile}%'")
+      end
     end
-    if params[:full_name].present?
-      @agent_full_name = Agent.find_by(id: params[:full_name]).try(:full_name)
-      # agent = Agent.find_by(id: params[:full_name])
-      # @agent_full_name = [agent.id, agent.full_name]
-      # @agents = @agents.where("id = #{params[:full_name]} and full_name like '%#{params[:term]}%'}")
-      @agents = @agents.where("full_name like '%#{@agent_full_name}%'")
-    end
-    if params[:contacts].present?
-      # agent = Agent.find_by(id: params[:contacts])
-      @agent_contacts = Agent.find_by(id: params[:contacts]).try(:contacts)
-      @agents = @agents.where("contacts like '%#{@agent_contacts}%'")
-    end
-    if params[:mobile].present?
-      # agent = Agent.find_by(id: params[:mobile])
-      @agent_mobile = Agent.find_by(id: params[:mobile]).try(:mobile)
-      @agents = @agents.where("mobile like '%#{@agent_mobile}%'")
-    end
+    
     # @agents = @agents.where("full_name like :keyword", keyword: "%#{params[:term]}%") if params[:term].present?
     # 配件统计信息(将电话号码相同的所有代理商视为同一个代理商，分组统计)
     agents_arr = []
