@@ -11,7 +11,7 @@ class IncomesController < ApplicationController
       @incomes =@incomes.where(order_id: indent.orders.pluck(:id))
     end
     @incomes = @incomes.page(params[:page])
-    @income = Income.new(bank_id: Bank.find_by(is_default: 1).try(:id), username: current_user.name, income_at: Time.now)
+    @income = Income.new(bank_id: Bank.find_by(is_default: 1).try(:id), username: current_user.username, income_at: Time.now)
   end
 
   # GET /incomes/1
@@ -21,7 +21,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    @income = Income.new(bank_id: Bank.find_by(is_default: 1).id, username: current_user.name, income_at: Time.now)
+    @income = Income.new(bank_id: Bank.find_by(is_default: 1).id, username: current_user.username, income_at: Time.now)
   end
 
   # GET /incomes/1/edit
@@ -49,7 +49,7 @@ class IncomesController < ApplicationController
             # 代理商余额足够时，扣除余额，新增订单收入记录；否则，扣除代理商余额、不足金额计算到订单欠款，跳出循环
             if agent_balance >= o_arrear
               agent_balance = agent_balance - o_arrear
-              @income = o.incomes.new(indent_id: indent.id, bank_id: income_params[:bank_id], username: current_user.name,
+              @income = o.incomes.new(indent_id: indent.id, bank_id: income_params[:bank_id], username: current_user.username,
                                       money: o_arrear, income_at: income_params[:income_at],
                                       note: income_params[:note])
                                       #"来自订单#{order.name}于#{income_params[:income_at]}收入的#{income_params[:money].to_i},剩余#{income_params[:money].to_i - o_arrear}已存入代理商余额")
@@ -61,7 +61,7 @@ class IncomesController < ApplicationController
               if agent_balance > 0
                 # 重复代码：跳出循环时，不执行本次循环break后面的代码
                 @income = o.incomes.new(indent_id: indent.id, bank_id: income_params[:bank_id], money: agent_balance, 
-                                     username: current_user.name, income_at: income_params[:income_at],
+                                     username: current_user.username, income_at: income_params[:income_at],
                                      note: income_params[:note])
                                      # "来自订单#{order.name}于#{income_params[:income_at]}收入的#{income_params[:money].to_i}")
                 @income.save!
