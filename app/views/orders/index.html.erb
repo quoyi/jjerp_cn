@@ -58,10 +58,10 @@
                 <label class="col-sm-1 control-label text-right" for="provide">子订单号</label>
                 <div class="col-sm-7">
                   <div class="input-group" style="width: 100%;">
-                    <%= select_year Date.today.year, {field_name: :year, start_year: 2010, end_year: Date.today.year}, {class: 'form-control'} %>
+                    <%= select_year params[:date].present? ? params[:date][:year].to_i : Date.today.year, {field_name: :year, start_year: 2010, end_year: Date.today.year}, {class: 'form-control'} %>
                     <div class="input-group-addon">年</div>
                     <%#= label_tag '年', nil, class: 'control-label', for: 'date_year', style: 'padding: 0 10px;' %>
-                    <%= select_month Date.today.month, {field_name: :month, use_month_numbers: true}, {class: 'form-control'} %>
+                    <%= select_month params[:date].present? ? params[:date][:month].to_i : Date.today.month, {field_name: :month, use_month_numbers: true}, {class: 'form-control'} %>
                     <div class="input-group-addon">月</div>
                     <%#= label_tag '月', nil, class: 'control-label', for: 'date_month', style: 'padding: 0 10px;' %>
                     <%= text_field_tag :name, params[:name].presence || '' , class:'form-control', placeholder: '订单号', data: {toggle: 'tooltip'}, title: '请输入需要查找、打包的订单号' %> <!-- autofocus:true -->
