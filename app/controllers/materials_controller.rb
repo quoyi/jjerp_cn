@@ -14,7 +14,7 @@ class MaterialsController < ApplicationController
       @materials = @materials.where("created_at between ? and ?", params[:start_at], params[:end_at])
     end
     
-    # 板料统计信息
+    # 板料统计信息 (全部 / 所选时间段)
     materials_arr = []
     Unit.all.group_by{|u| [u.ply, u.texture, u.color]}.each_pair do |key, value|
       obj = {}
