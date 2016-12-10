@@ -1,6 +1,16 @@
 module IncomesHelper
+  require 'find'
   # 新建 /public/excels/incomes/#{timestamp}.xls 文件，列出所有 incomes
   def createIncomes(timestamp, incomes)
+  	directory = "#{Rails.root}/public/excels/incomes"
+  	# 删除 /public/excels/incomes/ 目录下前一天的文件
+  	Dir.foreach(directory) do |filename|
+  	  if filename !="." and filename !=".."
+  	  	binding.pry
+  	  	File.delete(directory + "/" + filename) if filename.gsub(".xls", "").to_i < Date.today.strftime("%Y%m%d%H%M%S%L").to_i
+  	  end
+  	end
+
   	wb = WriteExcel.new("#{Rails.root}/public/excels/incomes/" + timestamp + ".xls")
   	ws = wb.add_worksheet
     ws.set_column('A:G', 25) # 设置列宽
