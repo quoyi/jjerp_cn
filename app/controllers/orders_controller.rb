@@ -54,12 +54,12 @@ class OrdersController < ApplicationController
     end
 
     search = ''
-    if params[:date].present?
-      search += "#{params[:date][:year]}%-" if params[:date][:year].present?
-      search += "#{params[:date][:month]}-" if params[:date][:month].present?
-    end
+    #if params[:date].present?
+    #  search += "#{params[:date][:year]}%-" if params[:date][:year].present?
+    #  search += "#{params[:date][:month]}-" if params[:date][:month].present?
+    #end
     search += params[:name] if params[:name].present?
-    @orders = @orders.where("name like '#{search}'") unless search.blank?
+    @orders = @orders.where("name like '%-#{search}'") unless search.blank?
 
     # 搜索条件 订单类型
     if params[:order_category_id].present?
