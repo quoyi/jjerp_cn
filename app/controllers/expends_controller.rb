@@ -7,7 +7,20 @@ class ExpendsController < ApplicationController
   def index
     @expend = Expend.new(username: current_user.name, expend_at: Time.now)
     @expends = Expend.where(deleted: false)
-    @expends = @expends.page(params[:page])
+    if params[:start_at].present? && params[:end_at].present?
+      @expends = @expends.where("expend_at between ? and ?", params[:start_at], params[:end_at])
+    end
+    if params[:bank_id].present?
+      @expends = @expends.where(bank_id: params[:bank_id])
+    end
+
+    respond_to do |format|
+      format.html { @expends = @expends.page(params[:page]) }
+      format.json
+      format.xls {
+        
+      }
+    end
   end
 
   # GET /expends/1

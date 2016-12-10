@@ -4,6 +4,7 @@
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 收入记录 <small>列表</small> </h2>
       <div class="pull-right panel-options">
         <%= link_to '新建', '#', class: 'btn btn-info', data: { toggle: 'modal', target: '#addIncomes'} %>
+        
       </div>
     </div>
   </div>
@@ -21,7 +22,10 @@
           <%= date_field_tag :end_at, params[:end_at].presence || Date.today.end_of_month, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',  required: true %>
           <%= label_tag :agent_id, '代理商', class: 'control-label', style: 'margin: 0px;' %>
           <%= select_tag :agent_id, params[:agent_id].present? ? raw("<option value='#{params[:agent_id]}'>#{Agent.find_by_id(params[:agent_id]).try(:full_name)}</option>") : nil, class: 'form-control remoteDataAgent', style: 'width: 200px;' %>
-          <%= submit_tag '查询', class: 'btn btn-primary', style: 'margin: 0 0 0 10px;' %>
+          <%= label_tag :bank_id, '卡号', class: 'control-label', style: 'margin: 0px;' %>
+          <%= select_tag :bank_id, options_for_select(Bank.all.map{|i|[i.bank_card, i.id]}, params[:bank_id].presence), class: 'form-control' %>
+          <%= link_to '查询', '#', class: 'btn btn-primary', style: 'margin: 0 0 0 10px;', onclick: 'searchOrDownload(this, "search")' %>
+          <%= link_to '下载', '#', class: 'btn btn-default', onclick: 'searchOrDownload(this, "download")' %>
           <% end %>
         </div>
       </div>
@@ -41,9 +45,9 @@
           </tr>
         </thead>
         <tbody>
-          <% @incomes.each do |i| %>
+          <% @incomes.each_with_index do |i, index| %>
           <tr>
-            <td><%= i.id %></td>
+            <td><%= index + 1 %></td>
             <td><%= i.reason %></td>
             <td><%= i.bank.bank_card %></td>
             <td><%= i.income_at.strftime('%Y-%m-%d') %></td>

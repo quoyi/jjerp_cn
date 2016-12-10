@@ -9,6 +9,24 @@
   </div>
   <div class="content-box-large box-with-header">
     <div class="row content-table">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <span>查询条件</span>
+        </div>
+        <div class="panel-body">
+          <%= form_tag expends_path, class: 'form-inline', method: 'get' do %>
+          <%= label_tag :start_at, '支出时间', class: 'control-label', style: 'margin: 0px;' %>
+          <%= date_field_tag :start_at, params[:start_at].presence || Date.today.beginning_of_month, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择起始日期', required: true %>
+          &nbsp;&nbsp;--&nbsp;&nbsp;
+          <%= date_field_tag :end_at, params[:end_at].presence || Date.today.end_of_month, class: 'form-control', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',  required: true %>
+          <%= label_tag :bank_id, '卡号', class: 'control-label', style: 'margin: 0px;' %>
+          <%= select_tag :bank_id, options_for_select(Bank.all.map{|i|[i.bank_card, i.id]}, params[:bank_id].presence), class: 'form-control' %>
+          <%= submit_tag '查询', class: 'btn btn-primary', style: 'margin: 0 0 0 10px;' %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="row content-table">
       <table class="table table-hover table-striped table-bordered table-condensed text-center">
         <thead>
           <tr>
