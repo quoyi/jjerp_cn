@@ -44,14 +44,15 @@ class OrdersController < ApplicationController
     @district = params[:district].presence || @district
     # @district 不为空时，才需要过滤
     @agents = @agents.where(district: @district) unless @district.blank?
-    @orders = @orders.where(agent_id: @agents)
+    @orders = @orders.where(agent_id: @agents) unless @agents.blank?
 
     # 判断搜索条件 起始时间 -- 结束时间
     if params[:start_at].present? && params[:end_at].present?
       @start_at = params[:start_at]
       @end_at = params[:end_at]
+      @orders = @orders.where("created_at between ? and ?", @start_at, @end_at)
     end
-    @orders = @orders.where("created_at between ? and ?", @start_at, @end_at)
+
     search = ''
     if params[:date].present?
       search += "#{params[:date][:year]}%-" if params[:date][:year].present?
@@ -59,15 +60,18 @@ class OrdersController < ApplicationController
     end
     search += params[:name] if params[:name].present?
     @orders = @orders.where("name like '#{search}'") unless search.blank?
+
     # 搜索条件 订单类型
     if params[:order_category_id].present?
       @order_category_id = params[:order_category_id]
     end
     @orders = @orders.where(order_category_id: @order_category_id) unless @order_category_id.blank?
+
     if params[:oftype].present?
       @order_oftype = params[:oftype]
     end
     @orders = @orders.where(oftype: Order.oftypes[@order_oftype]) unless @order_oftype.blank?
+
     # 搜索条件 代理商ID(@agent_id是返回给view使用)
     if params[:agent_id].present?
       @agent_id = params[:agent_id]
@@ -144,13 +148,32 @@ class OrdersController < ApplicationController
     end
     @orders_result[:part] = @orders.where(order_category_id: OrderCategory.find_by(name: '配件').try(:id)).count
     @orders_result[:other] = @orders.where(order_category_id: OrderCategory.find_by(name: '其他').try(:id)).count
-    # 分页
-    @download = @orders if params[:format] == "xls"
-    @orders = @orders.page(params[:page])
+    
+    
     # @orders = @orders.sort_by{|o|[o.name.split("-")[0].to_i,o.name.split('-')[1].to_i,o.name.split('-')[2].to_i]}
     respond_to do |format|
-      format.html
+      format.html {
+        @orders = @orders.page(params[:page])
+      }
+      format.json {
+        @orders = @orders.where("name like '#{params[:term]}%'") if params[:term].present?
+        if params[:page]
+          per = 6
+          size = @orders.offset((params[:page].to_i - 1) * per).size  # 剩下的记录条数
+          result = @orders.offset((params[:page].to_i - 1) * per).limit(per)  # 当前显示的所有记录
+          # if params[:oftype].present?
+          #   result = result.map{|ac| {id: ac.id, text: (ac.full_name)}}  if params[:oftype] == 'full_name'
+          #   result = result.map{|ac| {id: ac.id, text: (ac.contacts)}}  if params[:oftype] == 'contacts'
+          #   result = result.map{|ac| {id: ac.id, text: (ac.mobile)}}  if params[:oftype] == 'mobile'
+          # end
+          # result = result << {id: "other", text: '其他收入'} if params[:page].to_i == 1
+          result = result.map { |o| {id: o.id, text: o.name}} << {id: '0', text: '其他收入'}
+        end
+        render json: {:orders => result.reverse, :total => size} 
+      }
       format.xls do
+        # 分页
+        @download = @orders if params[:format] == "xls"
         filename = Time.now.strftime("%Y%m%d%H%M%S%L") + ".xls"
         export_orders(filename, @download, params[:start_at], params[:end_at])
         send_file "#{Rails.root}/public/excels/orders/" + filename, type: 'text/xls; charset=utf-8'

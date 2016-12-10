@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="addIncomes" tabindex="-1" role="dialog" aria-labelledby="addIncomesLabel">
+<div class="modal fade" id="addIncomes" role="dialog" aria-labelledby="addIncomesLabel">
   <div class="modal-dialog modal-sm" role="document" style="width: 400px;">
     <div class="modal-content">
 
@@ -11,9 +11,12 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label for="income_order_id" class="control-label col-sm-3"><span class="require">*</span>订单号</label>
+          <label for="income_order_id" class="control-label col-sm-3" data-toggle="tooltip" title="收入来源（订单收入或者其他收入）"><span class="require">*</span>来源/订单号</label>
           <div class="col-sm-9">
-            <%= select_tag 'income[order_id]', options_for_select(Order.all.map{|i|[i.name, i.id]}), class: 'form-control indents_income_order_id', required: true %>
+            <select name="income[order_id]" class="remoteDataOrder form-control" required="required" style="width: 100%;">
+              <!-- <option value="other" selected="selected">其他收入</option> -->
+            </select>
+            <%#= select_tag 'income[order_id]', options_for_select(Order.all.map{|i|[i.name, i.id]}), class: 'form-control indents_income_order_id', required: true %>
           </div>
         </div>
         <div class="form-group">
@@ -67,3 +70,34 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+$(".remoteDataOrder").select2({
+  language: 'zh-CN',
+  theme: 'bootstrap',
+  placeholder: "来源/订单号",
+  minimumInputLength: 0,
+  // width: '100%',
+  ajax: {
+    url: '/orders.json',
+    dataType: 'json',
+    delay: 250,
+    cache: false,
+    data: function(params){
+      return {
+        term: params.term,
+        page: params.page || 1
+      };
+    },
+    processResults: function(data, params){
+      params.page = params.page || 1;
+      return {
+        results: data.orders,
+        pagination: {
+          more: (params.page * 6) < data.total
+        }
+      };
+    }
+  }
+});
+</script>

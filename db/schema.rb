@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161203111920) do
+ActiveRecord::Schema.define(version: 20161210011222) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",             limit: 255,                         default: "",    null: false
@@ -134,23 +134,21 @@ ActiveRecord::Schema.define(version: 20161203111920) do
     t.string   "name",       limit: 255
     t.integer  "bank_id",    limit: 4
     t.string   "reason",     limit: 255
-    t.integer  "indent_id",  limit: 4,                                           null: false
     t.decimal  "money",                  precision: 8, scale: 2
     t.string   "username",   limit: 255
     t.datetime "income_at"
     t.integer  "status",     limit: 4
     t.string   "note",       limit: 255
     t.boolean  "deleted",                                        default: false, null: false
-    t.integer  "order_id",   limit: 4,                                           null: false
     t.string   "source",     limit: 255,                         default: ""
     t.datetime "created_at",                                                     null: false
     t.datetime "updated_at",                                                     null: false
+    t.integer  "indent_id",  limit: 4
+    t.integer  "order_id",   limit: 4
   end
 
   add_index "incomes", ["bank_id"], name: "index_incomes_on_bank_id", using: :btree
   add_index "incomes", ["income_at"], name: "index_incomes_on_income_at", using: :btree
-  add_index "incomes", ["indent_id"], name: "index_incomes_on_indent_id", using: :btree
-  add_index "incomes", ["order_id"], name: "index_incomes_on_order_id", using: :btree
 
   create_table "indents", force: :cascade do |t|
     t.string   "name",             limit: 255,                                         null: false

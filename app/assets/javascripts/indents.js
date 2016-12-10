@@ -111,7 +111,7 @@ $(function() {
     theme: 'bootstrap',
     placeholder: "店名/代理商名称",
     minimumInputLength: 0,
-    // width: '100%',
+    allowClear: true,
     ajax: {
       url: '/agents.json',
       dataType: 'json',
