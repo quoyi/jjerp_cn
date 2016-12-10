@@ -174,7 +174,7 @@
 <div class="modal-footer">
   <div class="pull-left">
     <%= f.link_to_add '添加子订单', :orders, data: {target: @indent.new_record? ? '#indentOrders' : '#editIndentOrders'}, class: 'btn btn-info' %>
-    <%= f.link_to_add '添加配件补单', :order_parts, data: {target: @indent.new_record? ? '#indentOrderRepairParts' : '#editIndentOrderRepairParts'}, class: 'btn btn-info' %>
+    <%= f.link_to_add '添加配件补单', :order_parts, data: {target: @indent.new_record? ? '#indentOrderRepairParts' : '#editIndentOrderRepairParts'}, class: 'btn btn-info nested_parts_fields' %>
   </div>
   <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
   <%= f.submit '提交', class: 'btn btn-primary' %>
@@ -333,6 +333,7 @@ $(".material-color").select2({
     }
   }
 });
+
 $("#indent_form_fields").on("nested:fieldAdded:orders", function(e){
   var fields = e.field;
   var order_category_id_field_name = fields.find(".indent_nested_form_first_select_field").attr("name");
@@ -431,6 +432,8 @@ $("#indent_form_fields").on("nested:fieldAdded:orders", function(e){
     }
   });
 }).on("nested:fieldAdded:order_parts", function(e){
-  
+  $(e.currentTarget).find("a.nested_parts_fields").addClass("disabled");
+}).on("nested:fieldRemoved:order_parts", function(e){
+  $(e.currentTarget).find("a.nested_parts_fields").removeClass("disabled");
 });
 </script>

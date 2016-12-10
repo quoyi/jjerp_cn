@@ -24,9 +24,9 @@
             <td style="max-width:500px;"><%= uc.note %></td>
             <td>              
               <% if uc.deleted %>
-              <%= link_to '恢复', unit_category_path(uc, reset: true), method: :patch, style: "color: green !important;" %>
+              <%= link_to '恢复', unit_category_path(uc, reset: true), method: :patch, class: 'btn btn-xs btn-default',  style: "color: green !important;" %>
               <% else %>
-              <%= link_to '删除', uc, method: :delete, style: "color: red !important;", data: { confirm: '确认删除？' } %>
+              <%= link_to '删除', uc, method: :delete, class: 'btn btn-xs btn-default', style: "color: red !important;", data: { confirm: '确认删除？' } %>
               <% end %>
             </td>
           </tr>

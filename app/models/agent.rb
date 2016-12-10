@@ -1,6 +1,7 @@
 class Agent < ActiveRecord::Base
   has_many :indents
   has_many :orders
+  has_many :incomes
   validates :name, uniqueness: true
   validates_uniqueness_of :mobile
   before_save :generate_address
