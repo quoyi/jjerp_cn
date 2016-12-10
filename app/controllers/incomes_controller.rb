@@ -42,6 +42,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
+    binding.pry
     @income = Income.new(bank_id: Bank.find_by(is_default: 1).id, username: current_user.username, income_at: Time.now)
   end
 
@@ -66,7 +67,7 @@ class IncomesController < ApplicationController
             agent_arrear = agent.arrear - income_params[:money].to_f
             # 新建银行卡的收入信息
             updateIncomeExpend(income_params[:bank_id], income_params[:money].to_f, 'income')
-            @income = order.incomes.new(indent_id: order.indent.id, bank_id: income_params[:bank_id], username: income_params[:username],
+            @income = order.incomes.new(indent_id: order.indent.id, bank_id: income_params[:bank_id], username: income_params[:username], agent_id: agent.id,
                                        money: income_params[:money], income_at: income_params[:income_at], note: income_params[:note], reason: order.name)
             @income.save!
             # 如果订单欠款大于收入，则继续欠款；否则，欠款为零
@@ -78,7 +79,7 @@ class IncomesController < ApplicationController
               agent.update!(balance: agent_balance - order.arrear, arrear: agent_arrear)
             end
           else # 子订单号为0 或为指定时，视为其他收入
-            @income = Income.new(bank_id: income_params[:bank_id], username: income_params[:username], money: income_params[:money],
+            @income = Income.new(bank_id: income_params[:bank_id], username: income_params[:username], money: income_params[:money], agent_id: agent.id,
                                 income_at: income_params[:income_at], note: income_params[:note], reason: '其他收入')
             @income.save!
           end

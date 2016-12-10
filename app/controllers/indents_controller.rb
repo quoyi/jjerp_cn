@@ -73,9 +73,15 @@ class IndentsController < ApplicationController
       agent.update!(arrear: agent.arrear + @indent.amount - origin_indent_amount, 
                     history: agent.history + @indent.amount - origin_indent_amount)
     end
-    
-    if @indent
-      redirect_to indents_path, notice: '订单创建成功！'
+
+    # 根据是否保存成功，跳转到不同页面
+    if @indent.persisted?
+      # 创建了配件补单，跳转到对应的自定义报价中；否则，跳转到总订单详细页面
+      if @indent.order_parts.any?
+        redirect_to custom_offer_order_path(@indent.order_parts.first), notice: '订单创建成功！'
+      else
+        redirect_to indent_path(@indent), notice: '订单创建成功！'
+      end
     else
       redirect_to indents_path, error: '请检查编号是否唯一且数据正确，订单创建失败！'
     end

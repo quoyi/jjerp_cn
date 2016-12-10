@@ -36,6 +36,7 @@
           <tr>
             <th>编号</th>
             <th>来源</th>
+            <th>订单号</th>
             <th>卡号</th>
             <th>收入时间</th>
             <th>收入金额</th>
@@ -48,6 +49,7 @@
           <% @incomes.each_with_index do |i, index| %>
           <tr>
             <td><%= index + 1 %></td>
+            <td><%= i.agent.try(:full_name) %></td>
             <td><%= i.reason %></td>
             <td><%= i.bank.bank_card %></td>
             <td><%= i.income_at.strftime('%Y-%m-%d') %></td>

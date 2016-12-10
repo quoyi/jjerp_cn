@@ -83,14 +83,15 @@ $(function() {
   $("#addIncomes").on('show.bs.modal', function(e) {
     if (e != null && e.relatedTarget != null) {
       // 获取 订单号、应收金额、已收金额
-      var order_id = e.relatedTarget.dataset.order;
-      if (order_id != null && order_id != "") {
-        var amount = e.relatedTarget.dataset.amount;
-        var arrear = e.relatedTarget.dataset.arrear;
+      var order_string = e.relatedTarget.dataset.order;
+      if (order_string != null && order_string != "") {
+        var order = JSON.parse(order_string);
         var username = e.relatedTarget.dataset.username;
-        $("#income_order_id").val(order_id);
-        $("#income_should").val(amount);
-        $("#income_yet").val(amount - arrear);
+        var $order_field = $(e.currentTarget).find("#income_new_order_id");
+        $order_field.empty().append("<input type='text'  value='" + order.name + "' class='form-control' disabled='disabled'/>")
+        .append("<input type='hidden' name='income[order_id]' value='" + order.id + "'/>");
+        $("#income_should").val(order.price);
+        $("#income_yet").val(order.price - order.arrear);
         $("#income_username").val(username);
       }
     }
@@ -136,108 +137,8 @@ $(function() {
     }
   });
 
-
-
-  // $(".remoteDataAgent").select2({
-  //   language: 'zh-CN',
-  //   theme: 'bootstrap',
-  //   placeholder: "全部",
-  //   minimumInputLength: 0,
-  //   allowClear: true,
-  //   ajax: {
-  //     url: '/agents.json',
-  //     dataType: 'json',
-  //     delay: 250,
-  //     cache: false,
-  //     data: function(params){
-  //       return {
-  //         term: params.term,
-  //         page: params.page || 1
-  //       };
-  //     },
-  //     processResults: function(data, params){
-  //       params.page = params.page || 1;
-  //       return {
-  //         results: data.agents,
-  //         pagination: {
-  //           more: (params.page * 6) < data.total
-  //         }
-  //       };
-  //     }
-  //   }
-  // }).on("select2:select", function(e){
-  //   var $select2 = $(this);
-  //   $.ajax({
-  //     url: "/agents/" + $select2.val(),
-  //     dataType: 'json',
-  //     type: 'GET',
-  //     cache: false,
-  //     success: function(data){
-  //       var $panels = $select2.parents(".panel-heading");
-  //       $panels.find("#indent_logistics").val(data.logistics);
-  //       $panels.find("#indent_delivery_address").val(data.delivery_address);
-  //     },
-  //     error: function(data){
-  //       jsNoty("网络错误！","error");
-  //     }
-  //   });
-  // });
 });
 
-
-/****** 总订单 新建 子订单 --- 价格 与 板料厚度、材质、颜色 的联动逻辑  开始 ******/
-// $('#indentAjaxSearchMaterial').each((function(_this) {
-//     return function(i, e) {
-//       var options, select;
-//       select = $(e);
-//       options = {
-//         placeholder: "搜索代理商名称",
-//         minimumInputLength: 0
-//       };
-//       if (select.hasClass('ajax')) {
-//         options.ajax = {
-//           url: "/material_categories.json",
-//           dataType: 'json',
-//           cache: false,
-//           data: function(term, page) {
-//             return {
-//               term: term,
-//               page: page,
-//               per: 25
-//             };
-//           },
-//           results: function(data, page) {
-//             return {
-//               results: data.agents,
-//               more: data.total > (page * 25)
-//             };
-//           }
-//         };
-//         options.dropdownCssClass = "bigdrop";
-//       }
-//       return select.select2(options).select2("data", {
-//           "id": $("#indentAjaxSearchMaterial").data("id"),
-//           "text": (isNaN($("#indentAjaxSearchMaterial").data("name")) ? $("#indentAjaxSearchMaterial").data("name") : "搜索代理商名称")
-//         } //初始化数据
-//       );;
-//     };
-//   })(this));//.change(function(){
-  //   var $select2 = $(this);
-  //   $.ajax({
-  //     url: "/agents/" + $select2.val(),
-  //     dataType: 'json',
-  //     type: 'GET',
-  //     cache: false,
-  //     success: function(data){
-  //       var $panels = $select2.parents(".panel-heading");
-  //       $panels.find("#indent_logistics").val(data.logistics);
-  //       $panels.find("#indent_delivery_address").val(data.delivery_address);
-  //     },
-  //     error: function(data){
-  //       jsNoty("网络错误！","error");
-  //     }
-  //   });
-  // });
 /**
  * Ajax 获取指定 板料价格
  */
@@ -272,7 +173,6 @@ function getMaterialPrice(obj) {
   });
 }
 
-
 //全选和反选(未发货not_sent.html)
 function CheckSelect(id) {
   var check_boxes = $('.checkbox-' + id);
@@ -289,7 +189,6 @@ function CheckSelect(id) {
     }
   }
 }
-
 
 function sent_list() {
   var ids = new Array();

@@ -2,6 +2,7 @@ class Income < ActiveRecord::Base
   belongs_to :indent
   belongs_to :bank
   belongs_to :order
+  belongs_to :agent
 
   # after_save :update_other_orders_money
 
