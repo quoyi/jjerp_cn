@@ -1,5 +1,6 @@
 class IncomesController < ApplicationController
   include BanksHelper
+  include IncomesHelper
   before_action :set_income, only: [:show, :edit, :update, :destroy]
 
   # GET /incomes
@@ -17,11 +18,20 @@ class IncomesController < ApplicationController
       agent = Agent.find_by_id(params[:agent_id])
       @incomes = @incomes.where(order_id: agent.orders.pluck(:id))
     end
+    if params[:bank_id].present?
+      @incomes = @incomes.where(bank_id: params[:bank_id])
+    end
+
     @income = Income.new(bank_id: Bank.find_by(is_default: 1).try(:id), username: current_user.username, income_at: Time.now)
 
     respond_to do |format|
       format.html { @incomes = @incomes.page(params[:page]) }
       format.json
+      format.xls {
+        timestamp = Time.now.strftime("%Y%m%d%H%M%S%L")
+        createIncomes(timestamp, @incomes)
+        send_file "#{Rails.root}/public/excels/incomes/" + timestamp + ".xls", type: 'text/xls; charset=utf-8'
+      }
     end
   end
 
@@ -44,7 +54,6 @@ class IncomesController < ApplicationController
   def create
     begin
       Income.transaction do
-        binding.pry
         # 子订单收入
         if income_params[:order_id].present?
           # 指定子订单号时，需要将收入金额添加到代理商，然后从代理商余额中扣除子订单金额
@@ -120,7 +129,6 @@ class IncomesController < ApplicationController
     # @income.update(deleted: true)
     redirect_to incomes_path, notice: msg
   end
-
 
   def stat
     @incomes = Income.all
