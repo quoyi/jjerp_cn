@@ -6,7 +6,6 @@ module IncomesHelper
   	# 删除 /public/excels/incomes/ 目录下前一天的文件
   	Dir.foreach(directory) do |filename|
   	  if filename !="." and filename !=".."
-  	  	binding.pry
   	  	File.delete(directory + "/" + filename) if filename.gsub(".xls", "").to_i < Date.today.strftime("%Y%m%d%H%M%S%L").to_i
   	  end
   	end

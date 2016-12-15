@@ -70,6 +70,7 @@ class IndentsController < ApplicationController
       origin_indent_amount = @indent.orders.pluck(:price).sum
       @indent.save!
       agent = @indent.agent
+      # binding.pry
       agent.update!(arrear: agent.arrear + @indent.amount - origin_indent_amount, 
                     history: agent.history + @indent.amount - origin_indent_amount)
     end
