@@ -53,6 +53,7 @@ class OrdersController < ApplicationController
       @orders = @orders.where("created_at between ? and ?", @start_at, @end_at)
     end
 
+    # 子订单列表搜索条件同时包含 创建时间范围 和 订单号年月 时，搜索结果为空。因此取消此年月查询条件
     search = ''
     #if params[:date].present?
     #  search += "#{params[:date][:year]}%-" if params[:date][:year].present?
@@ -666,7 +667,7 @@ class OrdersController < ApplicationController
   
   # GET 转款
   def change_income
-    binding.pry
+    # binding.pry
     @order = Order.find_by_id(params[:id]) if params[:id].present?
     if params[:order].present?
       target_order = Order.find_by_id(params[:order][:id])

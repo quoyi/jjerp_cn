@@ -42,7 +42,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    binding.pry
+    # binding.pry
     @income = Income.new(bank_id: Bank.find_by(is_default: 1).id, username: current_user.username, income_at: Time.now)
   end
 
