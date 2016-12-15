@@ -1,7 +1,7 @@
 ####################################### 代理商 #######################################
-Agent.create(id: 1,name: 'JX0001', province: 17, full_name: '小秦代理', contacts: '王xx', mobile: '18610086121', logistics: '顺丰')
-Agent.create(id: 2,name: 'JX0002', province: 17, full_name: '傣家代理', contacts: '岳xx', mobile: '18610086122', logistics: '圆通')
-Agent.create(id: 3,name: 'JX0003', province: 17, full_name: '小孙代理', contacts: '孙x', mobile: '18610086123', logistics: '韵达')
+Agent.create(id: 1,name: 'DL0001', province: 17, full_name: '小秦代理', contacts: '王xx', mobile: '18610086121', logistics: '顺丰')
+Agent.create(id: 2,name: 'DL0002', province: 17, full_name: '傣家代理', contacts: '岳xx', mobile: '18610086122', logistics: '圆通')
+Agent.create(id: 3,name: 'DL0003', province: 17, full_name: '小孙代理', contacts: '孙x', mobile: '18610086123', logistics: '韵达')
 puts 'created Agent success ! '
 
 ####################################### 供应商 #######################################

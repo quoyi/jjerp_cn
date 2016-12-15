@@ -8,7 +8,10 @@ class IndentsController < ApplicationController
   # GET /indents
   # GET /indents.json
   def index
-    @agent = Agent.new(name: "DL".upcase() + (Agent.count+1).to_s.rjust(4, "0"))
+    tmp_agent = Agent.order(:created_at).last
+    tmp_name = tmp_agent.present? ? tmp_agent.name.gsub('DL', '').to_i + 1 : 1
+    @agent = Agent.new(name: "DL".upcase() + tmp_name.to_s.rjust(4, "0"))
+    # @agent = Agent.new(name: "DL".upcase() + (Agent.count+1).to_s.rjust(4, "0"))
     # @agents = Agent.all
     now = Time.now
     after_ten_day = Time.now + 864000 # 十天 = 60 (秒钟/分钟) * 60 (分钟/天) * 24 (小时/天) * 10
@@ -41,7 +44,10 @@ class IndentsController < ApplicationController
   # GET /units/1
   # GET /units/1.json
   def show
-    @agent = Agent.new(name: "DL".upcase() + (Agent.count+1).to_s.rjust(4, "0"))
+    tmp_agent = Agent.order(:created_at).last
+    tmp_name = tmp_agent.present? ? tmp_agent.name.gsub('DL', '').to_i + 1 : 1
+    @agent = Agent.new(name: "DL".upcase() + tmp_name.to_s.rjust(4, "0"))
+    # @agent = Agent.new(name: "DL".upcase() + (Agent.count+1).to_s.rjust(4, "0"))
     @order = Order.new
     @order_offers = @indent.offers
     @orders = Order.where(indent:@indent).order(created_at: :desc)
