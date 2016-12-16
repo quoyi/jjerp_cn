@@ -14,11 +14,15 @@
       <%= render '/layouts/message' %>
       <% if current_user %>
       <div class="page-content">
-        <div class="row">
+        <div class="row" style="margin-top: 5px;">
           <%= render '/layouts/sidebar' %>
           <%= render '/layouts/content' %>
         </div>
       </div>
+      <% if controller_name == 'orders' and action_name == 'not_sent' %>
+      <!-- 漂浮容器 -->
+      <%= render '/layouts/float' %>
+      <% end %>
       <% else %>
       <div class="static-index-page text-center">
         <%= yield %>

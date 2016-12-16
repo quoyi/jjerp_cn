@@ -64,11 +64,7 @@
             <% else %>
               <%= link_to '自定报价', custom_offer_order_path(o), class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '自定义报价' %>
             <% end %>
-            <% if o.income_status == '全款' %>
-            <button class="btn btn-primary btn-xs" disabled="true">到款</button>
-            <% else %>
-            <%= link_to '到款', '#', class: 'btn btn-primary btn-xs', data: {toggle: 'modal', target: '#addIncomes', order: o.id, amount: o.price, arrear: ((o.price.to_f - o.incomes.pluck(:money).sum.to_f) >0 ? (o.price.to_f - o.incomes.pluck(:money).sum.to_f) : 0), username: current_user.name}, id: 'addIncomesBtn' %>
-            <% end %>
+            <%= link_to '到款', '#', class: "btn btn-primary btn-xs #{o.income_status == '全款' ? 'disabled' : ''}", data: {toggle: 'modal', target: '#addIncomes', order: o, username: current_user.username}, id: 'addIncomesBtn' %>
           </td>
           <td>
             <% if Order.statuses[o.status] < 1 || (o.units.count < 1 && o.parts.count < 1 && o.crafts.count < 1) %>

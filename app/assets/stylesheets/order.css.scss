@@ -19,3 +19,21 @@
 .order-panel-header {
   padding: 2px !important;
 }
+
+
+/* 未发货页面样式 */
+.order-not-sent {
+  & .content-box-large {
+    padding: 5px;
+    margin-bottom: 5px;
+    & .panel-group .panel-body {
+      padding: 0;
+      & table {
+        margin-bottom: 0px;
+        & td {
+          padding: 2px;
+        }
+      }
+    }
+  }
+}

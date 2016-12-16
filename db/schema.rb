@@ -11,34 +11,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161210061055) do
+ActiveRecord::Schema.define(version: 20161216083655) do
 
   create_table "agents", force: :cascade do |t|
-    t.string   "name",             limit: 255,                         default: "",    null: false
+    t.string   "name",             limit: 255,                          default: "",    null: false
     t.string   "province",         limit: 255
     t.string   "city",             limit: 255
     t.string   "district",         limit: 255
     t.string   "town",             limit: 255
-    t.string   "address",          limit: 255,                         default: "",    null: false
-    t.string   "full_name",        limit: 255,                                         null: false
+    t.string   "address",          limit: 255,                          default: "",    null: false
+    t.string   "full_name",        limit: 255,                                          null: false
     t.string   "contacts",         limit: 255
     t.string   "mobile",           limit: 255
     t.string   "e_account",        limit: 255
     t.string   "fax",              limit: 255
     t.string   "email",            limit: 255
     t.string   "wechar",           limit: 255
-    t.decimal  "balance",                      precision: 8, scale: 2, default: 0.0,   null: false
-    t.decimal  "arrear",                       precision: 8, scale: 2, default: 0.0,   null: false
-    t.decimal  "history",                      precision: 8, scale: 2, default: 0.0,   null: false
+    t.decimal  "balance",                      precision: 12, scale: 2, default: 0.0,   null: false
+    t.decimal  "arrear",                       precision: 12, scale: 2, default: 0.0,   null: false
+    t.decimal  "history",                      precision: 12, scale: 2, default: 0.0,   null: false
     t.string   "logistics",        limit: 255
     t.integer  "order_condition",  limit: 4
     t.integer  "send_condition",   limit: 4
     t.string   "cycle",            limit: 255
     t.string   "note",             limit: 255
-    t.boolean  "deleted",                                              default: false
-    t.datetime "created_at",                                                           null: false
-    t.datetime "updated_at",                                                           null: false
-    t.string   "delivery_address", limit: 255,                         default: "",    null: false
+    t.boolean  "deleted",                                               default: false
+    t.datetime "created_at",                                                            null: false
+    t.datetime "updated_at",                                                            null: false
+    t.string   "delivery_address", limit: 255,                          default: "",    null: false
   end
 
   add_index "agents", ["full_name"], name: "index_agents_on_full_name", using: :btree
@@ -48,12 +48,12 @@ ActiveRecord::Schema.define(version: 20161210061055) do
     t.string   "name",       limit: 255
     t.string   "bank_name",  limit: 255
     t.string   "bank_card",  limit: 255
-    t.decimal  "balance",                precision: 8, scale: 2, default: 0.0
-    t.decimal  "incomes",                precision: 8, scale: 2, default: 0.0
-    t.decimal  "expends",                precision: 8, scale: 2, default: 0.0
-    t.boolean  "is_default",                                     default: false
-    t.datetime "created_at",                                                     null: false
-    t.datetime "updated_at",                                                     null: false
+    t.decimal  "balance",                precision: 12, scale: 2, default: 0.0
+    t.decimal  "incomes",                precision: 12, scale: 2, default: 0.0
+    t.decimal  "expends",                precision: 12, scale: 2, default: 0.0
+    t.boolean  "is_default",                                      default: false
+    t.datetime "created_at",                                                      null: false
+    t.datetime "updated_at",                                                      null: false
   end
 
   add_index "banks", ["is_default"], name: "index_banks_on_is_default", using: :btree
@@ -120,29 +120,29 @@ ActiveRecord::Schema.define(version: 20161210061055) do
     t.string   "name",       limit: 255
     t.integer  "bank_id",    limit: 4
     t.string   "reason",     limit: 255
-    t.decimal  "money",                  precision: 8, scale: 2
+    t.decimal  "money",                  precision: 12, scale: 2, default: 0.0
     t.string   "username",   limit: 255
     t.datetime "expend_at"
     t.integer  "status",     limit: 4
     t.string   "note",       limit: 255
-    t.boolean  "deleted",                                        default: false, null: false
-    t.datetime "created_at",                                                     null: false
-    t.datetime "updated_at",                                                     null: false
+    t.boolean  "deleted",                                         default: false, null: false
+    t.datetime "created_at",                                                      null: false
+    t.datetime "updated_at",                                                      null: false
   end
 
   create_table "incomes", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.integer  "bank_id",    limit: 4
     t.string   "reason",     limit: 255
-    t.decimal  "money",                  precision: 8, scale: 2
+    t.decimal  "money",                  precision: 12, scale: 2, default: 0.0
     t.string   "username",   limit: 255
     t.datetime "income_at"
     t.integer  "status",     limit: 4
     t.string   "note",       limit: 255
-    t.boolean  "deleted",                                        default: false, null: false
-    t.string   "source",     limit: 255,                         default: ""
-    t.datetime "created_at",                                                     null: false
-    t.datetime "updated_at",                                                     null: false
+    t.boolean  "deleted",                                         default: false, null: false
+    t.string   "source",     limit: 255,                          default: ""
+    t.datetime "created_at",                                                      null: false
+    t.datetime "updated_at",                                                      null: false
     t.integer  "indent_id",  limit: 4
     t.integer  "order_id",   limit: 4
     t.integer  "agent_id",   limit: 4
@@ -213,8 +213,8 @@ ActiveRecord::Schema.define(version: 20161210061055) do
     t.string   "uom",        limit: 255
     t.decimal  "number",                 precision: 10, scale: 6, default: 0.0
     t.decimal  "price",                  precision: 8,  scale: 2, default: 0.0
-    t.decimal  "sum",                    precision: 8,  scale: 2, default: 0.0
-    t.decimal  "total",                  precision: 8,  scale: 2, default: 0.0
+    t.decimal  "sum",                    precision: 12, scale: 2, default: 0.0
+    t.decimal  "total",                  precision: 12, scale: 2, default: 0.0
     t.string   "note",       limit: 255
     t.boolean  "deleted",                                         default: false
     t.datetime "created_at",                                                      null: false
@@ -234,33 +234,33 @@ ActiveRecord::Schema.define(version: 20161210061055) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "indent_id",             limit: 4,                                           null: false
-    t.string   "name",                  limit: 255,                         default: "",    null: false
-    t.integer  "order_category_id",     limit: 4,                           default: 1,     null: false
+    t.integer  "indent_id",             limit: 4,                                            null: false
+    t.string   "name",                  limit: 255,                          default: "",    null: false
+    t.integer  "order_category_id",     limit: 4,                            default: 1,     null: false
     t.string   "customer",              limit: 255
-    t.integer  "ply",                   limit: 4,                           default: 0,     null: false
-    t.integer  "texture",               limit: 4,                           default: 0,     null: false
-    t.integer  "color",                 limit: 4,                           default: 0,     null: false
-    t.integer  "length",                limit: 4,                           default: 1,     null: false
-    t.integer  "width",                 limit: 4,                           default: 1,     null: false
-    t.integer  "height",                limit: 4,                           default: 1,     null: false
-    t.integer  "number",                limit: 4,                           default: 1,     null: false
-    t.decimal  "price",                             precision: 8, scale: 2, default: 0.0
-    t.decimal  "arrear",                            precision: 8, scale: 2, default: 0.0
-    t.decimal  "material_price",                    precision: 8, scale: 2, default: 0.0
-    t.integer  "status",                limit: 4,                           default: 0,     null: false
-    t.integer  "oftype",                limit: 4,                           default: 0,     null: false
-    t.integer  "package_num",           limit: 4,                           default: 0,     null: false
+    t.integer  "ply",                   limit: 4,                            default: 0,     null: false
+    t.integer  "texture",               limit: 4,                            default: 0,     null: false
+    t.integer  "color",                 limit: 4,                            default: 0,     null: false
+    t.integer  "length",                limit: 4,                            default: 1,     null: false
+    t.integer  "width",                 limit: 4,                            default: 1,     null: false
+    t.integer  "height",                limit: 4,                            default: 1,     null: false
+    t.integer  "number",                limit: 4,                            default: 1,     null: false
+    t.decimal  "price",                             precision: 12, scale: 2, default: 0.0
+    t.decimal  "arrear",                            precision: 12, scale: 2, default: 0.0
+    t.decimal  "material_price",                    precision: 8,  scale: 2, default: 0.0
+    t.integer  "status",                limit: 4,                            default: 0,     null: false
+    t.integer  "oftype",                limit: 4,                            default: 0,     null: false
+    t.integer  "package_num",           limit: 4,                            default: 0,     null: false
     t.string   "note",                  limit: 255
-    t.string   "delivery_address",      limit: 255,                         default: "",    null: false
-    t.boolean  "deleted",                                                   default: false, null: false
-    t.boolean  "is_use_order_material",                                     default: false
+    t.string   "delivery_address",      limit: 255,                          default: "",    null: false
+    t.boolean  "deleted",                                                    default: false, null: false
+    t.boolean  "is_use_order_material",                                      default: false
     t.integer  "agent_id",              limit: 4
-    t.datetime "created_at",                                                                null: false
-    t.datetime "updated_at",                                                                null: false
+    t.datetime "created_at",                                                                 null: false
+    t.datetime "updated_at",                                                                 null: false
     t.integer  "index",                 limit: 4
-    t.integer  "handler",               limit: 4,                           default: 0,     null: false
-    t.decimal  "material_number",                   precision: 8, scale: 2, default: 0.0,   null: false
+    t.integer  "handler",               limit: 4,                            default: 0,     null: false
+    t.decimal  "material_number",                   precision: 8,  scale: 2, default: 0.0,   null: false
   end
 
   add_index "orders", ["agent_id"], name: "index_orders_on_agent_id", using: :btree
@@ -366,23 +366,23 @@ ActiveRecord::Schema.define(version: 20161210061055) do
   end
 
   create_table "sents", force: :cascade do |t|
-    t.integer  "owner_id",       limit: 4,                                         null: false
-    t.string   "owner_type",     limit: 255,                                       null: false
+    t.integer  "owner_id",       limit: 4,                                          null: false
+    t.string   "owner_type",     limit: 255,                                        null: false
     t.integer  "sent_list_id",   limit: 4
     t.string   "name",           limit: 255
     t.datetime "sent_at"
     t.string   "area",           limit: 255
-    t.string   "receiver",       limit: 255,                                       null: false
-    t.string   "contact",        limit: 255,                                       null: false
-    t.integer  "cupboard",       limit: 4,                           default: 0
-    t.integer  "robe",           limit: 4,                           default: 0
-    t.integer  "door",           limit: 4,                           default: 0
-    t.integer  "part",           limit: 4,                           default: 0
-    t.decimal  "collection",                 precision: 8, scale: 2, default: 0.0
-    t.string   "logistics",      limit: 255,                         default: "",  null: false
-    t.string   "logistics_code", limit: 255,                         default: "",  null: false
-    t.datetime "created_at",                                                       null: false
-    t.datetime "updated_at",                                                       null: false
+    t.string   "receiver",       limit: 255,                                        null: false
+    t.string   "contact",        limit: 255,                                        null: false
+    t.integer  "cupboard",       limit: 4,                            default: 0
+    t.integer  "robe",           limit: 4,                            default: 0
+    t.integer  "door",           limit: 4,                            default: 0
+    t.integer  "part",           limit: 4,                            default: 0
+    t.decimal  "collection",                 precision: 12, scale: 2, default: 0.0
+    t.string   "logistics",      limit: 255,                          default: "",  null: false
+    t.string   "logistics_code", limit: 255,                          default: "",  null: false
+    t.datetime "created_at",                                                        null: false
+    t.datetime "updated_at",                                                        null: false
   end
 
   create_table "supplies", force: :cascade do |t|

@@ -3,7 +3,7 @@ class Agent < ActiveRecord::Base
   has_many :orders
   has_many :incomes
   validates :name, uniqueness: true
-  validates_uniqueness_of :mobile
+  validates_uniqueness_of :mobile # 开发环境暂时取消此验证，否则无法模拟电话号码重复
   before_save :generate_address
   #validates :full_name, uniqueness: {scope: :name}
   #

@@ -386,3 +386,80 @@ function changeIncomeOrder(obj){
     });
   }
 }
+
+// 子订单 - 待发货 全选和反选(未发货not_sent.html)
+function CheckSelect(id) {
+  var check_boxes = $('.checkbox-' + id);
+  for (var i = 0; i < check_boxes.length; i++) {
+    // 提取控件  
+    var checkbox = check_boxes[i];
+    // 检查是否是指定的控件  
+    if (checkbox.checked === false) {
+      // 正选  
+      checkbox.checked = true;
+    } else if (checkbox.checked === true) {
+      // 反选  
+      checkbox.checked = false;
+    }
+  }
+}
+
+// 子订单 - 待发货 提交发货清单
+function sent_list() {
+  var ids = new Array();
+  var $check_boxes = $('.index_checkbox');
+  for (var i = 0; i < $check_boxes.length; i++) {
+    if ($check_boxes[i].checked) {
+      ids.push($check_boxes[i].value);
+    }
+  }
+  if (ids.length == 0) {
+    jsNoty("请先选中所要下载的发货信息！", "warning");
+    return false;
+  }
+  $("#sents_ids").val(ids);
+
+  // url = "/sent_lists";
+  // $("#batch_set").attr('action', url);
+}
+
+/**
+ * 将 子订单 加入到发货清单中
+ **/
+function addOrderToSentList(el){
+  var data = $(el).data(); // {type: 'indent/order', id: '', name: ''}
+  var storage = window.localStorage;
+  var sent_list = storage.getItem("sent_list");
+  var sent_arr;
+  console.log(sent_list);
+
+  if (sent_list != null && sent_list != "") {
+    sent_arr = sent_list.split(",");
+    if(sent_arr.indexOf(data.id) < 0){
+      sent_arr[sent_arr.length] = data.id;
+      $(".order-sent-list").append("<li>" + data.name + "</li>");
+    }
+  } else {
+    sent_arr = new Array();
+    sent_arr[sent_arr.length] = data.id;
+    $(".order-sent-list").append("<li>" + data.name + "</li>");
+  }
+  storage.sent_list = sent_arr.join(",");
+  $("#sent_list_ids").val(storage.sent_list);
+
+  var $sidebar = $("div.right-sidebar");
+  if ($sidebar.css("display") == 'none') {
+    $sidebar.show();
+  }
+}
+
+/**
+ * 将 总订单 加入到发货清单中
+ **/
+function addIndentToSentList(el){
+  var $orders = $(el).parents("thead").siblings("tbody").find(".indent_orders");
+  $.each($orders, function(index){
+    // var data = $(this).data();
+    addOrderToSentList($(this));
+  });
+}
