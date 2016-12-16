@@ -43,9 +43,11 @@ class SentListsController < ApplicationController
   # POST /sent_lists.json
   def create
     if params[:sent][:ids].present?
-      sents = Sent.where(id: params[:sent][:ids].split(','))
+      sents = Sent.where(owner_id: params[:sent][:ids].split(','), owner_type: Order.name)
       label_size = sents.map{|s| s.cupboard.to_i + s.robe.to_i + s.door.to_i + s.part.to_i}.sum
       @sent_list = SentList.create(total: label_size, created_by: Time.new.strftime('%Y-%m-%d %H:%M:%S'))
+      # @sent_list.save!
+      # @sent_list = @sent_list.reload  # 不需要重新加载 reload
       sents.each do |s|
         s.sent_list_id = @sent_list.id
         s.save!
@@ -58,6 +60,7 @@ class SentListsController < ApplicationController
     end
 
     respond_to do |format|
+      # if @sent_list.persisted?
       if @sent_list.save
         format.html { redirect_to @sent_list, notice: '发货清单创建成功！' }
         format.pdf do

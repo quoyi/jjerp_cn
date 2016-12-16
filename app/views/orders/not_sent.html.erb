@@ -1,18 +1,17 @@
-<div class="panel-warning">
+<div class="panel-warning order-not-sent">
   <div class="content-box-header panel-heading">
     <!-- Page title -->
     <div class="panel-title">
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 待发货 <small>列表</small></h2>
-      <div class="pull-right panel-options">
-        <%= form_tag '/sent_lists', html: { class: "form-inline", id: "batch_set"}, method: 'post' do |f| %>
+      <!-- <div class="pull-right panel-options">
+        <%#= form_tag '/sent_lists', html: { class: "form-inline", id: "batch_set"}, method: 'post' do |f| %>
           <input type="hidden" id="sents_ids" name="sent[ids]">
           <button class="btn btn-primary" onclick = "return sent_list();">提交发货清单</button>
-        <% end %>
-      </div>
+        <%# end %>
+      </div> -->
     </div>
   </div>
   <div class="content-box-large box-with-header">
-    <div class="row">
       <% @indents.each do |indent| %>
       <div class="panel-group" style="margin: 0 !important;" id="accordion<%=indent.id%>" role="tablist" aria-multiselectable="true">
         <div class="panel panel-info" style="margin-bottom: 5px;">
@@ -27,11 +26,7 @@
                 欠款：<%= indent.arrear %>&nbsp;&nbsp;
                 状态：<%= indent.status_name %>&nbsp;&nbsp;
                 总件数：<%= indent.orders.map{|o| o.packages.map(&:label_size).compact.sum}.flatten.sum %>&nbsp;&nbsp;
-                <% if indent.status == "packaged" %>
-                <%= link_to '添加发货信息', change_sents_path(id: indent.sent.try(:id), indent_or_order_id: indent.id, type: 'indent'), class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addSent'}, id: 'addSentsBtn', title: '添加发货信息' %>
-                <% else %>
-                <%= link_to '添加发货信息', '#', class: 'btn btn-info btn-xs', data: { confirm: '未完全打包，无法以总订单为单位发货！' }, title: '添加发货信息' %>
-                <% end %>
+                <%= link_to '添加发货信息', change_sents_path(id: indent.sent.try(:id), indent_or_order_id: indent.id, type: 'indent'), class: "btn btn-primary btn-xs #{'disabled' unless indent.status == 'packaged'}", data: { toggle: 'modal', target: '#addSent'}, id: 'addSentsBtn', title: '添加发货信息' %>
               </p>
             </div>
           </div>
@@ -40,10 +35,8 @@
               <table class="table table-border">
                 <thead>
                   <tr>
-                    <td class="col-sm-1">全选</br>
-                      <% if indent.sent || indent.orders.detect{|o| o.sent && o.packaged? } %>
-                      <input type="checkbox" name="checkbox" onClick="CheckSelect(<%= indent.id%>)" checked>
-                      <% end %>
+                    <td class="col-sm-1">
+                      <%= link_to "全部加入清单", "javascript:void(0);", class: "btn btn-xs btn-info #{'disabled' unless indent.orders.detect{|o| o.sent && o.packaged?} }", onclick: "addIndentToSentList(this);" %>
                     </td>
                     <td class="col-sm-2">子订单编号</td>
                     <td class="col-sm-1">类型</td>
@@ -56,18 +49,16 @@
                 <tbody>
                   <% indent.orders.each do |order| %>
                   <% next unless order.packaged? %>
-                  <tr>
+                  <tr class="indent_orders" data-id="<%= order.id %>" data-name="<%= order.name %>">
                     <td>
-                      <% if order.sent %>
-                      <input type="checkbox" name="checkbox" checked class="index_checkbox checkbox-<%= indent.id%>" value="<%=order.sent.id%>" >
-                      <%end%>
+                      <%= link_to "加入清单", "javascript:void(0);", class: "btn btn-xs btn-info #{'disabled' unless order.sent}", onclick: "addOrderToSentList(this);", data: {id: order.id, name: order.name} %>
                     </td>
                     <td><%= order.name %></td>
                     <td><%= order.order_category.name %></td>
                     <td><%= order.packages.map(&:label_size).compact.sum %></td>
                     <td><%= order.status_name %></td>
                     <td><%= order.note %></td>
-                    <td><%= link_to '添加发货', change_sents_path(id: order.sent.try(:id), indent_or_order_id: order.id, type: 'order'), class: 'btn btn-info btn-xs', data: { toggle: 'modal', target: '#addSent'}, id: 'addSentsBtn', title: '添加发货信息' %></td>
+                    <td><%= link_to '添加发货信息', change_sents_path(id: order.sent.try(:id), indent_or_order_id: order.id, type: 'order'), class: 'btn btn-primary btn-xs', data: { toggle: 'modal', target: '#addSent'}, id: 'addSentsBtn', title: '添加发货信息' %></td>
                   </tr>
                   <% end %>
                 </tbody>
@@ -77,7 +68,6 @@
         </div>
       </div>
       <% end %>
-    </div>
   </div>
 </div>
 <!-- Modal -->
@@ -88,6 +78,8 @@
   </div>
 </div>
 <script type="text/javascript">
+// 重新访问此页面时，需要清除本地存储
+window.localStorage.removeItem("sent_list");
 $("#addSent").on("hidden.bs.modal", function(e){
   $(this).removeData("bs.modal");
 });

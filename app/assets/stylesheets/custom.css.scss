@@ -306,3 +306,53 @@ label > span {
     margin: 0;
   }
 }
+
+/* 右边增强功能区（只有待发货页面显示）样式 */
+.container-absolute {
+  text-align: center;
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+}
+.right-sidebar {
+  display: none;
+  position: fixed;
+  margin-bottom: 0px !important;
+  width: 120px;
+  /*height: 800px;*/
+  top: 100px;
+  right: 0px;
+  bottom: 45px;
+  & .panel-heading {
+    padding: 3px;
+  }
+  & .panel-body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    /*height: 100%;*/
+    padding: 3px;
+    position: inherit;
+    top: 127px;
+    bottom: 82px;
+    & .order-sent-list {
+      list-style: none;
+      padding-left: 0px;
+      margin-bottom: 0px;
+      width: 112px;
+      & li {
+        border-bottom: 1px solid #D0E9F5;
+      }
+    }
+  }
+  & .panel-footer {
+    background: none;
+    position: inherit;
+    text-align: center;
+    padding: 3px;
+    width: 112px;
+    bottom: 45px;
+    right: 5px;
+  }
+}
+
+/* 右边增强功能区（只有待发货页面显示）样式 */
