@@ -309,12 +309,18 @@ label > span {
 
 /* 右边增强功能区（只有待发货页面显示）样式 */
 .container-absolute {
+  width: 120px;
   text-align: center;
   position: fixed;
-  bottom: 5px;
-  right: 5px;
+  bottom: 0px;
+  right: 0px;
+  background-color: #000;
+  opacity: 0.6;
+  border-top-left-radius: 4px;
 }
 .right-sidebar {
+  background-color: #EEE !important;
+  opacity: 0.9;
   display: none;
   position: fixed;
   margin-bottom: 0px !important;
