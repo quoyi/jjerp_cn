@@ -111,6 +111,7 @@ class IncomesController < ApplicationController
   # DELETE /incomes/1
   # DELETE /incomes/1.json
   def destroy
+    msg = '收入记录已删除。'
     Income.transaction do 
       order = @income.order
       indent = @income.indent
@@ -124,7 +125,6 @@ class IncomesController < ApplicationController
         raise ActiveRecord::Rollback
       end
       @income.destroy
-      msg = '收入记录已删除。'
     end
 
     # @income.update(deleted: true)
