@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161216083655) do
+ActiveRecord::Schema.define(version: 20161222063648) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",             limit: 255,                          default: "",    null: false
@@ -265,6 +265,7 @@ ActiveRecord::Schema.define(version: 20161216083655) do
 
   add_index "orders", ["agent_id"], name: "index_orders_on_agent_id", using: :btree
   add_index "orders", ["indent_id"], name: "index_orders_on_indent_id", using: :btree
+  add_index "orders", ["name"], name: "index_orders_on_name", unique: true, using: :btree
 
   create_table "packages", force: :cascade do |t|
     t.integer "order_id",   limit: 4,                   null: false
@@ -418,6 +419,17 @@ ActiveRecord::Schema.define(version: 20161216083655) do
 
   add_index "tasks", ["item_id"], name: "index_tasks_on_item_id", using: :btree
   add_index "tasks", ["order_id"], name: "index_tasks_on_order_id", using: :btree
+
+  create_table "templates", force: :cascade do |t|
+    t.string   "name",       limit: 255,                                       null: false
+    t.integer  "creator",    limit: 4,                                         null: false
+    t.decimal  "price",                  precision: 8, scale: 2, default: 0.0
+    t.integer  "times",      limit: 4,                           default: 0
+    t.datetime "created_at",                                                   null: false
+    t.datetime "updated_at",                                                   null: false
+  end
+
+  add_index "templates", ["name"], name: "index_templates_on_name", using: :btree
 
   create_table "unit_categories", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false

@@ -10,7 +10,7 @@
       </small>
       </h2>
       <div class="pull-right panel-options">
-        <% if !@current_user.admin? && @indent.over? %>
+        <% if !current_user.admin? && @indent.over? %>
           <%= link_to '管理', '#', class: 'btn-primary btn', disabled: 'disabled' %>
           <%= link_to '报价', '#', class: 'btn-primary btn', disabled: 'disabled' %>
         <% else %>
@@ -64,7 +64,7 @@
             <% else %>
               <%= link_to '自定报价', custom_offer_order_path(o), class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '自定义报价' %>
             <% end %>
-            <%= link_to '到款', '#', class: "btn btn-primary btn-xs #{o.income_status == '全款' ? 'disabled' : ''}", data: {toggle: 'modal', target: '#addIncomes', order: o, username: current_user.username}, id: 'addIncomesBtn' %>
+            <%= link_to '到款', '#', class: "btn btn-primary btn-xs #{o.income_status == '全款' ? 'disabled' : ''}", data: {toggle: 'modal', target: '#addIncomes', order: o, username: current_user.username.presence || current_user.email}, id: 'addIncomesBtn' %>
           </td>
           <td>
             <% if Order.statuses[o.status] < 1 || (o.units.count < 1 && o.parts.count < 1 && o.crafts.count < 1) %>

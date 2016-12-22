@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :templates
   resources :craft_categories do
     collection do
       post :find

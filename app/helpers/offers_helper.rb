@@ -77,16 +77,17 @@ module OffersHelper
         offer.save!
         craft_num += 1
       end
+      # TODO: 去掉更新逻辑、修改总订单归属后，同时修改代理商金额
       # 修改总订单归属后，同时修改代理商金额
       # 更新报价前的代理商 agent 
-      order_agent.update(arrear: agent_origin_arrear - order_origin_money, history: agent_origin_history - order_origin_money)
-      order_money = unit_money + part_money + craft_money
-      # 更新报价后的代理商 agent
-      indent_agent = order.indent.agent
-      indent_agent.update(arrear: indent_agent.arrear + order_money, history: indent_agent.history + order_money)
-      # 更新订单总金额和欠款
-      order.update(price: order_money, arrear: (order_money - (order_origin_money - order_origin_arrear)).abs,
-                   agent_id: indent_agent.id)
+      # order_agent.update(arrear: order_agent.orders.pluck(:arrear).sum, history: order_agent.orders.pluck(:price).sum)
+      # # order_money = unit_money + part_money + craft_money
+      # # 更新报价后的代理商 agent
+      # indent_agent = order.indent.agent
+      # indent_agent.update(arrear: indent_agent.orders.pluck(:arrear).sum, history: indent_agent.orders.pluck(:price).sum)
+      # # 更新子订单总金额和欠款
+      # order.update(price: order_money, arrear: (order_money - (order_origin_money - order_origin_arrear)).abs,
+      #              agent_id: indent_agent.id)
     end
     # order.offering! if unit_num == 0 && part_num == 0 && craft_num == 0
     # indent = indent.reload

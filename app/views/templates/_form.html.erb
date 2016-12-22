@@ -1,0 +1,28 @@
+<%= form_for(@template, html: {class: 'form-inline'}) do |f| %>
+  <% if @template.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@template.errors.count, "error") %> prohibited this template from being saved:</h2>
+      <ul>
+      <% @template.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :name, '名称', class: 'control-label' %>
+    <%= f.text_field :name, class: 'form-control', placeholder: '请输入模板名称' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :creator, '创建者', class: 'control-label', data: {toggle: 'tooltip'}, title: '创建者默认为当前用户，不可修改。' %>
+    <%= f.text_field :creator, value: current_user.username, class: 'form-control', disabled: true, data: {toggle: 'tooltip'}, title: '创建者默认为当前用户，不可修改。' %>
+  </div>
+  <div class="form-control">
+    <%= f.label :price, '价格', class: %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -43,8 +43,8 @@
             <td><%= MaterialCategory.find_by_id(u.texture).try(:name) %></td>
             <td><%= MaterialCategory.find_by_id(u.color).try(:name) %></td>
             <td><%= u.size %></td>
-            <td><%= u.order.indent.customer %></td>
-            <td><%= u.order.indent.agent.try(:full_name) %></td>
+            <td><%= u.order ? u.order.indent.customer : '无' %></td>
+            <td><%= u.order ? u.order.indent.agent.try(:full_name) : '无' %></td>
             <td style="max-width:200px;"><%= u.note %></td>
           </tr>
           <% end %>

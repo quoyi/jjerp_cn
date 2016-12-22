@@ -22,10 +22,10 @@ $(function(){
       cache: false,
       success: function(data){
         window.location.reload();
-        jsNoty("更新成功！", "success");
+        jsNoty("success", "更新成功！");
       },
       error: function(data){
-        jsNoty("网络错误，无法更新配件类型！", "error");
+        jsNoty("error", "网络错误，无法更新配件类型！");
       }
     });
   });

@@ -31,7 +31,7 @@ class OrdersController < ApplicationController
     @agents = Agent.all.order(:id)
     @province = Province.find_by_name("湖北省").try(:id)
     @provinces = Province.all.order(:id)
-    @city = City.find_by_name("武汉市").try(:id)
+    @city = ""
     @cities = City.where(province_id: @province).order(:id)
     @district = ""
     @districts = District.where(city_id: @city).order(:id)
@@ -225,15 +225,21 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
+    # 检查权限
     return redirect_to :back, error: '没有权限编辑此订单！' if !current_user.admin? && @order.handler?(current_user)
     return redirect_to :back, error: '请求无效！请检查数据是否有效。' unless params[:order]
+
+    # 删除配件(将标记为删除的配件 _destory 设置为 true)
     order_params_process_parts_attributes = order_params
     if order_params_process_parts_attributes[:parts_attributes]
       order_params_process_parts_attributes[:parts_attributes].each do |k, v|
         order_params_process_parts_attributes[:parts_attributes][k]["_destroy"] = "1" if v[:id] && v[:number].blank?
       end
     end
+
+    # 更新子订单
     Order.transaction do
+      # 真实处理者
       really_handler = current_user.admin? ? @order.handler : current_user.id
       indent = @order.indent
       agent = indent.agent
@@ -242,7 +248,9 @@ class OrdersController < ApplicationController
       origin_indent_arrear = indent.arrear
       origin_order_amount = @order.price
       origin_order_arrear = @order.arrear
+      origin_order_income = @order.incomes.pluck(:money).sum
       origin_agent_balance = agent.balance
+      # 更新子订单（删除标记为删除的配件）
       @order.update!(order_params_process_parts_attributes)
       # 自定义报价时，查找或创建板料，防止找不到板料
       @order.units.where(is_custom: true).each do |unit|
@@ -268,85 +276,22 @@ class OrdersController < ApplicationController
       sum_crafts = @order.crafts.map{|c| c.number * c.price}.sum()
       # 新子订单总金额
       new_order_amount = (sum_units + sum_parts + sum_crafts).round
-      # 原金额 >= 新金额 时，金额差 返回到 代理商余额，更新总订单的金额、欠款
-      # 原金额 < 新金额  时，从代理商余额中扣除 金额差： 余额 > 金额差，更新总订单金额、欠款； 余额 < 金额差，更新子订单欠款，代理商余额为0
-
-      # 金额差 = 原总金额 - 新总金额
+      # 修改订单前后的 金额差 = 原总金额 - 新总金额
       order_remain = origin_order_amount - new_order_amount
-      # 子订单： (原)金额 大于 (现)金额（总金额减少，删除部件、配件、工艺操作）
-      if order_remain >= 0
-        income_and_balance = @order.incomes.pluck(:money).sum + agent.balance
-        income_remain = income_and_balance - new_order_amount
-        # 已收总金额 > 修改后的总金额，需要将多余的钱退回代理商余额
-        if income_remain >= 0
-          tmp_agent_balance = agent.balance
-          tmp_agent_arrear = agent.arrear
-          # 订单还有欠款时(修改前，收入不足)
-          if @order.arrear > 0
-            tmp_order_remain = @order.incomes.pluck(:money).sum - new_order_amount
-          else
-            tmp_order_remain = order_remain
-          end
-          # 删除扣款记录
-          @order.incomes.order(created_at: :desc).each do |income|
-            break if tmp_order_remain == 0
-            # 单条收入记录的金额 <= 修改前后的金额差
-            if income.money <= tmp_order_remain
-              tmp_order_remain -= income.money
-              # 先将收入记录的金额返回到代理商余额中
-              tmp_agent_balance += income.money
-              income.destroy!
-            else
-              # 更新收入记录中的金额
-              income.update!(money: income.money - tmp_order_remain, note: income.note + ";编辑子订单时，返回#{tmp_order_remain}到代理商余额")
-              # 将收入记录的金额返回到代理商余额中
-              tmp_agent_balance += tmp_order_remain
-              tmp_order_remain = 0
-            end
-          end
-          new_order_arrear = new_order_amount - @order.incomes.pluck(:money).sum
-          tmp_agent_arrear -= (origin_order_arrear - new_order_arrear)
-          agent.update!(balance: tmp_agent_balance, arrear: tmp_agent_arrear, history: agent.history - order_remain)
-          @order.update!(price: new_order_amount, arrear: 0, handler: really_handler)
-        else # 收入金额不够时(因为不能同时存在余额和欠款，而且已收金额小于订单总金额)
-          @order.update!(price: new_order_amount, arrear: new_order_amount - @order.incomes.pluck(:money).sum, handler: really_handler)
-          agent.update!(arrear: agent.arrear - order_remain, history: agent.history - order_remain)
-        end
-      else # 添加部件、配件、工艺操作
-        # 代理商余额之和大于0时，才扣除金额、添加到款记录
-        if agent.balance > 0
-          income_and_balance = @order.incomes.pluck(:money).sum + agent.balance
-          income_remain = income_and_balance - new_order_amount
-          # 已收总金额 > 修改后的总金额，从代理商余额扣除不足金额
-          if income_remain >= 0
-            # 新建一条收入记录，记载从代理商余额中扣除款项
-            income = @order.incomes.new(indent_id: indent.id, bank_id: Bank.find_by(is_default: 1).id, money: order_remain.abs,
-                                        username: current_user.name, income_at: Time.now, note: "从代理商余额中扣款#{order_remain.abs}")
-            income.save!
-            agent.update!(balance: agent.balance - order_remain.abs, history: agent.history + order_remain.abs)
-          else # 收入金额不够时(因为不能同时存在余额和欠款，而且已收金额小于订单总金额)
-            @order.update(price: new_order_amount, arrear: income_remain.abs, handler: really_handler)
-            income = @order.incomes.new(indent_id: indent.id, bank_id: Bank.find_by(is_default: 1).id, money: agent.balance,
-                                        username: current_user.name, income_at: Time.now, note: "从代理商余额中扣款#{agent.balance}")
-            income.save!
-            agent.update!(balance: 0, arrear: agent.arrear + income_remain.abs,
-                          history: agent.history + order_remain.abs)
-          end
-        else
-          @order.update!(price: new_order_amount, arrear: @order.arrear +  order_remain.abs, handler: really_handler)
-          agent.update!(arrear: agent.arrear + order_remain.abs, history: agent.history + order_remain.abs)
-        end
-      end
 
-      # 更新后代理商有余额时，查找子订单之后的所有子订单，重新扣除金额
-      # 更新总订单金额
-      # 总订单 -- 所有子订单 （新）金额合计
-      indent_amount = indent.orders.pluck(:price).sum
-      # 总订单 -- 所有收入 （新）金额合计
-      indent_arrear = indent.orders.pluck(:arrear).sum
-      # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
-      indent.update!(amount: indent_amount, arrear: indent_arrear)
-      
+      # 金额变小（order_remain > 0)将收入的钱退回到代理商中、金额变大（order_remain <= 0)什么都不处理。同时要求已收金额大于零
+      if order_remain > 0 && origin_order_income > 0
+        @order.incomes.destroy_all
+        income = Income.new(bank_id: Bank.find_by(is_default: 1).id, money: origin_order_income, agent_id: agent.id,
+                            username: current_user.username.presence || current_user.email, income_at: Time.now,
+                            note: "编辑子订单【#{@order.name}】时，将已收【#{origin_order_income}元】退回【#{agent.full_name}】余额。")
+        income.save!
+      end
+      @order.update!(price: new_order_amount, arrear: new_order_amount)
+      # 更新总订单金额: 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
+      indent.update!(amount: indent.orders.pluck(:price).sum, arrear: indent.orders.pluck(:arrear).sum)
+      agent.update!(balance: agent.balance + origin_order_income, arrear: agent.orders.pluck(:arrear).sum,
+                    history: agent.orders.pluck(:price).sum)
       # 生成报价单
       create_offer(@order)
       # 修改子订单、总订单的状态
@@ -387,8 +332,16 @@ class OrdersController < ApplicationController
 
   # 未发货
   def not_sent
-    @orders = Order.where(status: Order.statuses[:packaged])
-    @indents = @orders.group(:indent_id).map(&:indent)
+    # 订单状态小于“已打包” = "packaged" = 3
+    # @orders = Order.where("status <= ?", Order.statuses[:packaged])
+    # @indents = @orders.group(:indent_id).map(&:indent)
+    @indents = Indent.where("status <= ?", Indent.statuses[:packaged])
+    @indents = @indents.where("agent_id=?", params[:agent_id]) if params[:agent_id].present?
+    @indents = @indents.where("name like '%#{params[:indent_name]}%'") if params[:indent_name].present?
+    if params[:order_name].present?
+      @orders = Order.where("name like '%#{params[:date][:year]}%#{params[:date][:month]}%#{params[:order_name]}'")
+      @indents = @indents.where(id: @orders.group(:indent_id).pluck(:indent_id))
+    end
     @sent = Sent.new()
   end
 

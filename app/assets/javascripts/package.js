@@ -33,11 +33,11 @@ function next() {
         $("#new_table").find("tbody").html(pack[current_index + 1]);
       }
     } else {
-      jsNoty("没有下一包了", "information");
+      jsNoty("information", "没有下一包了");
       return false;
     }
   } else {
-    jsNoty("当前包未添加部件！", "warning");
+    jsNoty("warning", "当前包未添加部件！");
     return false;
   }
 
@@ -63,7 +63,7 @@ function previous() {
   var val = $("#new_table").find("tbody").html();
   var pack = JSON.parse(localStorage.getItem("pack"));
   // if (val.trim() == '') {
-  //   jsNoty("当前包没有数据。", "information");
+  //   jsNoty("information", "当前包没有数据。");
   //   return false;
   // }
   if (pack && pack[current_index - 1]) {
@@ -76,7 +76,7 @@ function previous() {
     $("#new_table").find("tbody").html(pack[current_index - 1]);
     return false;
   } else {
-    jsNoty("没有上一包了。", "information");
+    jsNoty("information", "没有上一包了。");
     return false;
   }
   return false;
@@ -96,13 +96,13 @@ function print_current_page() {
     pack = JSON.parse(localStorage.getItem("pack"));
   }
   if (val.trim() == '') {
-    jsNoty("当前包没有数据。", "error");
+    jsNoty("error", "当前包没有数据。");
     return false;
   }
 
   if (val) {
     if (pack[current_index - 1]) {
-      jsNoty("上一包未打印，请先打印上一包！", "warning");
+      jsNoty("warning", "上一包未打印，请先打印上一包！");
       return false;
     } else {
       if (!pack[current_index]) {
@@ -115,7 +115,7 @@ function print_current_page() {
     }
 
   } else {
-    jsNoty("请选择当前包装的部件！", "error");
+    jsNoty("error", "请选择当前包装的部件！");
     return false;
   }
 }
@@ -128,7 +128,7 @@ function print_current_page() {
 function print_pages(obj) {
   var order_units_size = $(obj).data("units");
   if (order_units_size == "" || order_units_size == 0) {
-    jsNoty("所有部件均已打包，请选择重新打印！", "error");
+    jsNoty("error", "所有部件均已打包，请选择重新打印！");
     // 所有部件均已打包，请选择重新打印
     return false;
   }
@@ -142,7 +142,7 @@ function print_pages(obj) {
     // 弹出模态框，获取输入的数据
     var number = prompt("请输入标签总数：", "");
     if(isNaN(parseInt(number)) || number == null || number == 0 || number < 0 || number > 50){
-      jsNoty("标签总数范围：1～50 张！", "error");
+      jsNoty("error", "标签总数范围：1～50 张！");
       return false;
     }else{
       $("#order_label_size").val(number);
@@ -174,7 +174,7 @@ function print_pages(obj) {
 function reprint_set_label_size(){
   var number = prompt("请输入标签总数：", "");
   if(isNaN(parseInt(number)) || number == null || number == 0 || number < 0 || number > 50){
-    jsNoty("标签总数范围：1～50 张！", "error");
+    jsNoty("error", "标签总数范围：1～50 张！");
     return false;
   }
   $("#label_size").val(number);
@@ -188,7 +188,7 @@ function reprint_set_label_size(){
 //     cache: false,
 //     data: {length: $("#package_label_length").val(), width: $("#package_label_width").val()},
 //     success: function(data){
-//       jsNoty("重新打印成功！", "success");
+//       jsNoty("success", "重新打印成功！");
 //     }
 //   });
 // }

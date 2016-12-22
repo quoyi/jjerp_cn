@@ -6,7 +6,7 @@ class Income < ActiveRecord::Base
 
   # after_save :update_other_orders_money
 
-  # 应收、已收
+  # 应收、已收、收入类型
   attr_accessor :should, :yet
 
   # 添加收入记录后，需要修改订单的“已收”、"欠款"

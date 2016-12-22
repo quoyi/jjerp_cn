@@ -31,7 +31,7 @@
           <div class="form-group" style="width: 40%;">
             <label class="col-sm-3 control-label text-right" for="agent_id">代理商</label>
             <div class="col-sm-9">
-              <%= select_tag :agent_id, nil, class: 'form-control remoteDataAgent', style: 'width:100%;' %>
+              <%= select_tag :agent_id, params[:agent_id].present? ? raw("<option value='#{params[:agent_id]}'>#{Agent.find_by_id(params[:agent_id]).try(:full_name)}</option>") : nil, class: 'form-control remoteDataAgent', style: 'width:100%;' %>
               <!-- <select name="agent_id" class="remoteDataAgent">
                 <option value="<%#= @agent_search.try(:id) %>" selected="selected"><%#= @agent_search.try(:full_name) %></option>
                 <option value="">全部</option>
