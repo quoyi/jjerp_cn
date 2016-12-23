@@ -7,7 +7,7 @@
   </h4>
 </div>
 <div class="modal-body" style="padding-bottom: 0px;">
-  <div class="panel panel-default" style="margin-bottom: 0px;">
+  <div class="panel panel-default">
     <div class="panel-heading">
       <div class="row">
         <%= f.hidden_field :name, value: @indent.name %>
@@ -52,7 +52,7 @@
         </div>
       </div>
     </div>
-    <div class="panel-body table-responsive" style="max-height: 400px;">
+    <div class="panel-body table-responsive" style="max-height: 400px; padding-bottom: 0px;">
       <div id="<%= @indent.new_record? ? 'indentOrders' : 'editIndentOrders' %>">
         <%= f.fields_for :orders, :wrapper => false do |order_form| %>
         <% of = order_form.object %>

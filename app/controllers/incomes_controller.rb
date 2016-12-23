@@ -63,7 +63,7 @@ class IncomesController < ApplicationController
         agent = @income.agent
         # 订单 “扣款”
         if income_params[:order_id].present?
-          @income.note = "#{Date.today.strftime("%Y-%m-%d")}订单【#{order.name}】从余额扣除【#{income_params[:money]}元】"
+          @income.note = "【#{Date.today.strftime("%Y-%m-%d")}】订单【#{order.name}】从余额扣除【#{income_params[:money]}元】"
           order.update!(arrear: order.arrear - income_params[:money].to_f)
           indent = order.indent
           indent.update!(arrear: indent.orders.pluck(:arrear).sum)
