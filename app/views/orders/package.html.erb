@@ -64,7 +64,7 @@ $(function(){
             <% if @order.over? %>
             <button class="btn btn-info" disabled="disabled">重新打印</button>
             <% else %>
-            <button type="submit" class="btn btn-primary" <%= disabled='disabled' unless @order.packages.pluck(:label_size).sum > 0 %> onclick="return reprint_set_label_size();">重新打印</button>
+            <button type="submit" class="btn btn-primary" <%= disabled='disabled' unless @order.packages.pluck(:label_size).sum >= 0 %> onclick="return reprint_set_label_size();">重新打印</button>
             <% end %>
           <% end %>
           </div>

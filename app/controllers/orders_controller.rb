@@ -588,9 +588,11 @@ class OrdersController < ApplicationController
   # POST /orders/1/reprint
   def reprint
     @order = Order.find_by_id(params[:id])
-    label_size = params[:label_size].to_i
+    # # 第一次进入 重新打印 页面
     batch_package = @order.packages.where(is_batch: 1).first
+    label_size = (params[:label_size].presence || batch_package.label_size).to_i
     batch_package.update(label_size: label_size) if batch_package.present?
+
     # （打印）标签属性设置
     if params[:length].present? && params[:width].present?
       @length = params[:length].to_i
@@ -604,6 +606,7 @@ class OrdersController < ApplicationController
       @length = 80
       @width = 60
     end
+
     # 返回结果
     respond_to do |format|
       # 请求页面为 html 时，返回到打包页面
@@ -611,9 +614,7 @@ class OrdersController < ApplicationController
       format.pdf do
         # 打印尺寸毫米（长宽）
         pdf = OrderPdf.new(@length, @width, label_size , @order.id)
-        send_data pdf.render, filename: "order_#{@order.id}.pdf",
-          type: "application/pdf",
-          disposition: "inline"
+        send_data pdf.render, type: "application/pdf", disposition: "inline"
       end
     end
   end

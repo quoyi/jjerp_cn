@@ -13,7 +13,7 @@
         <%= f.hidden_field :name, value: @indent.name %>
         <label for="indent_customer" class="col-sm-1 control-label text-right"><span class="require">*</span>终端客户</label>
         <div class="col-sm-3" style="padding: 0px">
-          <%= f.text_field :customer, maxlength: 10, class: 'form-control', required: true, style: 'width: 100%;' %>
+          <%= f.text_field :customer, maxlength: 16, class: 'form-control', required: true, style: 'width: 100%;' %>
         </div>
         <label for="indent_agent_id" class="col-sm-1 control-label text-right"><span class="require">*</span>代理商</label>
         <div class="col-sm-3" style="padding: 0px;">
@@ -120,7 +120,7 @@
                 </div>
                 <label class="col-sm-1 text-right" style="margin: 8px 0;">备注</label>
                 <div class="col-sm-7" style="padding: 0px;">
-                  <%= order_form.text_field :note, value: of.new_record? ? '' : of.note, maxlength: 25, class: 'form-control', placeholder: '请填写备注信息', style:'width: 100%;' %>
+                  <%= order_form.text_field :note, value: of.new_record? ? '' : of.note, maxlength: 32, class: 'form-control', placeholder: '请填写备注信息', style:'width: 100%;' %>
                 </div>
               </div>
             </div>
@@ -161,7 +161,7 @@
                 </div>
                 <label class="col-sm-1 text-right" style="margin: 8px 0;">备注</label>
                 <div class="col-sm-3" style="padding: 0px;">
-                  <%= part_form.text_field :note, value: pf.new_record? ? '' : pf.note, maxlength: 25, class: 'form-control', placeholder: '请填写备注信息', style:'width: 100%;' %>
+                  <%= part_form.text_field :note, value: pf.new_record? ? '' : pf.note, maxlength: 32, class: 'form-control', placeholder: '请填写备注信息', style:'width: 100%;' %>
                 </div>
               </div>
             </div>

@@ -53,18 +53,26 @@ class SentsController < ApplicationController
   # POST /sents.json
   def create
     binding.pry
-    @sent = Sent.new(sent_params)
+    if sent_params[:owner_type] == Indent.name
+      indent = Indent.find_by_id(sent_params[:owner_id])
+      indent.orders.each do |order|
+        @sent = Sent.find_or_create_by(owner_id: order.id, owner_type: Order.name, area: sent_params[:area], receiver: sent_params[:receiver],
+                            contact: sent_params[:contact], collection: sent_params[:collection], logistics: sent_params[:logistics],
+                            cupboard: sent_params[:cupboard], robe: sent_params[:robe], door: sent_params[:door], part: sent_params[:part])
+        @sent.save!
+      end
+    else
+      @sent = Sent.new(sent_params)
+      @sent.save!
+    end
 
     respond_to do |format|
-      if @sent.save
+      if @sent.persisted?
         if @sent.owner_type == Indent.name
           # 所有已打包的子订单添加发货记录
           @sent.owner.orders.each do |order|
             next unless order.packaged?
-            cupboard = 0
-            robe = 0
-            door = 0
-            part = 0
+            cupboard, robe, door, part = 4.times.map{0}
             case order.order_category.name
               when "橱柜" then cupboard = order.packages.pluck(:label_size).sum
               when "衣柜" then robe = order.packages.pluck(:label_size).sum
