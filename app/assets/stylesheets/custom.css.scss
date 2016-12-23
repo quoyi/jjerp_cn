@@ -130,8 +130,7 @@ body {
 //     text-align: center;
 //   }
 // }
-
-input[type='select'], input[type='phone'], input[type='password']{
+input[type='date'], input[type='select'], input[type='phone'], input[type='password'], select{
   padding: 6px 3px !important;
 }
 select {
@@ -183,6 +182,9 @@ a {
 }
 // 模态框样式
 .modal .modal-dialog.modal-sm {
+  & .modal-header {
+    padding: 9px 15px;
+  }
   & .modal-body {
     padding-bottom: 0px
   }

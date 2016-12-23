@@ -23,9 +23,16 @@
           <%= label_tag :agent_id, '代理商', class: 'control-label', style: 'margin: 0px;' %>
           <%= select_tag :agent_id, params[:agent_id].present? ? raw("<option value='#{params[:agent_id]}'>#{Agent.find_by_id(params[:agent_id]).try(:full_name)}</option>") : nil, class: 'form-control remoteDataAgent', style: 'width: 200px;' %>
           <%= label_tag :bank_id, '卡号', class: 'control-label', style: 'margin: 0px;' %>
-          <%= select_tag :bank_id, options_for_select(Bank.all.map{|i|[i.bank_card, i.id]}, params[:bank_id].presence), class: 'form-control' %>
+          <%= select_tag :bank_id, options_for_select(Bank.all.map{|i|[i.bank_card, i.id]}, params[:bank_id].presence), include_blank: "选择查询卡号", class: 'form-control' %>
           <%= link_to '查询', '#', class: 'btn btn-primary', style: 'margin: 0 0 0 10px;', onclick: 'searchOrDownload(this, "search")' %>
           <%= link_to '下载', '#', class: 'btn btn-default', onclick: 'searchOrDownload(this, "download")' %>
+          <% end %>
+          <% if current_user.admin? || current_user.role?('financial') %>
+          <div class="row text-center" style="margin-top: 10px; font-weight: bold;">
+            <span>收入金额：<code><%= @agent_incomes %></code>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span>其他金额：<code><%= @other_incomes %></code>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span>(支出)订单金额：<code><%= @order_incomes %></code>&nbsp;元</span>
+          </div>
           <% end %>
         </div>
       </div>
@@ -36,13 +43,13 @@
           <tr>
             <th>编号</th>
             <th>来源</th>
-            <th>订单号</th>
-            <th>卡号</th>
+            <th>收入类型</th>
+            <th>收入卡号</th>
             <th>收入时间</th>
             <th>收入金额</th>
             <th>经手人</th>
             <th>备注</th>
-            <th>操作</th>
+            <!-- <th>操作</th> -->
           </tr>
         </thead>
         <tbody>
@@ -51,12 +58,12 @@
             <td><%= index + 1 %></td>
             <td><%= i.agent.try(:full_name) %></td>
             <td><%= i.reason %></td>
-            <td><%= i.bank.bank_card %></td>
+            <td><%= i.bank.present? ? (i.bank.bank_name + " " + i.bank.bank_card) : '代理商余额扣款' %></td>
             <td><%= i.income_at.strftime('%Y-%m-%d') %></td>
             <td><%= i.money %></td>
             <td><%= i.username %></td>
             <td style="max-width:300px;"><%= i.note %></td>
-            <td><%= link_to '删除', i, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' } %></td>
+            <%#= link_to '删除', i, method: :delete, data: {confirm: '警告！ 操作不可逆转，确认删除？' }, class: 'btn btn-xs btn-default', style: 'color: red !important;' %>
           </tr>
           <% end %>
         </tbody>
