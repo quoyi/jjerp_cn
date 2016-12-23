@@ -5,6 +5,7 @@ class SentsController < ApplicationController
   # GET /sents
   # GET /sents.json
   def index
+    binding.pry
     @sents = Sent.where(owner_type: Order.name)
 
     if params[:start_at].present? && params[:end_at].present?
@@ -51,18 +52,27 @@ class SentsController < ApplicationController
   # POST /sents
   # POST /sents.json
   def create
-    @sent = Sent.new(sent_params)
+    binding.pry
+    if sent_params[:owner_type] == Indent.name
+      indent = Indent.find_by_id(sent_params[:owner_id])
+      indent.orders.each do |order|
+        @sent = Sent.find_or_create_by(owner_id: order.id, owner_type: Order.name, area: sent_params[:area], receiver: sent_params[:receiver],
+                            contact: sent_params[:contact], collection: sent_params[:collection], logistics: sent_params[:logistics],
+                            cupboard: sent_params[:cupboard], robe: sent_params[:robe], door: sent_params[:door], part: sent_params[:part])
+        @sent.save!
+      end
+    else
+      @sent = Sent.new(sent_params)
+      @sent.save!
+    end
 
     respond_to do |format|
-      if @sent.save
-        if @sent.owner_type == 'Indent'
+      if @sent.persisted?
+        if @sent.owner_type == Indent.name
           # 所有已打包的子订单添加发货记录
           @sent.owner.orders.each do |order|
             next unless order.packaged?
-            cupboard = 0
-            robe = 0
-            door = 0
-            part = 0
+            cupboard, robe, door, part = 4.times.map{0}
             case order.order_category.name
               when "橱柜" then cupboard = order.packages.pluck(:label_size).sum
               when "衣柜" then robe = order.packages.pluck(:label_size).sum
@@ -78,8 +88,10 @@ class SentsController < ApplicationController
           end
         end
         format.html { redirect_to not_sent_orders_path, notice: '发货信息创建成功！' }
+        format.json { render json: @sent, notice: '发货信息创建成功！'}
       else
-        format.html { redirect_to not_sent_orders_path, notice: '发货信息创建失败！' }
+        format.html { redirect_to not_sent_orders_path, error: '发货信息创建失败！' }
+        format.json { render json: nil, error: '发货信息创建失败！'}
       end
     end
   end
@@ -88,11 +100,11 @@ class SentsController < ApplicationController
   # 添加发货信息
   def change
     @sent = params[:id].present? ? Sent.find_by_id(params[:id]) : Sent.new
-    case params[:type]
-      when 'indent'
-        @indent_or_order = Indent.find_by_id(params[:indent_or_order_id])
-      when 'order'
-        @indent_or_order = Order.find_by_id(params[:indent_or_order_id])
+    case params[:owner_type]
+      when Indent.name
+        @indent_or_order = Indent.find_by_id(params[:owner_id])
+      when Order.name
+        @indent_or_order = Order.find_by_id(params[:owner_id])
       else
         @indent_or_order = nil
     end
@@ -112,7 +124,7 @@ class SentsController < ApplicationController
     respond_to do |format|
       if @sent.update(sent_params)
 
-        if @sent.owner_type == 'Indent'
+        if @sent.owner_type == Indent.name
           # 所有已打包的子订单添加发货记录
           @sent.owner.orders.each do |order|
             next unless order.packaged?
@@ -137,8 +149,10 @@ class SentsController < ApplicationController
           end
         end
         format.html { redirect_to :back, notice: '发货单编辑成功！' }
+        format.json { render json: {notice: '发货单编辑成功！'}}
       else
         format.html { redirect_to :back, error: '发货单编辑失败！' }
+        format.json { render json: {error: '发货单编辑失败！'}}
       end
     end
   end

@@ -72,7 +72,7 @@
                 </div>
                 <div class="row">
                   <label class="col-sm-1 text-right control-label" style="margin: 7px 0;">备注</label>
-                  <%= unit_form.text_field :note, value: uf.new_record? ? @order.note : uf.note, maxlength: 25, class: 'col-sm-11', placeholder: '请填写备注信息' %>
+                  <%= unit_form.text_field :note, value: uf.new_record? ? @order.note : uf.note, maxlength: 32, class: 'col-sm-11', placeholder: '请填写备注信息' %>
                 </div>
               </div>
               <div class="col-sm-1 text-center" style="margin: 30px 0;">

@@ -15,15 +15,17 @@ class IncomesController < ApplicationController
       @incomes = @incomes.where("income_at between ? and ?", params[:start_at], params[:end_at])
     end
     if params[:agent_id].present?
-      agent = Agent.find_by_id(params[:agent_id])
-      @incomes = @incomes.where(order_id: agent.orders.pluck(:id))
+      @incomes = @incomes.where(agent_id: params[:agent_id])
     end
     if params[:bank_id].present?
+      # 子订单号 order_id 和 总订单号 indent_id 为空时表示 代理商汇款； 不为空时表示 订单扣款
       @incomes = @incomes.where(bank_id: params[:bank_id])
     end
-
     @income = Income.new(bank_id: Bank.find_by(is_default: 1).try(:id), username: current_user.username, income_at: Time.now)
 
+    @agent_incomes = @incomes.where("bank_id is not null and order_id is null and agent_id is not null").pluck(:money).sum
+    @order_incomes = @incomes.where("bank_id is null and order_id is not null").pluck(:money).sum
+    @other_incomes = @incomes.where(agent_id: nil).pluck(:money).sum
     respond_to do |format|
       format.html { @incomes = @incomes.page(params[:page]) }
       format.json
@@ -53,46 +55,33 @@ class IncomesController < ApplicationController
   # POST /incomes
   # POST /incomes.json
   def create
-    begin
-      Income.transaction do
-        # 子订单收入
+    Income.transaction do
+      @income = Income.new(income_params)
+      if income_params[:reason] == "order"
+        @income.reason = "订单收入"
+        order = @income.order
+        agent = @income.agent
+        # 订单 “扣款”
         if income_params[:order_id].present?
-          # 指定子订单号时，需要将收入金额添加到代理商，然后从代理商余额中扣除子订单金额
-          if income_params[:order_id].to_i > 0
-            order = Order.find_by_id(income_params[:order_id])
-            indent = order.indent
-            agent = indent.agent
-            # 收入金额加到代理商余额中
-            agent_balance = agent.balance + income_params[:money].to_f
-            agent_arrear = agent.arrear - income_params[:money].to_f
-            # 新建银行卡的收入信息
-            updateIncomeExpend(income_params[:bank_id], income_params[:money].to_f, 'income')
-            @income = order.incomes.new(indent_id: order.indent.id, bank_id: income_params[:bank_id], username: income_params[:username], agent_id: agent.id,
-                                       money: income_params[:money], income_at: income_params[:income_at], note: income_params[:note], reason: order.name)
-            @income.save!
-            # 如果订单欠款大于收入，则继续欠款；否则，欠款为零
-            if order.arrear > agent.balance
-              order.update!(arrear: order.arrear - agent_balance)
-              agent.update!(balance: 0, arrear: agent_arrear)
-            else
-              order.update!(arrear: 0)
-              agent.update!(balance: agent_balance - order.arrear, arrear: agent_arrear)
-            end
-          else # 子订单号为0 或为指定时，视为其他收入
-            @income = Income.new(bank_id: income_params[:bank_id], username: income_params[:username], money: income_params[:money], agent_id: agent.id,
-                                income_at: income_params[:income_at], note: income_params[:note], reason: '其他收入')
-            @income.save!
-          end
+          @income.note = "#{Date.today.strftime("%Y-%m-%d")}订单【#{order.name}】从余额扣除【#{income_params[:money]}元】"
+          order.update!(arrear: order.arrear - income_params[:money].to_f)
+          indent = order.indent
+          indent.update!(arrear: indent.orders.pluck(:arrear).sum)
+          agent.update!(balance: agent.balance - income_params[:money].to_f, arrear: agent.arrear - income_params[:money].to_f)
+        else # “收入” 页面新建 收入记录（代理商打款）
+          agent.update!(balance: agent.balance + income_params[:money].to_f)
         end
+      else # 其他收入（例如卖废品收入等）
+        @income.reason = "其他收入"
+        bank = Bank.find_by_id(income_params[:bank_id])
+        bank.update!(incomes: bank.incomes + income_params[:money].to_f)
       end
-    rescue ActiveRecord::RecordInvalid => exception
+      @income.save!
     end
-    
-    
-    if @income
-      redirect_to :back, notice: '收入记录创建成功！'
+    if @income.persisted?
+      redirect_to :back, notice: '收入创建成功！'
     else
-      redirect_to :back, error: '收入记录创建失败！'
+      redirect_to :back, error: '收入创建失败！'
     end
   end
 
@@ -111,24 +100,35 @@ class IncomesController < ApplicationController
   # DELETE /incomes/1
   # DELETE /incomes/1.json
   def destroy
-    msg = '收入记录已删除。'
-    Income.transaction do 
-      order = @income.order
-      indent = @income.indent
+    msg = {notice: '收入记录已删除。'}
+    Income.transaction do
       bank = @income.bank
-      order.update!(arrear: order.arrear + @income.money)
-      indent.update!(arrear: indent.arrear + @income.money)
-      if bank.balance > @income.money
+      if @income.order
+        order = @income.order
+        indent = order.indent
+        order.update!(arrear: order.arrear + @income.money)
+        indent.update!(arrear: indent.arrear + @income.money)
+      end
+      
+      binding.pry
+      if bank.balance >= @income.money
         bank.update!(balance: bank.balance - @income.money, incomes: bank.incomes - @income.money)
       else
-        msg = "银行卡余额不足，无法删除收入记录！"
+        msg = {error: "银行卡余额不足，无法删除收入记录！"}
         raise ActiveRecord::Rollback
       end
       @income.destroy
     end
 
     # @income.update(deleted: true)
-    redirect_to incomes_path, notice: msg
+    redirect_to incomes_path, msg
+  end
+
+  # 订单扣款
+  def deduct
+    order = Order.find_by_id(params[:order_id])
+    @income = order.incomes.new(agent_id: order.agent_id, indent_id: order.indent.id)
+    render layout: false
   end
 
   def stat
@@ -172,6 +172,6 @@ class IncomesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def income_params
       params.require(:income).permit(:name, :reason, :indent_id, :order_id, :money, :username,
-                                     :income_at, :status, :note, :bank_id, :deleted)
+                                     :income_at, :status, :note, :bank_id, :agent_id, :deleted)
     end
 end

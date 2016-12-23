@@ -1,0 +1,69 @@
+<%= form_for @income, html: {class: 'form-horizontal'} do |f| %>
+<% order = @income.order 
+  indent = order.indent
+  agent = order.agent
+%>
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="editMaterialCategoryLabel"> 子订单 <small> 扣款 </small></h4>
+</div>
+<div class="modal-body">
+  <div class="form-group">
+    <%= f.label '订单号', for: 'order_id', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= f.hidden_field :order_id, vaule: order.id %>
+      <%= f.hidden_field :indent_id, value: indent.id %>
+      <%= f.text_field nil, value: order.name, class: 'form-control', disabled: 'disabled', id: 'order_id' %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label '代理商', for: 'agent_id', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= f.hidden_field :agent_id, value: @income.agent_id %>
+      <%= f.hidden_field :reason, value: 'order' %>
+      <%= f.text_field :nil, value: agent.full_name, class: 'form-control', disabled: 'disabled' %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label '可用余额', for: 'available', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= f.text_field nil, value: agent.balance, class: 'form-control', disabled: 'disabled', id: 'available' %>
+    </div>
+  </div>
+  <div class="form-group" data-toggle="tooltip" title="订单 <%= order.name %> 所欠款项">
+    <%= f.label '订单欠款', for: 'order_arrear', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= f.text_field nil, value: order.arrear, class: 'form-control', disabled: 'disabled', id: 'order_arrear' %>
+    </div>
+  </div>
+  <div class="form-group" data-toggle='tooltip' title="默认值为订单欠款。">
+    <label for="income_money" class="control-label col-sm-3"><span class="require">*</span>扣款金额</label>
+    <div class="col-sm-9">
+      <%= f.number_field :money, min: 0.01, step: 0.01, max: [agent.balance, order.price].min, value: order.arrear, class: 'form-control', required: true, oninvalid: "setCustomValidity('必须大于【0】且小于等于『订单欠款』与『可用余额』中较小的一个【#{[agent.balance,order.arrear].min}】');", oninput: "setCustomValidity('');" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="income_username" class="control-label col-sm-3"><span class="require">*</span>经手人</label>
+    <div class="col-sm-9">
+      <%= f.text_field :username, value: current_user.username.presence || current_user.email, class: 'form-control col-sm-9', required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="income_income_at" class="control-label col-sm-3"><span class="require">*</span>时间</label>
+    <div class="col-sm-9">
+      <%= f.date_field :income_at, value: @income.income_at.presence || Date.today, class: 'form-control col-sm-9', data: {provide: 'datepicker'}, required: true %>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
+  <%= f.submit '提交', class: 'btn btn-primary' %>
+</div>
+<% end %>
+<script type="text/javascript">
+$("[data-provide=datepicker]").datepicker({
+format: 'yyyy-mm-dd',
+language: 'zh-CN',
+autoclose: true
+});
+</script>

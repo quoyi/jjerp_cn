@@ -51,7 +51,7 @@ class IndentsController < ApplicationController
     @order = Order.new
     @order_offers = @indent.offers
     @orders = Order.where(indent:@indent).order(created_at: :desc)
-    @income = Income.new(bank_id: Bank.find_by(is_default: 1).try(:id), username: current_user.name, income_at: Time.now)
+    @income = Income.new(bank_id: Bank.find_by(is_default: 1).try(:id), income_at: Time.now)
   end
 
   # GET /indents/new
@@ -98,18 +98,15 @@ class IndentsController < ApplicationController
   # PATCH/PUT /indents/1.json
   def update
     Indent.transaction do
-      # 获取删除的 orders
-      # 更新总订单之前，先获取总订单 （原）金额，后面需要减 （原）金额
-      origin_indent_amount = @indent.orders.pluck(:price).sum
-      origin_indent_arrear = @indent.orders.pluck(:arrear).sum
+      # 编辑 或 增删 子订单，需要先保存更新，然后再更新金额、状态
       @indent.update!(indent_params)
       # 更新总订单金额
       @indent.update!(amount: @indent.orders.pluck(:price).sum, arrear: @indent.orders.pluck(:arrear).sum,
-                      status: @indent.orders.map{|o|Order.statuses[o.status]}.min || 0)
-      indent_remain = origin_indent_amount - @indent.amount
+                      status: @indent.orders.map { |o| Order.statuses[o.status] }.min || 0)
+      # 修改后的总订单代理商
       agent = @indent.agent
-      agent.update!(balance: agent.balance + indent_remain, arrear: agent.arrear + @indent.arrear - origin_indent_arrear, 
-                    history: agent.history + @indent.amount - origin_indent_amount)
+      # 修改后的代理商 欠款、历史金额
+      agent.update!(arrear: agent.orders.pluck(:arrear).sum, history: agent.orders.pluck(:price).sum)
     end
 
     redirect_to :back, notice: "订单编辑成功！"
@@ -118,15 +115,23 @@ class IndentsController < ApplicationController
   # DELETE /indents/1
   # DELETE /indents/1.json
   def destroy
+    msg = {notice: "订单已删除。"}
     Indent.transaction do
       agent = @indent.agent
-      agent.update!(arrear: agent.arrear - @indent.amount, 
-                    history: agent.history - @indent.amount)
-      # # 删除所有子订单
-      # @indent.orders.destroy_all
-      @indent.destroy!
+      binding.pry
+      if agent.arrear < @indent.amount
+        msg = {error: "订单已收款，删除失败！"}
+      else
+        agent.update!(arrear: agent.arrear - @indent.amount, history: agent.history - @indent.amount)
+        # TODO: 删除所有子订单、收入记录，金额应该返回到代理商余额中
+        # @indent.orders.destroy_all
+        # @indent.incomes.destroy_all
+        # @indent.orders.each {|o| o.incomes.destroy_all }
+        @indent.destroy!
+      end
     end
-    redirect_to indents_path, notice: '订单已删除。'
+
+    redirect_to indents_path, msg
   end
 
   # 到款详细
@@ -140,6 +145,7 @@ class IndentsController < ApplicationController
     # 查找订单的所有拆单信息，并生成报价单
     indent = Indent.find_by_id(params[:id])
     indent.orders.each do |order|
+      #TODO: 添加自动报价逻辑
       create_offer(order)
       update_order_status(order)
     end

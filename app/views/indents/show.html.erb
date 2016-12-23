@@ -10,7 +10,7 @@
       </small>
       </h2>
       <div class="pull-right panel-options">
-        <% if !@current_user.admin? && @indent.over? %>
+        <% if !current_user.admin? && @indent.over? %>
           <%= link_to '管理', '#', class: 'btn-primary btn', disabled: 'disabled' %>
           <%= link_to '报价', '#', class: 'btn-primary btn', disabled: 'disabled' %>
         <% else %>
@@ -64,7 +64,7 @@
             <% else %>
               <%= link_to '自定报价', custom_offer_order_path(o), class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '自定义报价' %>
             <% end %>
-            <%= link_to '到款', '#', class: "btn btn-primary btn-xs #{o.income_status == '全款' ? 'disabled' : ''}", data: {toggle: 'modal', target: '#addIncomes', order: o, username: current_user.username}, id: 'addIncomesBtn' %>
+            <%= link_to '扣款', deduct_incomes_path(order_id: o.id), class: "btn btn-primary btn-xs #{o.income_status == '全款' ? 'disabled' : ''}", data: {toggle: 'modal', target: '#deductBalance', order: o, username: current_user.username.presence || current_user.email} %>
           </td>
           <td>
             <% if Order.statuses[o.status] < 1 || (o.units.count < 1 && o.parts.count < 1 && o.crafts.count < 1) %>
@@ -83,10 +83,15 @@
 </div>
 <%= render 'agents/new' %>
 <%= render 'offers' %>
-<%= render '/incomes/new' %>
 <%#= render 'indents/edit' %>
 <%#= render 'add_offers' %>
 <!-- Modal -->
+<div class="modal fade" id="deductBalance" role="dialog" aria-labelledby="editIndentLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document" style="width: 400px;">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="editIndent" role="dialog" aria-labelledby="editIndentLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document" style="width: 80%;">
     <div class="modal-content">

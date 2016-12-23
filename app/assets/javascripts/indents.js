@@ -14,7 +14,7 @@ $(function() {
       var logic = now.setDate(now.getDate() + 10);
       var require_at = e.date;
       if (require_at < logic) {
-        jsNoty("建议发货时间为10天后！", "warning");
+        jsNoty("warning", "建议发货时间为10天后！");
       }
     }
   });
@@ -71,7 +71,7 @@ $(function() {
         $panels.find("#indent_delivery_address").val(data.delivery_address);
       },
       error: function(data){
-        jsNoty("网络错误！","error");
+        jsNoty("error", "网络错误！");
       }
     });
   });
@@ -168,7 +168,7 @@ function getMaterialPrice(obj) {
       }
     },
     error: function(data) {
-      jsNoty("网络错误！", "error");
+      jsNoty("error", "网络错误！");
     }
   });
 }

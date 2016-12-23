@@ -263,7 +263,7 @@ function setChildPartCategory(obj){
       }
     },
     error: function(data){
-      jsNoty("网络错误，无法获取子配件类型！", "error");
+      jsNoty("error", "网络错误，无法获取子配件类型！");
     }
   });
 }
@@ -289,7 +289,7 @@ function setPartCategoryPrice(obj){
       }
     },
     error: function(data){
-      jsNoty("网络错误，无法获取配件价格！", "error");
+      jsNoty("error", "网络错误，无法获取配件价格！");
     }
   });
 }
@@ -312,7 +312,7 @@ function setCraft(obj){
       }
     },
     error: function(data){
-      jsNoty("网络错误，无法获取配件价格！", "error");
+      jsNoty("error", "网络错误，无法获取配件价格！");
     }
   });
 }
@@ -366,25 +366,25 @@ function setOrderUnitLengthWidth(obj){
  * @return {[type]}     [description]
  */
 function changeIncomeOrder(obj){
-  var order_id = $(obj).val();
-  var price_field = $(obj).parents(".row").find(".change_income_order_price");
-  var price = price_field.val();
-  if(order_id != null && order_id != ""){
-    $.ajax({
-      url: "/orders/" + order_id,
-      type: "GET",
-      dataType: "JSON",
-      cache: false,
-      success: function(data){
-        // console.log(data);
-        price_field.val(data.arrear);
-        price_field.attr("max", data.arrear);
-      },
-      error: function(data){
-        jsNoty("网络错误，无法获取子订单信息！", "error");
-      }
-    });
-  }
+  // 所转款项 必须验证是否超过 收入/订单总金额
+  // var order_id = $(obj).val();
+  // var price_field = $(obj).parents(".row").find(".change_income_order_price");
+  // if(order_id != null && order_id != ""){
+  //   $.ajax({
+  //     url: "/orders/" + order_id,
+  //     type: "GET",
+  //     dataType: "JSON",
+  //     cache: false,
+  //     success: function(data){
+  //       // console.log(data);
+  //       price_field.val(data.arrear);
+  //       price_field.attr("max", data.arrear);
+  //     },
+  //     error: function(data){
+  //       jsNoty("error", "网络错误，无法获取子订单信息！");
+  //     }
+  //   });
+  // }
 }
 
 // 子订单 - 待发货 全选和反选(未发货not_sent.html)
@@ -414,52 +414,11 @@ function sent_list() {
     }
   }
   if (ids.length == 0) {
-    jsNoty("请先选中所要下载的发货信息！", "warning");
+    jsNoty("warning", "请先选中所要下载的发货信息！");
     return false;
   }
   $("#sents_ids").val(ids);
 
   // url = "/sent_lists";
   // $("#batch_set").attr('action', url);
-}
-
-/**
- * 将 子订单 加入到发货清单中
- **/
-function addOrderToSentList(el){
-  var data = $(el).data(); // {type: 'indent/order', id: '', name: ''}
-  var storage = window.localStorage;
-  var sent_list = storage.getItem("sent_list");
-  var sent_arr;
-  console.log(sent_list);
-
-  if (sent_list != null && sent_list != "") {
-    sent_arr = sent_list.split(",");
-    if(sent_arr.indexOf(data.id) < 0){
-      sent_arr[sent_arr.length] = data.id;
-      $(".order-sent-list").append("<li>" + data.name + "</li>");
-    }
-  } else {
-    sent_arr = new Array();
-    sent_arr[sent_arr.length] = data.id;
-    $(".order-sent-list").append("<li>" + data.name + "</li>");
-  }
-  storage.sent_list = sent_arr.join(",");
-  $("#sent_list_ids").val(storage.sent_list);
-
-  var $sidebar = $("div.right-sidebar");
-  if ($sidebar.css("display") == 'none') {
-    $sidebar.show();
-  }
-}
-
-/**
- * 将 总订单 加入到发货清单中
- **/
-function addIndentToSentList(el){
-  var $orders = $(el).parents("thead").siblings("tbody").find(".indent_orders");
-  $.each($orders, function(index){
-    // var data = $(this).data();
-    addOrderToSentList($(this));
-  });
 }

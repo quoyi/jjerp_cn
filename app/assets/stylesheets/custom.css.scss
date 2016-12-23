@@ -130,8 +130,7 @@ body {
 //     text-align: center;
 //   }
 // }
-
-input[type='select'], input[type='phone'], input[type='password']{
+input[type='date'], input[type='select'], input[type='phone'], input[type='password'], select{
   padding: 6px 3px !important;
 }
 select {
@@ -183,6 +182,9 @@ a {
 }
 // 模态框样式
 .modal .modal-dialog.modal-sm {
+  & .modal-header {
+    padding: 9px 15px;
+  }
   & .modal-body {
     padding-bottom: 0px
   }
@@ -324,7 +326,7 @@ label > span {
   display: none;
   position: fixed;
   margin-bottom: 0px !important;
-  width: 120px;
+  width: 200px;
   /*height: 800px;*/
   top: 100px;
   right: 0px;
@@ -335,19 +337,15 @@ label > span {
   & .panel-body {
     overflow-x: hidden;
     overflow-y: auto;
-    /*height: 100%;*/
-    padding: 3px;
+    width: 100%;
+    padding: 0;
     position: inherit;
     top: 127px;
     bottom: 82px;
     & .order-sent-list {
-      list-style: none;
       padding-left: 0px;
       margin-bottom: 0px;
-      width: 112px;
-      & li {
-        border-bottom: 1px solid #D0E9F5;
-      }
+      width: 194px;
     }
   }
   & .panel-footer {
@@ -355,9 +353,8 @@ label > span {
     position: inherit;
     text-align: center;
     padding: 3px;
-    width: 112px;
+    width: 198px;
     bottom: 45px;
-    right: 5px;
   }
 }
 

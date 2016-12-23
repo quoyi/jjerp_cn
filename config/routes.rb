@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :templates
   resources :craft_categories do
     collection do
       post :find
@@ -26,6 +27,7 @@ Rails.application.routes.draw do
   resources :incomes do
     collection do
       get :stat # 财务统计
+      get :deduct # 订单扣款
     end
   end
   resources :crafts

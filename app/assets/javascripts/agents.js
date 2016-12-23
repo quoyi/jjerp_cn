@@ -116,7 +116,7 @@ function getChinaCity(obj) {
         }
       },
       error: function() {
-        jsNoty("网络错误！", "error");
+        jsNoty("error", "网络错误！");
       }
     });
   } else if (element_name == "city") {
@@ -141,7 +141,7 @@ function getChinaCity(obj) {
         }
       },
       error: function() {
-        jsNoty("网络错误！", "error");
+        jsNoty("error", "网络错误！");
       }
     });
   }
@@ -172,7 +172,7 @@ function validateCities(obj) {
           }
         },
         error: function() {
-          jsNoty("网络错误！", "error");
+          jsNoty("error", "网络错误！");
         }
       });
     }
@@ -198,7 +198,7 @@ function validateCities(obj) {
           }
         },
         error: function() {
-          jsNoty("网络错误！", "error");
+          jsNoty("error", "网络错误！");
         }
       });
     }

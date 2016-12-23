@@ -13,18 +13,24 @@
         <%= f.hidden_field :name, value: @indent.name %>
         <label for="indent_customer" class="col-sm-1 control-label text-right"><span class="require">*</span>终端客户</label>
         <div class="col-sm-3" style="padding: 0px">
-          <%= f.text_field :customer, maxlength: 10, class: 'form-control', required: true, style: 'width: 100%;' %>
+          <%= f.text_field :customer, maxlength: 16, class: 'form-control', required: true, style: 'width: 100%;' %>
         </div>
         <label for="indent_agent_id" class="col-sm-1 control-label text-right"><span class="require">*</span>代理商</label>
         <div class="col-sm-3" style="padding: 0px;">
+          <% if @indent.new_record? %>
           <div class="col-sm-8" style="padding: 0px;">
             <select name="indent[agent_id]" class="remoteDataAgent" required="required" style="width: 100%;">
               <option value="<%= @indent.agent.try(:id) %>" selected="selected"><%= @indent.agent.try(:full_name) %></option>
             </select>
+            
           </div>
           <div class="col-sm-4" style="padding: 2px 0px 2px 0px;">
             <%= link_to '新建', '#', data: {toggle: 'modal', target: '#addAgent'}, class: 'btn btn-primary btn-sm pull-right' %>
           </div>
+          <% else %>
+          <%= f.hidden_field :agent_id, value: @indent.agent.id %>
+          <%= text_field_tag '', @indent.agent.full_name, class: 'form-control', disabled: true, style: 'width: 100%;' %>
+          <% end %>
         </div>
         <label for="indent_logistics" class="col-sm-1 control-label text-right"><span class="require">*</span>要求物流</label>
         <div class="col-sm-3" style="padding-left: 0px;">
@@ -114,7 +120,7 @@
                 </div>
                 <label class="col-sm-1 text-right" style="margin: 8px 0;">备注</label>
                 <div class="col-sm-7" style="padding: 0px;">
-                  <%= order_form.text_field :note, value: of.new_record? ? '' : of.note, maxlength: 25, class: 'form-control', placeholder: '请填写备注信息', style:'width: 100%;' %>
+                  <%= order_form.text_field :note, value: of.new_record? ? '' : of.note, maxlength: 32, class: 'form-control', placeholder: '请填写备注信息', style:'width: 100%;' %>
                 </div>
               </div>
             </div>
@@ -155,7 +161,7 @@
                 </div>
                 <label class="col-sm-1 text-right" style="margin: 8px 0;">备注</label>
                 <div class="col-sm-3" style="padding: 0px;">
-                  <%= part_form.text_field :note, value: pf.new_record? ? '' : pf.note, maxlength: 25, class: 'form-control', placeholder: '请填写备注信息', style:'width: 100%;' %>
+                  <%= part_form.text_field :note, value: pf.new_record? ? '' : pf.note, maxlength: 32, class: 'form-control', placeholder: '请填写备注信息', style:'width: 100%;' %>
                 </div>
               </div>
             </div>
