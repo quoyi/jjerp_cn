@@ -77,8 +77,8 @@ class IndentsController < ApplicationController
       @indent.save!
       agent = @indent.agent
       # binding.pry
-      agent.update!(arrear: agent.arrear + @indent.amount - origin_indent_amount, 
-                    history: agent.history + @indent.amount - origin_indent_amount)
+      agent.update!(arrear: agent.arrear.to_f + @indent.amount.to_f - origin_indent_amount.to_f, 
+                    history: agent.history.to_f + @indent.amount.to_f - origin_indent_amount.to_f)
     end
 
     # 根据是否保存成功，跳转到不同页面
