@@ -76,7 +76,6 @@ class IndentsController < ApplicationController
       origin_indent_amount = @indent.orders.pluck(:price).sum
       @indent.save!
       agent = @indent.agent
-      # binding.pry
       agent.update!(arrear: agent.arrear.to_f + @indent.amount.to_f - origin_indent_amount.to_f, 
                     history: agent.history.to_f + @indent.amount.to_f - origin_indent_amount.to_f)
     end
@@ -118,7 +117,6 @@ class IndentsController < ApplicationController
     msg = {notice: "订单已删除。"}
     Indent.transaction do
       agent = @indent.agent
-      binding.pry
       if agent.arrear < @indent.amount
         msg = {error: "订单已收款，删除失败！"}
       else

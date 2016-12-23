@@ -44,7 +44,6 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    # binding.pry
     @income = Income.new(bank_id: Bank.find_by(is_default: 1).id, username: current_user.username, income_at: Time.now)
   end
 
@@ -110,7 +109,6 @@ class IncomesController < ApplicationController
         indent.update!(arrear: indent.arrear + @income.money)
       end
       
-      binding.pry
       if bank.balance >= @income.money
         bank.update!(balance: bank.balance - @income.money, incomes: bank.incomes - @income.money)
       else

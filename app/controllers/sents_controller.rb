@@ -5,7 +5,6 @@ class SentsController < ApplicationController
   # GET /sents
   # GET /sents.json
   def index
-    binding.pry
     @sents = Sent.where(owner_type: Order.name)
 
     if params[:start_at].present? && params[:end_at].present?
@@ -52,7 +51,6 @@ class SentsController < ApplicationController
   # POST /sents
   # POST /sents.json
   def create
-    binding.pry
     if sent_params[:owner_type] == Indent.name
       indent = Indent.find_by_id(sent_params[:owner_id])
       indent.orders.each do |order|
