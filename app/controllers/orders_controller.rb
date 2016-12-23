@@ -621,18 +621,18 @@ class OrdersController < ApplicationController
   
   # GET 转款
   def change_income
-    # binding.pry
     @order = Order.find_by_id(params[:id]) if params[:id].present?
     if params[:order].present?
-      target_order = Order.find_by_id(params[:order][:id])
-      msg = "操作成功！"
+      msg = {success: "操作成功！"}
       Order.transaction do
-        now = Time.now
+        today = Date.today
         tmp_money = params[:order][:price].to_f
+        # 将金额转到指定 子订单
         if params[:order][:id].present?
+          target_order = Order.find_by_id(params[:order][:id])
           income = target_order.incomes.new(indent_id: target_order.indent.id, bank_id: Bank.find_by(is_default: 1).id,
-                                            income_at: now, username: current_user.name, money: tmp_money,
-                                            note: "从订单#{@order.name}手动转款#{tmp_money}")
+                                            income_at: today, username: current_user.name.presence || current_user.email, money: tmp_money,
+                                            note: "【#{today}】从子订单【#{@order.name}】手动转入【#{target_order.name}】金额【#{tmp_money}元】")
           income.save!
           @order.incomes.order(created_at: :desc).each do |i|
             break if tmp_money == 0
@@ -640,28 +640,34 @@ class OrdersController < ApplicationController
               tmp_money -= i.money
               i.destroy!
             else
-              i.update!(money: i.money - tmp_money, note: i.note + ";#{current_user.name}于#{now}从此订单转出#{tmp_money}到#{target_order.name}")
+              i.update!(money: i.money - tmp_money, note: i.note + ";【#{today}】从【#{@order.name}】转出【#{tmp_money}元】到【#{target_order.name}】")
+              tmp_money = 0
+            end
+          end
+          target_order.update!(arrear: target_order.arrear - params[:order][:price].to_f)
+          @order.update!(arrear: @order.arrear + params[:order][:price].to_f)
+          msg = {notice: "【#{today}】从【#{@order.name}】转出【#{params[:order][:price]}元】到【#{target_order.name}】"}
+        else # 将金额转到代理商余额
+          agent = @order.agent
+          @order.incomes.order(created_at: :desc).each do |i|
+            break if tmp_money == 0
+            if i.money <= tmp_money
+              tmp_money -= i.money
+              i.destroy!
+            else
+              i.update!(money: i.money - tmp_money, note: i.note + ";【#{today}】从【#{@order.name}】转出【#{tmp_money}元】到【#{target_order.name}】")
               tmp_money = 0
             end
           end
           @order.update!(arrear: @order.arrear + params[:order][:price].to_f)
-          msg = "成功将#{@order.name}的#{params[:order][:price]}转款到#{target_order.name}"
-        else
-          agent = @order.agent
-          agent_balance = @order.agent.balance
-          @order.update!(arrear: @order.arrear + params[:order][:price].to_f)
-          if agent_balance >= 0
-            agent.update!(balance: agent.balance + params[:order][:price].to_f,
-                          arrear: agent.orders.pluck(:arrear).sum)
-          # else
-          #   agent.update!(arrear: agent.arrear - params[:order][:price].to_f)
-          end
-          msg = "成功将#{@order.name}的#{params[:order][:price]}转款到代理商#{agent.full_name}余额中"
+          agent.update!(balance: agent.balance + params[:order][:price].to_f, arrear: agent.orders.pluck(:arrear).sum)
+          msg = {notice: "【#{today}】从【#{@order.name}】转出【#{params[:order][:price]}元】代理商【#{agent.full_name}】余额"}
         end
+        # 重新计算总订单欠款
         indent = @order.indent
         indent.update!(arrear: indent.orders.pluck(:arrear).sum)
       end
-      redirect_to orders_path, success: msg
+      redirect_to orders_path, msg
     else
       render layout: false
     end
