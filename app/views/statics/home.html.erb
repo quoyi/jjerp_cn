@@ -17,7 +17,7 @@
   <div class="content-box-large box-with-header">
     <div class="row">
       <% if current_user.role?("super_admin") || current_user.role?("admin") %>
-      <div class="text-center"><h2>欢迎登陆，管理员！</h2></div>
+      <div class="text-center"><h2>欢迎登陆，管理员！</h2><p><%= link_to '备份数据库', 'javascript:void(0);', class: 'btn btn-lg btn-primary', data: {confirm: "即将开始数据备份，请确认。"} %></p></div>
       <% elsif current_user.role?("employee") %>
       <% searh_order = Order.where("created_at >= ? AND created_at <= ?", Date.today.beginning_of_month, Date.today.end_of_month).order(created_at: :asc).first %>
       <% if searh_order.present? %>

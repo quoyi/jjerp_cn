@@ -335,13 +335,14 @@ class OrdersController < ApplicationController
     # 订单状态小于“已打包” = "packaged" = 3
     # @orders = Order.where("status <= ?", Order.statuses[:packaged])
     # @indents = @orders.group(:indent_id).map(&:indent)
-    @indents = Indent.where("status <= ?", Indent.statuses[:packaged])
+    @indents = Indent.where("status <= ? and status > 1", Indent.statuses[:packaged])
     @indents = @indents.where("agent_id=?", params[:agent_id]) if params[:agent_id].present?
     @indents = @indents.where("name like '%#{params[:indent_name]}%'") if params[:indent_name].present?
     if params[:order_name].present?
       @orders = Order.where("name like '%#{params[:date][:year]}%#{params[:date][:month]}%#{params[:order_name]}'")
       @indents = @indents.where(id: @orders.group(:indent_id).pluck(:indent_id))
     end
+
     @sent = Sent.new()
   end
 
