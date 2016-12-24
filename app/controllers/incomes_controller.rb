@@ -92,9 +92,11 @@ end
   def update
     Income.transaction do
       origin_money = @income.money.to_f
+if income_params[:bank_id].present?
       bank = Bank.find_by_id(income_params[:bank_id])
       bank.update!(balance: bank.balance + income_params[:money].to_f - origin_money,
                    incomes: bank.incomes + income_params[:money].to_f - origin_money)
+end
       @income.update!(money: income_params[:money].presence.to_f)
       if income_params[:agent_id].present?
         agent = Agent.find_by_id(income_params[:agent_id])
