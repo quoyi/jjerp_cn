@@ -49,6 +49,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes/1/edit
   def edit
+    render layout: false
   end
 
   # POST /incomes
@@ -56,6 +57,8 @@ class IncomesController < ApplicationController
   def create
     Income.transaction do
       @income = Income.new(income_params)
+      bank = Bank.find_by_id(income_params[:bank_id])
+      bank.update!(balance: bank.balance + income_params[:money].to_f, incomes: bank.incomes + income_params[:money].to_f)
       if income_params[:reason] == "order"
         @income.reason = "订单收入"
         order = @income.order
@@ -72,8 +75,6 @@ class IncomesController < ApplicationController
         end
       else # 其他收入（例如卖废品收入等）
         @income.reason = "其他收入"
-        bank = Bank.find_by_id(income_params[:bank_id])
-        bank.update!(incomes: bank.incomes + income_params[:money].to_f)
       end
       @income.save!
     end
@@ -87,9 +88,20 @@ class IncomesController < ApplicationController
   # PATCH/PUT /incomes/1
   # PATCH/PUT /incomes/1.json
   def update
-    if @income.update(income_params)
-      # 修改银行卡的收入信息
-      updateIncomeExpend(income_params, 0)
+    Income.transaction do
+      origin_money = @income.money.to_f
+      bank = Bank.find_by_id(income_params[:bank_id])
+      bank.update!(balance: bank.balance + income_params[:money].to_f - origin_money,
+                   incomes: bank.incomes + income_params[:money].to_f - origin_money)
+      @income.update!(money: income_params[:money].presence.to_f)
+      if income_params[:agent_id].present?
+        agent = Agent.find_by_id(income_params[:agent_id])
+        new_balance = agent.balance + income_params[:money].to_f - origin_money
+        new_balance > 0 ? agent.update!(balance: new_balance) : agent.update!(arrear: agent.arrear + new_balance.abs)
+      end
+    end
+    
+    if @income.persisted?
       redirect_to incomes_path, notice: '收入记录编辑成功！'
     else
       redirect_to incomes_path, error: '收入记录编辑失败！'

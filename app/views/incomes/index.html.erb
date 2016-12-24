@@ -49,7 +49,7 @@
             <th>收入金额</th>
             <th>经手人</th>
             <th>备注</th>
-            <!-- <th>操作</th> -->
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
@@ -63,7 +63,7 @@
             <td><%= i.money %></td>
             <td><%= i.username %></td>
             <td style="max-width:300px;"><%= i.note %></td>
-            <%#= link_to '删除', i, method: :delete, data: {confirm: '警告！ 操作不可逆转，确认删除？' }, class: 'btn btn-xs btn-default', style: 'color: red !important;' %>
+            <td><%= link_to '编辑', edit_income_path(i), data: { toggle: 'modal', target: '#editIncome'}, class: 'btn btn-xs btn-primary' %></td>
           </tr>
           <% end %>
         </tbody>
@@ -75,3 +75,16 @@
   </div>
 </div>
 <%= render 'new' %>
+
+<!-- Modal -->
+<div class="modal fade" id="editIncome" tabindex="-1" role="dialog" aria-labelledby="editIncomeLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$("#editIncome").on("hidden.bs.modal", function(e){
+  $(this).removeData("bs.modal");
+});
+</script>
