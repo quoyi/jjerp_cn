@@ -1,0 +1,44 @@
+<%= form_for @income, html: {class: 'form-horizontal'} do |f| %>
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="deductBalanceLabel"> 收入 <small> 编辑 </small></h4>
+</div>
+<div class="modal-body">
+  <div class="form-group">
+    <%= f.label '来源', for: 'agent_id', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= f.hidden_field :agent_id, value: @income.agent_id %>
+      <%= f.text_field nil, value: @income.agent.try(:full_name), class: 'form-control', disabled: 'disabled' %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label '开户银行', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= f.text_field nil, value: @income.bank.try(:bank_name), class: 'form-control', disabled: 'disabled' %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label '银行卡号', for: 'bank_id', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= f.hidden_field :bank_id, value: @income.bank_id %>
+      <%= f.text_field nil, value: @income.bank.try(:bank_card), class: 'form-control', disabled: 'disabled' %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="income_money" class="control-label col-sm-3"><span class="require">*</span>收入金额</label>
+    <div class="col-sm-9">
+      <%= f.number_field :money, min: 0.01, step: 0.01, max: @income.money, value: @income.money, class: 'form-control', required: true %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label '备注', for: 'income_note', class: 'control-label col-sm-3' %>
+    <div class="col-sm-9">
+      <%= f.text_area :note, rows: 2, value: @income.note, class: 'form-control col-sm-9', style: 'resize: none; padding: 3px;', placeholder: '请输入备注信息' %>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
+  <%= f.submit '提交', class: 'btn btn-primary' %>
+</div>
+<% end %>
