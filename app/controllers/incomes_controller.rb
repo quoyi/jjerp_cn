@@ -6,7 +6,7 @@ class IncomesController < ApplicationController
   # GET /incomes
   # GET /incomes.json
   def index
-    @incomes = Income.all
+    @incomes = Income.all.order(created_at: :desc)
     if params[:indent_id].present?
       indent = Indent.find_by_id(params[:indent_id])
       @incomes = @incomes.where(order_id: indent.orders.pluck(:id))
@@ -57,8 +57,10 @@ class IncomesController < ApplicationController
   def create
     Income.transaction do
       @income = Income.new(income_params)
+if income_params[:bank_id].present?
       bank = Bank.find_by_id(income_params[:bank_id])
       bank.update!(balance: bank.balance + income_params[:money].to_f, incomes: bank.incomes + income_params[:money].to_f)
+end
       if income_params[:reason] == "order"
         @income.reason = "订单收入"
         order = @income.order
