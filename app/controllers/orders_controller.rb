@@ -226,7 +226,7 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1.json
   def update
     # 检查权限
-    return redirect_to :back, error: '没有权限编辑此订单！' if !current_user.admin? && @order.handler?(current_user)
+    return redirect_to :back, error: '没有权限编辑此订单！' unless current_user.admin? || @order.handler?(current_user)
     return redirect_to :back, error: '请求无效！请检查数据是否有效。' unless params[:order]
 
     # 删除配件(将标记为删除的配件 _destory 设置为 true)
