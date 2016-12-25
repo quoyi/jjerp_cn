@@ -287,7 +287,7 @@ class OrdersController < ApplicationController
                             note: "编辑子订单【#{@order.name}】时，将已收【#{origin_order_income}元】退回【#{agent.full_name}】余额。")
         income.save!
       end
-      @order.update!(price: new_order_amount, arrear: new_order_amount)
+      @order.update!(price: new_order_amount, arrear: new_order_amount, handler: @order.handler.to_i == 0 ? current_user.id : really_handler)
       # 更新总订单金额: 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
       indent.update!(amount: indent.orders.pluck(:price).sum, arrear: indent.orders.pluck(:arrear).sum)
       agent.update!(balance: agent.balance + origin_order_income, arrear: agent.orders.pluck(:arrear).sum,
