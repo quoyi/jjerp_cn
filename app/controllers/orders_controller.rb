@@ -226,7 +226,7 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1.json
   def update
     # 检查权限
-    return redirect_to :back, error: '没有权限编辑此订单！' unless current_user.admin? || @order.handler?(current_user)
+    return redirect_to :back, error: '没有权限编辑此订单！' if !current_user.admin? && @order.handler != 0 && @order.handler != current_user.id
     return redirect_to :back, error: '请求无效！请检查数据是否有效。' unless params[:order]
 
     # 删除配件(将标记为删除的配件 _destory 设置为 true)
@@ -239,8 +239,6 @@ class OrdersController < ApplicationController
 
     # 更新子订单
     Order.transaction do
-      # 真实处理者
-      really_handler = current_user.admin? ? @order.handler : current_user.id
       indent = @order.indent
       agent = indent.agent
       # 在更新之前保存订单 （原）金额、（原）欠款
@@ -287,6 +285,8 @@ class OrdersController < ApplicationController
                             note: "编辑子订单【#{@order.name}】时，将已收【#{origin_order_income}元】退回【#{agent.full_name}】余额。")
         income.save!
       end
+      # 真实处理者
+      really_handler = @order.handler.to_i == 0 ? current_user.id : @order.handler
       @order.update!(price: new_order_amount, arrear: new_order_amount, handler: @order.handler.to_i == 0 ? current_user.id : really_handler)
       # 更新总订单金额: 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
       indent.update!(amount: indent.orders.pluck(:price).sum, arrear: indent.orders.pluck(:arrear).sum)
