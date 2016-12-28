@@ -204,7 +204,9 @@ class SentsController < ApplicationController
       update_order_status(order)
       if sent_list.sents.size == 0
       sent_list.destroy!
-      File.delete("#{Rails.root}/public/excels/sent_lists/" + sent_list.name + ".xls")
+      filename = "#{Rails.root}/public/excels/sent_lists/" + sent_list.name + ".xls"
+      # 删除文件
+      File.delete(filename) if File.exist?(filename)
       redirect_to sent_lists_path, notice: '发货记录已删除！'
       else
         redirect_to :back, notice: '发货记录已删除！'

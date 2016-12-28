@@ -57,10 +57,10 @@ class IncomesController < ApplicationController
   def create
     Income.transaction do
       @income = Income.new(income_params)
-if income_params[:bank_id].present?
-      bank = Bank.find_by_id(income_params[:bank_id])
-      bank.update!(balance: bank.balance + income_params[:money].to_f, incomes: bank.incomes + income_params[:money].to_f)
-end
+      if income_params[:bank_id].present?
+        bank = Bank.find_by_id(income_params[:bank_id])
+        bank.update!(balance: bank.balance.to_f + income_params[:money].to_f, incomes: bank.incomes.to_f + income_params[:money].to_f)
+      end
       if income_params[:reason] == "order"
         @income.reason = "订单收入"
         order = @income.order
@@ -68,12 +68,12 @@ end
         # 订单 “扣款”
         if income_params[:order_id].present?
           @income.note = "【#{Date.today.strftime("%Y-%m-%d")}】订单【#{order.name}】从余额扣除【#{income_params[:money]}元】"
-          order.update!(arrear: order.arrear - income_params[:money].to_f)
+          order.update!(arrear: order.arrear.to_f - income_params[:money].to_f)
           indent = order.indent
           indent.update!(arrear: indent.orders.pluck(:arrear).sum)
-          agent.update!(balance: agent.balance - income_params[:money].to_f, arrear: agent.arrear - income_params[:money].to_f)
+          agent.update!(balance: agent.balance.to_f - income_params[:money].to_f, arrear: agent.arrear.to_f - income_params[:money].to_f)
         else # “收入” 页面新建 收入记录（代理商打款）
-          agent.update!(balance: agent.balance + income_params[:money].to_f)
+          agent.update!(balance: agent.balance.to_f + income_params[:money].to_f)
         end
       else # 其他收入（例如卖废品收入等）
         @income.reason = "其他收入"
@@ -101,7 +101,7 @@ end
       if income_params[:agent_id].present?
         agent = Agent.find_by_id(income_params[:agent_id])
         new_balance = agent.balance + income_params[:money].to_f - origin_money
-        new_balance > 0 ? agent.update!(balance: new_balance) : agent.update!(arrear: agent.arrear + new_balance.abs)
+        new_balance > 0 ? agent.update!(balance: new_balance) : agent.update!(arrear: agent.arrear.to_f + new_balance.abs)
       end
     end
     
@@ -126,7 +126,7 @@ end
       end
       
       if bank.balance >= @income.money
-        bank.update!(balance: bank.balance - @income.money, incomes: bank.incomes - @income.money)
+        bank.update!(balance: bank.balance.to_f - @income.money.to_f, incomes: bank.incomes.to_f - @income.money.to_f)
       else
         msg = {error: "银行卡余额不足，无法删除收入记录！"}
         raise ActiveRecord::Rollback

@@ -27,27 +27,27 @@
               <div class="form-group" style="width: 100%;">
                 <label class="col-sm-1 control-label text-right" for="start_at">下单时间</label>
                 <div class="col-sm-5" style="padding-right: 0px;">
-                  <%= date_field_tag :start_at, @start_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择起始日期',required: true, class: 'form-control', style: 'width: 49%;' %>
-                  <%= date_field_tag :end_at, @end_at, class: '', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',required: true, class: 'form-control', style: 'width: 49%;' %>
+                  <%= date_field_tag :start_at, params[:start_at].presence || Date.today.beginning_of_month.to_s, class: '', data: {provide: 'datepicker'}, placeholder: '请选择起始日期',required: true, class: 'form-control', style: 'width: 49%;' %>
+                  <%= date_field_tag :end_at, params[:end_at].presence || Date.today.end_of_month.to_s, class: '', data: {provide: 'datepicker'}, placeholder: '请选择终止日期',required: true, class: 'form-control', style: 'width: 49%;' %>
                 </div>
                 <div class="col-sm-2" style="padding-left: 0px;">
-                  <%= select_tag :user_id, options_for_select(User.all.map{|r|[r.username, r.id]}, params[:user_id].presence || @user_id), prompt: '全部', class: 'form-control', style: 'width: 96%;' %>
+                  <%= select_tag :user_id, options_for_select(User.all.map{|r|[r.username, r.id]}, params[:user_id].presence), prompt: '全部', class: 'form-control', style: 'width: 96%;' %>
                 </div>
                 <label class="col-sm-1 control-label text-right">订单类型</label>
                 <div class="col-sm-3" style="padding-right: 0px;">
                   <div class="input-group" style="width: 100%;">
-                    <%= select_tag :order_category_id, options_from_collection_for_select(OrderCategory.all, :id, :name, @order_category_id), {include_blank: '请选择', class: 'form-control'} %>
+                    <%= select_tag :order_category_id, options_from_collection_for_select(OrderCategory.all, :id, :name, params[:order_category_id].presence), {include_blank: '请选择', class: 'form-control'} %>
                     <div class="input-group-addon">-</div>
-                    <%= select_tag :oftype, options_from_collection_for_select(Order.oftype, :last, :first, @order_oftype), {include_blank: '请选择', class: 'form-control'} %>
+                    <%= select_tag :oftype, options_from_collection_for_select(Order.oftype, :last, :first, params[:oftype].presence), {include_blank: '请选择', class: 'form-control'} %>
                   </div>
                 </div>
               </div>
               <div class="form-group" style="width: 100%; margin-top: 5px;">
                 <label class="col-sm-1 control-label text-right" for="provide">地区</label>
                 <div class="col-sm-7 city-group">
-                  <%= select_tag :province, options_from_collection_for_select(@provinces, :id, :name, @province), class: 'form-control orders-search-province', onchange: 'getChinaCity(this);', style: 'width: 30%; padding: 3px;' %>
-                  <%= select_tag :city, options_from_collection_for_select(@cities, :id, :name, @city), include_blank: '--城市--', class: 'form-control orders-search-city', onchange: 'getChinaCity(this);', onclick: 'validateCities(this);', style: 'width: 30%; padding: 3px;' %>
-                  <%= select_tag :district, options_from_collection_for_select(@districts, :id, :name, @district), include_blank: '--地区--', class: 'form-control orders-search-district', style: 'width: 38%; padding: 3px;' %>
+                  <%= select_tag :province, options_from_collection_for_select(@provinces, :id, :name, params[:province].presence || Province.find_by_name("湖北省").try(:id)), class: 'form-control orders-search-province', onchange: 'getChinaCity(this);', style: 'width: 30%; padding: 3px;' %>
+                  <%= select_tag :city, options_from_collection_for_select(@cities, :id, :name, params[:city].presence), include_blank: '--城市--', class: 'form-control orders-search-city', onchange: 'getChinaCity(this);', onclick: 'validateCities(this);', style: 'width: 30%; padding: 3px;' %>
+                  <%= select_tag :district, options_from_collection_for_select(@districts, :id, :name, params[:district]), include_blank: '--地区--', class: 'form-control orders-search-district', style: 'width: 38%; padding: 3px;' %>
                 </div>
                 <label class="col-sm-1 control-label text-right">代理/店名</label>
                 <div class="col-sm-3" style="padding-right: 0px;">
@@ -57,15 +57,7 @@
               <div class="form-group"  style="width: 100%; margin-top: 5px;">
                 <label class="col-sm-1 control-label text-right" for="provide">子订单号</label>
                 <div class="col-sm-7">
-                  <!-- <div class="input-group" style="width: 100%;"> -->
-                    <%#= select_year params[:date].present? ? params[:date][:year].to_i : Date.today.year, {field_name: :year, start_year: 2010, end_year: Date.today.year}, {class: 'form-control'} %>
-                    <!-- <div class="input-group-addon">年</div> -->
-                    <%#= label_tag '年', nil, class: 'control-label', for: 'date_year', style: 'padding: 0 10px;' %>
-                    <%#= select_month params[:date].present? ? params[:date][:month].to_i : Date.today.month, {field_name: :month, use_month_numbers: true}, {class: 'form-control'} %>
-                    <!-- <div class="input-group-addon">月</div> -->
-                    <%#= label_tag '月', nil, class: 'control-label', for: 'date_month', style: 'padding: 0 10px;' %>
-                    <%= text_field_tag :name, params[:name].presence || '' , class:'form-control', placeholder: '请输入订单号', data: {toggle: 'tooltip'}, title: '请输入需要查找、打包的订单号', style: 'width: 99%;' %> <!-- autofocus:true -->
-                  <!-- </div> -->
+                    <%= text_field_tag :name, params[:name].presence || '' , class:'form-control', placeholder: '请输入订单号', data: {toggle: 'tooltip'}, title: '请输入需要查找、打包的订单号', style: 'width: 99%;' %> 
                 </div>
               </div>
             </div>

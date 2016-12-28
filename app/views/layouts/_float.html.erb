@@ -55,6 +55,7 @@ function submit_batch_set_form(el){
 function clear_batch_set_form(el){
   $("#sent_list_ids").val("");
   $(".order-sent-list tbody").empty();
+  window.localStorage.removeItem("sent_list");
   jsNoty("information", "发货清单已清空。");
 }
 function toggleSidebar(el){
