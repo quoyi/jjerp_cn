@@ -55,7 +55,8 @@
           <div class="panel-title" role="button" style="margin: 0px; padding: 3px;">
             <label>总订单号：<%= indent.name %></label>
             <p class="pull-right" style="font-size: 14px;">
-              经销商：<%= indent.agent.full_name %>&nbsp;&nbsp;
+              <% agent_name = indent.agent.full_name %>
+              经销商：<%= agent_name %>&nbsp;&nbsp;
               终端客户：<%= indent.customer.truncate(10) %>&nbsp;&nbsp;
               应收款：<%= indent.amount %>&nbsp;&nbsp;
               已收款：<%= indent.amount - indent.arrear %>&nbsp;&nbsp;
@@ -85,10 +86,7 @@
               <tbody id="not_sent_indent_<%= indent.id %>">
                 <% indent.orders.each do |order| %>
                 <%# next unless order.packaged? %>
-                <tr class="indent_orders" data-id="<%= order.id %>" data-name="<%= order.name %>" data-agent="<%= order.agent.full_name %>">
-                  <!-- <td> -->
-                  <%#= link_to "加入清单", "javascript:void(0);", class: "btn btn-xs btn-info #{'disabled' unless order.sent}", onclick: "addOrderToSentList(this);", data: {id: order.id, name: order.name} %>
-                  <!-- </td> -->
+                <tr class="indent_orders" data-id="<%= order.id %>" data-name="<%= order.name %>" data-agent="<%= agent_name %>">
                   <td><%= order.name %></td>
                   <td><%= order.order_category.name %></td>
                   <td><%= order.packages.map(&:label_size).compact.sum %></td>
@@ -105,6 +103,9 @@
       </div>
     </div>
     <% end %>
+    <div class="pages pull-right">
+      <%= paginate @indents %>
+    </div>
   </div>
 </div>
 <!-- Modal -->

@@ -7,79 +7,48 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @unit = Unit.new
-    @part = Part.new
-    @craft = Craft.new
     @order = Order.new(created_at: Time.now)
     @income = Income.new(username: current_user.name, income_at: Time.now)
-    @orders = Order.all.order(created_at: :desc, index: :desc)
-    @start_at = params[:start_at].presence || Date.today.beginning_of_month.to_s
-    @end_at = params[:end_at].presence || Date.today.end_of_month.to_s
+    # View 使用的省市县集合数据
+    @provinces = Province.all.order(:id)
+    @cities = City.where(province_id: params[:province]).order(:id)
+    @districts = District.where(city_id: params[:city]).order(:id)
+    # 查询条件hash，优化“一次查询”
+    order_condition = {}
 
     if current_user.role?('super_admin') || current_user.role?('admin') || current_user.role?('financial')
-      @user_id = params[:user_id].presence.to_i
-      @orders = @orders.where(handler: @user_id) if @user_id != 0
-    elsif current_user.role?('order')
-      @user_id = current_user.id
-      @orders = @orders.where(handler: @user_id) if current_user.id == @user_id
+      order_condition[:handler] = params[:user_id] if params[:user_id].to_i != 0
     else
-      @user_id = ''
+      order_condition[:handler] = params[:user_id] if current_user.id == params[:user_id].to_i
     end
-
-    @order_category_id = ''
-    @order_oftype = ''
-    @agents = Agent.all.order(:id)
-    @province = Province.find_by_name("湖北省").try(:id)
-    @provinces = Province.all.order(:id)
-    @city = ""
-    @cities = City.where(province_id: @province).order(:id)
-    @district = ""
-    @districts = District.where(city_id: @city).order(:id)
-    # search = ''
-    @province = params[:province] unless params[:province].nil?
-    @agents = @agents.where(province: @province) unless @province.blank?
-    @city = params[:city] unless params[:city].nil?
-    # @city 不为空时，才需要过滤
-    @agents = @agents.where(city: @city) unless @city.blank?
-    @district = params[:district].presence || @district
-    # @district 不为空时，才需要过滤
-    @agents = @agents.where(district: @district) unless @district.blank?
-    @orders = @orders.where(agent_id: @agents) unless @agents.blank?
 
     # 判断搜索条件 起始时间 -- 结束时间
     if params[:start_at].present? && params[:end_at].present?
-      @start_at = params[:start_at]
-      @end_at = params[:end_at]
-      @orders = @orders.where("created_at between ? and ?", @start_at, @end_at)
+      order_condition[:created_at] = params[:start_at]..params[:end_at]
     end
-
-    # 子订单列表搜索条件同时包含 创建时间范围 和 订单号年月 时，搜索结果为空。因此取消此年月查询条件
-    search = ''
-    #if params[:date].present?
-    #  search += "#{params[:date][:year]}%-" if params[:date][:year].present?
-    #  search += "#{params[:date][:month]}-" if params[:date][:month].present?
-    #end
-    search += params[:name] if params[:name].present?
-    @orders = @orders.where("name like '%-#{search}'") unless search.blank?
 
     # 搜索条件 订单类型
-    if params[:order_category_id].present?
-      @order_category_id = params[:order_category_id]
-    end
-    @orders = @orders.where(order_category_id: @order_category_id) unless @order_category_id.blank?
+    order_condition[:order_category_id] = params[:order_category_id] if params[:order_category_id].present?
 
-    if params[:oftype].present?
-      @order_oftype = params[:oftype]
-    end
-    @orders = @orders.where(oftype: Order.oftypes[@order_oftype]) unless @order_oftype.blank?
+    # 搜索指定订单类型
+    order_condition[:oftype] = Order.oftypes[params[:oftype]] if params[:oftype].present?
 
-    # 搜索条件 代理商ID(@agent_id是返回给view使用)
+    # 搜索指定代理商订单 或 模糊查询省市县所有代理商
     if params[:agent_id].present?
-      @agent_id = params[:agent_id]
+      order_condition[:agent_id] = params[:agent_id]
     else
-      @agent_id = ''
+      agent_condition = {}
+      agent_condition[:province] = params[:province]
+      agent_condition[:city] = params[:city] if params[:city].present?
+      agent_condition[:district] = params[:district] if params[:district].present?
+      @agents = Agent.where(agent_condition)
+      order_condition[:agent_id] = @agents.any? ? @agents.pluck(:id) : 0
     end
-    @orders = @orders.where("agent_id = ?", @agent_id) unless @agent_id.blank?
+
+    @orders = Order.where(order_condition).order(created_at: :desc)
+    
+    # 订单号模糊查询：子订单列表搜索条件同时包含 创建时间范围 和 订单号年月 时，搜索结果为空。因此取消此年月查询条件
+    @orders = @orders.where("name like '%-#{params[:name]}'") if params[:name].present?
 
     # 查询结果统计信息
     @orders_result = {}
@@ -150,8 +119,6 @@ class OrdersController < ApplicationController
     @orders_result[:part] = @orders.where(order_category_id: OrderCategory.find_by(name: '配件').try(:id)).count
     @orders_result[:other] = @orders.where(order_category_id: OrderCategory.find_by(name: '其他').try(:id)).count
     
-    
-    # @orders = @orders.sort_by{|o|[o.name.split("-")[0].to_i,o.name.split('-')[1].to_i,o.name.split('-')[2].to_i]}
     respond_to do |format|
       format.html {
         @orders = @orders.page(params[:page])
@@ -162,12 +129,6 @@ class OrdersController < ApplicationController
           per = 6
           size = @orders.offset((params[:page].to_i - 1) * per).size  # 剩下的记录条数
           result = @orders.offset((params[:page].to_i - 1) * per).limit(per)  # 当前显示的所有记录
-          # if params[:oftype].present?
-          #   result = result.map{|ac| {id: ac.id, text: (ac.full_name)}}  if params[:oftype] == 'full_name'
-          #   result = result.map{|ac| {id: ac.id, text: (ac.contacts)}}  if params[:oftype] == 'contacts'
-          #   result = result.map{|ac| {id: ac.id, text: (ac.mobile)}}  if params[:oftype] == 'mobile'
-          # end
-          # result = result << {id: "other", text: '其他收入'} if params[:page].to_i == 1
           result = result.map { |o| {id: o.id, text: o.name}} << {id: '0', text: '其他收入'}
         end
         render json: {:orders => result.reverse, :total => size} 
@@ -332,17 +293,19 @@ class OrdersController < ApplicationController
 
   # 未发货
   def not_sent
-    # 订单状态小于“已打包” = "packaged" = 3
-    # @orders = Order.where("status <= ?", Order.statuses[:packaged])
-    # @indents = @orders.group(:indent_id).map(&:indent)
-    @indents = Indent.where("status <= ? and status > 1", Indent.statuses[:packaged])
-    @indents = @indents.where("agent_id=?", params[:agent_id]) if params[:agent_id].present?
+    # 已拆单，且未打包 的总订单
+    indent_condition = {}
+    indent_condition[:status] = Indent.statuses[:offered]..Indent.statuses[:packaged]
+    indent_condition[:agent_id] = params[:agent_id] if params[:agent_id].present?
+    @indents = Indent.where(indent_condition)
     @indents = @indents.where("name like '%#{params[:indent_name]}%'") if params[:indent_name].present?
     if params[:order_name].present?
       @orders = Order.where("name like '%#{params[:date][:year]}%#{params[:date][:month]}%#{params[:order_name]}'")
-      @indents = @indents.where(id: @orders.group(:indent_id).pluck(:indent_id))
+      #@indents = @indents.where(id: @orders.select(:indent_id).distinct.pluck(:indent_id))
+      @indents = @indents.joins(:orders).where({orders: {id: @orders}})
     end
 
+    @indents = @indents.includes(:agent, :sent, orders: [:packages, :order_category, :sent]).page(params[:page])
     @sent = Sent.new()
   end
 
