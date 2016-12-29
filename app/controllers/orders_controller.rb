@@ -8,9 +8,9 @@ class OrdersController < ApplicationController
   # GET /orders.json
   def index
     # 页面初始化参数
-    params[:start_at] = Date.today.beginning_of_month
-    params[:end_at] = Date.today.end_of_month
-    params[:province] = Province.find_by_name("湖北省").try(:id)
+    params[:start_at] = Date.today.beginning_of_month if params[:start_at].blank?
+    params[:end_at] = Date.today.end_of_month if params[:end_at].blank?
+    params[:province] = Province.find_by_name("湖北省").try(:id) if params[:province].blank?
 
     @order = Order.new(created_at: Time.now)
     # @income = Income.new(username: current_user.name, income_at: Time.now)
