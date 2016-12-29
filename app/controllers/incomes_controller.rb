@@ -55,7 +55,6 @@ class IncomesController < ApplicationController
   # POST /incomes
   # POST /incomes.json
   def create
-    binding.pry
     Income.transaction do
       @income = Income.new(income_params)
       if income_params[:bank_id].present?
@@ -98,7 +97,6 @@ class IncomesController < ApplicationController
       agent = @income.agent
       # 修改前后的金额差
       income_remain = @income.money.to_f - income_params[:money].to_f
-      binding.pry
       # 修改的收入为：代理商打款（有银行信息时）
       if income_params[:bank_id].present?
         bank = @income.bank
