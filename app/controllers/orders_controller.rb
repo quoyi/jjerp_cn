@@ -7,8 +7,13 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
+    # 页面初始化参数
+    params[:start_at] = Date.today.beginning_of_month
+    params[:end_at] = Date.today.end_of_month
+    params[:province] = Province.find_by_name("湖北省").try(:id)
+
     @order = Order.new(created_at: Time.now)
-    @income = Income.new(username: current_user.name, income_at: Time.now)
+    # @income = Income.new(username: current_user.name, income_at: Time.now)
     # View 使用的省市县集合数据
     @provinces = Province.all.order(:id)
     @cities = City.where(province_id: params[:province]).order(:id)
@@ -121,7 +126,7 @@ class OrdersController < ApplicationController
     
     respond_to do |format|
       format.html {
-        @orders = @orders.page(params[:page])
+        @orders = @orders.includes(:packages, indent: [:agent]).page(params[:page])
       }
       format.json {
         @orders = @orders.where("name like '#{params[:term]}%'") if params[:term].present?
@@ -159,6 +164,22 @@ class OrdersController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render json: @order }
+    end
+  end
+
+  # 查找 指定 name(订单号) 的子订单
+  # GET /orders/find.json
+  def find
+    @order = Order.where("name like '#{params[:year]}%-#{params[:month]}-#{params[:name]}'").first if params[:year].present? && params[:month].present? && params[:name].present?
+    if @order.present?
+      agent = @order.agent
+      data = {agent_id: agent.try(:id), agent_name: agent.try(:full_name), agent_balance: agent.try(:balance), order_id: @order.try(:id),
+              order_customer: @order.indent.try(:customer), order_price: @order.try(:price), order_arrear: @order.try(:arrear)}
+    else
+      data = {}
+    end
+    respond_to do |format|
+      format.json { render json: data }
     end
   end
 

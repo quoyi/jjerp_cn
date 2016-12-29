@@ -26,12 +26,13 @@
           <%= select_tag :bank_id, options_for_select(Bank.all.map{|i|[i.bank_card, i.id]}, params[:bank_id].presence), include_blank: "选择查询卡号", class: 'form-control' %>
           <%= link_to '查询', '#', class: 'btn btn-primary', style: 'margin: 0 0 0 10px;', onclick: 'searchOrDownload(this, "search")' %>
           <%= link_to '下载', '#', class: 'btn btn-default', onclick: 'searchOrDownload(this, "download")' %>
+          <%= link_to "订单扣款", 'javascript:void(0);', class: 'btn btn-primary pull-right',  data: { toggle: 'modal', target: '#paymentIncome'} %>
           <% end %>
           <% if current_user.admin? || current_user.role?('financial') %>
           <div class="row text-center" style="margin-top: 10px; font-weight: bold;">
             <span>收入金额：<code><%= @agent_incomes %></code>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;</span>
             <span>其他金额：<code><%= @other_incomes %></code>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <span>(支出)订单金额：<code><%= @order_incomes %></code>&nbsp;元</span>
+            <span>订单(支出)金额：<code><%= @order_incomes %></code>&nbsp;元</span>
           </div>
           <% end %>
         </div>
@@ -75,8 +76,9 @@
   </div>
 </div>
 <%= render 'new' %>
+<%= render '/incomes/payment' %>
 
-<!-- Modal -->
+<!-- 收入编辑 Modal -->
 <div class="modal fade" id="editIncome" tabindex="-1" role="dialog" aria-labelledby="editIncomeLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
@@ -84,6 +86,7 @@
   </div>
 </div>
 <script type="text/javascript">
+// 收入编辑
 $("#editIncome").on("hidden.bs.modal", function(e){
   $(this).removeData("bs.modal");
 });

@@ -67,7 +67,9 @@ class IncomesController < ApplicationController
         agent = @income.agent
         # 订单 “扣款”
         if income_params[:order_id].present?
-          @income.note = "【#{Date.today.strftime("%Y-%m-%d")}】订单【#{order.name}】从余额扣除【#{income_params[:money]}元】"
+          @income.reason = "余额扣款" if income_params[:bank_id].blank?
+          @income.indent_id = order.indent.id
+          @income.note = "【#{Date.today.strftime("%Y-%m-%d")}】订单【#{order.name}】从【#{agent.full_name}】余额扣除【#{income_params[:money]}元】"
           order.update!(arrear: order.arrear.to_f - income_params[:money].to_f)
           indent = order.indent
           indent.update!(arrear: indent.orders.pluck(:arrear).sum)
@@ -92,11 +94,11 @@ class IncomesController < ApplicationController
   def update
     Income.transaction do
       origin_money = @income.money.to_f
-if income_params[:bank_id].present?
-      bank = Bank.find_by_id(income_params[:bank_id])
-      bank.update!(balance: bank.balance + income_params[:money].to_f - origin_money,
-                   incomes: bank.incomes + income_params[:money].to_f - origin_money)
-end
+      if income_params[:bank_id].present?
+            bank = Bank.find_by_id(income_params[:bank_id])
+            bank.update!(balance: bank.balance + income_params[:money].to_f - origin_money,
+                         incomes: bank.incomes + income_params[:money].to_f - origin_money)
+      end
       @income.update!(money: income_params[:money].presence.to_f)
       if income_params[:agent_id].present?
         agent = Agent.find_by_id(income_params[:agent_id])

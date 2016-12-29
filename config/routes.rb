@@ -66,6 +66,7 @@ Rails.application.routes.draw do
   end
   resources :orders do
     collection do
+      get :find # 查找指定name（订单号）的子订单
       post :import # 导入拆单数据
       get :not_sent # 未发货
       get :producing # 生产中

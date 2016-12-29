@@ -1,0 +1,154 @@
+<div class="modal fade" id="paymentIncome" tabindex="-1" role="dialog" aria-labelledby="paymentIncomeLabel">
+  <div class="modal-dialog modal-sm" role="document" style="width: 400px;">
+    <div class="modal-content">
+      <%= form_for @income, html: {class: 'form-horizontal', id: 'income_order_form'} do |f| %>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="paymentIncomeLabel"> 订单收入 <small> 新建 </small></h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="order_name" class="control-label col-sm-3"><span class="require">*</span>订单号</label>
+          <div class="col-sm-9">
+            <div class="input-group" style="width: 100%;">
+              <%= select_year Date.today.year, {field_name: :year, start_year: 2010, end_year: Date.today.year}, {class: 'form-control', style: 'min-width: 65px;'} %>
+              <div class="input-group-addon" style="padding: 2px;">年</div>
+              <%= select_month Date.today.month, {field_name: :month, use_month_numbers: true}, {class: 'form-control', style: 'min-width: 45px;'} %>
+              <div class="input-group-addon" style="padding: 2px;">月</div>
+              <%= text_field_tag :order_name, params[:order_name].presence, class:'form-control', autofocus: true, placeholder: '请输入订单号', data: {toggle: 'tooltip'}, title: '请输入订单号，获取订单信息！', required: true %>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '代理商', for: 'income_agent_name', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.hidden_field :agent_id, value: nil %>
+            <%= f.text_field :agent_name, value: nil, class: 'form-control', disabled: 'disabled' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '可用余额', for: 'income_agent_balance', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :agent_balance, value: nil, class: 'form-control', disabled: 'disabled' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '终端客户', for: 'income_order_customer', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :order_customer, value: nil, class: 'form-control', disabled: 'disabled' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '订单金额', for: 'income_order_price', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :order_price, value: nil, class: 'form-control', disabled: 'disabled' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '订单欠款', for: 'income_order_arrear', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_field :order_arrear, value: nil, class: 'form-control', disabled: 'disabled' %>
+          </div>
+        </div>
+        <%= f.hidden_field :reason, value: 'order' %>
+        <%= f.hidden_field :order_id, value: nil %>
+        <div class="form-group">
+          <label for="income_money" class="control-label col-sm-3"><span class="require">*</span>扣款金额</label>
+          <div class="col-sm-9">
+            <%= f.number_field :money, value: nil, min: 0, step: 0.01, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="income_username" class="control-label col-sm-3"><span class="require">*</span>经手人</label>
+          <div class="col-sm-9">
+            <%= f.text_field :username, value: current_user.username.presence || current_user.email, class: 'form-control col-sm-9', required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="income_income_at" class="control-label col-sm-3"><span class="require">*</span>扣款时间</label>
+          <div class="col-sm-9">
+            <%= f.date_field :income_at, value: Date.today, class: 'form-control col-sm-9', data: {provide: 'datepicker'}, required: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label '备注', for: 'income_note', class: 'control-label col-sm-3' %>
+          <div class="col-sm-9">
+            <%= f.text_area :note, rows: 2, value: @income.note, class: 'form-control col-sm-9', style: 'resize: none; padding: 3px;', placeholder: '请输入备注信息' %>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <%= f.button '取消', class: 'btn btn-default', data: {dismiss: 'modal'} %>
+        <%= f.submit '提交', class: 'btn btn-primary disabled' %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$("[data-provide=datepicker]").datepicker({
+  format: 'yyyy-mm-dd',
+  language: 'zh-CN',
+  autoclose: true
+});
+// 模态框显示后，设置焦点（因为bootstrap模态框无法设置自动焦点）
+$("#paymentIncome").on('shown.bs.modal', function(e){
+  var $form = $("#income_order_form");
+  var $order_name = $form.find("[autofocus='autofocus']").first();
+  var $date_year = $form.find("#date_year");
+  var $date_month = $form.find("#date_month");
+  var $income_agent_id = $form.find("#income_agent_id");
+  var $income_agent_name = $form.find("#income_agent_name");
+  var $income_agent_balance = $form.find("#income_agent_balance");
+  var $income_order_id = $form.find("#income_order_id");
+  var $income_order_customer = $form.find("#income_order_customer");
+  var $income_order_price = $form.find("#income_order_price");
+  var $income_order_arrear = $form.find("#income_order_arrear");
+  var $income_money = $form.find("#income_money");
+  var $submit = $form.find("input[type='submit']");
+  
+  // $form.clearForm();  // 暂时不用清空
+  $order_name.focus();
+  $order_name.tooltip('show');
+  // 订单号失去焦点时、确定，自动获取订单信息，并填写到表单中
+  $order_name.on('blur', function(event){
+    $.ajax({
+      url: '/orders/find.json',
+      type: 'get',
+      dataType: 'json',
+      cache: true,
+      data: {name: $order_name.val(), year: $date_year.val(), month: $date_month.val()},
+      success: function(data){
+        if ($.isEmptyObject(data)) {
+          jsNoty("warning", "未找到订单！请输入正确的订单号！");
+          $order_name.focus();
+          $income_agent_id.val("未找到订单！请输入正确的订单号！");
+          $income_agent_name.val("未找到订单！请输入正确的订单号！");
+          $income_agent_balance.val("未找到订单！请输入正确的订单号！");
+          $income_order_id.val("未找到订单！请输入正确的订单号！");
+          $income_order_customer.val("未找到订单！请输入正确的订单号！");
+          $income_order_price.val("未找到订单！请输入正确的订单号！");
+          $income_order_arrear.val("未找到订单！请输入正确的订单号！");
+          $income_money.prop("max", 0);
+          $submit.addClass("disabled");
+        } else {
+          // 表单赋值
+          $income_agent_id.val(data.agent_id);
+          $income_agent_name.val(data.agent_name);
+          $income_agent_balance.val(data.agent_balance);
+          $income_order_id.val(data.order_id);
+          $income_order_customer.val(data.order_customer);
+          $income_order_price.val(data.order_price);
+          $income_order_arrear.val(data.order_arrear);
+          if(data.order_arrear > data.agent_balance){
+            $income_money.prop("max", data.agent_balance);
+          }else {
+            $income_money.prop("max", data.order_arrear);
+          }
+          $submit.removeClass("disabled");
+        }
+      }
+    });
+  });
+});
+</script>
