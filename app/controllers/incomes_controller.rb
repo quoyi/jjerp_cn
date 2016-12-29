@@ -55,6 +55,7 @@ class IncomesController < ApplicationController
   # POST /incomes
   # POST /incomes.json
   def create
+    binding.pry
     Income.transaction do
       @income = Income.new(income_params)
       if income_params[:bank_id].present?
@@ -93,18 +94,46 @@ class IncomesController < ApplicationController
   # PATCH/PUT /incomes/1.json
   def update
     Income.transaction do
-      origin_money = @income.money.to_f
+      # 必须有代理商
+      agent = @income.agent
+      # 修改前后的金额差
+      income_remain = @income.money.to_f - income_params[:money].to_f
+      binding.pry
+      # 修改的收入为：代理商打款（有银行信息时）
       if income_params[:bank_id].present?
-            bank = Bank.find_by_id(income_params[:bank_id])
-            bank.update!(balance: bank.balance + income_params[:money].to_f - origin_money,
-                         incomes: bank.incomes + income_params[:money].to_f - origin_money)
+        bank = @income.bank
+        if income_remain > 0 # 改小
+          bank_balance = bank.balance - income_remain
+          bank_incomes = bank.incomes - income_remain
+          # bank.update!(balance: bank.balance - income_remain, incomes: bank.incomes - income_remain)
+          agent_balance = agent.balance.to_f - income_remain
+          agent_arrear = agent.arrear.to_f - income_remain
+        else # 改大
+          bank_balance = bank.balance + income_remain.abs
+          bank_incomes = bank.incomes + income_remain.abs
+          agent_balance = agent.balance.to_f + income_remain.abs
+          agent_arrear = agent.arrear.to_f + income_remain.abs
+        end
+        bank.update!(balance: bank_balance, incomes: bank_incomes)
+      end 
+
+      # 修改的收入为：子订单扣款（无银行卡信息）
+      if income_params[:order_id].present? # 有订单号时
+        order = @income.order
+        indent = order.indent
+        order.update!(arrear: order.arrear + income_remain)
+        indent.update!(arrear: indent.orders.pluck(:arrear).sum)
+        if income_remain > 0
+          agent_balance = agent.balance + income_remain
+          agent_arrear = agent.arrear + income_remain
+        else
+          agent_balance = agent.balance - income_remain.abs
+          agent_arrear = agent.arrear - income_remain.abs
+        end
       end
-      @income.update!(money: income_params[:money].presence.to_f)
-      if income_params[:agent_id].present?
-        agent = Agent.find_by_id(income_params[:agent_id])
-        new_balance = agent.balance + income_params[:money].to_f - origin_money
-        new_balance > 0 ? agent.update!(balance: new_balance) : agent.update!(arrear: agent.arrear.to_f + new_balance.abs)
-      end
+      
+      agent.update!(balance: agent_balance, arrear: agent_arrear)
+      @income.update!(money: income_params[:money].presence.to_f, note: income_params[:note])
     end
     
     if @income.persisted?

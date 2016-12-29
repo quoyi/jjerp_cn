@@ -7,6 +7,8 @@
   <div class="form-group">
     <%= f.label '来源', for: 'agent_id', class: 'control-label col-sm-3' %>
     <div class="col-sm-9">
+      <%= f.hidden_field :indent_id, value: @income.indent_id %>
+      <%= f.hidden_field :order_id, value: @income.order_id %>
       <%= f.hidden_field :agent_id, value: @income.agent_id %>
       <%= f.text_field nil, value: @income.agent.try(:full_name), class: 'form-control', disabled: 'disabled' %>
     </div>
@@ -27,7 +29,7 @@
   <div class="form-group">
     <label for="income_money" class="control-label col-sm-3"><span class="require">*</span>收入金额</label>
     <div class="col-sm-9">
-      <%= f.number_field :money, min: 0, step: 0.01, value: @income.money, class: 'form-control', required: true %>
+      <%= f.number_field :money, min: 0, step: 0.01, value: @income.money, max: @income.order_id ? @income.order.price : nil, class: 'form-control', required: true, oninvalid: "setCustomValidity(#{'\'收入类型为“余额扣款”时，最大不能高于订单金额【' + @income.order.price.to_s + '】\'' if @income.order.present?});", oninput: "setCustomValidity('');" %>
     </div>
   </div>
   <div class="form-group">

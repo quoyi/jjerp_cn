@@ -132,6 +132,7 @@ $("#paymentIncome").on('shown.bs.modal', function(e){
           $income_money.prop("max", 0);
           $submit.addClass("disabled");
         } else {
+          console.log(data);
           // 表单赋值
           $income_agent_id.val(data.agent_id);
           $income_agent_name.val(data.agent_name);
@@ -140,7 +141,7 @@ $("#paymentIncome").on('shown.bs.modal', function(e){
           $income_order_customer.val(data.order_customer);
           $income_order_price.val(data.order_price);
           $income_order_arrear.val(data.order_arrear);
-          if(data.order_arrear > data.agent_balance){
+          if(Number(data.order_arrear) > Number(data.agent_balance)){
             $income_money.prop("max", data.agent_balance);
           }else {
             $income_money.prop("max", data.order_arrear);
