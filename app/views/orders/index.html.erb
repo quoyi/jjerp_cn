@@ -41,7 +41,7 @@
                 </div>
                 <label class="col-sm-1 control-label text-right">代理/店名</label>
                 <div class="col-sm-3" style="padding-right: 0px;">
-                  <%= select_tag :agent_id, options_from_collection_for_select(@agents, :id, :full_name, params[:agent_id]), include_blank: '请选择', class: 'form-control orders-search-agent', style: 'width: 100%; padding: 5px;' %>
+                  <%= select_tag :agent_id, options_from_collection_for_select(Agent.all, :id, :full_name, params[:agent_id]), include_blank: '请选择', class: 'form-control orders-search-agent', style: 'width: 100%; padding: 5px;' %>
                 </div>
               </div>
               <div class="form-group"  style="width: 100%; margin-top: 5px;">
