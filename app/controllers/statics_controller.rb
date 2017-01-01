@@ -12,6 +12,6 @@ class StaticsController < ApplicationController
   end
 
   def about
-    redirect_to statics_home_path if Date.today < Date.new(2017, 1, 1)
+    redirect_to statics_home_path if Date.today < Date.new(2017, 1, 15)
   end
 end
