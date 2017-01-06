@@ -55,6 +55,7 @@
         </thead>
         <tbody>
           <% @incomes.each_with_index do |i, index| %>
+          <% next if i.money.to_i == 0 %>
           <tr>
             <td><%= index + 1 %></td>
             <td><%= i.agent.try(:full_name) %></td>
