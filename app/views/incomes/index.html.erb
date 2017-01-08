@@ -65,7 +65,10 @@
             <td><%= i.money %></td>
             <td><%= i.username %></td>
             <td style="max-width:300px;"><%= i.note %></td>
-            <td><%= link_to '编辑', edit_income_path(i), data: { toggle: 'modal', target: '#editIncome'}, class: 'btn btn-xs btn-primary' %></td>
+            <td>
+              <%= link_to '编辑', edit_income_path(i), data: { toggle: 'modal', target: '#editIncome'}, class: 'btn btn-xs btn-primary' %>
+              <%= link_to '删除', i, method: :delete, data: { confirm: '警告！ 操作不可逆转，确认删除？' }, class: 'btn btn-xs btn-danger' %>
+            </td>
           </tr>
           <% end %>
         </tbody>

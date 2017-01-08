@@ -113,7 +113,7 @@ class IncomesController < ApplicationController
           agent_arrear = agent.arrear.to_f + income_remain.abs
         end
         bank.update!(balance: bank_balance, incomes: bank_incomes)
-      end 
+      end
 
       # 修改的收入为：子订单扣款（无银行卡信息）
       if income_params[:order_id].present? # 有订单号时
@@ -129,11 +129,11 @@ class IncomesController < ApplicationController
           agent_arrear = agent.arrear - income_remain.abs
         end
       end
-      
+
       agent.update!(balance: agent_balance, arrear: agent_arrear)
       @income.update!(money: income_params[:money].presence.to_f, note: income_params[:note])
     end
-    
+
     if @income.persisted?
       redirect_to incomes_path, notice: '收入记录编辑成功！'
     else
@@ -146,21 +146,28 @@ class IncomesController < ApplicationController
   def destroy
     msg = {notice: '收入记录已删除。'}
     Income.transaction do
+      agent = @income.agent
       bank = @income.bank
-      if @income.order
-        order = @income.order
-        indent = order.indent
-        order.update!(arrear: order.arrear + @income.money)
-        indent.update!(arrear: indent.arrear + @income.money)
+      # 订单收入
+      unless bank
+        if @income.order
+          order = @income.order
+          indent = order.indent
+          order.update!(arrear: order.arrear + @income.money)
+          indent.update!(arrear: indent.arrear + @income.money)
+          agent.update!(balance: agent.balance + @income.money, arrear: agent.arrear + @income.money)
+        end
+      else # 余额扣款
+        if bank.balance >= @income.money && agent.balance >= @income.money
+          bank.update!(balance: bank.balance.to_f - @income.money.to_f, incomes: bank.incomes.to_f - @income.money.to_f)
+          agent.update!(balance: agent.balance.to_f - @income.money.to_f)
+        else
+          msg = {error: "银行卡或代理商余额不足，无法删除！"}
+          raise ActiveRecord::Rollback
+        end
       end
-      
-      if bank.balance >= @income.money
-        bank.update!(balance: bank.balance.to_f - @income.money.to_f, incomes: bank.incomes.to_f - @income.money.to_f)
-      else
-        msg = {error: "银行卡余额不足，无法删除收入记录！"}
-        raise ActiveRecord::Rollback
-      end
-      @income.destroy
+      # @income.destroy
+      @income.update!(money: 0)
     end
 
     # @income.update(deleted: true)
@@ -207,14 +214,14 @@ class IncomesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_income
-      @income = Income.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_income
+    @income = Income.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def income_params
-      params.require(:income).permit(:name, :reason, :indent_id, :order_id, :money, :username,
-                                     :income_at, :status, :note, :bank_id, :agent_id, :deleted)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def income_params
+    params.require(:income).permit(:name, :reason, :indent_id, :order_id, :money, :username,
+                                   :income_at, :status, :note, :bank_id, :agent_id, :deleted)
+  end
 end
