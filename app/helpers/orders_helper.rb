@@ -299,6 +299,7 @@ module OrdersHelper
     
     # 所有子订单中，最小状态值作为总订单的状态
     min_status = indent.orders.map{|o|Order.statuses[o.status]}.min
-    indent.update!(status: min_status)
+    max_status = indent.orders.map{|o|Order.statuses[o.status]}.max
+    indent.update!(status: min_status, max_status: max_status)
   end
 end

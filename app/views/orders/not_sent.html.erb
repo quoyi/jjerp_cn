@@ -72,9 +72,6 @@
             <table class="table table-border">
               <thead>
                 <tr>
-                  <!-- <td class="col-sm-1"> -->
-                  <%#= link_to "全部加入清单", "javascript:void(0);", class: "btn btn-xs btn-info #{'disabled' unless indent.orders.detect{|o| o.sent && o.packaged?} }", onclick: "addIndentToSentList(this);" %>
-                  <!-- </td> -->
                   <td class="col-sm-2">子订单编号</td>
                   <td class="col-sm-1">类型</td>
                   <td class="col-sm-1">包装件数</td>
@@ -85,7 +82,6 @@
               </thead>
               <tbody id="not_sent_indent_<%= indent.id %>">
                 <% indent.orders.each do |order| %>
-                <%# next unless order.packaged? %>
                 <tr class="indent_orders" data-id="<%= order.id %>" data-name="<%= order.name %>" data-agent="<%= agent_name %>">
                   <td><%= order.name %></td>
                   <td><%= order.order_category.name %></td>
@@ -93,7 +89,7 @@
                   <td><%= order.status_name %></td>
                   <td><%= order.note %></td>
                   <!-- TODO:  -->
-                  <td><%= link_to '添加发货信息', change_sents_path(id: order.sent.try(:id), owner_id: order.id, owner_type: Order.name), class: 'btn btn-primary btn-xs', data: { toggle: 'modal', target: '#addSent'}, id: 'addSentsBtn', title: '添加发货信息' %></td>
+                  <td><%= link_to '添加发货信息', change_sents_path(id: order.sent.try(:id), owner_id: order.id, owner_type: Order.name), class: "btn btn-primary btn-xs #{'disabled' unless order.status == 'packaged'}", data: { toggle: 'modal', target: '#addSent'}, id: 'addSentsBtn', title: '添加发货信息' %></td>
                 </tr>
                 <% end %>
               </tbody>

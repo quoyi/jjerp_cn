@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161222063648) do
+ActiveRecord::Schema.define(version: 20170109121316) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "name",             limit: 255,                          default: "",    null: false
@@ -168,6 +168,7 @@ ActiveRecord::Schema.define(version: 20161222063648) do
     t.boolean  "deleted",                                              default: false, null: false
     t.datetime "created_at",                                                           null: false
     t.datetime "updated_at",                                                           null: false
+    t.integer  "max_status",       limit: 4,                           default: 0,     null: false
   end
 
   add_index "indents", ["agent_id"], name: "index_indents_on_agent_id", using: :btree
