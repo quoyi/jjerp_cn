@@ -320,7 +320,7 @@ class OrdersController < ApplicationController
     indent_condition[:max_status] = Indent.statuses[:packaged]..Indent.statuses[:sent]
     # indent_condition[:status] = Indent.statuses[:packaged]
     indent_condition[:agent_id] = params[:agent_id] if params[:agent_id].present?
-    @indents = Indent.where(indent_condition)
+    @indents = Indent.where(indent_condition).order(created_at: :desc)
     @indents = @indents.where("name like '%#{params[:indent_name]}%'") if params[:indent_name].present?
     if params[:order_name].present?
       @orders = Order.where("name like '%#{params[:date][:year]}%#{params[:date][:month]}%#{params[:order_name]}'")
