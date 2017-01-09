@@ -20,7 +20,7 @@ end
 
 Indents.transaction do
   Indents.all.each do |indent|
-    indent.update!(max_status: Orders.where(indent_id: indent.id).pluck(:status).max)
+    indent.update!(max_status: Orders.where(indent_id: indent.id).pluck(:status).max.to_i)
   end
 end
 
