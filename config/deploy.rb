@@ -53,7 +53,7 @@ namespace :deploy do
     on roles(:app) do
       execute "ls -l"
       info "Update Sentry's configuration in file: config/application.rb"
-      execute "cd config/ && cat application.rb"
+      execute "cd #{current_path}/config/ && cat application.rb"
     end
   end
 end
