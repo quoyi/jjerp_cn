@@ -46,3 +46,8 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 #   set :passenger_restart_with_touch, false # Note that `nil` is NOT the same as `false` here
 # If you don't set `:passenger_restart_with_touch`, capistrano-passenger will check what version of passenger you are running
 # and use `passenger-config restart-app` if it is available in that version.
+
+desc "Update Sentry's configuration in file: config/application.rb"
+file 'config/application.rb' do |f|
+  sh "cat #{f.name}"
+end
