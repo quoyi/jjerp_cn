@@ -54,6 +54,11 @@ namespace :deploy do
       execute "ls -l"
       info "Update Sentry's configuration in file: config/application.rb"
       execute "cd #{current_path}/config/ && cat application.rb"
+      file "#{current_path}/config/application.rb" do |f|
+        while line = f.gets
+          puts line
+        end
+      end
     end
   end
 end
