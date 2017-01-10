@@ -50,13 +50,9 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 namespace :deploy do
   desc "Update Sentry's configuration in file: config/application.rb"
   task :update_sentry_config do
-    sh "cat #{f.name}"
-  end
-
-  desc "echo config/application.rb"
-  file 'config/application.rb' do |f|
-    sh "cat #{f.name}"
-    run "cat #{f.name}"
+    execute "ls -l"
+    info "Update Sentry's configuration in file: config/application.rb"
+    execute "cd config/ && cat application.rb"
   end
 end
 
