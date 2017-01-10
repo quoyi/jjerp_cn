@@ -47,7 +47,17 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 # If you don't set `:passenger_restart_with_touch`, capistrano-passenger will check what version of passenger you are running
 # and use `passenger-config restart-app` if it is available in that version.
 
-desc "Update Sentry's configuration in file: config/application.rb"
-file 'config/application.rb' do |f|
-  sh "cat #{f.name}"
+namespace :deploy do
+  desc "Update Sentry's configuration in file: config/application.rb"
+  task :update_sentry_config do
+    sh "cat #{f.name}"
+  end
+
+  desc "echo config/application.rb"
+  file 'config/application.rb' do |f|
+    sh "cat #{f.name}"
+    run "cat #{f.name}"
+  end
 end
+
+after :deploy, "deploy:update_sentry_config"
