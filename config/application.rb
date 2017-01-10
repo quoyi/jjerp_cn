@@ -18,7 +18,7 @@ module Jjerp
     # config.time_zone = 'Central Time (US & Canada)'
     config.autoload_paths << Rails.root.join("lib")
     config.autoload_paths << Rails.root.join('app').join('pdfs')
-    
+
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
@@ -36,10 +36,14 @@ module Jjerp
 
     # 定制 rails generator scaffold
     config.generators do |g|
-        g.orm :active_record
-        g.template_engine :erb
-        g.test_framework :test_unit, fixture: true
-        g.stylesheets false # 禁止生成scss
+      g.orm :active_record
+      g.template_engine :erb
+      g.test_framework :test_unit, fixture: true
+      g.stylesheets false # 禁止生成scss
+    end
+
+    Raven.configure do |config|
+      config.dsn = 'https://022c5ad877dd486cb4bf12596be3fa06:f9c7d4a12c264fecbfcce7f6fbb6af4f@sentry.io/128020'
     end
   end
 end
