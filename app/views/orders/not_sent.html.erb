@@ -82,6 +82,7 @@
               </thead>
               <tbody id="not_sent_indent_<%= indent.id %>">
                 <% indent.orders.each do |order| %>
+<% next if Order.statuses[order.status] >= Order.statuses[:sending] %>
                 <tr class="indent_orders" data-id="<%= order.id %>" data-name="<%= order.name %>" data-agent="<%= agent_name %>">
                   <td><%= order.name %></td>
                   <td><%= order.order_category.name %></td>

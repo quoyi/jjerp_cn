@@ -316,7 +316,7 @@ class OrdersController < ApplicationController
   def not_sent
     # 已拆单，且未打包 的总订单
     indent_condition = {}
-    # indent_condition[:status] = Indent.statuses[:offered]..Indent.statuses[:packaged]
+    indent_condition[:status] = Indent.statuses[:offered]..Indent.statuses[:packaged]
     indent_condition[:max_status] = Indent.statuses[:packaged]..Indent.statuses[:sent]
     # indent_condition[:status] = Indent.statuses[:packaged]
     indent_condition[:agent_id] = params[:agent_id] if params[:agent_id].present?
