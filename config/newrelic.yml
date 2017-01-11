@@ -5,14 +5,14 @@
 #
 # Generated January 11, 2017
 #
-# This configuration file is custom generated for beitar
+# This configuration file is custom generated for beitaz
 #
 # For full documentation of agent configuration options, please refer to
 # https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-configuration
 
 common: &default_settings
   # Required license key associated with your New Relic account.
-  license_key: eb9bcab1ea5751b4b56b59489082b498dfbd0233
+  license_key: 7da40b25516e5be3a2c934e0d07b043c9a0166b0
 
   # Your application name. Renaming here affects where data displays in New
   # Relic.  For more details, see https://docs.newrelic.com/docs/apm/new-relic-apm/maintenance/renaming-applications
@@ -43,7 +43,7 @@ test:
 
 staging:
   <<: *default_settings
-  app_name: My Application (Staging)
+  app_name: jjerp.cn
 
 production:
   <<: *default_settings

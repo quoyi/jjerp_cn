@@ -44,7 +44,7 @@ module Jjerp
 
     Raven.configure do |config|
       # jjerp.cn
-      config.dsn = 'https://d861696a152a48ef85f0e01b84d217cd:84658b9a1b1d4aaaac605dec4e49cf7e@sentry.io/128047'
+      config.dsn = 'https://f366746ab9c94929906c5d960a447bc5:918fa9992f5d41889e229fe51a6f1e67@sentry.io/128322'
       # 其他
       #config.dsn = 'https://022c5ad877dd486cb4bf12596be3fa06:f9c7d4a12c264fecbfcce7f6fbb6af4f@sentry.io/128020'
     end

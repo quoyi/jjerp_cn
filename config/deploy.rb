@@ -2,7 +2,7 @@
 # lock '3.6.1'
 
 set :application, 'jjerp.cn'
-set :repo_url, 'https://github.com/bestar-zhao/jjerp.cn.git'
+set :repo_url, 'https://github.com/beitaz/jjerp.cn.git'
 set :deploy_user, 'bestar'
 
 # Default branch is :master
