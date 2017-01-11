@@ -48,17 +48,23 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 # and use `passenger-config restart-app` if it is available in that version.
 
 namespace :deploy do
+  # desc "create test.rb file"
+  # file 'test.rb' do |f|
+  # 	sh "touch #{f.name}"
+  # end
+
   desc "Update Sentry's configuration in file: config/application.rb"
   task :update_sentry_config do
     on roles(:app) do
+      info "test"
       execute "ls -l"
       info "Update Sentry's configuration in file: config/application.rb"
       execute "cd #{current_path}/config/ && cat application.rb"
-      file "#{current_path}/config/application.rb" do |f|
-        while line = f.gets
-          puts line
-        end
-      end
+      # File.open("#{current_path}/config/application.rb", "r") do |file|
+      #   while line = file.gets
+      #     puts line
+      #   end
+      # end
     end
   end
 end

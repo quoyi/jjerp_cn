@@ -45,6 +45,8 @@ gem 'barby', '~> 0.6.4'
 gem 'chunky_png'
 # 服务器监控
 gem 'sentry-raven'
+# 性能监控(performance monitoring)
+gem 'newrelic_rpm'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
