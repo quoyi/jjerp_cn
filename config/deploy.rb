@@ -64,6 +64,13 @@ namespace :deploy do
       # 查找并替换 不包含符号# 开头的 config.dsn 字符串 为 #config.dsn
       # execute "sed -i 's/[^#]config.dsn/#config.dsn/g' #{current_path}/config/application.rb"
 
+      execute "mkdir #{current_path}/public/excels/expends && chmod 666 #{current_path}/public/excels/expends"
+      execute "mkdir #{current_path}/public/excels/incomes && chmod 666 #{current_path}/public/excels/incomes"
+      execute "mkdir #{current_path}/public/excels/offers && chmod 666 #{current_path}/public/excels/offers"
+      execute "mkdir #{current_path}/public/excels/orders && chmod 666 #{current_path}/public/excels/orders"
+      execute "mkdir #{current_path}/public/excels/parts && chmod 666 #{current_path}/public/excels/parts"
+      execute "mkdir #{current_path}/public/excels/sent_lists && chmod 666 #{current_path}/public/excels/sent_lists"
+      execute "mkdir #{current_path}/public/images && chmod 666 #{current_path}/public/excels/images"
       info "自动部署完成！"
     end
   end
