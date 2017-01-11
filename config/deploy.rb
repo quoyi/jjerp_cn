@@ -56,15 +56,15 @@ namespace :deploy do
   desc "Update Sentry's configuration in file: config/application.rb"
   task :update_sentry_config do
     on roles(:app) do
-      info "test"
-      execute "ls -l"
-      info "Update Sentry's configuration in file: config/application.rb"
-      execute "cd #{current_path}/config/ && cat application.rb"
-      # File.open("#{current_path}/config/application.rb", "r") do |file|
-      #   while line = file.gets
-      #     puts line
-      #   end
-      # end
+
+      # execute "ls -l"
+      # info "Update Sentry's configuration in file: config/application.rb"
+      # execute "cd #{current_path}/config/ && cat application.rb"
+
+      # 查找并替换 不包含符号# 开头的 config.dsn 字符串 为 #config.dsn
+      # execute "sed -i 's/[^#]config.dsn/#config.dsn/g' #{current_path}/config/application.rb"
+
+      info "自动部署完成！"
     end
   end
 end
