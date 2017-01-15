@@ -54,6 +54,6 @@ class ApplicationController < ActionController::Base
   end
 
   def validate_date?
-    Date.today < Date.new(2017, 1, 15) ? true : false
+    Date.today < Date.new(2917, 1, 15) ? true : false
   end
 end
