@@ -45,11 +45,13 @@ class SentListsController < ApplicationController
     if params[:sent][:ids].present?
       sents = Sent.where(owner_id: params[:sent][:ids].split(','), owner_type: Order.name)
       label_size = sents.map{|s| s.cupboard.to_i + s.robe.to_i + s.door.to_i + s.part.to_i}.sum
-      @sent_list = SentList.create(total: label_size, created_by: Time.new.strftime('%Y-%m-%d %H:%M:%S'))
+      now = Time.now
+      @sent_list = SentList.create(total: label_size, created_by: now.strftime('%Y-%m-%d %H:%M:%S'))
       # @sent_list.save!
       # @sent_list = @sent_list.reload  # 不需要重新加载 reload
       sents.each do |s|
         s.sent_list_id = @sent_list.id
+        s.sent_at = now
         s.save!
         s.owner.sending!
         update_order_status(s.owner)

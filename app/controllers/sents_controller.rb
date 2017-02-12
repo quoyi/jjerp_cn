@@ -6,9 +6,8 @@ class SentsController < ApplicationController
   # GET /sents.json
   def index
     @sents = Sent.where(owner_type: Order.name)
-
     if params[:start_at].present? && params[:end_at].present?
-      @sents = @sents.where("sent_at between ? and ?", params[:start_at], params[:end_at])
+      @sents = @sents.where(sent_at: (params[:start_at]..params[:end_at]))
     elsif params[:start_at].present? || params[:end_at].present?
       @sents = @sents.where("sent_at = ? ", params[:start_at].present? ? params[:start_at] : params[:end_at])
     end
