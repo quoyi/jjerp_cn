@@ -121,7 +121,13 @@
             <%= link_to '扣款', deduct_incomes_path(order_id: o.id), class: "btn btn-primary btn-xs #{o.income_status == '全款' ? 'disabled' : ''}", data: {toggle: 'modal', target: '#deductBalance', order: o, username: current_user.username} %>
             <!-- 单签订单有收入记录、且有其他欠款订单欠款时，才能点击按钮 -->
             <%= link_to '转款', change_income_order_path(o), class: "btn btn-primary btn-xs #{o.incomes.pluck(:money).sum > 0 ? '' : 'disabled'}", data: {toggle: 'modal', target: '#changeIncomes' } %>
-            <%= link_to '生产', order_path(id: o.id, order: {status: 'producing'}),method: :put, class: "btn btn-primary btn-xs #{Order.statuses[o.status] >= 2 ? '' : 'disabled'}", data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
+            <% if Order.statuses[o.status] < 1 || (o.units.count < 1 && o.parts.count < 1 && o.crafts.count < 1) %>
+            <%= link_to '生产', 'javascript: void(0);', method: :put, class: "btn btn-primary btn-xs disabled", data: {toggle: 'tooltip'}, title: '请拆单报价后再点击"生产"按钮' %>
+            <% elsif Order.statuses[o.status] == 1 %>
+            <%= link_to '生产', order_path(id: o.id, order: {status: 'producing'}),method: :put, class: "btn btn-primary btn-xs", data: {toggle: 'tooltip'}, title: '开始生产此订单' %>
+            <% else %>
+            已生产
+            <% end %>
           </td>
         </tr>
         <% end %>

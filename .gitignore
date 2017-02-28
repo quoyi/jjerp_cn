@@ -19,7 +19,7 @@ public/assets/*
 !public/images
 public/images/*
 
-config/database.yml
+database.yml
 config/secrets.yml
 
 *.lock

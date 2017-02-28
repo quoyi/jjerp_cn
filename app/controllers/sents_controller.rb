@@ -5,32 +5,28 @@ class SentsController < ApplicationController
   # GET /sents
   # GET /sents.json
   def index
-    @sents = Sent.where(owner_type: Order.name)
+    @sent = Sent.new
+    condition = {
+      owner_type: Order.name
+    }
+    @sents = Sent.where(owner_type: Order.name).order('id desc')
     if params[:start_at].present? && params[:end_at].present?
-      @sents = @sents.where(created_at: (params[:start_at]..params[:end_at]))
-    elsif params[:start_at].present? || params[:end_at].present?
-      @sents = @sents.where("sent_at = ? ", params[:start_at].present? ? params[:start_at] : params[:end_at])
+      condition[:sent_at] = params[:start_at]..params[:end_at]
+    elsif params[:start_at].present?
+      condition[:sent_at] = params[:start_at].to_datetime..(Time.now + 10.years).to_datetime
+    elsif params[:end_at].present?
+      condition[:sent_at] = (params[:end_at] - 10.years).to_datetime..params[:end_at].to_datetime
     end
-
     if params[:order_name].present?
       order = Order.where("name like '%#{params[:order_name]}%'").first
-      @sents =  @sents.where(owner_id: order.id) if order.present?
-      #@sents = @sents.joins(:indent).where("indents.name = ?", params[:indent_name].to_s)
-    end
-
-    if params[:agent_id].present?
-      # indent = Indent.find_by(agent_id: params[:agent_id])
+      condition[:owner_id] = order.present? ? order.id : -1
+    elsif params[:agent_id].present?
       orders = Order.where(agent_id: params[:agent_id])
-      if orders.present?
-        @sents = @sents.where(owner_id: orders.map(&:id))
-      else
-        # 指定代理商没有订单时，利用数据库主键不可能为 -1 过滤所有记录
-        @sents = @sents.where(owner_id: -1)
-      end
+      # 指定代理商没有订单时，利用数据库主键不可能为 -1 过滤所有记录
+      condition[:owner_id] = orders.present? ? orders.pluck(:id) : -1
     end
+    @sents = Sent.where(condition).order('name desc')
     @sents = @sents.page(params[:page])
-    
-    @sent = Sent.new
   end
 
   # GET /sents/1
