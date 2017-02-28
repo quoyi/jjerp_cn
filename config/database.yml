@@ -15,7 +15,7 @@ default: &default
   pool: 5
   username: root
   password: 123abc..
-  socket: /tmp/mysql.sock  # Mac 下默认为此路径
+  # socket: /tmp/mysql.sock  # Mac 下默认为此路径
   # socket: /var/run/mysqld/mysqld.sock  # Ubuntu 下默认为此路径
 
 development:
