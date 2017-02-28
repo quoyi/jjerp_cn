@@ -5,6 +5,10 @@ $(function(){
   // localStorage.removeItem('index');
   localStorage.setItem('index', 1);
 });
+function linkToReprint(e){
+  e.preventDefault();
+  $(".orders_package_reprint").click();
+}
 </script>
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
@@ -23,6 +27,60 @@ $(function(){
     </div>
   </div>
   <div class="content-box-large box-with-header" style="padding-left: 5px; padding-right: 5px;">
+    <% if @order.order_category.name == '配件' %>
+    <%# "配件补单"类型的订单打包页面 %>
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-sm-3" style="padding-right: 0px;">
+            <%= text_field_tag :unit_part_craft_name, '', disabled: true, class: 'form-control', style: 'font-size: 18px; font-weight: bold; padding: 5px;', placeholder: '请扫描或者输入条码号' %>
+          </div>
+          <div class="col-sm-7" style="padding-left: 0px;">
+            <div class="row">
+              <%= form_tag("/orders/#{@order.id}/package.pdf", method: :post, class: 'form-inline') do |f| %>
+              <div class="col-sm-5" style="padding-right: 0px;">
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;尺寸：</label>
+                <%= number_field_tag 'length', @length, value: "80", class: "form-control", style: "width: 40px", readOnly: true, id: 'package_label_length' %>
+                &nbsp;&nbsp;×&nbsp;&nbsp;
+                <%= number_field_tag 'width', @width, value: "60", class: "form-control", style: "width: 40px", readOnly: true, id: 'package_label_width' %>
+              </div>
+              <div class="col-sm-7 text-right" style="padding: 0px;">
+                <button class="btn btn-info" disabled="disabled">上一包</button><button class="btn btn-info" disabled="disabled">下一包</button>
+                <button class="btn btn-primary" disabled="disabled" onclick="return linkToReprint(this);">打印当前</button>
+                <% if @order.over? %>
+                <button class="btn btn-primary" disabled="disabled">批量打印</button>
+                <% else %>
+                <button class="btn btn-primary" onclick="return print_pages(this);">批量打印</button>
+                <% end %>
+              </div>
+              <% end %>
+            </div>
+          </div>
+          <div class="col-sm-2 text-left" style="padding: 0px 4px;">
+          <%= form_tag("/orders/#{@order.id}/reprint.pdf", method: :post) do |reprint_form| %>
+            <%= hidden_field_tag :length, "80" %>
+            <%= hidden_field_tag :width, "60" %>
+            <%= hidden_field_tag :label_size %>
+            <%= hidden_field_tag :is_batch, 1 %>
+            <% if @order.over? %>
+            <button class="btn btn-info" disabled="disabled">重新打印</button>
+            <% else %>
+            <button type="submit" class="btn btn-primary orders_package_reprint" <%= disabled='disabled' unless @order.packages.pluck(:label_size).sum >= 0 %> onclick="return reprint_set_label_size();">重新打印</button>
+            <% end %>
+          <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class='row'>
+          <div class="col-sm-12 text-center" style="font-size: 25px; font-weight: solid;">
+            <span>配件补单,请直接打包!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% else %>
+    <%# 非"配件补单"类型的订单打包页面 %>
     <div class="panel panel-info">
       <div class="panel-heading">
         <div class="row">
@@ -49,7 +107,7 @@ $(function(){
                 <button class="btn btn-info" onclick="return previous();">上一包</button>
                 <button class="btn btn-info" onclick="return next();">下一包</button>
                 <button class="btn btn-primary" onclick="return print_current_page();">打印当前</button>
-                <button class="btn btn-primary" onclick="return print_pages(this);" data-units="<%= @order_units.map(&:is_printed).uniq.select { |e| !e  }.size %>">批量打印</button>
+                <button class="btn btn-primary" onclick="return print_pages(this);" data-units="<%= @order_units.map(&:is_printed).uniq.select { |e| !e  }.size if @order_units %>">批量打印</button>
                 <% end %>
               </div>
               <% end %>
@@ -83,6 +141,7 @@ $(function(){
                 </tr>
               </thead>
               <tbody>
+                <% if @order_units %>
                 <% @order_units.each do |order_unit|%>
                 <% next if order_unit.is_printed %>
                 <tr onclick="remove_order(this)" id="order_unit_<%=order_unit.id%>">
@@ -91,6 +150,7 @@ $(function(){
                   <td><%= order_unit.full_name%></td>
                 </tr>
                 <%end%>
+                <% end %>
               </tbody>
             </table>
           </div>
@@ -119,15 +179,17 @@ $(function(){
                 </tr>
               </thead>
               <tbody>
+                <% if @packages %>
                 <% @packages.each do |p|%>
-                <% Unit.where(id: p.unit_ids.split(',')).each do |order_unit|%>
-                <% next unless order_unit.is_printed %>
-                <tr>
-                  <td><%= order_unit.name%></td>
-                  <td>部件</td>
-                  <td><%= order_unit.full_name%></td>
-                </tr>
-                <% end %>
+                  <% Unit.where(id: p.unit_ids.split(',')).each do |order_unit|%>
+                    <% next unless order_unit.is_printed %>
+                    <tr>
+                      <td><%= order_unit.name%></td>
+                      <td>部件</td>
+                      <td><%= order_unit.full_name%></td>
+                    </tr>
+                    <% end %>
+                  <% end %>
                 <% end %>
               </tbody>
             </table>
@@ -135,5 +197,6 @@ $(function(){
         </div>
       </div>
     </div>
+    <% end %>
   </div>
 </div>
