@@ -121,6 +121,7 @@ class SentListsController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_sent_list
       @sent_list = SentList.find(params[:id])
@@ -135,9 +136,9 @@ class SentListsController < ApplicationController
     def to_csv(send_list)
       return [] if send_list.nil?
       # make excel using utf8 to open csv file
-      head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
-      head = '\xEF\xBB\xBF'.split(' ').map{|a|a.hex.chr}.join()
-      head = ""
+      # head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
+      # head = '\xEF\xBB\xBF'.split(' ').map{|a|a.hex.chr}.join()
+      # head = ""
       CSV.generate do |csv|
 
         csv << ['序号', '地区', '收货人', '联系方式', '订单编号', '橱', '衣', '门', '配', '合计', '代收', '物流名称']
@@ -159,14 +160,14 @@ class SentListsController < ApplicationController
           sents <<  keys[3]
           csv << sents
           values.each_with_index do |v, i|
-            next if i == 0 
+            next if i.zero?
             sents_group = ['', '', '', '']
             sents_group <<  v.owner.name
             sents_group <<  v.cupboard
             sents_group <<  v.robe
             sents_group <<  v.door
-            sents_group <<  v.part            
-            csv << sents_group    
+            sents_group <<  v.part
+            csv << sents_group
           end
         end
       end#.encode('gb2312', :invalid => :replace, :undef => :replace, :replace => "?")

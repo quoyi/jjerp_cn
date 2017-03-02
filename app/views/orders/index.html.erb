@@ -90,7 +90,7 @@
           <!-- <th>长</th>
           <th>宽</th>
           <th>高</th> -->
-          <th data-toggle="tooltip" title="子订单金额">金额</th>
+          <th data-toggle="tooltip" title="子订单金额">订单金额</th>
           <th>板料数量</th>
           <th>负责人</th>
           <th>状态</th>
@@ -118,7 +118,7 @@
           <td class="<%= 'success' if o.income_status == '全款' %>"><%= o.income_status %></td>
           <td><%= o.note %></td>
           <td>
-            <%= link_to '扣款', deduct_incomes_path(order_id: o.id), class: "btn btn-primary btn-xs #{o.income_status == '全款' ? 'disabled' : ''}", data: {toggle: 'modal', target: '#deductBalance', order: o, username: current_user.username} %>
+            <%= link_to '扣款', deduct_incomes_path(order_id: o.id), class: "btn btn-primary btn-xs #{o.income_status == '全款' || o.agent.balance <= 0 ? 'disabled' : ''}", data: {toggle: 'modal', target: '#deductBalance', order: o, username: current_user.username} %>
             <!-- 单签订单有收入记录、且有其他欠款订单欠款时，才能点击按钮 -->
             <%= link_to '转款', change_income_order_path(o), class: "btn btn-primary btn-xs #{o.incomes.pluck(:money).sum > 0 ? '' : 'disabled'}", data: {toggle: 'modal', target: '#changeIncomes' } %>
             <% if Order.statuses[o.status] < 1 || (o.units.count < 1 && o.parts.count < 1 && o.crafts.count < 1) %>

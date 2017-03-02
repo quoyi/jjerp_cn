@@ -8,7 +8,7 @@ ruby '2.3.0'
 gem 'devise'
 # gem 'cancancan'
 # gem 'rolify'
-
+gem 'by_star', git: 'git://github.com/radar/by_star'
 # 前端样式 Bootstrap
 gem 'bootstrap-sass'
 # 使用第三方图标库
@@ -52,8 +52,8 @@ gem 'newrelic_rpm'
 gem 'jquery-rails'
 # 这里不指定小于 5.0.0 时会导致左边菜单无法切换
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks', '~> 2.5.3', '< 5.0.0'
 gem 'jquery-turbolinks'
+gem 'turbolinks', '~> 2.5.3', '< 5.0.0'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -69,9 +69,10 @@ gem 'kaminari'
 
 # 打印
 gem 'prawn'
-gem "prawnto_2", :require => "prawnto"
-gem 'prawn-table'
 gem 'prawn-print'
+gem 'prawn-table'
+gem 'prawnto_2', require: 'prawnto'
+
 
 gem 'china_city'
 
@@ -87,9 +88,9 @@ end
 group :development do
   gem 'capistrano', '~> 3.6'
   gem 'capistrano-bundler'
+  gem 'capistrano-passenger'
   gem 'capistrano-rails'
   gem 'capistrano-rvm'
-  gem 'capistrano-passenger'
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
 

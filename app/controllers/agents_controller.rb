@@ -136,6 +136,6 @@ class AgentsController < ApplicationController
       params.require(:agent).permit(:name, :province, :city, :district, :town, :address, :delivery_address,
                                     :full_name, :contacts, :mobile, :e_account, :fax, :email,
                                     :wechar, :logistics, :order_condition, :send_condition,
-                                    :cycle, :note, :deleted, :arrear, :history, :balance)
+                                    :cycle, :note, :deleted, :history, :balance)
     end
 end
