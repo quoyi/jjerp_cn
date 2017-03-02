@@ -3,11 +3,14 @@ class UsersController < ApplicationController
   before_action :set_current_user, only: [:edit, :update]
 
   def index
+    params[:start_at] ||= Date.today.beginning_of_month
+    params[:end_at] ||= Date.today.end_of_month
     @users = User.all
-    @start_at = params[:start_at].presence || Date.today.beginning_of_month
-    @end_at = params[:end_at].presence || Date.today.end_of_month
     @users.each do |user|
-      orders = Order.where("handler = ? and (created_at between ? and ?)", user.id, @start_at, @end_at)
+      orders = Order.where('handler = ? and (created_at between ? and ?)',
+                           user.id,
+                           params[:start_at].to_datetime.beginning_of_day,
+                           params[:end_at].to_datetime.end_of_day)
       material_number = 0
       amount = 0
       orders.each do |order|
@@ -16,7 +19,7 @@ class UsersController < ApplicationController
             if unit.size.blank?
               material_number += unit.number
             else
-              material_number += unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+              material_number += unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * unit.number
             end
           end
         end
@@ -42,7 +45,7 @@ class UsersController < ApplicationController
 
   def update
     # 管理员更新用户角色
-    if (current_user.id == @user.id || current_user.has_role?("super_admin")) && user_params[:role_ids]
+    if (current_user.id == @user.id || current_user.has_role?('super_admin')) && user_params[:role_ids]
       @user.roles.delete(@user.roles.first) if @user.roles.any?
       @role = Role.find(user_params[:role_ids].to_i)
       @user.add_role! @role.nick
@@ -51,14 +54,15 @@ class UsersController < ApplicationController
     # 用户修改自己的账号信息
     if (current_user.id == @user.id || current_user.has_role?('super_admin') || current_user.has_role?('admin')) && @user.update(user_params)
       @role = @user.roles.first
-      flash[:success] = "您的信息已修改！"
+      flash[:success] = '您的信息已修改！'
     else
-      flash[:error] = "个人信息修改失败！"
+      flash[:error] = '个人信息修改失败！'
     end
     redirect_to :back
   end
 
   private
+
     def set_current_user
       @user = User.find(params[:id])
     end

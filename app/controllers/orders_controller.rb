@@ -8,10 +8,9 @@ class OrdersController < ApplicationController
   # GET /orders.json
   def index
     # 页面初始化参数
-    params[:start_at] = Date.today.beginning_of_month if params[:start_at].blank?
-    params[:end_at] = Date.today.end_of_month if params[:end_at].blank?
-    params[:province] = Province.find_by_name("湖北省").try(:id) if params[:province].blank?
-
+    params[:start_at] ||= Date.today.beginning_of_month
+    params[:end_at] ||= Date.today.end_of_month
+    params[:province] = Province.find_by_name('湖北省').try(:id) if params[:province].blank?
     @order = Order.new(created_at: Time.now)
     # @income = Income.new(username: current_user.name, income_at: Time.now)
     # View 使用的省市县集合数据
@@ -20,24 +19,15 @@ class OrdersController < ApplicationController
     @districts = District.where(city_id: params[:city]).order(:id)
     # 查询条件hash，优化“一次查询”
     order_condition = {}
-
     if current_user.role?('super_admin') || current_user.role?('admin') || current_user.role?('financial')
       order_condition[:handler] = params[:user_id] if params[:user_id].to_i != 0
-    else
-      order_condition[:handler] = params[:user_id] if current_user.id == params[:user_id].to_i
+    elsif current_user.id == params[:user_id].to_i
+      order_condition[:handler] = params[:user_id]
     end
-
-    # 判断搜索条件 起始时间 -- 结束时间
-    if params[:start_at].present? && params[:end_at].present?
-      order_condition[:created_at] = params[:start_at]..params[:end_at]
-    end
-
     # 搜索条件 订单类型
     order_condition[:order_category_id] = params[:order_category_id] if params[:order_category_id].present?
-
     # 搜索指定订单类型
     order_condition[:oftype] = Order.oftypes[params[:oftype]] if params[:oftype].present?
-
     # 搜索指定代理商订单 或 模糊查询省市县所有代理商
     if params[:agent_id].present?
       order_condition[:agent_id] = params[:agent_id]
@@ -49,9 +39,13 @@ class OrdersController < ApplicationController
       @agents = Agent.where(agent_condition)
       order_condition[:agent_id] = @agents.any? ? @agents.pluck(:id) : 0
     end
-
     @orders = Order.where(order_condition).order(created_at: :desc)
-    
+    # 判断搜索条件 起始时间 -- 结束时间
+    if params[:start_at].present? && params[:end_at].present?
+      @orders = @orders.where('created_at BETWEEN ? AND ?',
+                              params[:start_at].to_datetime.beginning_of_day,
+                              params[:end_at].to_datetime.end_of_day)
+    end
     # 订单号模糊查询：子订单列表搜索条件同时包含 创建时间范围 和 订单号年月 时，搜索结果为空。因此取消此年月查询条件
     @orders = @orders.where("name like '%-#{params[:name]}'") if params[:name].present?
 
@@ -60,7 +54,7 @@ class OrdersController < ApplicationController
     @orders_result[:total] = @orders.count
     @orders_result[:money] = @orders.pluck(:price).sum
     # 柜体总面积，背板总面积
-    @orders_result[:cabinets], @orders_result[:backboard] = 2.times.map{0}
+    @orders_result[:cabinets], @orders_result[:backboard] = Array.new(2) { 0 }
     @orders.each do |order|
       order.units.each do |unit|
         unit_number = 0
@@ -68,7 +62,7 @@ class OrdersController < ApplicationController
           unit_number = unit.number
           unit.is_backboard? ? @orders_result[:backboard] += unit_number : @orders_result[:cabinets] += unit_number
         else
-          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * unit.number
           unit.is_backboard? ? @orders_result[:backboard] += unit_number : @orders_result[:cabinets] += unit_number
         end
       end
@@ -76,7 +70,7 @@ class OrdersController < ApplicationController
     # 橱柜
     cupboards = @orders.where(order_category_id: OrderCategory.find_by(name: '橱柜').try(:id))
     @orders_result[:cupboard] = cupboards.count
-    @orders_result[:cupboard_cabinets], @orders_result[:cupboard_backboard] = 2.times.map { 0 }
+    @orders_result[:cupboard_cabinets], @orders_result[:cupboard_backboard] = Array.new(2) { 0 }
     cupboards.each do |order|
       order.units.each do |unit|
         unit_number = 0
@@ -84,7 +78,7 @@ class OrdersController < ApplicationController
           unit_number = unit.number
           unit.is_backboard? ? @orders_result[:cupboard_backboard] += unit_number : @orders_result[:cupboard_cabinets] += unit_number
         else
-          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * unit.number
           unit.is_backboard? ? @orders_result[:cupboard_backboard] += unit_number : @orders_result[:cupboard_cabinets] += unit_number
         end
       end
@@ -92,7 +86,7 @@ class OrdersController < ApplicationController
     # 衣柜
     robes = @orders.where(order_category_id: OrderCategory.find_by(name: '衣柜').try(:id))
     @orders_result[:robe] = robes.count
-    @orders_result[:robe_cabinets], @orders_result[:robe_backboard] = 2.times.map { 0 }
+    @orders_result[:robe_cabinets], @orders_result[:robe_backboard] = Array.new(2) { 0 }
     robes.each do |order|
       order.units.each do |unit|
         unit_number = 0
@@ -100,7 +94,7 @@ class OrdersController < ApplicationController
           unit_number = unit.number
           unit.is_backboard? ? @orders_result[:robe_backboard] += unit_number : @orders_result[:robe_cabinets] += unit_number
         else
-          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * unit.number
           unit.is_backboard? ? @orders_result[:robe_backboard] += unit_number : @orders_result[:robe_cabinets] += unit_number
         end
       end
@@ -116,32 +110,32 @@ class OrdersController < ApplicationController
           unit_number = unit.number
           @orders_result[:door_count] += unit_number
         else
-          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1){|result, item| result*=item}/(1000*1000).to_f * unit.number
+          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * unit.number
           @orders_result[:door_count] += unit_number
         end
       end
     end
     @orders_result[:part] = @orders.where(order_category_id: OrderCategory.find_by(name: '配件').try(:id)).count
     @orders_result[:other] = @orders.where(order_category_id: OrderCategory.find_by(name: '其他').try(:id)).count
-    
+
     respond_to do |format|
-      format.html {
+      format.html do
         @orders = @orders.includes(:packages, indent: [:agent]).page(params[:page])
-      }
-      format.json {
+      end
+      format.json do
         @orders = @orders.where("name like '#{params[:term]}%'") if params[:term].present?
         if params[:page]
           per = 6
-          size = @orders.offset((params[:page].to_i - 1) * per).size  # 剩下的记录条数
-          result = @orders.offset((params[:page].to_i - 1) * per).limit(per)  # 当前显示的所有记录
-          result = result.map { |o| {id: o.id, text: o.name}} << {id: '0', text: '其他收入'}
+          size = @orders.offset((params[:page].to_i - 1) * per).size # 剩下的记录条数
+          result = @orders.offset((params[:page].to_i - 1) * per).limit(per) # 当前显示的所有记录
+          result = result.map { |o| { id: o.id, text: o.name } } << { id: '0', text: '其他收入' }
         end
-        render json: {:orders => result.reverse, :total => size} 
-      }
+        render json: { orders: result.reverse, total: size }
+      end
       format.xls do
         # 分页
-        @download = @orders if params[:format] == "xls"
-        filename = Time.now.strftime("%Y%m%d%H%M%S%L") + ".xls"
+        @download = @orders if params[:format] == 'xls'
+        filename = Time.now.strftime('%Y%m%d%H%M%S%L') + '.xls'
         export_orders(filename, @download, params[:start_at], params[:end_at])
         send_file "#{Rails.root}/public/excels/orders/" + filename, type: 'text/xls; charset=utf-8'
       end
@@ -173,8 +167,8 @@ class OrdersController < ApplicationController
     @order = Order.where("name like '#{params[:year]}%-#{params[:month]}-#{params[:name]}'").first if params[:year].present? && params[:month].present? && params[:name].present?
     if @order.present?
       agent = @order.agent
-      data = {agent_id: agent.try(:id), agent_name: agent.try(:full_name), agent_balance: agent.try(:balance), order_id: @order.try(:id),
-              order_customer: @order.indent.try(:customer), order_price: @order.try(:price), order_arrear: @order.try(:arrear)}
+      data = { agent_id: agent.try(:id), agent_name: agent.try(:full_name), agent_balance: agent.try(:balance), order_id: @order.try(:id),
+               order_customer: @order.indent.try(:customer), order_price: @order.try(:price), order_arrear: @order.try(:arrear) }
     else
       data = {}
     end
@@ -189,8 +183,7 @@ class OrdersController < ApplicationController
   end
 
   # GET /orders/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /orders
   # POST /orders.json
@@ -208,7 +201,9 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1.json
   def update
     # 检查权限
-    return redirect_to :back, error: '没有权限编辑此订单！' if !current_user.admin? && @order.handler != 0 && @order.handler != current_user.id
+    if !current_user.admin? && @order.handler != 0 && @order.handler != current_user.id
+      return redirect_to :back, error: '没有权限编辑此订单！'
+    end
     return redirect_to :back, error: '请求无效！请检查数据是否有效。' unless params[:order]
 
     # 仅仅只是修改订单状态时
@@ -225,77 +220,11 @@ class OrdersController < ApplicationController
       else
         @order.update(status: order_params[:status])
       end
-      return redirect_to :back, notice: '子订单编辑成功！'
+      return redirect_to :back, notice: '订单状态已修改.'
     end
 
-    # 删除配件(将标记为删除的配件 _destory 设置为 true)
-    order_params_process_parts_attributes = order_params
-    if order_params_process_parts_attributes[:parts_attributes]
-      order_params_process_parts_attributes[:parts_attributes].each do |k, v|
-        order_params_process_parts_attributes[:parts_attributes][k]["_destroy"] = "1" if v[:id] && v[:number].blank?
-      end
-    end
-
-    # 更新子订单
-    Order.transaction do
-      indent = @order.indent
-      agent = indent.agent
-      # 在更新之前保存订单 （原）金额、（原）欠款
-      origin_indent_amount = indent.orders.pluck(:price).sum
-      origin_indent_arrear = indent.arrear
-      origin_order_amount = @order.price
-      origin_order_arrear = @order.arrear
-      origin_order_income = @order.incomes.pluck(:money).sum
-      origin_agent_balance = agent.balance
-      # 更新子订单（删除标记为删除的配件）
-      @order.update!(order_params_process_parts_attributes)
-      # 自定义报价时，查找或创建板料，防止找不到板料
-      @order.units.where(is_custom: true).each do |unit|
-        m = Material.find_or_create_by(ply: unit.ply, texture: unit.texture, color: unit.color)
-        m.full_name = "#{unit.ply_name}-#{unit.texture_name}-#{unit.color_name}" unless m.full_name.present?
-        m.buy = 0 unless m.buy.present?
-        m.uom = Uom.first.try(:name) if Uom.count > 0
-        m.price = unit.price unless m.price.present?
-        m.save!
-      end
-
-      # 更新子订单金额、代理商余额、收入记录
-      sum_units = 0
-      # 将子订单的所有部件按是否"自定义报价"分组 {true: 自定义报价部件; false: 正常拆单部件}
-      group_units = @order.units.group_by{|u| u.is_custom}
-      # 自定义报价中的部件 尺寸 不参与计算
-      sum_units += group_units[true].map{|u| u.number * u.price}.sum() if group_units[true]
-      # 正常拆单部件 尺寸 参与计算
-      sum_units += group_units[false].map{|u| u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum() if group_units[false]
-      # 计算 配件 金额
-      sum_parts = @order.parts.map{|p| p.number * p.price}.sum()
-      # 计算 工艺 金额
-      sum_crafts = @order.crafts.map{|c| c.number * c.price}.sum()
-      # 新子订单总金额
-      new_order_amount = (sum_units + sum_parts + sum_crafts).round
-      # 修改订单前后的 金额差 = 原总金额 - 新总金额
-      order_remain = origin_order_amount - new_order_amount
-
-      # 金额变小（order_remain > 0)将收入的钱退回到代理商中、金额变大（order_remain <= 0)什么都不处理。同时要求已收金额大于零
-      if order_remain > 0 && origin_order_income > 0
-        @order.incomes.destroy_all
-        income = Income.new(bank_id: Bank.find_by(is_default: 1).id, money: origin_order_income, agent_id: agent.id,
-                            username: current_user.username.presence || current_user.email, income_at: Time.now,
-                            note: "编辑子订单【#{@order.name}】时，将已收【#{origin_order_income}元】退回【#{agent.full_name}】余额。")
-        income.save!
-      end
-      # 真实处理者
-      really_handler = @order.handler.to_i == 0 ? current_user.id : @order.handler
-      @order.update!(price: new_order_amount, arrear: new_order_amount, handler: @order.handler.to_i == 0 ? current_user.id : really_handler)
-      # 更新总订单金额: 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
-      indent.update!(amount: indent.orders.pluck(:price).sum, arrear: indent.orders.pluck(:arrear).sum)
-      agent.update!(balance: agent.balance + origin_order_income, arrear: agent.orders.pluck(:arrear).sum,
-                    history: agent.orders.pluck(:price).sum)
-      # 生成报价单
-      create_offer(@order)
-      # 修改子订单、总订单的状态
-      update_order_status(@order.reload)
-    end
+    OrderService.update_units_parts_crafts(@order, order_params) if order_params[:parts_attributes]
+    OrderService.update_order(current_user, @order)
     # 子订单列表页面更新后，应该返回到列表页面
     redirect_to :back, notice: '子订单编辑成功！'
   end
@@ -318,7 +247,7 @@ class OrdersController < ApplicationController
       if agent.balance > 0
         agent.update!(balance: agent.balance + order.price, history: agent.history - order.price)
       else
-        agent.update!(arrear: agent.arrear - order.price, history: agent.history - order.price)
+        agent.update!(history: agent.history - order.price)
       end
 
       # 生成报价单
@@ -341,23 +270,27 @@ class OrdersController < ApplicationController
     @indents = @indents.where("name like '%#{params[:indent_name]}%'") if params[:indent_name].present?
     if params[:order_name].present?
       @orders = Order.where("name like '%#{params[:date][:year]}%#{params[:date][:month]}%#{params[:order_name]}'")
-      #@indents = @indents.where(id: @orders.select(:indent_id).distinct.pluck(:indent_id))
-      @indents = @indents.joins(:orders).where({orders: {id: @orders}})
+      @indents = @indents.joins(:orders).where(orders: { id: @orders })
     end
 
     @indents = @indents.includes(:agent, :sent, orders: [:packages, :order_category, :sent]).page(params[:page])
-    @sent = Sent.new()
+    @sent = Sent.new
   end
 
-  #生产任务
+  # 生产任务
   # GET
   def producing
     condition = {
       status: Order.statuses[:producing]
     }
-    condition[:produced_at] = params[:start_at].to_datetime..params[:end_at].to_datetime if params[:start_at].present? && params[:end_at].present?
     condition[:agent_id] = params[:agent_id] if params[:agent_id].present?
     @orders = Order.where(condition)
+    # 判断搜索条件 起始时间 -- 结束时间
+    if params[:start_at].present? && params[:end_at].present?
+      @orders = @orders.where('created_at BETWEEN ? AND ?',
+                              params[:start_at].to_datetime.beginning_of_day,
+                              params[:end_at].to_datetime.end_of_day)
+    end
     @orders = @orders.page(params[:page])
   end
 
@@ -378,15 +311,15 @@ class OrdersController < ApplicationController
       # 更新子订单金额、代理商余额、收入记录  开始
       sum_units = 0
       # 将子订单的所有部件按是否"自定义报价"分组 {true: 自定义报价部件; false: 正常拆单部件}
-      group_units = @order.units.group_by{|u| u.is_custom}
+      group_units = @order.units.group_by(&:is_custom)
       # 自定义报价中的部件 尺寸 不参与计算
-      sum_units += group_units[true].map{|u| u.number * u.price}.sum() if group_units[true]
+      sum_units += group_units[true].map { |u| u.number * u.price }.sum if group_units[true]
       # 正常拆单部件 尺寸 参与计算
-      sum_units += group_units[false].map{|u| u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum() if group_units[false]
+      sum_units += group_units[false].map { |u| u.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * u.number * u.price }.sum if group_units[false]
       # 计算 配件 金额
-      sum_parts = @order.parts.map{|p| p.number * p.price}.sum()
+      sum_parts = @order.parts.map { |p| p.number * p.price }.sum
       # 计算 工艺 金额
-      sum_crafts = @order.crafts.map{|c| c.number * c.price}.sum()
+      sum_crafts = @order.crafts.map { |c| c.number * c.price }.sum
       # 新子订单总金额
       new_order_amount = (sum_units + sum_parts + sum_crafts).round
       # 子订单金额 = 子订单部件合计 + 子订单配件合计 + 子订单工艺费合计
@@ -404,7 +337,7 @@ class OrdersController < ApplicationController
         @order.incomes.each do |income|
           # 收入记录的金额 <= 金额差： 删掉收入记录、继续找下一个收入
           if income.money <= new_order_remain
-            new_order_remain = new_order_remain - income.money
+            new_order_remain -= income.money
             income.destroy!
           else
             # 收入记录的金额 > 金额差： 更新收入记录、收入备注
@@ -437,15 +370,15 @@ class OrdersController < ApplicationController
       # 更新子订单金额
       sum_units = 0
       # 将子订单的所有部件按是否"自定义报价"分组 {true: 自定义报价部件; false: 正常拆单部件}
-      group_units = @order.units.group_by{|u| u.is_custom}
+      group_units = @order.units.group_by(&:is_custom)
       # 自定义报价中的部件 尺寸 不参与计算
-      sum_units += group_units[true].map{|u| u.number * u.price}.sum() if group_units[true]
+      sum_units += group_units[true].map { |u| u.number * u.price }.sum if group_units[true]
       # 正常拆单部件 尺寸 参与计算
-      sum_units += group_units[false].map{|u| u.size.split(/[xX*×]/).map(&:to_i).inject(1){|result,item| result*=item}/(1000*1000).to_f * u.number * u.price}.sum() if group_units[false]
+      sum_units += group_units[false].map { |u| u.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * u.number * u.price }.sum if group_units[false]
       # 计算 配件 金额
-      sum_parts = @order.parts.map{|p| p.number * p.price}.sum()
+      sum_parts = @order.parts.map { |p| p.number * p.price }.sum
       # 计算 工艺 金额
-      sum_crafts = @order.crafts.map{|c| c.number * c.price}.sum()
+      sum_crafts = @order.crafts.map { |c| c.number * c.price }.sum
       # 子订单金额 = 子订单部件合计 + 子订单配件合计 + 子订单工艺费合计
       @order.update!(price: (sum_units + sum_parts + sum_crafts).round)
 
@@ -460,7 +393,7 @@ class OrdersController < ApplicationController
 
       # 更新代理商 历史欠款合计、历史订单合计
       agent = indent.agent
-      agent.update!(arrear: agent.arrear + indent.amount - origin_indent_amount, history: agent.history + indent.amount - origin_indent_amount)
+      agent.update!(history: agent.history + indent.amount - origin_indent_amount)
 
       # 生成报价单
       create_offer(@order)
@@ -487,6 +420,7 @@ class OrdersController < ApplicationController
   end
 
   # 自定义报价
+  # GET /orders/:order_id/custom_offer
   def custom_offer
     @indent = @order.indent
     @parts = @order.parts
@@ -500,13 +434,12 @@ class OrdersController < ApplicationController
   # orders/1/package
   # # orders/1/package.pdf
   def package
-    byebug
-    # TODO 打印预览页面刷新时,显示错误
+    # TODO: 打印预览页面刷新时,显示错误
 
     # 按照顺序查找： 指定编号、指定ID、第一个（防止打印页面报错）
     if params[:name].present?
-      date = params[:date].presence || {year: Date.today.year.to_s, month: Date.today.month.to_s}
-      @order =  Order.where("name like '#{date[:year]}%-#{date[:month]}-#{params[:name]}'").first
+      date = params[:date].presence || { year: Date.today.year.to_s, month: Date.today.month.to_s }
+      @order = Order.where("name like '#{date[:year]}%-#{date[:month]}-#{params[:name]}'").first
     elsif params[:id].present?
       @order = Order.find_by_id(params[:id])
     else
@@ -522,7 +455,7 @@ class OrdersController < ApplicationController
       if params[:length].present? && params[:width].present?
         @length = params[:length].to_i
         @width = params[:width].to_i
-        current_user.print_size = @length.to_s + '*'+ @width.to_s
+        current_user.print_size = @length.to_s + '*' + @width.to_s
         current_user.save! if current_user.changed?
       elsif current_user.print_size
         @length = current_user.print_size.split('*').first.to_i
@@ -535,29 +468,29 @@ class OrdersController < ApplicationController
       if @order.order_category.name == '配件'
         package = @order.packages.find_or_create_by(part_ids: @order.parts.pluck(:id))
         package.label_size = label_size
-        package.print_size = @length.to_s + "*" + @width.to_s
+        package.print_size = @length.to_s + '*' + @width.to_s
         package.is_batch = params[:is_batch].to_i if params[:is_batch].present?
         package.save!
         @order.parts.update_all(is_printed: true)
         @order.update(status: 'packaged', packaged_at: Time.now)
         update_order_status(@order)
       else
-        if params[:order_unit_ids].present? &&  params[:order_unit_ids] != "{}"
+        if params[:order_unit_ids].present? && params[:order_unit_ids] != '{}'
           # 这些值需存在数据库表package中
-          logger.debug "自定义日志：" + label_size.to_s
+          logger.debug '自定义日志：' + label_size.to_s
           ids = ActiveSupport::JSON.decode(params[:order_unit_ids])
 
           ids.each_value do |value|
             unit_ids = value.map  do |v|
               if v =~ /order_unit/
-                id = v.gsub(/order_unit_/,'')
+                id = v.gsub(/order_unit_/, '')
                 id
               end
             end
             # 保存包装记录
             package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','))
             package.label_size = label_size
-            package.print_size = @length.to_s + "*" + @width.to_s
+            package.print_size = @length.to_s + '*' + @width.to_s
             package.is_batch = params[:is_batch].to_i if params[:is_batch].present?
             package.save!
             # 更新包装状态（已打印）
@@ -579,10 +512,10 @@ class OrdersController < ApplicationController
         format.html
         format.pdf do
           # 打印尺寸毫米（长宽）
-          pdf = OrderPdf.new(@length, @width, label_size <= 0 ? 1 : label_size , @order.id)
+          pdf = OrderPdf.new(@length, @width, label_size <= 0 ? 1 : label_size, @order.id)
           send_data pdf.render, filename: "order_#{@order.id}.pdf",
-            type: "application/pdf",
-            disposition: "inline"
+                                type: 'application/pdf',
+                                disposition: 'inline'
         end
       end
     else
@@ -596,9 +529,14 @@ class OrdersController < ApplicationController
     condition = {
       status: Order.statuses[:packaged]
     }
-    condition[:packaged_at] = (params[:start_at].to_datetime..params[:end_at].to_datetime)if params[:start_at].present? && params[:end_at].present?
     condition[:agent_id] = params[:agent_id] if params[:agent_id].present?
     @orders = Order.where(condition)
+    # 判断搜索条件 起始时间 -- 结束时间
+    if params[:start_at].present? && params[:end_at].present?
+      @orders = @orders.where('created_at BETWEEN ? AND ?',
+                              params[:start_at].to_datetime.beginning_of_day,
+                              params[:end_at].to_datetime.end_of_day)
+    end
     @orders = @orders.page(params[:page])
   end
 
@@ -608,7 +546,6 @@ class OrdersController < ApplicationController
     @order = Order.find_by_id(params[:id])
     # # 第一次进入 / 重新打印 页面
     packages = @order.packages
-    byebug
     if packages.present?
       package = packages.first
       @order.packages.destroy_all
@@ -624,7 +561,7 @@ class OrdersController < ApplicationController
     if params[:length].present? && params[:width].present?
       @length = params[:length].to_i
       @width = params[:width].to_i
-      current_user.print_size = @length.to_s + '*'+ @width.to_s
+      current_user.print_size = @length.to_s + '*' + @width.to_s
       current_user.save! if current_user.changed?
     elsif current_user.print_size
       @length = current_user.print_size.split('*').first.to_i
@@ -637,30 +574,31 @@ class OrdersController < ApplicationController
     # 返回结果
     respond_to do |format|
       # 请求页面为 html 时，返回到打包页面
-      format.html {redirect_to package_order_path(@order)}
+      format.html { redirect_to package_order_path(@order) }
       format.pdf do
         # 打印尺寸毫米（长宽）
-        pdf = OrderPdf.new(@length, @width, label_size , @order.id)
-        send_data pdf.render, type: "application/pdf", disposition: "inline"
+        pdf = OrderPdf.new(@length, @width, label_size, @order.id)
+        send_data pdf.render, type: 'application/pdf', disposition: 'inline'
       end
     end
   end
-  
+
   # GET 转款
   def change_income
     @order = Order.find_by_id(params[:id]) if params[:id].present?
     if params[:order].present?
-      msg = {success: "操作成功！"}
+      msg = { success: '操作成功！' }
       Order.transaction do
         today = Date.today
         tmp_money = params[:order][:price].to_f
         # 将金额转到指定 子订单
         if params[:order][:id].present?
           target_order = Order.find_by_id(params[:order][:id])
-          income = target_order.incomes.new(indent_id: target_order.indent.id, bank_id: Bank.find_by(is_default: 1).id,
-                                            income_at: today, username: current_user.name.presence || current_user.email, money: tmp_money,
-                                            note: "【#{today}】从子订单【#{@order.name}】手动转入【#{target_order.name}】金额【#{tmp_money}元】")
-          income.save!
+          target_order.incomes.create(indent_id: target_order.indent.id,
+                                      income_at: today,
+                                      username: current_user.name.presence || current_user.email,
+                                      money: tmp_money,
+                                      note: "【#{today}】从子订单【#{@order.name}】手动转入【#{target_order.name}】金额【#{tmp_money}元】")
           @order.incomes.order(created_at: :desc).each do |i|
             break if tmp_money == 0
             if i.money <= tmp_money
@@ -673,7 +611,7 @@ class OrdersController < ApplicationController
           end
           target_order.update!(arrear: target_order.arrear - params[:order][:price].to_f)
           @order.update!(arrear: @order.arrear + params[:order][:price].to_f)
-          msg = {notice: "【#{today}】从【#{@order.name}】转出【#{params[:order][:price]}元】到【#{target_order.name}】"}
+          msg = { notice: "【#{today}】从【#{@order.name}】转出【#{params[:order][:price]}元】到【#{target_order.name}】" }
         else # 将金额转到代理商余额
           agent = @order.agent
           @order.incomes.order(created_at: :desc).each do |i|
@@ -687,8 +625,8 @@ class OrdersController < ApplicationController
             end
           end
           @order.update!(arrear: @order.arrear + params[:order][:price].to_f)
-          agent.update!(balance: agent.balance + params[:order][:price].to_f, arrear: agent.orders.pluck(:arrear).sum)
-          msg = {notice: "【#{today}】从【#{@order.name}】转出【#{params[:order][:price]}元】代理商【#{agent.full_name}】余额"}
+          agent.update!(balance: agent.balance + params[:order][:price].to_f)
+          msg = { notice: "【#{today}】从【#{@order.name}】转出【#{params[:order][:price]}元】代理商【#{agent.full_name}】余额" }
         end
         # 重新计算总订单欠款
         indent = @order.indent
@@ -701,7 +639,7 @@ class OrdersController < ApplicationController
   end
 
   private
-  
+
   # Use callbacks to share common setup or constraints between actions.
   def set_order
     @order = Order.find(params[:id])

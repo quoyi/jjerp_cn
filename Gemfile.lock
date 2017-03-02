@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/radar/by_star
+  revision: 3fe3ef33e98aebcc226cbfea51d1e5101f948c78
+  specs:
+    by_star (2.2.1)
+      activesupport
+
 GEM
   remote: https://gems.ruby-china.org/
   specs:
@@ -235,6 +242,7 @@ DEPENDENCIES
   barby (~> 0.6.4)
   bootstrap-datepicker-rails (~> 1.6, >= 1.6.0.1)
   bootstrap-sass
+  by_star!
   byebug
   capistrano (~> 3.6)
   capistrano-bundler
@@ -274,4 +282,4 @@ RUBY VERSION
    ruby 2.3.0p0
 
 BUNDLED WITH
-   1.13.7
+   1.14.5

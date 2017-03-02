@@ -11,10 +11,9 @@
   <% else %>
   <% end %>
   订单号：<span id="indent_or_order_name"><%= @indent_or_order.name %></span>&nbsp;&nbsp;
-  终端客户：</span><%= indent.customer.truncate(12) %></span>&nbsp;&nbsp;
+  终端客户：<span><%= indent.customer.truncate(12) %></span>&nbsp;&nbsp;
   代理商：<span  id="indent_or_order_agent"><%= agent.full_name.truncate(12) %></span>&nbsp;&nbsp;
-  总件数：</span><%= indent.orders.map{|o| o.packages.map(&:label_size).compact.sum}.flatten.sum %>&nbsp;件</span>&nbsp;&nbsp;
-  欠款：</span><%= agent.arrear %>&nbsp;元</span>
+  总件数：<span><%= indent.orders.map{|o| o.packages.map(&:label_size).compact.sum}.flatten.sum %>&nbsp;件</span>
   </small>
   </h4>
 </div>

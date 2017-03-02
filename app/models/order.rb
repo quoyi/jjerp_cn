@@ -20,6 +20,10 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for :parts, reject_if: :social_rejectable?, allow_destroy: true
   accepts_nested_attributes_for :crafts, allow_destroy: true
 
+  validates_presence_of :order_category_id
+  scope :agent_amount, ->(agent_id) { where(agent_id: agent_id).pluck(:price).sum.round(2) }
+  scope :agent_arrear, ->(agent_id) { where(agent_id: agent_id).pluck(:arrear).sum.round(2) }
+
   #订单状态：0.报价中 1.已报价 2.生产中 3.已入库 4.已发货
   enum status: [:offering, :offered, :producing, :packaged, :sending, :sent, :over]
 

@@ -64,7 +64,7 @@
             <% else %>
               <%= link_to '自定报价', custom_offer_order_path(o), class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '自定义报价' %>
             <% end %>
-            <%= link_to '扣款', deduct_incomes_path(order_id: o.id), class: "btn btn-primary btn-xs #{o.income_status == '全款' ? 'disabled' : ''}", data: {toggle: 'modal', target: '#deductBalance', order: o, username: current_user.username.presence || current_user.email} %>
+            <%= link_to '扣款', deduct_incomes_path(order_id: o.id), class: "btn btn-primary btn-xs #{o.income_status == '全款' || o.agent.balance <= 0 ? 'disabled' : ''}", data: {toggle: 'modal', target: '#deductBalance', order: o, username: current_user.username.presence || current_user.email} %>
           </td>
           <td>
             <% if Order.statuses[o.status] < 1 || (o.units.count < 1 && o.parts.count < 1 && o.crafts.count < 1) %>

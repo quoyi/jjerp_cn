@@ -5,11 +5,10 @@ class Agent < ActiveRecord::Base
   validates :name, uniqueness: true
   validates_uniqueness_of :mobile # 开发环境暂时取消此验证，否则无法模拟电话号码重复
   before_save :generate_address
-  #validates :full_name, uniqueness: {scope: :name}
+  # attr_accessor :take_in, :take_out
+  # validates :full_name, uniqueness: {scope: :name}
   #
-
   # def delivery_address
-    
   #   # [ChinaCity.get(self.province), ChinaCity.get(self.city), ChinaCity.get(self.district), self.town, self.address].join('')
   # end
 
@@ -46,22 +45,22 @@ class Agent < ActiveRecord::Base
         end
       elsif (city_name =~ /(市辖区|县)$/).present?
         tmp_address = province_name
-        if self.district.present?
+        if district.present?
           tmp_district = District.find(district).name
-          tmp_address = tmp_address + (tmp_district.length > 2 ? tmp_district.gsub("县", "") : tmp_district)
-        elsif self.town.present?
+          tmp_address = tmp_address + (tmp_district.length > 2 ? tmp_district.gsub('县', '') : tmp_district)
+        elsif town.present?
           tmp_address = tmp_address + town
         else
           tmp_address = tmp_address
         end
       else
         tmp_address = province_name + city_name.gsub("市", "")
-        if self.district.present?
+        if district.present?
           tmp_district =  District.find(district).name.gsub("土家族自治县", "").gsub("市辖区","")
-          tmp_address = tmp_address + (tmp_district.length > 2 ? tmp_district.gsub("区", "").gsub("县", "") : tmp_district)
-          tmp_address = (tmp_address.gsub(province_name, "") + self.town) if self.town.present?
-        elsif self.town.present?
-          tmp_address = tmp_address + town
+          tmp_address = tmp_address + (tmp_district.length > 2 ? tmp_district.gsub("区", "").gsub('县', '') : tmp_district)
+          tmp_address = (tmp_address.gsub(province_name, '') + self.town) if self.town.present?
+        elsif town.present?
+          tmp_address += town
         else
           tmp_address = tmp_address
         end
@@ -69,7 +68,7 @@ class Agent < ActiveRecord::Base
       # tmp_address = tmp_address.gsub("市", "").gsub("地区", "")
     else
       tmp_address = province_name
-      tmp_address = tmp_address + town if self.town.present?
+      tmp_address += town if town.present?
     end
     self.delivery_address = tmp_address
   end

@@ -7,7 +7,7 @@ class AgentsController < ApplicationController
     tmp_agent = Agent.order(:created_at).last
     tmp_name = tmp_agent.present? ? tmp_agent.name.gsub('DL', '').to_i + 1 : 1
     @agent = Agent.new(name: "DL".upcase() + tmp_name.to_s.rjust(4, "0"))
-    @agents = Agent.where(deleted: false)
+    @agents = Agent.where(deleted: false).order(created_at: :desc)
     # 代理商列表页面查询用
     @agent_full_name, @agent_contacts, @agent_mobile = 3.times.map{""}
     # 提供给 select2 查询
@@ -136,6 +136,6 @@ class AgentsController < ApplicationController
       params.require(:agent).permit(:name, :province, :city, :district, :town, :address, :delivery_address,
                                     :full_name, :contacts, :mobile, :e_account, :fax, :email,
                                     :wechar, :logistics, :order_condition, :send_condition,
-                                    :cycle, :note, :deleted, :arrear, :history, :balance)
+                                    :cycle, :note, :deleted, :history, :balance)
     end
 end
