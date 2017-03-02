@@ -8,7 +8,6 @@ class Agent < ActiveRecord::Base
   # attr_accessor :take_in, :take_out
   # validates :full_name, uniqueness: {scope: :name}
   #
-
   # def delivery_address
   #   # [ChinaCity.get(self.province), ChinaCity.get(self.city), ChinaCity.get(self.district), self.town, self.address].join('')
   # end

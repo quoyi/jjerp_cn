@@ -5,42 +5,36 @@ class MaterialsController < ApplicationController
   # GET /materials.json
   def index
     @material = Material.new
-    # if params[:ply].present? && params[:texture].present? && params[:color].present?
-    #   @materials = Material.where(ply: params[:ply], texture: params[:texture], color: params[:color]) 
-    # else
     @materials = Material.where(deleted: false)
-    # end
     if params[:start_at].present? && params[:end_at].present?
-      @materials = @materials.where("created_at between ? and ?", params[:start_at], params[:end_at])
+      @materials = @materials.where('created_at between ? and ?',
+                                    params[:start_at].to_datetime.beginning_of_day,
+                                    params[:end_at].to_datetime.end_of_day)
     end
     
     # 板料统计信息 (全部 / 所选时间段)
     materials_arr = []
-    Unit.all.group_by{|u| [u.ply, u.texture, u.color]}.each_pair do |key, value|
+    Unit.all.group_by { |u| [u.ply, u.texture, u.color] }.each_pair do |key, value|
       obj = {}
       materail = Material.find_by(ply: key.first, texture: key.second, color: key.last)
-      total_number = 0 
+      total_number = 0
       value.each do |unit|
         if unit.is_custom
           total_number += unit.number.to_f
         else
           size = unit.size.split(/[xX*×]/).map(&:to_i)
-          if size.length > 1
-            total_number += ((unit.number.to_f * size[0] * size[1])/(1000*1000))
-          else
-            total_number += unit.number.to_f
-          end
+          total_number += size.length > 1 ? ((unit.number.to_f * size[0] * size[1]) / (1000 * 1000)) : unit.number.to_f
         end
       end
       obj[:name] = materail.try(:full_name)
       obj[:number] = total_number
       materials_arr << obj
     end
-    @materials_arr = materials_arr.sort_by{|m| m[:number] }
+    @materials_arr = materials_arr.sort_by { |m| m[:number] }
     @materials_arr = @materials_arr.reverse if params[:sort].present? && params[:sort] == 'desc'
     respond_to do |format|
       format.html { @materials = @materials.page(params[:page]) }
-      format.json {render json: {flag: @materials.empty? ? "false" : "true"} }
+      format.json { render json: { flag: @materials.empty? ? 'false' : 'true' } }
     end
   end
 

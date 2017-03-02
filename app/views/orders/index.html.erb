@@ -85,17 +85,18 @@
           <th>订单号</th>
           <th colspan="2">类型</th>
           <th>代理商</th>
-          <th>终端客户</th>
+          <th>终端</th>
           <th>收货地址</th>
           <!-- <th>长</th>
           <th>宽</th>
           <th>高</th> -->
-          <th data-toggle="tooltip" title="子订单金额">订单金额</th>
-          <th>板料数量</th>
+          <th data-toggle="tooltip" title="子订单金额">金额</th>
+          <th>欠款</th>
+          <th>板数</th>
           <th>负责人</th>
           <th>状态</th>
           <th>件数</th>
-          <th>到款状态</th>
+          <th>到款</th>
           <th>备注</th>
           <th>操作</th>
         </tr>
@@ -111,6 +112,7 @@
           <td class="col-sm-1"><%#= o.width %></td>
           <td class="col-sm-1"><%#= o.height %></td> -->
           <td data-toggle="tooltip" title="子订单金额"><%= o.price %></td>
+          <td><%= o.arrear %></td>
           <td><%= o.material_number %></td>
           <td><%= User.find_by(id: o.handler).try(:username).presence || User.find_by(id: o.handler).try(:email) || "无" %></td>
           <td><%= o.status_name %></td>

@@ -1,6 +1,6 @@
 class OrderService < BaseService
   # 修改订单
-  def self.update_order(order)
+  def self.update_order(handler, order)
     indent = order.indent
     agent = indent.agent
     # 自定义报价时，查找或创建板料，防止找不到板料
@@ -18,7 +18,7 @@ class OrderService < BaseService
     order.update(agent_id: agent.id,
                  price: new_order_amount,
                  arrear: new_order_amount,
-                 handler: order.handler.to_i.zero? ? current_user.id : order.handler)
+                 handler: order.handler.to_i.zero? ? handler.id : order.handler)
     # 更新总订单金额: 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
     indent.update!(amount: indent.orders.pluck(:price).sum,
                    arrear: indent.orders.pluck(:arrear).sum)

@@ -13,20 +13,19 @@ class IndentsController < ApplicationController
     @agent = Agent.new(name: 'DL'.upcase + tmp_name.to_s.rjust(4, '0'))
     now = Time.now
     after_ten_day = Time.now + 864_000 # 十天 = 60 (秒钟/分钟) * 60 (分钟/天) * 24 (小时/天) * 10
-    @indent = Indent.new(name: Time.now.strftime('%Y%m%d') + SecureRandom.hex(1).upcase, verify_at: Time.now, require_at: after_ten_day)
-    @income = @indent.incomes.new(username: current_user.name, income_at: now)
-
-    @indents = Indent.all.order(created_at: :desc)
+    @indent = Indent.new(name: Time.now.strftime('%Y%m%d') + SecureRandom.hex(1).upcase,
+                         verify_at: Time.now,
+                         require_at: after_ten_day)
+    @income = @indent.incomes.new(username: current_user.name,
+                                  income_at: now)
     @start_at = Date.today.beginning_of_month.to_s
     @end_at = Date.today.end_of_month.to_s
-    if params[:start_at].present? && params[:end_at].present?
-      @start_at = params[:start_at]
-      @end_at = params[:end_at]
-    end
-    @indents = @indents.where('verify_at between ? and ?', @start_at, @end_at)
-    if params[:agent_id].present?
-      @indents = @indents.where(agent_id: params[:agent_id])
-    end
+    params[:start_at] ||= Date.today.beginning_of_month
+    params[:end_at] ||= Date.today.end_of_month
+    @indents = Indent.where('verify_at between ? and ?',
+                            params[:start_at].to_datetime.beginning_of_day,
+                            params[:end_at].to_datetime.end_of_day)
+    @indents = @indents.where(agent_id: params[:agent_id]) if params[:agent_id].present?
     @indents = @indents.page(params[:page])
   end
 

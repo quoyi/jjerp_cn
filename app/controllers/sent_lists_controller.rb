@@ -9,9 +9,9 @@ class SentListsController < ApplicationController
     @sent_lists = SentList.all.order(created_at: :desc)
     # 判断搜索条件 起始时间 -- 结束时间
     if params[:start_at].present? && params[:end_at].present?
-      @start_at = params[:start_at]
-      @end_at = params[:end_at]
-      @sent_lists = @sent_lists.where("created_at between ? and ?", @start_at, @end_at).order(:id)
+      @sent_lists = @sent_lists.where('created_at BETWEEN ? AND ?',
+                                      params[:start_at].to_datetime.beginning_of_day,
+                                      params[:end_at].to_datetime.end_of_day)
     end
     
     if params[:agent_id].present?
@@ -44,33 +44,31 @@ class SentListsController < ApplicationController
   def create
     if params[:sent][:ids].present?
       sents = Sent.where(owner_id: params[:sent][:ids].split(','), owner_type: Order.name)
-      label_size = sents.map{|s| s.cupboard.to_i + s.robe.to_i + s.door.to_i + s.part.to_i}.sum
+      label_size = sents.map { |s| s.cupboard.to_i + s.robe.to_i + s.door.to_i + s.part.to_i }.sum
       now = Time.now
       @sent_list = SentList.create(total: label_size, created_by: now.strftime('%Y-%m-%d %H:%M:%S'))
-      # @sent_list.save!
-      # @sent_list = @sent_list.reload  # 不需要重新加载 reload
       sents.each do |s|
-        s.sent_list_id = @sent_list.id
-        s.sent_at = now
-        s.save!
-        s.owner.sending!
-        update_order_status(s.owner)
+        s.update(sent_list_id: @sent_list.id, sent_at: now)
+        s.owner.update(status: Order.statuses[:sending], sent_at: now)
       end
+      indent = sents.first.owner.indent
+      indent_status = indent.orders.pluck(:status)
+      indent.update(status: indent_status.min, max_status: indent_status.max)
       export_sent_list(@sent_list)
     else
-      @sent_list = SentList.new(sent_list_params)
+      @sent_list = SentList.create(sent_list_params)
     end
 
     respond_to do |format|
-      # if @sent_list.persisted?
-      if @sent_list.save
+      # if @sent_list.save
+      if @sent_list.persisted?
         format.html { redirect_to @sent_list, notice: '发货清单创建成功！' }
         format.pdf do
           # 打印尺寸毫米（长宽）
           pdf = SentListPdf.new(sent_list)
           send_data pdf.render, filename: "发货清单#{sent_list.name}.pdf",
-            type: "application/pdf",
-            disposition: "inline"
+                                type: 'application/pdf',
+                                disposition: 'inline'
         end
       else
         format.html { render :new }
@@ -140,11 +138,10 @@ class SentListsController < ApplicationController
       # head = '\xEF\xBB\xBF'.split(' ').map{|a|a.hex.chr}.join()
       # head = ""
       CSV.generate do |csv|
-
         csv << ['序号', '地区', '收货人', '联系方式', '订单编号', '橱', '衣', '门', '配', '合计', '代收', '物流名称']
 
         index = 0
-        send_list.sents.group_by{|s| [s.area, s.receiver, s.contact, s.logistics]}.each_pair do  |keys, values|
+        send_list.sents.group_by { |s| [s.area, s.receiver, s.contact, s.logistics] }.each_pair do  |keys, values|
           sents = []
           sents << index += 1
           sents <<  keys[0]
@@ -155,7 +152,7 @@ class SentListsController < ApplicationController
           sents <<  values.first.robe
           sents <<  values.first.door
           sents <<  values.first.part
-          sents <<  values.map{|sent| sent.cupboard + sent.robe + sent.door + sent.part }.sum
+          sents <<  values.map { |sent| sent.cupboard + sent.robe + sent.door + sent.part }.sum
           sents <<  values.map(&:collection).sum
           sents <<  keys[3]
           csv << sents
@@ -170,6 +167,6 @@ class SentListsController < ApplicationController
             csv << sents_group
           end
         end
-      end#.encode('gb2312', :invalid => :replace, :undef => :replace, :replace => "?")
+      end # .encode('gb2312', :invalid => :replace, :undef => :replace, :replace => "?")
     end
 end

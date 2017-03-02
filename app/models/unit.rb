@@ -7,6 +7,10 @@ class Unit < ActiveRecord::Base
   validates_presence_of :order_id, :number, :length, :width, :uom
   before_save :generate_name
 
+  # scope :custom_size, lambda { |order_id|
+  #   Unit.joins(:order).where('units.order_id = orders.id')
+  # }
+
   def ply_name
     MaterialCategory.find_by(id: self.ply).try(:name)
   end

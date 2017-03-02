@@ -6,20 +6,17 @@ class ExpendsController < ApplicationController
   # GET /expends.json
   def index
     @expend = Expend.new(username: current_user.name, expend_at: Time.now)
-    @expends = Expend.where(deleted: false)
+    @expends = Expend.where(deleted: false).order(created_at: :desc)
     if params[:start_at].present? && params[:end_at].present?
-      @expends = @expends.where("expend_at between ? and ?", params[:start_at], params[:end_at])
+      @expends = @expends.where('expend_at between ? and ?',
+                                params[:start_at].to_datetime.beginning_of_day,
+                                params[:end_at].to_datetime.end_of_day)
     end
-    if params[:bank_id].present?
-      @expends = @expends.where(bank_id: params[:bank_id])
-    end
+    @expends = @expends.where(bank_id: params[:bank_id]) if params[:bank_id].present?
 
     respond_to do |format|
       format.html { @expends = @expends.page(params[:page]) }
       format.json
-      format.xls {
-        
-      }
     end
   end
 

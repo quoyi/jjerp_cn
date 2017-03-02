@@ -10,13 +10,7 @@ class SentsController < ApplicationController
       owner_type: Order.name
     }
     @sents = Sent.where(owner_type: Order.name).order('id desc')
-    if params[:start_at].present? && params[:end_at].present?
-      condition[:sent_at] = params[:start_at]..params[:end_at]
-    elsif params[:start_at].present?
-      condition[:sent_at] = params[:start_at].to_datetime..(Time.now + 10.years).to_datetime
-    elsif params[:end_at].present?
-      condition[:sent_at] = (params[:end_at] - 10.years).to_datetime..params[:end_at].to_datetime
-    end
+    
     if params[:order_name].present?
       order = Order.where("name like '%#{params[:order_name]}%'").first
       condition[:owner_id] = order.present? ? order.id : -1
@@ -25,7 +19,12 @@ class SentsController < ApplicationController
       # 指定代理商没有订单时，利用数据库主键不可能为 -1 过滤所有记录
       condition[:owner_id] = orders.present? ? orders.pluck(:id) : -1
     end
-    @sents = Sent.where(condition).order('name desc')
+    @sents = Sent.where(condition).order(sent_at: :desc)
+    if params[:start_at].present? && params[:end_at].present?
+      @sents = @sents.where('sent_at between ? and ?',
+                            params[:start_at].to_datetime.beginning_of_day,
+                            params[:end_at].to_datetime.end_of_day)
+    end
     @sents = @sents.page(params[:page])
   end
 
@@ -49,14 +48,20 @@ class SentsController < ApplicationController
     if sent_params[:owner_type] == Indent.name
       indent = Indent.find_by_id(sent_params[:owner_id])
       indent.orders.each do |order|
-        @sent = Sent.find_or_create_by(owner_id: order.id, owner_type: Order.name, area: sent_params[:area], receiver: sent_params[:receiver],
-                            contact: sent_params[:contact], collection: sent_params[:collection], logistics: sent_params[:logistics],
-                            cupboard: sent_params[:cupboard], robe: sent_params[:robe], door: sent_params[:door], part: sent_params[:part])
-        @sent.save!
+        @sent = Sent.find_or_create_by(owner_id: order.id,
+                                       owner_type: Order.name,
+                                       area: sent_params[:area],
+                                       receiver: sent_params[:receiver],
+                                       contact: sent_params[:contact],
+                                       collection: sent_params[:collection],
+                                       logistics: sent_params[:logistics],
+                                       cupboard: sent_params[:cupboard],
+                                       robe: sent_params[:robe],
+                                       door: sent_params[:door],
+                                       part: sent_params[:part])
       end
     else
-      @sent = Sent.new(sent_params)
-      @sent.save!
+      @sent = Sent.create(sent_params)
     end
 
     respond_to do |format|
@@ -65,26 +70,32 @@ class SentsController < ApplicationController
           # 所有已打包的子订单添加发货记录
           @sent.owner.orders.each do |order|
             next unless order.packaged?
-            cupboard, robe, door, part = 4.times.map{0}
+            cupboard, robe, door, part = Array.new(4) { 0 }
             case order.order_category.name
-              when "橱柜" then cupboard = order.packages.pluck(:label_size).sum
-              when "衣柜" then robe = order.packages.pluck(:label_size).sum
-              when "门" then door = order.packages.pluck(:label_size).sum
-              when "配件" then part = order.packages.pluck(:label_size).sum
-              else
+            when '橱柜' then cupboard = order.packages.pluck(:label_size).sum
+            when '衣柜' then robe = order.packages.pluck(:label_size).sum
+            when '门' then door = order.packages.pluck(:label_size).sum
+            when '配件' then part = order.packages.pluck(:label_size).sum
             end
-            o_sent = Sent.new(owner_id: order.id, owner_type: Order.name, area: sent_params[:area], 
-                              receiver: sent_params[:receiver], contact: sent_params[:contact], 
-                              collection: sent_params[:collection], logistics: sent_params[:logistics],
-                              cupboard: cupboard, robe: robe, door: door, part: part)
+            o_sent = Sent.new(owner_id: order.id,
+                              owner_type: Order.name,
+                              area: sent_params[:area],
+                              receiver: sent_params[:receiver],
+                              contact: sent_params[:contact],
+                              collection: sent_params[:collection],
+                              logistics: sent_params[:logistics],
+                              cupboard: cupboard,
+                              robe: robe,
+                              door: door,
+                              part: part)
             o_sent.save!
           end
         end
         format.html { redirect_to not_sent_orders_path, notice: '发货信息创建成功！' }
-        format.json { render json: @sent, notice: '发货信息创建成功！'}
+        format.json { render json: @sent, notice: '发货信息创建成功！' }
       else
         format.html { redirect_to not_sent_orders_path, error: '发货信息创建失败！' }
-        format.json { render json: nil, error: '发货信息创建失败！'}
+        format.json { render json: nil, error: '发货信息创建失败！' }
       end
     end
   end
@@ -93,14 +104,14 @@ class SentsController < ApplicationController
   # 添加发货信息
   def change
     @sent = params[:id].present? ? Sent.find_by_id(params[:id]) : Sent.new
-    case params[:owner_type]
-      when Indent.name
-        @indent_or_order = Indent.find_by_id(params[:owner_id])
-      when Order.name
-        @indent_or_order = Order.find_by_id(params[:owner_id])
-      else
-        @indent_or_order = nil
-    end
+    @indent_or_order = case params[:owner_type]
+                       when Indent.name
+                         Indent.find_by_id(params[:owner_id])
+                       when Order.name
+                         Order.find_by_id(params[:owner_id])
+                       else
+                         nil
+                       end
     render layout: false
   end
 
@@ -142,10 +153,10 @@ class SentsController < ApplicationController
           end
         end
         format.html { redirect_to :back, notice: '发货单编辑成功！' }
-        format.json { render json: {notice: '发货单编辑成功！'}}
+        format.json { render json: { notice: '发货单编辑成功！' } }
       else
         format.html { redirect_to :back, error: '发货单编辑失败！' }
-        format.json { render json: {error: '发货单编辑失败！'}}
+        format.json { render json: { error: '发货单编辑失败！' } }
       end
     end
   end

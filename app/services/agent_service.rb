@@ -6,9 +6,10 @@ class AgentService < BaseService
 
   # 同步代理商信息
   def self.sync_status(agent)
-    orders_amount = agent.orders.pluck(:price).sum.round(2)
-    agent.update(balance: agent.balance - orders_amount,
-                 #  arrear: agent.arrear + orders_amount,
-                 history: agent.balance + orders_amount)
+    agent_earning = Income.agent_earning(agent.id)
+    agent_order_amount =  Order.agent_amount(agent.id)
+    agent.update(balance: agent_earning,
+                 arrear: agent_earning - agent_order_amount,
+                 history: agent_order_amount)
   end
 end

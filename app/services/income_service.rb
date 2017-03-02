@@ -10,13 +10,13 @@ class IncomeService < BaseService
                    incomes: bank.incomes.to_f + money)
       if income_params[:agent_id].present?
         income.reason = '订单收入'
-        income.note = income.note.presence || "【#{Date.today.strftime('%Y-%m-%d')}】手工添加收入【#{money}元】"
         agent = income.agent
         agent.update(balance: agent.balance + money)
       else
         income.reason = '其他收入'
         income.note = income.note.presence || "【#{Date.today.strftime('%Y-%m-%d')}】手工添加收入【#{money}元】"
       end
+      income.note = income.note.presence || "【#{Date.today.strftime('%Y-%m-%d')}】手工添加收入【#{money}元】"
     # 订单(代理商余额)扣款
     elsif income_params[:agent_id].present? && income_params[:order_id].present?
       order = income.order
@@ -27,7 +27,7 @@ class IncomeService < BaseService
       income.note = income.note.presence || "【#{Date.today.strftime('%Y-%m-%d')}】订单【#{order.name}】从【#{agent.full_name}】余额扣除【#{money}元】"
       order.update(arrear: order.arrear - money)
       indent.update(arrear: indent.arrear - money)
-      agent.update(balance: agent.balance - money, arrear: agent.arrear + money)
+      agent.update(balance: agent.balance - money)
     end
     income.save
     income

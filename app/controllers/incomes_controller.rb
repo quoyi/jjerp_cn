@@ -12,7 +12,9 @@ class IncomesController < ApplicationController
       @incomes = @incomes.where(order_id: indent.orders.pluck(:id))
     end
     if params[:start_at].present? && params[:end_at].present?
-      @incomes = @incomes.where('income_at between ? and ?', params[:start_at], params[:end_at])
+      @incomes = @incomes.where('income_at between ? and ?',
+                                params[:start_at].to_datetime.beginning_of_day,
+                                params[:end_at].to_datetime.end_of_day)
     end
     if params[:agent_id].present?
       @incomes = @incomes.where(agent_id: params[:agent_id])
@@ -21,7 +23,9 @@ class IncomesController < ApplicationController
       # 子订单号 order_id 和 总订单号 indent_id 为空时表示 代理商汇款； 不为空时表示 订单扣款
       @incomes = @incomes.where(bank_id: params[:bank_id])
     end
-    @income = Income.new(bank_id: Bank.find_by(is_default: 1).try(:id), username: current_user.username, income_at: Time.now)
+    @income = Income.new(bank_id: Bank.find_by(is_default: 1).try(:id),
+                         username: current_user.username,
+                         income_at: Time.now)
 
     @agent_incomes = @incomes.where('bank_id is not null and order_id is null and agent_id is not null').pluck(:money).sum
     @order_incomes = @incomes.where('bank_id is null and order_id is not null').pluck(:money).sum
@@ -29,11 +33,11 @@ class IncomesController < ApplicationController
     respond_to do |format|
       format.html { @incomes = @incomes.page(params[:page]) }
       format.json
-      format.xls {
+      format.xls do
         timestamp = Time.now.strftime('%Y%m%d%H%M%S%L')
         createIncomes(timestamp, @incomes)
         send_file "#{Rails.root}/public/excels/incomes/" + timestamp + '.xls', type: 'text/xls; charset=utf-8'
-      }
+      end
     end
   end
 
@@ -119,16 +123,12 @@ class IncomesController < ApplicationController
     @expends = Expend.all
 
     if params[:start_at].present? && params[:end_at].present?
-      @incomes = @incomes.where("income_at between ? and ?", params[:start_at], params[:end_at])
-      @expends = @expends.where("expend_at between ? and ?", params[:start_at], params[:end_at])
-    elsif params[:start_at].present? || params[:end_at].present?
-      @incomes = @incomes.where("income_at = ? ", params[:start_at].present? ? params[:start_at] : params[:end_at])
-      @expends = @expends.where("expend_at = ? ", params[:start_at].present? ? params[:start_at] : params[:end_at])
-    elsif !params[:start_at].present? && !params[:end_at].present?
-      beginning_month = Date.today.beginning_of_month
-      end_month = Date.today.end_of_month
-      @incomes = @incomes.where("income_at between ? and ?", beginning_month, end_month)
-      @expends = @expends.where("expend_at between ? and ?", beginning_month, end_month)
+      @incomes = @incomes.where('income_at between ? and ?',
+                                params[:start_at].to_datetime.beginning_of_day,
+                                params[:end_at].to_datetime.end_of_day)
+      @expends = @expends.where('expend_at between ? and ?',
+                                params[:start_at].to_datetime.beginning_of_day,
+                                params[:end_at].to_datetime.end_of_day)
     end
 
     if params[:bank_id].present?
@@ -140,21 +140,17 @@ class IncomesController < ApplicationController
     @expends = @expends.order(expend_at: :desc)
 
     @incomes_expends = @incomes.to_a + @expends.to_a
-    # @incomes_expends = @incomes_expends.page(params[:page])
-    # respond_to do |format|
-    #   format.html { @incomes_expends = @incomes_expends.page(params[:page]) }
-    # end
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_income
-    @income = Income.find(params[:id])
-  end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_income
+      @income = Income.find(params[:id])
+    end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def income_params
-    params.require(:income).permit(:name, :reason, :indent_id, :order_id, :money, :username,
-                                   :income_at, :status, :note, :bank_id, :agent_id, :deleted)
-  end
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def income_params
+      params.require(:income).permit(:name, :reason, :indent_id, :order_id, :money, :username,
+                                     :income_at, :status, :note, :bank_id, :agent_id, :deleted)
+    end
 end

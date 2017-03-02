@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   add_flash_types :warning, :error
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate!
-  before_action :auto_sign_out
   # before_action :authenticate_user!
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -53,9 +52,5 @@ class ApplicationController < ActionController::Base
 
     def validate_date?
       Date.today < Date.new(2917, 1, 15) ? true : false
-    end
-
-    def auto_sign_out
-      sign_out unless current_user
     end
 end

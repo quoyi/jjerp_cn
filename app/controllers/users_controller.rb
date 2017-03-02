@@ -3,11 +3,14 @@ class UsersController < ApplicationController
   before_action :set_current_user, only: [:edit, :update]
 
   def index
+    params[:start_at] ||= Date.today.beginning_of_month
+    params[:end_at] ||= Date.today.end_of_month
     @users = User.all
-    @start_at = params[:start_at].presence || Date.today.beginning_of_month
-    @end_at = params[:end_at].presence || Date.today.end_of_month
     @users.each do |user|
-      orders = Order.where('handler = ? and (created_at between ? and ?)', user.id, @start_at, @end_at)
+      orders = Order.where('handler = ? and (created_at between ? and ?)',
+                           user.id,
+                           params[:start_at].to_datetime.beginning_of_day,
+                           params[:end_at].to_datetime.end_of_day)
       material_number = 0
       amount = 0
       orders.each do |order|

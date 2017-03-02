@@ -11,7 +11,6 @@ class User < ActiveRecord::Base
   # validates_length_of :password_confirmation, within: 6..30, allow_blank: true
   # 删除开始
   # after_save :assign_role
-
   # def assign_role
   #   # add_role("other") if self.role.nil?
   #   self.roles << Role.find_by_nick("other") if self.roles.nil?

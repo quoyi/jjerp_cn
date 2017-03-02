@@ -8,10 +8,9 @@ class OrdersController < ApplicationController
   # GET /orders.json
   def index
     # 页面初始化参数
-    params[:start_at] = Date.today.beginning_of_month if params[:start_at].blank?
-    params[:end_at] = Date.today.end_of_month if params[:end_at].blank?
+    params[:start_at] ||= Date.today.beginning_of_month
+    params[:end_at] ||= Date.today.end_of_month
     params[:province] = Province.find_by_name('湖北省').try(:id) if params[:province].blank?
-
     @order = Order.new(created_at: Time.now)
     # @income = Income.new(username: current_user.name, income_at: Time.now)
     # View 使用的省市县集合数据
@@ -20,24 +19,15 @@ class OrdersController < ApplicationController
     @districts = District.where(city_id: params[:city]).order(:id)
     # 查询条件hash，优化“一次查询”
     order_condition = {}
-
     if current_user.role?('super_admin') || current_user.role?('admin') || current_user.role?('financial')
       order_condition[:handler] = params[:user_id] if params[:user_id].to_i != 0
-    else
-      order_condition[:handler] = params[:user_id] if current_user.id == params[:user_id].to_i
+    elsif current_user.id == params[:user_id].to_i
+      order_condition[:handler] = params[:user_id]
     end
-
-    # 判断搜索条件 起始时间 -- 结束时间
-    if params[:start_at].present? && params[:end_at].present?
-      order_condition[:created_at] = params[:start_at]..params[:end_at]
-    end
-
     # 搜索条件 订单类型
     order_condition[:order_category_id] = params[:order_category_id] if params[:order_category_id].present?
-
     # 搜索指定订单类型
     order_condition[:oftype] = Order.oftypes[params[:oftype]] if params[:oftype].present?
-
     # 搜索指定代理商订单 或 模糊查询省市县所有代理商
     if params[:agent_id].present?
       order_condition[:agent_id] = params[:agent_id]
@@ -49,9 +39,13 @@ class OrdersController < ApplicationController
       @agents = Agent.where(agent_condition)
       order_condition[:agent_id] = @agents.any? ? @agents.pluck(:id) : 0
     end
-
     @orders = Order.where(order_condition).order(created_at: :desc)
-
+    # 判断搜索条件 起始时间 -- 结束时间
+    if params[:start_at].present? && params[:end_at].present?
+      @orders = @orders.where('created_at BETWEEN ? AND ?',
+                              params[:start_at].to_datetime.beginning_of_day,
+                              params[:end_at].to_datetime.end_of_day)
+    end
     # 订单号模糊查询：子订单列表搜索条件同时包含 创建时间范围 和 订单号年月 时，搜索结果为空。因此取消此年月查询条件
     @orders = @orders.where("name like '%-#{params[:name]}'") if params[:name].present?
 
@@ -230,7 +224,7 @@ class OrdersController < ApplicationController
     end
 
     OrderService.update_units_parts_crafts(@order, order_params) if order_params[:parts_attributes]
-    OrderService.update_order(@order)
+    OrderService.update_order(current_user, @order)
     # 子订单列表页面更新后，应该返回到列表页面
     redirect_to :back, notice: '子订单编辑成功！'
   end
@@ -276,7 +270,6 @@ class OrdersController < ApplicationController
     @indents = @indents.where("name like '%#{params[:indent_name]}%'") if params[:indent_name].present?
     if params[:order_name].present?
       @orders = Order.where("name like '%#{params[:date][:year]}%#{params[:date][:month]}%#{params[:order_name]}'")
-      # @indents = @indents.where(id: @orders.select(:indent_id).distinct.pluck(:indent_id))
       @indents = @indents.joins(:orders).where(orders: { id: @orders })
     end
 
@@ -290,9 +283,14 @@ class OrdersController < ApplicationController
     condition = {
       status: Order.statuses[:producing]
     }
-    condition[:produced_at] = params[:start_at].to_datetime..params[:end_at].to_datetime if params[:start_at].present? && params[:end_at].present?
     condition[:agent_id] = params[:agent_id] if params[:agent_id].present?
     @orders = Order.where(condition)
+    # 判断搜索条件 起始时间 -- 结束时间
+    if params[:start_at].present? && params[:end_at].present?
+      @orders = @orders.where('created_at BETWEEN ? AND ?',
+                              params[:start_at].to_datetime.beginning_of_day,
+                              params[:end_at].to_datetime.end_of_day)
+    end
     @orders = @orders.page(params[:page])
   end
 
@@ -531,9 +529,14 @@ class OrdersController < ApplicationController
     condition = {
       status: Order.statuses[:packaged]
     }
-    condition[:packaged_at] = (params[:start_at].to_datetime..params[:end_at].to_datetime) if params[:start_at].present? && params[:end_at].present?
     condition[:agent_id] = params[:agent_id] if params[:agent_id].present?
     @orders = Order.where(condition)
+    # 判断搜索条件 起始时间 -- 结束时间
+    if params[:start_at].present? && params[:end_at].present?
+      @orders = @orders.where('created_at BETWEEN ? AND ?',
+                              params[:start_at].to_datetime.beginning_of_day,
+                              params[:end_at].to_datetime.end_of_day)
+    end
     @orders = @orders.page(params[:page])
   end
 
@@ -591,10 +594,11 @@ class OrdersController < ApplicationController
         # 将金额转到指定 子订单
         if params[:order][:id].present?
           target_order = Order.find_by_id(params[:order][:id])
-          income = target_order.incomes.new(indent_id: target_order.indent.id, bank_id: Bank.find_by(is_default: 1).id,
-                                            income_at: today, username: current_user.name.presence || current_user.email, money: tmp_money,
-                                            note: "【#{today}】从子订单【#{@order.name}】手动转入【#{target_order.name}】金额【#{tmp_money}元】")
-          income.save!
+          target_order.incomes.create(indent_id: target_order.indent.id,
+                                      income_at: today,
+                                      username: current_user.name.presence || current_user.email,
+                                      money: tmp_money,
+                                      note: "【#{today}】从子订单【#{@order.name}】手动转入【#{target_order.name}】金额【#{tmp_money}元】")
           @order.incomes.order(created_at: :desc).each do |i|
             break if tmp_money == 0
             if i.money <= tmp_money

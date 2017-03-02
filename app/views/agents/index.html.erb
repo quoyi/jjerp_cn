@@ -55,8 +55,10 @@
             <th>店名</th>
             <th>电话</th>
             <th>负责人</th>
-            <th>余额</th>
-            <th>订单收入</th>
+            <th>历史</th>
+            <th>收入</th>
+            <th>已扣</th>
+            <th title='负数表示欠款'>余额</th>
             <th>QQ</th>
             <th>传真</th>
             <th>邮箱</th>
@@ -75,8 +77,10 @@
             <td><%= link_to a.full_name, edit_agent_path(a), data:{toggle: 'tooltip'}, title: '编辑代理商' %></td>
             <td><%= a.mobile %></td>
             <td><%= a.contacts %></td>
-            <td><%= a.balance %></td>
-            <td><%= a.arrear %></td>
+            <td><%= a.history %></td><!-- Order.agent_amount(a.id) -->
+            <td><%= Income.agent_earning(a.id) %></td>
+            <td><%= Income.agent_orders_earning(a.id) %></td>
+            <td data-toggle='tooltip' title='负数表示欠款' class="<%= 'danger' if a.balance.to_i < 0 %>"><%= a.balance %></td>
             <td><%= a.e_account %></td>
             <td><%= a.fax %></td>
             <td><%= a.email %></td>

@@ -7,13 +7,6 @@
   <div class="content-box-large box-with-header">
     <div class="row">
       <div>
-        <% @start_at = nil; @end_at = nil;%>
-        <% if params[:start_at] || params[:end_at] || params[:agent_id] || params[:order_name] %>
-        <% @start_at = params[:start_at]%>
-        <% @end_at = params[:end_at]%>
-        <% @order_name = params[:order_name]%>
-        <% @agent_search = Agent.find_by_id(params[:agent_id])%>
-        <% end%>
         <%= form_tag sents_path, class: 'form-inline', method: 'get' do %>
         <div class="panel panel-info">
           <div class="panel-heading">
