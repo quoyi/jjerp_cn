@@ -56,7 +56,8 @@ class IndentsController < ApplicationController
   # POST /indents
   # POST /indents.json
   def create
-    indent = IndentService.create(indent_params)
+    # Indent.create(params)
+    indent = IndentService.create_indent(indent_params)
     # 根据是否保存成功，跳转到不同页面
     if indent.persisted?
       redirect_path = indent.order_parts.any? ? custom_offer_order_path(indent.order_parts.first) : indent_path(indent)

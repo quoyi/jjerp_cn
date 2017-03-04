@@ -20,7 +20,7 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for :parts, reject_if: :social_rejectable?, allow_destroy: true
   accepts_nested_attributes_for :crafts, allow_destroy: true
 
-  validates :order_category_id, :agent_id, presence: true
+  validates :order_category_id, presence: true
   scope :agent_amount, ->(agent_id) { where(agent_id: agent_id).pluck(:price).sum.round(2) }
   scope :agent_arrear, ->(agent_id) { where(agent_id: agent_id).pluck(:arrear).sum.round(2) }
   scope :not_sent, -> { where(status: statuses[:packaged]) }
