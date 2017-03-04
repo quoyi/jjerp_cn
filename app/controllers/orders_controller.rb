@@ -39,7 +39,7 @@ class OrdersController < ApplicationController
       @agents = Agent.where(agent_condition)
       order_condition[:agent_id] = @agents.any? ? @agents.pluck(:id) : 0
     end
-    @orders = Order.where(order_condition).order(created_at: :desc)
+    @orders = Order.where(order_condition)
     # 判断搜索条件 起始时间 -- 结束时间
     if params[:start_at].present? && params[:end_at].present?
       @orders = @orders.where('created_at BETWEEN ? AND ?',
@@ -48,6 +48,7 @@ class OrdersController < ApplicationController
     end
     # 订单号模糊查询：子订单列表搜索条件同时包含 创建时间范围 和 订单号年月 时，搜索结果为空。因此取消此年月查询条件
     @orders = @orders.where("name like '%-#{params[:name]}'") if params[:name].present?
+    @orders = @orders.order(created_at: :desc, name: :desc)
 
     # 查询结果统计信息
     @orders_result = {}
@@ -260,7 +261,14 @@ class OrdersController < ApplicationController
 
   # 未发货
   def not_sent
-    # 已拆单，且未打包 的总订单
+    # @orders = Order.not_sent
+    # @orders = @orders.where(agent_id: params[:agent_id]) if params[:agent_id].present?
+    # if params[:order_name].present?
+    #   @orders = @orders.where("name like '%#{params[:date][:year]}%#{params[:date][:month]}%#{params[:order_name]}'")
+    # end
+    # @indents = Indent.where(id: @orders.group(:indent_id).pluck(:indent_id),
+    #                         status: Indent.statuses[:offered]..Indent.statuses[:packaged]).order(created_at: :desc)
+    # # 已拆单，且未打包 的总订单
     indent_condition = {}
     indent_condition[:status] = Indent.statuses[:offered]..Indent.statuses[:packaged]
     indent_condition[:max_status] = Indent.statuses[:packaged]..Indent.statuses[:sent]
@@ -272,7 +280,6 @@ class OrdersController < ApplicationController
       @orders = Order.where("name like '%#{params[:date][:year]}%#{params[:date][:month]}%#{params[:order_name]}'")
       @indents = @indents.joins(:orders).where(orders: { id: @orders })
     end
-
     @indents = @indents.includes(:agent, :sent, orders: [:packages, :order_category, :sent]).page(params[:page])
     @sent = Sent.new
   end
