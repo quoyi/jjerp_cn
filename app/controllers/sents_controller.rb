@@ -45,25 +45,7 @@ class SentsController < ApplicationController
   # POST /sents
   # POST /sents.json
   def create
-    if sent_params[:owner_type] == Indent.name
-      indent = Indent.find_by_id(sent_params[:owner_id])
-      indent.orders.each do |order|
-        @sent = Sent.find_or_create_by(owner_id: order.id,
-                                       owner_type: Order.name,
-                                       area: sent_params[:area],
-                                       receiver: sent_params[:receiver],
-                                       contact: sent_params[:contact],
-                                       collection: sent_params[:collection],
-                                       logistics: sent_params[:logistics],
-                                       cupboard: sent_params[:cupboard],
-                                       robe: sent_params[:robe],
-                                       door: sent_params[:door],
-                                       part: sent_params[:part])
-      end
-    else
-      @sent = Sent.create(sent_params)
-    end
-
+    @sent = Sent.create(sent_params)
     respond_to do |format|
       if @sent.persisted?
         if @sent.owner_type == Indent.name
@@ -109,8 +91,6 @@ class SentsController < ApplicationController
                          Indent.find_by_id(params[:owner_id])
                        when Order.name
                          Order.find_by_id(params[:owner_id])
-                       else
-                         nil
                        end
     render layout: false
   end
@@ -127,16 +107,33 @@ class SentsController < ApplicationController
   def update
     respond_to do |format|
       if @sent.update(sent_params)
-
         if @sent.owner_type == Indent.name
           # 所有已打包的子订单添加发货记录
           @sent.owner.orders.each do |order|
             next unless order.packaged?
-            o_sent = order.sent
-            o_sent.present? ? o_sent.update_attributes(sent_params) : o_sent = Sent.new(sent_params)
-            o_sent.owner_id = order.id
-            o_sent.owner_type = order.class.name
-            o_sent.save!
+            cupboard_sum, robe_sum, door_sum, part_sum = Array.new(4) { 0 }
+            case order.order_category.name
+            when '橱柜'
+              cupboard_sum = order.packages.pluck(:label_size).sum
+            when '衣柜'
+              robe_sum = order.packages.pluck(:label_size).sum
+            when '门'
+              door_sum = order.packages.pluck(:label_size).sum
+            when '配件'
+              part_sum = order.packages.pluck(:label_size).sum
+            end
+            o_sent = Sent.new(sent_params)
+            o_sent.owner = order
+            o_sent.cupboard = cupboard_sum
+            o_sent.robe = robe_sum
+            o_sent.door = door_sum
+            o_sent.part = part_sum
+            o_sent.save
+            # o_sent = order.create_sent({cupboard: cupboard_sum,
+            #                            robe: robe_sum,
+            #                            door: door_sum,
+            #                            part: part_sum}.merge(sent_params.except(:owner_id, :owner_type)))
+            # o_sent.save!
           end
         end
         # 发货单的发货时间、物流回执单号不为空时，更新订单状态
@@ -148,8 +145,6 @@ class SentsController < ApplicationController
             order = Order.find_by_id(@sent.owner_id)
             order.over!
             update_order_status(order)
-          else
-            # 更新订单状态错误
           end
         end
         format.html { redirect_to :back, notice: '发货单编辑成功！' }
@@ -178,7 +173,7 @@ class SentsController < ApplicationController
   #   #     s.owner.sending!
   #   #     update_order_status(s.owner)
   #   #   end
-      
+
   #   end
   #   # export_sent_list(sent_list)
   #   respond_to do |format|
@@ -202,18 +197,16 @@ class SentsController < ApplicationController
   # DELETE /sents/1
   # DELETE /sents/1.json
   def destroy
-    order = @sent.owner
     sent_list = @sent.sent_list
     Sent.transaction do
       @sent.destroy
-      order.packaged! # 将子订单状态改回上一步“已打包”
-      update_order_status(order)
-      if sent_list.sents.size == 0
-      sent_list.destroy!
-      filename = "#{Rails.root}/public/excels/sent_lists/" + sent_list.name + ".xls"
-      # 删除文件
-      File.delete(filename) if File.exist?(filename)
-      redirect_to sent_lists_path, notice: '发货记录已删除！'
+      IndentService.sync_status(@sent.owner.indent) if @sent.owner.instance_of?(Order)
+      if sent_list.sents.empty?
+        sent_list.destroy!
+        filename = "#{Rails.root}/public/excels/sent_lists/" + sent_list.name + '.xls'
+        # 删除文件
+        File.delete(filename) if File.exist?(filename)
+        redirect_to sent_lists_path, notice: '发货记录已删除！'
       else
         redirect_to :back, notice: '发货记录已删除！'
       end

@@ -14,6 +14,8 @@ class Indent < ActiveRecord::Base
   accepts_nested_attributes_for :offers, allow_destroy: true
   accepts_nested_attributes_for :order_parts, allow_destroy: true
 
+  scope :not_sent, -> { where('status >= ? AND status <= ?', statuses[:packaged], statuses[:sent]) }
+
   # 下单条件：1.正常单  2.补单  3.加急单 4.批量单
   enum oftype: [:normal, :repair, :instancy, :batch]
 

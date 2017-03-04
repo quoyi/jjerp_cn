@@ -24,7 +24,7 @@ class IndentsController < ApplicationController
     params[:end_at] ||= Date.today.end_of_month
     @indents = Indent.where('verify_at between ? and ?',
                             params[:start_at].to_datetime.beginning_of_day,
-                            params[:end_at].to_datetime.end_of_day)
+                            params[:end_at].to_datetime.end_of_day).order(created_at: :desc)
     @indents = @indents.where(agent_id: params[:agent_id]) if params[:agent_id].present?
     @indents = @indents.page(params[:page])
   end
@@ -70,7 +70,7 @@ class IndentsController < ApplicationController
   # PATCH/PUT /indents/1
   # PATCH/PUT /indents/1.json
   def update
-    IndentService.update(indent_params)
+    IndentService.update_indent(params[:id], indent_params)
     redirect_to :back, notice: '订单编辑成功！'
   end
 

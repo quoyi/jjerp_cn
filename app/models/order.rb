@@ -20,9 +20,27 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for :parts, reject_if: :social_rejectable?, allow_destroy: true
   accepts_nested_attributes_for :crafts, allow_destroy: true
 
-  validates_presence_of :order_category_id
+  validates :order_category_id, :agent_id, presence: true
   scope :agent_amount, ->(agent_id) { where(agent_id: agent_id).pluck(:price).sum.round(2) }
   scope :agent_arrear, ->(agent_id) { where(agent_id: agent_id).pluck(:arrear).sum.round(2) }
+  scope :not_sent, -> { where(status: statuses[:packaged]) }
+  # scope :not_sent, -> do 
+  #   result = []
+  #   all.group_by{|o|o.indent_id}.each_pair do |k, v|
+  #     group = {}
+  #     indent = Indent.find(k)
+  #     min_status = Indent.statuses[:offered]..Indent.statuses[:packaged]
+  #     max_status = Indent.statuses[:packaged]..Indent.statuses[:sent]
+  #     if max_status.include?(indent.status) && min_status.include?(indent.status)
+
+  #     end
+  #     group[:indent] = Indent.find(k)
+  #     group[:orders] = v
+  #     result.push(group)
+  #   end
+  #   result
+  # end
+
 
   #订单状态：0.报价中 1.已报价 2.生产中 3.已入库 4.已发货
   enum status: [:offering, :offered, :producing, :packaged, :sending, :sent, :over]

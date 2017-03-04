@@ -82,7 +82,7 @@ class SentListsController < ApplicationController
   def update
     respond_to do |format|
       if @sent_list.update(sent_list_params)
-        format.html { redirect_to @sent_list, notice: 'Sent list was successfully updated.' }
+        format.html { redirect_to @sent_list, notice: '发货清单已更新.' }
         format.json { render :show, status: :ok, location: @sent_list }
       else
         format.html { render :edit }
@@ -112,8 +112,8 @@ class SentListsController < ApplicationController
         # 打印尺寸毫米（长宽）
         pdf = SentListPdf.new(@sent_list)
         send_data pdf.render, filename: "发货清单#{@sent_list.name}.pdf",
-          type: "application/pdf",
-          disposition: "inline"
+                              type: 'application/pdf',
+                              disposition: 'inline'
       end
     end
   end
