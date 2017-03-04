@@ -1,6 +1,6 @@
 class IndentService < BaseService
   # 创建总订单
-  def self.create(params)
+  def self.create_indent(params)
     indent = Indent.create(params)
     agent = indent.agent
     agent.update(balance: agent.balance - indent.orders.pluck(:price).sum)
