@@ -1,3 +1,32 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :integer          not null, primary key
+#  user_category          :integer          default(0), not null
+#  username               :string(255)      default(""), not null
+#  mobile                 :string(255)      default(""), not null
+#  name                   :string(255)
+#  cert                   :string(255)
+#  deleted                :boolean          default(FALSE), not null
+#  email                  :string(255)      default(""), not null
+#  encrypted_password     :string(255)      default(""), not null
+#  reset_password_token   :string(255)
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0), not null
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :string(255)
+#  last_sign_in_ip        :string(255)
+#  confirmation_token     :string(255)
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  print_size             :string(255)
+#
+
 class User < ActiveRecord::Base
   has_and_belongs_to_many :roles, join_table: :user_roles
   # 引入 devise 默认模块 :database_authenticatable, :registerable, :confirmable, :recoverable,

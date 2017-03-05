@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: banks
+#
+#  id         :integer          not null, primary key
+#  name       :string(255)
+#  bank_name  :string(255)
+#  bank_card  :string(255)
+#  balance    :decimal(12, 2)   default(0.0)
+#  incomes    :decimal(12, 2)   default(0.0)
+#  expends    :decimal(12, 2)   default(0.0)
+#  is_default :boolean          default(FALSE)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class Bank < ActiveRecord::Base
   has_many :income
   has_many :expend

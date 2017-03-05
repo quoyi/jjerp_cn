@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: indents
+#
+#  id               :integer          not null, primary key
+#  name             :string(255)      not null
+#  agent_id         :integer          not null
+#  customer         :string(255)
+#  verify_at        :date
+#  require_at       :date
+#  logistics        :string(255)
+#  delivery_address :string(255)
+#  status           :integer          default(0)
+#  note             :string(255)
+#  amount           :decimal(8, 2)    default(0.0)
+#  arrear           :decimal(8, 2)    default(0.0)
+#  total_history    :decimal(8, 2)    default(0.0)
+#  total_arrear     :decimal(8, 2)    default(0.0)
+#  deleted          :boolean          default(FALSE), not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  max_status       :integer          default(0), not null
+#
+
 class Indent < ActiveRecord::Base
   has_many :offers, dependent: :destroy
   has_many :orders, dependent: :destroy

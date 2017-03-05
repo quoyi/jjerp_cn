@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: roles
+#
+#  id         :integer          not null, primary key
+#  name       :string(255)      not null
+#  nick       :string(255)
+#  note       :string(255)
+#  deleted    :boolean          default(FALSE), not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  display    :boolean          default(TRUE), not null
+#
+
 class Role < ActiveRecord::Base
   # 冻结常量 ADMINISTRATOR 防止被修改
   ADMINISTRATOR = 'super_admin'.freeze

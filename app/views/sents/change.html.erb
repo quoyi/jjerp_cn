@@ -94,7 +94,6 @@ function addOrderToSentList(data){
   var storage = window.localStorage;
   var sent_list = storage.getItem("sent_list");
   var sent_arr;
-  console.log(data);
 
   if (sent_list != null && sent_list != "") {
     sent_arr = sent_list.split(",");
@@ -122,11 +121,13 @@ function addOrderToSentList(data){
  **/
 function addIndentToSentList(data){
   var indent_id = "#not_sent_indent_" + data.id;
-  console.log($(indent_id));
   var $orders = $(indent_id).find(".indent_orders");
   $.each($orders, function(index){
     var data = $(this).data();
-    addOrderToSentList({type: 'Order', id: data.id, name: data.name, agent: data.agent});
+    console.log(data);
+    if (data.status == 'packaged'){
+      addOrderToSentList({type: 'Order', id: data.id, name: data.name, agent: data.agent});
+    }
   });
 }
 
@@ -143,7 +144,11 @@ $("#order_sent_info_submit").on("click", function(e){
       // TODO: 有问题
       jsNoty("notice", "发货信息创建成功！");
       // 将 子订单 | 总订单下的所有子订单 添加到 发货清单 中
-      var data = {type: $("#order_sent_owner_type").val(), id: $("#order_sent_owner_id").val(), name: $("#indent_or_order_name").text(), agent: $("#indent_or_order_agent").text()};
+      var data = {type: $("#order_sent_owner_type").val(),
+                  id: $("#order_sent_owner_id").val(),
+                  name: $("#indent_or_order_name").text(),
+                  agent: $("#indent_or_order_agent").text(),
+                  status: ''};
       console.log(data);
       if(data.type == "Order"){
         addOrderToSentList(data);

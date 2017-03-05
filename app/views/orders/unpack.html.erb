@@ -8,14 +8,12 @@
   <!-- Page title -->
   <div class="content-box-large box-with-header">
     <div class="row content-table">
-      <% searh_order = Order.where("created_at >= ? AND created_at <= ?", Date.today.beginning_of_month, Date.today.end_of_month).order(created_at: :asc).first %>
-      <% if searh_order.present? %>
       <div class="panel panel-info">
         <div class="panel-heading">
           <span>查询条件</span>
         </div>
         <div class="panel-body text-center">
-          <%= form_tag package_order_path(searh_order), class: 'form-inline', method: 'post' do %>
+          <%= form_tag package_orders_path, class: 'form-inline', method: 'post' do %>
           <div class="form-group">
             <div class="input-group">
               <%= select_year Date.today.year, {field_name: :year, start_year: 2010, end_year: Date.today.year}, {class: 'form-control'} %>
@@ -31,11 +29,6 @@
           <% end %>
         </div>
       </div>
-      <% else %>
-      <div class="text-center">
-        <h1>未找到订单，请检查是否已新建订单！</h1>
-      </div>
-      <% end %>
     </div>
   </div>
 </div>

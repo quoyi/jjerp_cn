@@ -65,7 +65,7 @@
             <td><%= order.packaged_at.localtime.strftime('%Y-%m-%d') %></td> 
             <td><%= order.packages.pluck(:label_size).sum %></td>
             <td>
-              <%= link_to "重新打印", package_order_path(order), class: 'btn btn-primary btn-xs'%>
+              <%= link_to "重新打印", package_orders_path(id: order), class: 'btn btn-primary btn-xs'%>
             </td>
           </tr>
           <%end%>

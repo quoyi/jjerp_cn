@@ -55,7 +55,7 @@
             <td><%= sent_list.total %></td>
             <td><%= sent_list.created_by %></td>
             <td>
-              <%= link_to '删除', sent_list_path(sent_list), method: :delete, class: 'btn btn-primary btn-xs', data: { confirm: '确定删除?'} %>
+              <%= link_to '删除', sent_list_path(sent_list), method: :delete, class: "btn btn-primary btn-xs", data: { confirm: '确定删除?'} %>
               <% if sent_list.sents.pluck(:logistics_code).join().blank? %>
               <%= link_to '编辑', edit_sent_list_path(sent_list), class: 'btn btn-primary btn-xs', data: {toggle: 'tooltip'}, title: '编辑发货清单' %>
               <% else %>

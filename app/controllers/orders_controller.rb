@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   include IndentsHelper
   include OrdersHelper
   include OffersHelper
-  before_action :set_order, only: [:show, :edit, :update, :destroy, :import, :custom_offer]
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :import, :custom_offer, :reprint]
 
   # GET /orders
   # GET /orders.json
@@ -242,8 +242,6 @@ class OrdersController < ApplicationController
       # 更新总订单金额、欠款
       # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
       indent.update!(amount: indent.orders.pluck(:price).sum, arrear: indent.orders.pluck(:arrear).sum)
-
-      order_incomes = order.incomes.pluck(:money).sum
       # 删除子订单前，先将金额退回到代理商余额、修改代理商历史金额
       if agent.balance > 0
         agent.update!(balance: agent.balance + order.price, history: agent.history - order.price)
@@ -261,27 +259,19 @@ class OrdersController < ApplicationController
 
   # 未发货
   def not_sent
-    # @orders = Order.not_sent
-    # @orders = @orders.where(agent_id: params[:agent_id]) if params[:agent_id].present?
-    # if params[:order_name].present?
-    #   @orders = @orders.where("name like '%#{params[:date][:year]}%#{params[:date][:month]}%#{params[:order_name]}'")
-    # end
-    # @indents = Indent.where(id: @orders.group(:indent_id).pluck(:indent_id),
-    #                         status: Indent.statuses[:offered]..Indent.statuses[:packaged]).order(created_at: :desc)
-    # # 已拆单，且未打包 的总订单
-    indent_condition = {}
-    indent_condition[:status] = Indent.statuses[:offered]..Indent.statuses[:packaged]
-    indent_condition[:max_status] = Indent.statuses[:packaged]..Indent.statuses[:sent]
-    # indent_condition[:status] = Indent.statuses[:packaged]
-    indent_condition[:agent_id] = params[:agent_id] if params[:agent_id].present?
-    @indents = Indent.where(indent_condition).order(created_at: :desc)
-    @indents = @indents.where("name like '%#{params[:indent_name]}%'") if params[:indent_name].present?
-    if params[:order_name].present?
-      @orders = Order.where("name like '%#{params[:date][:year]}%#{params[:date][:month]}%#{params[:order_name]}'")
-      @indents = @indents.joins(:orders).where(orders: { id: @orders })
-    end
-    @indents = @indents.includes(:agent, :sent, orders: [:packages, :order_category, :sent]).page(params[:page])
     @sent = Sent.new
+    @indents = Indent.where('max_status >= ? AND status != ?',
+                            Indent.statuses[:packaged],
+                            Indent.statuses[:sending]).order(created_at: :desc)
+    if params[:order_name].present?
+      @indents = @indents.joins('LEFT JOIN orders ON orders.indent_id = indents.id')
+                         .uniq
+                         .where('orders.name like ?',
+                                "%#{params[:date][:year]}%#{params[:date][:month]}%#{params[:order_name]}%")
+    end
+    @indents = @indents.where(agent_id: params[:agent_id]) if params[:agent_id].present?
+    @indents = @indents.where("name like '%#{params[:indent_name]}%'") if params[:indent_name].present?
+    @indents = @indents.includes(:agent, :sent, orders: [:packages, :order_category, :sent]).page(params[:page])
   end
 
   # 生产任务
@@ -438,19 +428,16 @@ class OrdersController < ApplicationController
   end
 
   # 打包页面
-  # orders/1/package
-  # # orders/1/package.pdf
+  # Post orders/package
   def package
     # TODO: 打印预览页面刷新时,显示错误
-
     # 按照顺序查找： 指定编号、指定ID、第一个（防止打印页面报错）
+    orders = Order.where(status: Order.statuses[:producing]..Order.statuses[:sending])
     if params[:name].present?
       date = params[:date].presence || { year: Date.today.year.to_s, month: Date.today.month.to_s }
-      @order = Order.where("name like '#{date[:year]}%-#{date[:month]}-#{params[:name]}'").first
+      @order = orders.where("name like '#{date[:year]}%-#{date[:month]}-#{params[:name]}'").first
     elsif params[:id].present?
-      @order = Order.find_by_id(params[:id])
-    else
-      @order = Order.order(produced_at: :desc).first
+      @order = orders.find(params[:id])
     end
     if @order.present?
       # 给前端使用
@@ -459,57 +446,46 @@ class OrdersController < ApplicationController
       # 打印尺寸需存在users表的default_print_size
       label_size = params[:order_label_size].to_i > 0 ? params[:order_label_size].to_i : 1
       # （打印）标签属性设置
-      if params[:length].present? && params[:width].present?
-        @length = params[:length].to_i
-        @width = params[:width].to_i
-        current_user.print_size = @length.to_s + '*' + @width.to_s
-        current_user.save! if current_user.changed?
-      elsif current_user.print_size
-        @length = current_user.print_size.split('*').first.to_i
-        @width = current_user.print_size.split('*').last.to_i
-      else
-        @length = 80
-        @width = 60
-      end
-
-      if @order.order_category.name == '配件'
-        package = @order.packages.find_or_create_by(part_ids: @order.parts.pluck(:id))
+      @length = (params[:length].presence || 80).to_i
+      @width = (params[:width].presence || 60).to_i
+      if @order.order_category.name == '配件'        # @order.packages.destroy_all
+        package = Package.find_or_create_by(order_id: @order.id)
+        package.part_ids = @order.parts.pluck(:id).join(',')
         package.label_size = label_size
         package.print_size = @length.to_s + '*' + @width.to_s
         package.is_batch = params[:is_batch].to_i if params[:is_batch].present?
         package.save!
         @order.parts.update_all(is_printed: true)
         @order.update(status: 'packaged', packaged_at: Time.now)
-        update_order_status(@order)
-      else
-        if params[:order_unit_ids].present? && params[:order_unit_ids] != '{}'
-          # 这些值需存在数据库表package中
-          logger.debug '自定义日志：' + label_size.to_s
-          ids = ActiveSupport::JSON.decode(params[:order_unit_ids])
+        IndentService.sync_status(@order.indent)
+      elsif params[:order_unit_ids].present? && params[:order_unit_ids] != '{}'
+        # 这些值需存在数据库表package中
+        logger.debug '自定义日志：' + label_size.to_s
+        ids = ActiveSupport::JSON.decode(params[:order_unit_ids])
 
-          ids.each_value do |value|
-            unit_ids = value.map  do |v|
-              if v =~ /order_unit/
-                id = v.gsub(/order_unit_/, '')
-                id
-              end
+        ids.each_value do |value|
+          unit_ids = value.map  do |v|
+            if v =~ /order_unit/
+              id = v.gsub(/order_unit_/, '')
+              id
             end
-            # 保存包装记录
-            package = @order.packages.find_or_create_by(unit_ids: unit_ids.compact.join(','))
-            package.label_size = label_size
-            package.print_size = @length.to_s + '*' + @width.to_s
-            package.is_batch = params[:is_batch].to_i if params[:is_batch].present?
-            package.save!
-            # 更新包装状态（已打印）
-            Unit.where(id: unit_ids.compact.uniq).update_all(is_printed: true)
-            # 查出已打包（已保存）的部件、配件id，用于界面显示
-            packaged_unit_ids = @order.packages.map(&:unit_ids).join(',').split(',').uniq.map(&:to_i)
-            unit_ids = @order_units.map(&:id)
-            # 订单的所有部件、配件均已打包，修改订单的状态为“已打包”
-            if (unit_ids - packaged_unit_ids).empty?
-              @order.update(status: 'packaged', packaged_at: Time.now)
-              update_order_status(@order)
-            end
+          end
+          # 保存包装记录
+          package = Package.find_or_create_by(order_id: @order.id)
+          package.unit_ids = unit_ids.compact.join(',')
+          package.label_size = label_size
+          package.print_size = @length.to_s + '*' + @width.to_s
+          package.is_batch = params[:is_batch].to_i if params[:is_batch].present?
+          package.save!
+          # 更新包装状态（已打印）
+          Unit.where(id: unit_ids.compact.uniq).update_all(is_printed: true)
+          # 查出已打包（已保存）的部件、配件id，用于界面显示
+          packaged_unit_ids = @order.packages.map(&:unit_ids).join(',').split(',').uniq.map(&:to_i)
+          unit_ids = @order_units.map(&:id)
+          # 订单的所有部件、配件均已打包，修改订单的状态为“已打包”
+          if (unit_ids - packaged_unit_ids).empty?
+            @order.update(status: 'packaged', packaged_at: Time.now)
+            IndentService.sync_status(@order.indent)
           end
         end
       end
@@ -519,15 +495,25 @@ class OrdersController < ApplicationController
         format.html
         format.pdf do
           # 打印尺寸毫米（长宽）
-          pdf = OrderPdf.new(@length, @width, label_size <= 0 ? 1 : label_size, @order.id)
+          pdf = OrderPdf.new(@length, @width, label_size, @order)
           send_data pdf.render, filename: "order_#{@order.id}.pdf",
                                 type: 'application/pdf',
                                 disposition: 'inline'
         end
       end
     else
-      redirect_to unpack_orders_path, warning: '未找到订单！'
+      redirect_to unpack_orders_path, warning: '订单未报价或不存在！'
     end
+  end
+
+  # 打包
+  # Post orders/:order_id/pack
+  def pack
+    # length = (params[:length].presence || 80).to_i
+    # width = (params[:width].presence || 60).to_i
+    # 批量打印
+
+    # 单包打印
   end
 
   # 已打包
@@ -550,42 +536,29 @@ class OrdersController < ApplicationController
   # 重新打印
   # POST /orders/1/reprint
   def reprint
-    @order = Order.find_by_id(params[:id])
-    # # 第一次进入 / 重新打印 页面
     packages = @order.packages
-    if packages.present?
-      package = packages.first
-      @order.packages.destroy_all
-      label_size = (params[:label_size].presence || package.label_size).to_i
+    label_size = params[:label_size].to_i
+    length = (params[:length].presence || 80).to_i
+    width = (params[:width].presence || 60).to_i
+    if label_size > 0 && packages.present?
+      packages.destroy_all
       @order.packages.create(unit_ids: @order.units.pluck(:id).join(','),
                              part_ids: @order.parts.pluck(:id).join(','),
                              label_size: label_size,
-                             print_size: package.print_size,
+                             print_size: length.to_s + '*' + width.to_s,
                              is_batch: true)
     end
-
-    # （打印）标签属性设置
-    if params[:length].present? && params[:width].present?
-      @length = params[:length].to_i
-      @width = params[:width].to_i
-      current_user.print_size = @length.to_s + '*' + @width.to_s
-      current_user.save! if current_user.changed?
-    elsif current_user.print_size
-      @length = current_user.print_size.split('*').first.to_i
-      @width = current_user.print_size.split('*').last.to_i
-    else
-      @length = 80
-      @width = 60
-    end
-
-    # 返回结果
     respond_to do |format|
       # 请求页面为 html 时，返回到打包页面
-      format.html { redirect_to package_order_path(@order) }
+      format.html { redirect_to package_orders_path(id: @order) }
       format.pdf do
-        # 打印尺寸毫米（长宽）
-        pdf = OrderPdf.new(@length, @width, label_size, @order.id)
-        send_data pdf.render, type: 'application/pdf', disposition: 'inline'
+        if label_size.zero?
+          redirect_to package_orders_path(id: @order)
+        else
+          # 打印尺寸毫米（长宽）
+          pdf = OrderPdf.new(length, width, label_size, @order)
+          send_data pdf.render, type: 'application/pdf', disposition: 'inline'
+        end
       end
     end
   end

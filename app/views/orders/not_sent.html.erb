@@ -63,7 +63,7 @@
               欠款：<%= indent.arrear %>&nbsp;&nbsp;
               状态：<%= indent.status_name %>&nbsp;&nbsp;
               总件数：<%= indent.orders.map{|o| o.packages.map(&:label_size).compact.sum}.flatten.sum %>&nbsp;&nbsp;
-              <%= link_to '添加发货信息', change_sents_path(id: indent.sent.try(:id), owner_id: indent.id, owner_type: Indent.name), class: "btn btn-primary btn-xs #{'disabled' unless Indent.statuses.keys[3..4].include?(indent.status)}", data: { toggle: 'modal', target: '#addSent'}, id: 'addSentsBtn', title: '添加发货信息' %>
+              <%= link_to '添加发货信息', change_sents_path(id: indent.sent.try(:id), owner_id: indent.id, owner_type: Indent.name), class: "btn btn-primary btn-xs", data: { toggle: 'modal', target: '#addSent'}, id: 'addSentsBtn', title: '添加发货信息' %>
             </p>
           </div>
         </div>
@@ -82,15 +82,15 @@
               </thead>
               <tbody id="not_sent_indent_<%= indent.id %>">
                 <% indent.orders.each do |order| %>
-                <% next if Order.statuses[order.status] >= Order.statuses[:sending] %>
-                <tr class="indent_orders" data-id="<%= order.id %>" data-name="<%= order.name %>" data-agent="<%= agent_name %>">
+                <% # next if Order.statuses[order.status] >= Order.statuses[:sending] %>
+                <tr class="indent_orders" data-id="<%= order.id %>" data-name="<%= order.name %>" data-agent="<%= agent_name %>" data-status="<%= order.status %>">
                   <td><%= order.name %></td>
                   <td><%= order.order_category.name %></td>
                   <td><%= order.packages.map(&:label_size).compact.sum %></td>
                   <td><%= order.status_name %></td>
                   <td><%= order.note %></td>
                   <!-- TODO:  -->
-                  <td><%= link_to '添加发货信息', change_sents_path(id: order.sent.try(:id), owner_id: order.id, owner_type: Order.name), class: "btn btn-primary btn-xs #{'disabled' unless Order.statuses.keys[3..4].include?(order.status)}", data: { toggle: 'modal', target: '#addSent'}, id: 'addSentsBtn', title: '添加发货信息' %></td>
+                  <td><%= link_to '添加发货信息', change_sents_path(id: order.sent.try(:id), owner_id: order.id, owner_type: Order.name), class: "btn btn-primary btn-xs #{'disabled' unless Order.statuses.keys[3...4].include?(order.status)}", data: { toggle: 'modal', target: '#addSent'}, id: 'addSentsBtn', title: '添加发货信息' %></td>
                 </tr>
                 <% end %>
               </tbody>

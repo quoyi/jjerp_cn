@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: parts
+#
+#  id               :integer          not null, primary key
+#  part_category_id :integer          not null
+#  order_id         :integer          not null
+#  name             :string(255)
+#  buy              :decimal(8, 2)
+#  price            :decimal(8, 2)
+#  store            :integer          default(1), not null
+#  uom              :string(255)
+#  number           :decimal(8, 4)    default(1.0), not null
+#  brand            :string(255)
+#  note             :string(255)
+#  supply_id        :integer          not null
+#  is_printed       :boolean          default(FALSE)
+#  deleted          :boolean          default(FALSE)
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#
+
 class Part < ActiveRecord::Base
   belongs_to :part_category
   belongs_to :supply

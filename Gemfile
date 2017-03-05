@@ -1,4 +1,4 @@
-#source 'https://rubygems.org'
+# source 'https://rubygems.org'
 source 'https://gems.ruby-china.org'
 
 # 指定ruby版本
@@ -8,7 +8,7 @@ ruby '2.3.0'
 gem 'devise'
 # gem 'cancancan'
 # gem 'rolify'
-gem 'by_star', git: 'git://github.com/radar/by_star'
+# gem 'by_star', git: 'git://github.com/radar/by_star'
 # 前端样式 Bootstrap
 gem 'bootstrap-sass'
 # 使用第三方图标库
@@ -86,6 +86,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'annotate'
   gem 'capistrano', '~> 3.6'
   gem 'capistrano-bundler'
   gem 'capistrano-passenger'
