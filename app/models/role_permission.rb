@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: role_permissions
+#
+#  id            :integer          not null, primary key
+#  role_id       :integer
+#  permission_id :integer
+#  klass         :string(255)      not null
+#  actions       :string(255)      not null
+#  note          :string(255)
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
 class RolePermission < ActiveRecord::Base
   belongs_to :role
   def permission?(klass, action)

@@ -129,11 +129,6 @@ class SentsController < ApplicationController
             o_sent.door = door_sum
             o_sent.part = part_sum
             o_sent.save
-            # o_sent = order.create_sent({cupboard: cupboard_sum,
-            #                            robe: robe_sum,
-            #                            door: door_sum,
-            #                            part: part_sum}.merge(sent_params.except(:owner_id, :owner_type)))
-            # o_sent.save!
           end
         end
         # 发货单的发货时间、物流回执单号不为空时，更新订单状态
@@ -241,12 +236,13 @@ class SentsController < ApplicationController
         values << obj.logistics
         csv << values
       end
-      footer = [ '', '', '', '', '', '', '', '', '', '', "打单时间:#{Time.new.strftime('%Y-%m-%d %H:%M:%S')}", "合计#{total}", '']
+      footer = ['', '', '', '', '', '', '', '', '', '', "打单时间:#{Time.new.strftime('%Y-%m-%d %H:%M:%S')}", "合计#{total}", '']
       csv << footer
     end
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_sent
       @sent = Sent.find(params[:id])

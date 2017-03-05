@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: sent_lists
+#
+#  id         :integer          not null, primary key
+#  name       :string(255)
+#  total      :integer
+#  created_by :string(255)
+#  deleted    :boolean
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class SentList < ActiveRecord::Base
   has_many :sents, dependent: :destroy
 

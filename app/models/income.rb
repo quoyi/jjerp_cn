@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: incomes
+#
+#  id         :integer          not null, primary key
+#  name       :string(255)
+#  bank_id    :integer
+#  reason     :string(255)
+#  money      :decimal(12, 2)   default(0.0)
+#  username   :string(255)
+#  income_at  :datetime
+#  status     :integer
+#  note       :string(255)
+#  deleted    :boolean          default(FALSE), not null
+#  source     :string(255)      default("")
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  indent_id  :integer
+#  order_id   :integer
+#  agent_id   :integer
+#
+
 class Income < ActiveRecord::Base
   belongs_to :indent
   belongs_to :bank

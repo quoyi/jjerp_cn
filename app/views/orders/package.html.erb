@@ -18,7 +18,7 @@ function linkToReprint(e){
       订单号：<%= link_to @order.name, indent_path(@order.indent), class: 'detail-link' %>&nbsp;&nbsp;&nbsp;&nbsp;
       下单客户：<%= link_to @order.indent.agent.full_name, agents_path, class: 'detail-link' %>&nbsp;&nbsp;&nbsp;&nbsp;
       终端客户：<%= @order.indent.customer %>&nbsp;&nbsp;&nbsp;&nbsp;
-      件数：<%= @order.packages.pluck(:label_size).sum %>
+      件数：<%= @packages.pluck(:label_size).sum %>
       </small>
       <div class="pull-right panel-options">
         <%= link_to '返回', :back, class: 'btn btn-info' %>
@@ -37,7 +37,7 @@ function linkToReprint(e){
           </div>
           <div class="col-sm-7" style="padding-left: 0px;">
             <div class="row">
-              <%= form_tag("/orders/#{@order.id}/package.pdf", method: :post, class: 'form-inline') do |f| %>
+              <%= form_tag(package_orders_path(id: @order.id), method: :post, format: :pdf, class: 'form-inline') do |f| %>
               <div class="col-sm-5" style="padding-right: 0px;">
                 <label>&nbsp;&nbsp;&nbsp;&nbsp;尺寸：</label>
                 <%= number_field_tag 'length', @length, value: "80", class: "form-control", style: "width: 40px", readOnly: true, id: 'package_label_length' %>
@@ -89,7 +89,7 @@ function linkToReprint(e){
           </div>
           <div class="col-sm-7" style="padding-left: 0px;">
             <div class="row">
-              <%= form_tag("/orders/#{@order.id}/package.pdf", method: :post, class: 'form-inline') do |f| %>
+              <%= form_tag(package_orders_path(id: @order.id), method: :post, format: :pdf, class: 'form-inline') do |f| %>
               <%= hidden_field_tag 'order_unit_ids', '' %>
               <%= hidden_field_tag 'order_label_size', 0 %><!-- 标签数量 -->
               <%= hidden_field_tag 'is_batch', 0, id: 'order_is_batch' %>

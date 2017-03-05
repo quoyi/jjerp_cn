@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: offers
+#
+#  id         :integer          not null, primary key
+#  indent_id  :integer
+#  order_id   :integer
+#  display    :integer
+#  item_id    :integer
+#  item_type  :integer          default(0)
+#  item_name  :string(255)
+#  uom        :string(255)
+#  number     :decimal(10, 6)   default(0.0)
+#  price      :decimal(8, 2)    default(0.0)
+#  sum        :decimal(12, 2)   default(0.0)
+#  total      :decimal(12, 2)   default(0.0)
+#  note       :string(255)
+#  deleted    :boolean          default(FALSE)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class Offer < ActiveRecord::Base
   include OrdersHelper
   belongs_to :indent

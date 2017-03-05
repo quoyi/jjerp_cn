@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: material_categories
+#
+#  id         :integer          not null, primary key
+#  oftype     :integer          not null
+#  name       :string(255)
+#  note       :string(255)
+#  deleted    :boolean          default(FALSE)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class MaterialCategory < ActiveRecord::Base
   has_many :material
   validates_presence_of :oftype, :name

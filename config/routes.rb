@@ -72,12 +72,14 @@ Rails.application.routes.draw do
       get :producing # 生产中
       get :export # 导出
       get :unpack # 未打包
-      get :packaged # 已打包
-    end
-    member  do
-      get :custom_offer # 自定义报价
       get :package # 打包
       post :package # 打包
+      get :packaged # 已打包
+    end
+    member do
+      get :custom_offer # 自定义报价
+      # get :package # 打包
+      post :pack # 打包
       get :reprint # 重新打印标签
       post :reprint # 重新打印标签
       get :change_income # 转款
