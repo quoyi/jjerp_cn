@@ -2,14 +2,14 @@
 # lock '3.6.1'
 
 set :application, 'jjerp.cn'
-set :repo_url, 'https://github.com/beitaz/jjerp.cn.git'
+set :repo_url, 'git@gitlab.com:beitaz/jjerp.cn.git'
 set :deploy_user, 'bestar'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "/home/#{fetch(:deploy_user)}/jjerp.cn"
+set :deploy_to, '/var/www/jjerp.cn'
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -56,7 +56,6 @@ namespace :deploy do
   desc "Update Sentry's configuration in file: config/application.rb"
   task :update_sentry_config do
     on roles(:app) do
-
       # execute "ls -l"
       # info "Update Sentry's configuration in file: config/application.rb"
       # execute "cd #{current_path}/config/ && cat application.rb"
@@ -71,9 +70,9 @@ namespace :deploy do
       execute "mkdir #{current_path}/public/excels/parts && chmod 666 #{current_path}/public/excels/parts"
       execute "mkdir #{current_path}/public/excels/sent_lists && chmod 666 #{current_path}/public/excels/sent_lists"
       execute "mkdir #{current_path}/public/images && chmod 666 #{current_path}/public/excels/images"
-      info "自动部署完成！"
+      info '自动部署完成！'
     end
   end
 end
 
-after :deploy, "deploy:update_sentry_config"
+after :deploy, 'deploy:update_sentry_config'
