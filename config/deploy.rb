@@ -69,7 +69,7 @@ namespace :deploy do
       execute "mkdir #{current_path}/public/excels/orders && chmod 666 #{current_path}/public/excels/orders"
       execute "mkdir #{current_path}/public/excels/parts && chmod 666 #{current_path}/public/excels/parts"
       execute "mkdir #{current_path}/public/excels/sent_lists && chmod 666 #{current_path}/public/excels/sent_lists"
-      execute "mkdir #{current_path}/public/images && chmod 666 #{current_path}/public/excels/images"
+      execute "mkdir #{current_path}/public/images && chmod 666 #{current_path}/public/images"
       info '自动部署完成！'
     end
   end
