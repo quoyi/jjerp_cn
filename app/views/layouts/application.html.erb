@@ -33,25 +33,3 @@
     <%= render '/layouts/footer' %>
   </body>
 </html>
-<!-- Sentry JS SDK 2.1.+ required -->
-<script src="https://cdn.ravenjs.com/2.1.0/raven.min.js"></script>
-
-<script>
-// configure the SDK as you normally would
-Raven.config('https://022c5ad877dd486cb4bf12596be3fa06@sentry.io/128020').install();
-
-/**
- * Report a routing error to Sentry and show a feedback dialog to
- * the user.
- * 
- * > try {
- * >   renderRoute()
- * > } catch (err) {
- * >   handleRouteError(err);
- * > }
- */
-function handleRouteError(err) {
-  Raven.captureException(err);
-  Raven.showReportDialog();
-};
-</script>

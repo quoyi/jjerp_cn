@@ -42,11 +42,5 @@ module Jjerp
       g.stylesheets false # 禁止生成scss
     end
 
-    Raven.configure do |config|
-      # jjerp.cn
-      config.dsn = 'https://f366746ab9c94929906c5d960a447bc5:918fa9992f5d41889e229fe51a6f1e67@sentry.io/128322'
-      # 伊思尔
-      #config.dsn = 'https://e2ac8d03f56945ff9c0071b46d295462:fe93ff8d32294292b00e109445dd9886@sentry.io/128398'
-    end
   end
 end
