@@ -35,34 +35,30 @@ class UsersController < ApplicationController
   end
 
   def edit
-    if update_permission?
-      redirect_to statics_home_path, error: '没有权限访问该页面！' 
-    else
-      @role = @user.roles.first
-    end
+    redirect_to statics_home_path, error: '没有权限访问该页面！' unless update_permission?
+    @role = @user.roles.first
   end
 
   def profile
     @user = User.find_by(id: params[:user_id]) if params[:user_id].present?
-    redirect_to statics_home_path, error: '没有权限访问该页面！' if update_permission?
+    redirect_to statics_home_path, error: '没有权限访问该页面！' unless update_permission?
   end
 
   def update
-    # 管理员更新用户角色
-    if update_permission? && user_params[:role_ids]
-      @user.roles.delete(@user.roles.first) if @user.roles.any?
-      @role = Role.find(user_params[:role_ids].to_i)
-      @user.add_role! @role.nick
-      flash[:success] = "用户#{@user.username}角色已改为#{@role.name}!"
-    end
-    # 用户修改自己的账号信息
-    if update_permission? && @user.update(user_params)
-      @role = @user.roles.first
-      flash[:success] = '您的信息已修改！'
+    if update_permission?
+      if user_params[:role_ids].present? # 管理员更新用户角色
+        @user.roles.delete(@user.roles.first) if @user.roles.any?
+        @role = Role.find(user_params[:role_ids].to_i)
+        @user.add_role! @role.nick
+        flash[:success] = "用户#{@user.username}角色已改为#{@role.name}!"
+      elsif @user.update(user_params) # 用户修改自己的账号信息
+        @role = @user.roles.first
+        flash[:success] = user_params.keys.include?('password') ? '密码已修改，请重新登录。' : '您的信息已修改！'
+      end
     else
-      flash[:error] = '个人信息修改失败！'
+      flash[:error] = '没有权限执行此操作！'
+      redirect_to :back
     end
-    redirect_to :back
   end
 
   private
@@ -72,7 +68,7 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:id, :role_ids, :name, :email, :username, :mobile, :start_at, :end_at)
+      params.require(:user).permit(:id, :role_ids, :name, :email, :username, :password, :mobile, :start_at, :end_at)
     end
 
     def change_role
@@ -80,6 +76,6 @@ class UsersController < ApplicationController
     end
 
     def update_permission?
-      current_user.id != @user.id && !current_user.has_role?('super_admin') && !current_user.has_role?('admin')
+      current_user.id == @user.id && !current_user.has_role?('super_admin') && !current_user.has_role?('admin')
     end
 end

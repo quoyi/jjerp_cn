@@ -1,5 +1,6 @@
 <% if flash.keys.present? %>
   <% flash.keys.each do |k, v| %>
+  <% if k.class == 'String' %>
   <script type="text/javascript">
     noty({
       text: "<%= flash[k].gsub('"', '\\"') %>",
@@ -17,6 +18,7 @@
       }
     });
   </script>
+  <% end %>
   <% end %>
 <% end %>
 <%#= devise_error_messages! if devise_error_messages! %>
