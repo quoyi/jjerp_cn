@@ -1,9 +1,9 @@
 #
 # This file configures the New Relic Agent.  New Relic monitors Ruby, Java,
-# .NET, PHP, Python and Node applications with deep visibility and low
+# .NET, PHP, Python, Node, and Go applications with deep visibility and low
 # overhead.  For more information, visit www.newrelic.com.
 #
-# Generated April 18, 2017
+# Generated March 02, 2018
 #
 # This configuration file is custom generated for beitaz
 #

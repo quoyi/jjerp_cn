@@ -84,4 +84,14 @@ Rails.application.configure do
 
   # 配置 权限验证，生产环境下，需要修改 host 为实际域名
   config.action_mailer.default_url_options = { host: 'jjerp.cn' }
+  # 邮件服务器配置
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: ENV['email_address'],
+    port: ENV['email_port'],
+    domain: ENV['email_domain'],
+    authentication: ENV['email_auth'],
+    user_name: ENV['email_username'],
+    password: ENV['email_password']
+  }
 end
