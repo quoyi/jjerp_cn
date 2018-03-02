@@ -18,9 +18,6 @@ Rails.application.routes.draw do
       get :replenish # 补充发货信息
     end
   end
-  resources :users, only: [:index, :edit, :update] do
-    get :profile
-  end
 
   resources :offers
   resources :expends
@@ -96,6 +93,9 @@ Rails.application.routes.draw do
     confirmations: 'users/confirmations',
     unlocks: 'users/unlocks'
   }
+  resources :users, only: [:index, :edit, :update] do
+    get :profile
+  end
   get 'areas/find'
   get 'statics/home'
   get 'statics/about'
