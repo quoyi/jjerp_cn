@@ -51,14 +51,22 @@ class UsersController < ApplicationController
         @role = Role.find(user_params[:role_ids].to_i)
         @user.add_role! @role.nick
         flash[:success] = "用户#{@user.username}角色已改为#{@role.name}!"
-      elsif @user.update(user_params) # 用户修改自己的账号信息
+      else
+        if user_params[:password].blank?
+          params = user_params.except(:password)
+          msg = '您的信息（密码除外）已修改！'
+        else 
+          params = user_params
+          msg = '您的信息（包含密码）已修改，请重新登录。'
+        end
+        @user.update(params) # 用户修改自己的账号信息
         @role = @user.roles.first
-        flash[:success] = user_params.keys.include?('password') ? '密码已修改，请重新登录。' : '您的信息已修改！'
+        flash[:success] = msg
       end
     else
       flash[:error] = '没有权限执行此操作！'
-      redirect_to :back
     end
+    redirect_to :back
   end
 
   private
@@ -76,6 +84,6 @@ class UsersController < ApplicationController
     end
 
     def update_permission?
-      current_user.id == @user.id && !current_user.has_role?('super_admin') && !current_user.has_role?('admin')
+      current_user.id == @user.id && (current_user.has_role?('super_admin') || !current_user.has_role?('admin'))
     end
 end
