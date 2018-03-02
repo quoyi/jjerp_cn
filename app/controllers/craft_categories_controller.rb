@@ -21,7 +21,7 @@ class CraftCategoriesController < ApplicationController
   def find
     @craft_category = CraftCategory.find_by_id(params[:id]) if params[:id].present?
     respond_to do |format|
-      format.json { render json: @craft_category}
+      format.json { render json: @craft_category }
     end
   end
 
@@ -73,15 +73,15 @@ class CraftCategoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_craft_category
-      @craft_category = CraftCategory.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def craft_category_params
-      params.require(:craft_category).permit(:full_name, :uom, :price, :note, :deleted, :reset, 
-                                             crafts_attributes: [:id, :order_id, :full_name, :uom, :craft_category_id,
-                                                      :price, :number, :note, :status, :deleted, :_destroy])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_craft_category
+    @craft_category = CraftCategory.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def craft_category_params
+    params.require(:craft_category).permit(:full_name, :uom, :price, :note, :deleted, :reset,
+                                           crafts_attributes: [:id, :order_id, :full_name, :uom, :craft_category_id, :price, :number, :note, :status, :deleted, :_destroy])
+  end
 end

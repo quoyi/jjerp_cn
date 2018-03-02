@@ -2,7 +2,7 @@
 source 'https://gems.ruby-china.org'
 
 # 指定ruby版本
-ruby '2.3.0'
+ruby '~> 2.3.0'
 
 # 权限认证
 gem 'devise'
@@ -71,20 +71,21 @@ gem 'prawn-print'
 gem 'prawn-table'
 gem 'prawnto_2', require: 'prawnto'
 
-
 gem 'china_city'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
+  gem 'annotate'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  gem 'overcommit'
   gem 'pry'
+  gem 'rubocop'
 end
 
 group :development do
-  gem 'annotate'
   gem 'capistrano', '~> 3.6'
   gem 'capistrano-bundler'
   gem 'capistrano-passenger'
@@ -96,4 +97,3 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
-

@@ -6,7 +6,7 @@ Role.register_permission class: 'RolesController',
     '修改' => [:edit, :update],
     '删除' => [:destroy],
     '详细' => [:show]
-}
+  }
 Role.register_permission class: 'UsersController',
   name: '用户',
   actions: {
@@ -15,7 +15,7 @@ Role.register_permission class: 'UsersController',
     '修改' => [:edit, :update],
     '删除' => [:destroy],
     '详细' => [:show]
-}
+  }
 Role.register_permission class: 'BanksController',
   name: '银行账号',
   actions: {
@@ -24,7 +24,7 @@ Role.register_permission class: 'BanksController',
     '修改' => [:edit, :update],
     '删除' => [:destroy],
     '详细' => [:show]
-}
+  }
 Role.register_permission class: 'AgentsController',
   name: '代理商',
   actions: {
@@ -33,7 +33,7 @@ Role.register_permission class: 'AgentsController',
     '修改' => [:edit, :update],
     '删除' => [:destroy],
     '详细' => [:show]
-}
+  }
 Role.register_permission class: 'SuppliesController',
   name: '供应商',
   actions: {
@@ -42,7 +42,7 @@ Role.register_permission class: 'SuppliesController',
     '修改' => [:edit, :update],
     '删除' => [:destroy],
     '详细' => [:show]
-}
+  }
 Role.register_permission class: 'OrderCategoriesController',
   name: '订单类型',
   actions: {
@@ -51,7 +51,7 @@ Role.register_permission class: 'OrderCategoriesController',
     '修改' => [:edit, :update],
     '删除' => [:destroy],
     '详细' => [:show]
-}
+  }
 Role.register_permission class: 'UnitsController',
   name: '部件',
   actions: {
@@ -60,7 +60,7 @@ Role.register_permission class: 'UnitsController',
     '修改' => [:edit, :update],
     '删除' => [:destroy],
     '详细' => [:show]
-}
+  }
 Role.register_permission class: 'PartCategoriesController',
   name: '配件类型',
   actions: {
@@ -69,7 +69,7 @@ Role.register_permission class: 'PartCategoriesController',
     '修改' => [:edit, :update],
     '删除' => [:destroy],
     '详细' => [:show]
-}
+  }
 
 Role.register_permission class: 'PartsController',
   name: '配件',
@@ -79,7 +79,7 @@ Role.register_permission class: 'PartsController',
     '修改' => [:edit, :update],
     '删除' => [:destroy],
     '详细' => [:show]
-}
+  }
 Role.register_permission class: 'MaterialCategoriesController',
   name: '板料类型',
   actions: {
@@ -88,7 +88,7 @@ Role.register_permission class: 'MaterialCategoriesController',
     '修改' => [:edit, :update],
     '删除' => [:destroy],
     '详细' => [:show]
-}
+  }
 Role.register_permission class: 'MaterialsController',
   name: '板料',
   actions: {
@@ -97,7 +97,7 @@ Role.register_permission class: 'MaterialsController',
     '修改' => [:edit, :update],
     '删除' => [:destroy],
     '详细' => [:show]
-}
+  }
 Role.register_permission class: 'IndentsController',
   name: '订单',
   actions: {
@@ -107,7 +107,7 @@ Role.register_permission class: 'IndentsController',
     '生成报价' => [:generate],
     '详细' => [:show],
     '包装打印' => [:unpack, :package]
-}
+  }
 Role.register_permission class: 'OrdersController',
   name: '子订单',
   actions: {
@@ -118,7 +118,7 @@ Role.register_permission class: 'OrdersController',
     '详细' => [:show],
     '生产任务' => [:producing],
     '未发货' => [:not_sent]
-}
+  }
 
 Role.register_permission class: 'IncomesController',
   name: '收入',
@@ -129,7 +129,7 @@ Role.register_permission class: 'IncomesController',
     '删除' => [:destroy],
     '详细' => [:show],
     '收支统计' => [:stat]
-}
+  }
 
 Role.register_permission class: 'ExpendsController',
   name: '支出',
@@ -139,7 +139,7 @@ Role.register_permission class: 'ExpendsController',
     '修改' => [:edit, :update],
     '删除' => [:destroy],
     '详细' => [:show]
-}
+  }
 Role.register_permission class: 'SentsController',
   name: '发货',
   actions: {
@@ -151,7 +151,7 @@ Role.register_permission class: 'SentsController',
     '添加发货信息' => [:change],
     '下载发货清单' => :download,
     '回填物流单号' => :replenish
-}
+  }
 
 Role.register_permission class: 'SentListsController',
   name: '发货清单',
@@ -161,4 +161,4 @@ Role.register_permission class: 'SentListsController',
     '修改' => [:edit, :update],
     '删除' => [:destroy],
     '详细' => [:show]
-}
+  }

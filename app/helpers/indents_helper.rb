@@ -20,7 +20,7 @@ module IndentsHelper
   #     indent.offering!
   #   end
   # end
-  
+
   # 导出 配件清单
   def export_part_list(result)
     wb = WriteExcel.new("#{Rails.root}/public/excels/parts/" + result["file_name"] + ".xls")
