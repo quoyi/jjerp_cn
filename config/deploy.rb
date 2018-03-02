@@ -9,7 +9,7 @@ set :deploy_user, 'bestar'
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, '/var/www/jjerp.cn'
+set :deploy_to, '/var/www/ruby/jjerp.cn'
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -36,7 +36,7 @@ set :deploy_to, '/var/www/jjerp.cn'
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-set :rvm_ruby_version, '2.3.0'
+set :rvm_ruby_version, '2.3.6'
 set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads')
 
