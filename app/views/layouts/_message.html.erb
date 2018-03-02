@@ -1,19 +1,22 @@
-<script type="text/javascript">
-<% flash.keys.each do |k, v| %>
-  noty({
-    text: "<%= flash[k].gsub('"', '\\"') %>",
-    type: "<%= k %>",
-    theme: 'bootstrapTheme',
-    layout: 'bottomRight',
-    // timeout: 8000,
-    closeWith: ['button', 'click'],
-    template: '<div class="alert alert-<%= k %>"><span class="noty_text"></span><div class="noty_close"></div></div>',
-    animation: { // 动画方式
-      open: 'animated bounceInDown', // Animate.css 中的class 名称
-      close: 'animated bounceOutDown', // Animate.css 中的class 名称
-      easing: 'swing', // 非必须。使用 Animate.css 时，此设值无效
-      speed: 500 // 非必须。使用 Animate.css 时，此设值无效
-    }
-  });
+<% if flash.keys.present? %>
+  <% flash.keys.each do |k, v| %>
+  <script type="text/javascript">
+    noty({
+      text: "<%= flash[k].gsub('"', '\\"') %>",
+      type: "<%= k %>",
+      theme: 'bootstrapTheme',
+      layout: 'bottomRight',
+      // timeout: 8000,
+      closeWith: ['button', 'click'],
+      template: '<div class="alert alert-<%= k %>"><span class="noty_text"></span><div class="noty_close"></div></div>',
+      animation: { // 动画方式
+        open: 'animated bounceInDown', // Animate.css 中的class 名称
+        close: 'animated bounceOutDown', // Animate.css 中的class 名称
+        easing: 'swing', // 非必须。使用 Animate.css 时，此设值无效
+        speed: 500 // 非必须。使用 Animate.css 时，此设值无效
+      }
+    });
+  </script>
+  <% end %>
 <% end %>
-</script>
+<%#= devise_error_messages! if devise_error_messages! %>

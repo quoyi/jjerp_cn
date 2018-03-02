@@ -73,6 +73,9 @@ gem 'prawnto_2', require: 'prawnto'
 
 gem 'china_city'
 
+# 全局变量
+gem 'figaro'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

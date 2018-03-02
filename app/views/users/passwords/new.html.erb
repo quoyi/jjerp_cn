@@ -1,16 +1,49 @@
-<h2>Forgot your password?</h2>
-
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= devise_error_messages! %>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
+<% flash = devise_error_messages! %>
+<% unless flash.blank? %>
+  <% flash.each do |msg| %>
+  <script type="text/javascript">
+    noty({
+      text: "<%= msg %>",
+      type: "danger",
+      theme: 'bootstrapTheme',
+      layout: 'bottomRight',
+      closeWith: ['button', 'click'],
+      template: '<div class="alert alert-error alert-danger"><span class="noty_text"></span><div class="noty_close"></div></div>',
+      animation: { // 动画方式
+        open: 'animated bounceInDown', // Animate.css 中的class 名称
+        close: 'animated bounceOutDown', // Animate.css 中的class 名称
+        easing: 'swing', // 非必须。使用 Animate.css 时，此设值无效
+        speed: 500 // 非必须。使用 Animate.css 时，此设值无效
+      }
+    });
+  </script>
+  <% end %>
 <% end %>
+<div class="login-wrapper">
+  <div class="box">
+    <div class="content-wrap">
+    <h2>忘记密码？</h2>
+    <hr />
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: 'form-horizontal' }) do |f| %>
+      <%= devise_error_messages! %>
 
-<%= render "users/shared/links" %>
+      <div class="form-group row field">
+        <%= f.label :email, '绑定邮箱', class: 'control-label col-xs-3' %>
+        <div class="col-xs-9">
+          <%= f.email_field :email, autofocus: true, required: true, class: 'form-control', placeholder: '输入您绑定的邮箱' %>
+        </div>
+      </div>
+
+      <div class="form-group row actions">
+        <div class="col-xs-12">
+          <div class="pull-right">
+            <%= f.submit "重置密码", class: "btn btn-primary signup" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    </div>
+  </div>
+</div>
+
+<%#= render "users/shared/links" %>

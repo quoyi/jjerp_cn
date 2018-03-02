@@ -19,15 +19,15 @@ zh-CN:
         user:
           attributes:
             email:
-              blank: 不能为空
-              taken: 已被注册
-              invalid: 格式错误,请填写正确的 邮箱 地址
+              blank: 不能为空。
+              taken: 已被注册。
+              invalid: 格式错误,请检查%{attribute}格式是否正确。
             password:
-              blank: 不能为空
-              too_short: 最少为六位
+              blank: 不能为空。
+              too_short: 最少为六位。
             password_confirmation:
-              blank: 不能为空
-              too_short: 最少为六位
-              confirmation: 与 密码 不一致
+              blank: 不能为空。
+              too_short: 最少为六位。
+              confirmation: 两次输入的密码不一致。
   helpers:
     agent:
