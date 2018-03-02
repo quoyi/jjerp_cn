@@ -93,6 +93,7 @@ Rails.application.routes.draw do
     confirmations: 'users/confirmations',
     unlocks: 'users/unlocks'
   }
+  # 自定义 controller 必须在 devise 之下定义，否则会被覆盖(冲突)
   resources :users, only: [:index, :edit, :update] do
     get :profile
   end

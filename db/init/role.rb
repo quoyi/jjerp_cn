@@ -33,6 +33,11 @@ permissions.each_pair do |k, v|
   admin.role_permissions.create(klass: k, actions: v[:actions].values.flatten.map(&:to_s).join(','))
 end
 
+normal = Role.find_or_create_by!(name: '普通用户', nick: 'normal')
+permissions.each_pair do |k, v|
+  normal.role_permissions.create(klass: k, actions: 'show,edit,update') if k == 'UsersController'
+end
+
 #财务角色 增删改查 财务数据;查看 订单数据、物流发货、客户数据、供应商。
 financial = Role.find_or_create_by!(name: '财务', nick: 'financial')
 permissions.each_pair do |k, v|
@@ -60,8 +65,11 @@ permissions.each_pair do |k, v|
 end
 
 #工人角色: 查看 生产任务(打印包装标签)
-employee = Role.find_or_create_by!(name: '工人', nick: 'employee')
+employee = Role.find_or_create_by!(name: '工人', nick: 'employe')
 permissions.each_pair do |k, v|
+  if k == 'UsersController'
+    employee.role_permissions.create(klass: k, actions: 'show,edit,update')
+  end
   if k == 'IndentsController'
     employee.role_permissions.create(klass: k, actions: 'unpack,package')
   end

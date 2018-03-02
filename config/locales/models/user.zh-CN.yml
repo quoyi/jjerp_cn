@@ -12,8 +12,9 @@ zh-CN:
         name: 姓名
         cert: 身份证号
         password: 密码
-        password_confirmation: 重复密码
+        password_confirmation: 确认密码
         remember_me: 记住我
+        reset_password_token: '重置密码请求'
     errors:
       models:
         user:
@@ -29,5 +30,7 @@ zh-CN:
               blank: 不能为空。
               too_short: 最少为六位。
               confirmation: 两次输入的密码不一致。
+            reset_password_token:
+              invalid: "已失效，请重新发送请求。"
   helpers:
     agent:

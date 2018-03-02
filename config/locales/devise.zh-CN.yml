@@ -24,6 +24,8 @@ zh-CN:
         subject: "确认信息"
       reset_password_instructions:
         subject: "重置密码信息"
+      password_change:
+        subject: "修改密码"
       unlock_instructions:
         subject: "解锁信息"
     omniauth_callbacks:

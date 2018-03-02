@@ -35,24 +35,28 @@ class UsersController < ApplicationController
   end
 
   def edit
-    return redirect_to statics_home_path, error: '没有权限访问该页面！' if (!current_user.has_role?('super_admin') && !current_user.has_role?('admin')) && current_user.id != @user.id
-    @role = @user.roles.first
+    if update_permission?
+      redirect_to statics_home_path, error: '没有权限访问该页面！' 
+    else
+      @role = @user.roles.first
+    end
   end
 
   def profile
     @user = User.find_by(id: params[:user_id]) if params[:user_id].present?
+    redirect_to statics_home_path, error: '没有权限访问该页面！' if update_permission?
   end
 
   def update
     # 管理员更新用户角色
-    if (current_user.id == @user.id || current_user.has_role?('super_admin')) && user_params[:role_ids]
+    if update_permission? && user_params[:role_ids]
       @user.roles.delete(@user.roles.first) if @user.roles.any?
       @role = Role.find(user_params[:role_ids].to_i)
       @user.add_role! @role.nick
       flash[:success] = "用户#{@user.username}角色已改为#{@role.name}!"
     end
     # 用户修改自己的账号信息
-    if (current_user.id == @user.id || current_user.has_role?('super_admin') || current_user.has_role?('admin')) && @user.update(user_params)
+    if update_permission? && @user.update(user_params)
       @role = @user.roles.first
       flash[:success] = '您的信息已修改！'
     else
@@ -73,5 +77,9 @@ class UsersController < ApplicationController
 
     def change_role
       Role.find(params[:user][:role_ids].to_i) unless params[:user][:role_ids].blank?
+    end
+
+    def update_permission?
+      current_user.id != @user.id && !current_user.has_role?('super_admin') && !current_user.has_role?('admin')
     end
 end
