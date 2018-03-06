@@ -16,7 +16,8 @@ class CraftsController < ApplicationController
       craft_category = CraftCategory.find_by(id: key)
       total_number = 0 
       value.each{|craft| total_number += craft.number}
-      crafts_arr << {name: craft_category.full_name, number: total_number}
+      debugger
+      crafts_arr << {name: craft_category.full_name, number: total_number} if craft_category
     end
     @crafts_arr = crafts_arr.sort_by{|m| m[:number] }
     @crafts_arr = @crafts_arr.reverse if params[:sort].present? && params[:sort] == 'desc'
