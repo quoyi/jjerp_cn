@@ -31,17 +31,17 @@
 #
 #  IndexTags:
 #    enabled: true # Generate a tags file with `ctags` each time HEAD changes
-CommitMsg:
-  CapitalizedSubject:
-    enabled: false
+# CommitMsg:
+#   CapitalizedSubject:
+#     enabled: false
 
 PreCommit:
   AuthorName:
     enabled: false
-  RuboCop:
-    enabled: true
-    command: ['bundle', 'exec', 'rubocop', '-c', '.rubocop.yml']
+#   RuboCop:
+#     enabled: true
+#     command: ['bundle', 'exec', 'rubocop', '-c', '.rubocop.yml']
 
-PrePush:
-  RSpec:
-    enabled: false
+# PrePush:
+#   RSpec:
+#     enabled: false
