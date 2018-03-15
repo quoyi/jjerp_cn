@@ -2,7 +2,7 @@
 source 'https://gems.ruby-china.org'
 
 # 指定ruby版本
-ruby "2.4.1"
+ruby "2.3.6"
 
 # 权限认证
 gem 'devise'
