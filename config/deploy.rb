@@ -3,13 +3,12 @@
 
 set :application, 'jjerp.cn'
 set :repo_url, 'git@gitlab.com:beitaz/jjerp.cn.git'
-set :deploy_user, 'bestar'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, '/var/www/ruby/jjerp.cn'
+set :deploy_to, '/var/www/jjerp'
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -36,7 +35,7 @@ set :deploy_to, '/var/www/ruby/jjerp.cn'
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-set :rvm_ruby_version, '2.3.6'
+set :rvm_ruby_version, '2.4.1'
 set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads')
 
@@ -50,12 +49,12 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 namespace :deploy do
   # desc "create test.rb file"
   # file 'test.rb' do |f|
-  # 	sh "touch #{f.name}"
+  # sh "touch #{f.name}"
   # end
 
-  desc "Update Sentry's configuration in file: config/application.rb"
-  task :update_sentry_config do
-    on roles(:app) do
+  desc 'Create assets directory'
+  task :create_directory do
+    on roles(:all) do
       # execute "ls -l"
       # info "Update Sentry's configuration in file: config/application.rb"
       # execute "cd #{current_path}/config/ && cat application.rb"
@@ -75,4 +74,4 @@ namespace :deploy do
   end
 end
 
-after :deploy, 'deploy:update_sentry_config'
+after :deploy, 'deploy:create_directory'

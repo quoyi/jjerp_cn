@@ -15,9 +15,9 @@
 # property set. Specify the username and a domain or IP for the server.
 # Don't use `:all`, it's a meta role.
 
-role :app, %w(bestar@47.93.41.1)
-role :web, %w(bestar@47.93.41.1)
-role :db,  %w(bestar@47.93.41.1)
+# role :app, %w(bestar@47.93.41.1)
+# role :web, %w(bestar@47.93.41.1)
+# role :db,  %w(bestar@47.93.41.1)
 
 # Configuration
 # =============
@@ -53,3 +53,13 @@ role :db,  %w(bestar@47.93.41.1)
 #     auth_methods: %w(publickey password)
 #     # password: 'please use keys'
 #   }
+server '47.93.41.1',
+       user: 'bestar',
+       roles: %w[web app],
+       ssh_options: {
+         user: 'bestar', # overrides user setting above
+         keys: [File.join(ENV['HOME'], '.ssh', 'id_rsa')],
+         forward_agent: false,
+         auth_methods: %w[publickey]
+         # password: "please use keys"
+       }
