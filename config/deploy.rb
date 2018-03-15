@@ -2,7 +2,7 @@
 # lock '3.6.1'
 
 set :application, 'jjerp.cn'
-set :repo_url, 'git@gitlab.com:beitaz/jjerp.cn.git'
+set :repo_url, 'git@github.com:beitaz/jjerp.cn.git'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
