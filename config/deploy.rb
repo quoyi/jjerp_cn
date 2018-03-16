@@ -37,7 +37,10 @@ set :deploy_to, '/var/www/jjerp'
 
 set :rvm_ruby_version, '2.3.6'
 set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
-set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads')
+set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system',
+                                               'public/uploads', 'public/images', 'public/excels/expends',
+                                               'public/excels/incomes', 'public/excels/offers', 'public/excels/orders',
+                                               'public/excels/parts', 'public/excels/sent_lists')
 
 # If you want to restart using `touch tmp/restart.txt`, add this to your config/deploy.rb:
 #   set :passenger_restart_with_touch, true
@@ -62,8 +65,8 @@ namespace :deploy do
       # 查找并替换 不包含符号# 开头的 config.dsn 字符串 为 #config.dsn
       # execute "sed -i 's/[^#]config.dsn/#config.dsn/g' #{current_path}/config/application.rb"
 
-      execute "mkdir -p #{current_path}/public/excels/{expends, incomes, offers, orders, parts, sent_lists}"
-      execute "mkdir -p #{current_path}/public/images"
+      # execute "mkdir -p #{deploy_to}/shared/public/excels/{expends,incomes,offers,orders,parts,sent_lists}"
+      # execute "mkdir -p #{deploy_to}/shared/public/images"
       info '自动部署完成！'
     end
   end
