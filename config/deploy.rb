@@ -37,8 +37,8 @@ set :deploy_to, '/var/www/jjerp'
 
 set :rvm_ruby_version, '2.3.6'
 set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
-set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system',
-                                               'public/uploads', 'public/images', 'public/excels/expends',
+set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle',
+                                               'public/system', 'public/uploads', 'public/images', 'public/excels/expends',
                                                'public/excels/incomes', 'public/excels/offers', 'public/excels/orders',
                                                'public/excels/parts', 'public/excels/sent_lists')
 
@@ -67,7 +67,7 @@ namespace :deploy do
 
       # execute "mkdir -p #{deploy_to}/shared/public/excels/{expends,incomes,offers,orders,parts,sent_lists}"
       # execute "mkdir -p #{deploy_to}/shared/public/images"
-      info '自动部署完成！'
+      info 'Directory created!'
     end
   end
 end
