@@ -35,7 +35,7 @@ set :deploy_to, '/var/www/jjerp'
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-set :rvm_ruby_version, '2.4.1'
+set :rvm_ruby_version, '2.3.6'
 set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads')
 
@@ -62,13 +62,8 @@ namespace :deploy do
       # 查找并替换 不包含符号# 开头的 config.dsn 字符串 为 #config.dsn
       # execute "sed -i 's/[^#]config.dsn/#config.dsn/g' #{current_path}/config/application.rb"
 
-      execute "mkdir #{current_path}/public/excels/expends && chmod 666 #{current_path}/public/excels/expends"
-      execute "mkdir #{current_path}/public/excels/incomes && chmod 666 #{current_path}/public/excels/incomes"
-      execute "mkdir #{current_path}/public/excels/offers && chmod 666 #{current_path}/public/excels/offers"
-      execute "mkdir #{current_path}/public/excels/orders && chmod 666 #{current_path}/public/excels/orders"
-      execute "mkdir #{current_path}/public/excels/parts && chmod 666 #{current_path}/public/excels/parts"
-      execute "mkdir #{current_path}/public/excels/sent_lists && chmod 666 #{current_path}/public/excels/sent_lists"
-      execute "mkdir #{current_path}/public/images && chmod 666 #{current_path}/public/images"
+      execute "mkdir -p #{current_path}/public/excels/{expends, incomes, offers, orders, parts, sent_lists}"
+      execute "mkdir -p #{current_path}/public/images"
       info '自动部署完成！'
     end
   end
