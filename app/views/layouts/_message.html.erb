@@ -1,9 +1,10 @@
 <% if flash.present? && flash.keys.present? %>
   <% flash.each do |k, v| %>
   <% if k.class == String %>
+  <% message = flash[k].gsub('"', '\\"') %>
   <script type="text/javascript">
     noty({
-      text: "<%= flash[k].gsub('"', '\\"') %>",
+      text: "<%= message %>",
       type: "<%= k %>",
       theme: 'bootstrapTheme',
       layout: 'bottomRight',
