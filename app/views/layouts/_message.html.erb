@@ -1,5 +1,5 @@
-<% if flash.keys.present? %>
-  <% flash.keys.each do |k, v| %>
+<% if flash.present? && flash.keys.present? %>
+  <% flash.each do |k, v| %>
   <% if k.class == String %>
   <script type="text/javascript">
     noty({
@@ -20,5 +20,6 @@
   </script>
   <% end %>
   <% end %>
+  <% flash.discard %><!-- 清空 flash 信息，防止页面刷新时重复弹出 -->
 <% end %>
 <%#= devise_error_messages! if devise_error_messages! %>
