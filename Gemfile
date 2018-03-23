@@ -2,7 +2,7 @@
 source 'https://gems.ruby-china.org'
 
 # 指定ruby版本
-ruby "2.3.6"
+ruby "2.4.1"
 
 # 权限认证
 gem 'devise'
@@ -45,6 +45,8 @@ gem 'barby', '~> 0.6.4'
 gem 'chunky_png'
 # 性能监控(performance monitoring)
 gem 'newrelic_rpm'
+
+gem 'qiniu', '~> 6.8.1'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
