@@ -13,6 +13,10 @@ set :deploy_to, '/var/www/jjerp'
 # Default value for :scm is :git
 # set :scm, :git
 
+# 设置远程仓库缓存，每次部署时使用 git pull 而不是 git clone
+set :repository_cache, 'git_cache'
+set :deploy_via, :remote_cache
+
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
 
