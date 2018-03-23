@@ -58,6 +58,21 @@ namespace :deploy do
   # file 'test.rb' do |f|
   # sh "touch #{f.name}"
   # end
+  desc 'check assets directory'
+  task :check_directory do
+    on roles(:all) do
+      # execute "ls -l"
+      # info "Update Sentry's configuration in file: config/application.rb"
+      # execute "cd #{current_path}/config/ && cat application.rb"
+
+      # 查找并替换 不包含符号# 开头的 config.dsn 字符串 为 #config.dsn
+      # execute "sed -i 's/[^#]config.dsn/#config.dsn/g' #{current_path}/config/application.rb"
+
+      # execute "mkdir -p #{deploy_to}/shared/public/excels/{expends,incomes,offers,orders,parts,sent_lists}"
+      # execute "mkdir -p #{deploy_to}/shared/public/images"
+      info 'Directory checked!'
+    end
+  end
 
   desc 'Create assets directory'
   task :create_directory do
@@ -76,4 +91,5 @@ namespace :deploy do
   end
 end
 
+before :deploy, 'deploy:check_directory'
 after :deploy, 'deploy:create_directory'
