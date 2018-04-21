@@ -16,6 +16,7 @@ set :deploy_to, '/var/www/jjerp'
 # 设置远程仓库缓存，每次部署时使用 git pull 而不是 git clone
 set :repository_cache, 'git_cache'
 set :deploy_via, :remote_cache
+set :git_shallow_clone, 1
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
