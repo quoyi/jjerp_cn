@@ -1,7 +1,13 @@
 # 初始化 jjerp.cn 代码仓库
 
+## 项目笔记
 
-### 配置邮件
+```shell
+$ rake db:drop db:create db:migrate db:seed
+...
+```
+
+## 配置邮件
 
 修改 `config/initializers/devise.rb` 中的 `config.mailer_sender` 等配置
 
