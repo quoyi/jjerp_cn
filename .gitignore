@@ -1,12 +1,12 @@
 log/*
 tmp/*
 
-!public/excels/offers/
-!public/excels/orders/
-!public/excels/parts/
-!public/excels/sent_lists/
-!public/excels/incomes/
-!public/excels/expends/
+!public/excels/offers
+!public/excels/orders
+!public/excels/parts
+!public/excels/sent_lists
+!public/excels/incomes
+!public/excels/expends
 public/excels/offers/*
 public/excels/orders/*
 public/excels/parts/*
