@@ -55,11 +55,8 @@
 #   }
 server '47.93.41.1',
        user: 'bestar',
-       roles: %w[web app],
+       roles: %w[web app db],
        ssh_options: {
-         user: 'bestar', # overrides user setting above
-         keys: [File.join(ENV['HOME'], '.ssh', 'id_rsa')],
-         forward_agent: false,
+         keys: %w[~/.ssh/id_rsa],
          auth_methods: %w[publickey]
-         # password: "please use keys"
        }
