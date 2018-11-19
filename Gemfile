@@ -1,5 +1,5 @@
 # source 'https://rubygems.org'
-source 'https://gems.ruby-china.org'
+source 'https://gems.ruby-china.com'
 
 # 指定ruby版本
 ruby "2.4.1"
