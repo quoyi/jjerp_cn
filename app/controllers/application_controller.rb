@@ -22,35 +22,35 @@ class ApplicationController < ActionController::Base
 
   protected
 
-    def configure_permitted_parameters
-      devise_parameter_sanitizer.permit(:sign_up) do |u|
-        u.permit(:email, :password, :password_confirmation)
-      end
-      devise_parameter_sanitizer.permit(:sign_in) do  |u|
-        u.permit(:email, :password, :remember_me)
-      end
-      devise_parameter_sanitizer.permit(:account_update) do |u|
-        u.permit(:name, :email, :password, :password_confirmation, :current_password)
-      end
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up) do |u|
+      u.permit(:email, :password, :password_confirmation)
     end
+    devise_parameter_sanitizer.permit(:sign_in) do |u|
+      u.permit(:email, :password, :remember_me)
+    end
+    devise_parameter_sanitizer.permit(:account_update) do |u|
+      u.permit(:name, :email, :password, :password_confirmation, :current_password)
+    end
+  end
 
-    def authenticate!
-      if validate_date?
-        authenticate_user!
-      else
-        render statics_about_path
-      end
+  def authenticate!
+    if validate_date?
+      authenticate_user!
+    else
+      render statics_about_path
     end
+  end
 
-    def layout_by_validity
-      if validate_date?
-        'application'
-      else
-        'validity'
-      end
+  def layout_by_validity
+    if validate_date?
+      'application'
+    else
+      'validity'
     end
+  end
 
-    def validate_date?
-      Date.today < Date.new(2917, 1, 15) ? true : false
-    end
+  def validate_date?
+    Date.today < Date.new(2917, 1, 15)
+  end
 end

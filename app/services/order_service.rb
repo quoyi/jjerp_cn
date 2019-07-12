@@ -57,7 +57,6 @@ class OrderService < BaseService
     indent.update!(status: min_status, max_status: max_status)
   end
 
-  private_class_method
   # 计算订单金额
   def self.calculate_amount(order)
     # 更新子订单金额、代理商余额、收入记录
@@ -67,9 +66,7 @@ class OrderService < BaseService
     # 自定义报价中的部件 尺寸 不参与计算
     sum_units += group_units[true].map { |u| u.number * u.price }.sum if group_units[true]
     # 正常拆单部件 尺寸 参与计算
-    if group_units[false]
-      sum_units += group_units[false].map { |u| u.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * u.number * u.price }.sum
-    end
+    sum_units += group_units[false].map { |u| u.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result * item } / (1000 * 1000).to_f * u.number * u.price }.sum if group_units[false]
     # 计算 配件 金额
     sum_parts = order.parts.map { |p| p.number * p.price }.sum
     # 计算 工艺 金额

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>伊思尔生产管理</title>
+    <title><%= ENV.fetch('APP_NAME') { '伊思尔生产管理' } %></title>
     <%= favicon_link_tag 'favicon.ico', rel: 'shortcut icon', type: 'image/png' %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>

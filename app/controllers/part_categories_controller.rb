@@ -15,10 +15,10 @@ class PartCategoriesController < ApplicationController
   # POST /part_categories/find.json
   def find
     @part_categories = PartCategory.where(parent_id: params[:parent_id], deleted: false) if params[:parent_id].present?
-    # 通用性问题（view 中使用了 each，遍历单条记录时会报错），此处必须用where 
+    # 通用性问题（view 中使用了 each，遍历单条记录时会报错），此处必须用where
     @part_categories = PartCategory.where(id: params[:id]) if params[:id].present?
     respond_to do |format|
-      format.json { render json: @part_categories}
+      format.json { render json: @part_categories }
     end
   end
 
@@ -60,7 +60,7 @@ class PartCategoriesController < ApplicationController
     end
     respond_to do |format|
       format.html { redirect_to part_categories_path, notice: '配件类型编辑成功！' }
-      format.json { render json: pc}
+      format.json { render json: pc }
     end
   end
 
@@ -69,19 +69,20 @@ class PartCategoriesController < ApplicationController
   def destroy
     @part_category.update_attributes(deleted: true)
     # 当配件类型为“基本类型”时，需要将它的所有子类型都标记删除
-    PartCategory.where(parent_id: @part_category.id).update_all(deleted: true) if @part_category.parent_id == 0
+    PartCategory.where(parent_id: @part_category.id).update_all(deleted: true) if @part_category.parent_id.zero?
     redirect_to part_categories_path, notice: '配件类型已删除！'
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_part_category
-      @part_category = PartCategory.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def part_category_params
-      params.require(:part_category).permit(:id, :parent_id, :name, :buy, :price, :store,
-                                            :uom, :brand, :supply_id, :note, :deleted)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_part_category
+    @part_category = PartCategory.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def part_category_params
+    params.require(:part_category).permit(:id, :parent_id, :name, :buy, :price, :store,
+                                          :uom, :brand, :supply_id, :note, :deleted)
+  end
 end

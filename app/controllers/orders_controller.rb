@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   include IndentsHelper
   include OrdersHelper
   include OffersHelper
-  before_action :set_order, only: [:show, :edit, :update, :destroy, :import, :custom_offer, :reprint]
+  before_action :set_order, only: %i[show edit update destroy import custom_offer reprint]
 
   # GET /orders
   # GET /orders.json
@@ -58,14 +58,12 @@ class OrdersController < ApplicationController
     @orders_result[:cabinets], @orders_result[:backboard] = Array.new(2) { 0 }
     @orders.each do |order|
       order.units.each do |unit|
-        unit_number = 0
-        if unit.size.blank?
-          unit_number = unit.number
-          unit.is_backboard? ? @orders_result[:backboard] += unit_number : @orders_result[:cabinets] += unit_number
-        else
-          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * unit.number
-          unit.is_backboard? ? @orders_result[:backboard] += unit_number : @orders_result[:cabinets] += unit_number
-        end
+        unit_number = if unit.size.blank?
+                        unit.number
+                      else
+                        unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result * item } / (1000 * 1000).to_f * unit.number
+                      end
+        unit.backboard? ? @orders_result[:backboard] += unit_number : @orders_result[:cabinets] += unit_number
       end
     end
     # 橱柜
@@ -74,14 +72,12 @@ class OrdersController < ApplicationController
     @orders_result[:cupboard_cabinets], @orders_result[:cupboard_backboard] = Array.new(2) { 0 }
     cupboards.each do |order|
       order.units.each do |unit|
-        unit_number = 0
-        if unit.size.blank?
-          unit_number = unit.number
-          unit.is_backboard? ? @orders_result[:cupboard_backboard] += unit_number : @orders_result[:cupboard_cabinets] += unit_number
-        else
-          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * unit.number
-          unit.is_backboard? ? @orders_result[:cupboard_backboard] += unit_number : @orders_result[:cupboard_cabinets] += unit_number
-        end
+        unit_number = if unit.size.blank?
+                        unit.number
+                      else
+                        unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result * item } / (1000 * 1000).to_f * unit.number
+                      end
+        unit.backboard? ? @orders_result[:cupboard_backboard] += unit_number : @orders_result[:cupboard_cabinets] += unit_number
       end
     end
     # 衣柜
@@ -90,14 +86,12 @@ class OrdersController < ApplicationController
     @orders_result[:robe_cabinets], @orders_result[:robe_backboard] = Array.new(2) { 0 }
     robes.each do |order|
       order.units.each do |unit|
-        unit_number = 0
-        if unit.size.blank?
-          unit_number = unit.number
-          unit.is_backboard? ? @orders_result[:robe_backboard] += unit_number : @orders_result[:robe_cabinets] += unit_number
-        else
-          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * unit.number
-          unit.is_backboard? ? @orders_result[:robe_backboard] += unit_number : @orders_result[:robe_cabinets] += unit_number
-        end
+        unit_number = if unit.size.blank?
+                        unit.number
+                      else
+                        unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result * item } / (1000 * 1000).to_f * unit.number
+                      end
+        unit.backboard? ? @orders_result[:robe_backboard] += unit_number : @orders_result[:robe_cabinets] += unit_number
       end
     end
     # 门
@@ -106,14 +100,12 @@ class OrdersController < ApplicationController
     @orders_result[:door_count] = 0
     doors.each do |order|
       order.units.each do |unit|
-        unit_number = 0
-        if unit.size.blank?
-          unit_number = unit.number
-          @orders_result[:door_count] += unit_number
-        else
-          unit_number = unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * unit.number
-          @orders_result[:door_count] += unit_number
-        end
+        unit_number = if unit.size.blank?
+                        unit.number
+                      else
+                        unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result * item } / (1000 * 1000).to_f * unit.number
+                      end
+        @orders_result[:door_count] += unit_number
       end
     end
     @orders_result[:part] = @orders.where(order_category_id: OrderCategory.find_by(name: '配件').try(:id)).count
@@ -202,9 +194,7 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1.json
   def update
     # 检查权限
-    if !current_user.admin? && @order.handler != 0 && @order.handler != current_user.id
-      return redirect_to :back, error: '没有权限编辑此订单！'
-    end
+    return redirect_to :back, error: '没有权限编辑此订单！' if !current_user.admin? && @order.handler != 0 && @order.handler != current_user.id
     return redirect_to :back, error: '请求无效！请检查数据是否有效。' unless params[:order]
 
     # 仅仅只是修改订单状态时
@@ -243,7 +233,7 @@ class OrdersController < ApplicationController
       # 总订单： 金额合计 = 所有子订单金额合计，  欠款合计 = 所有子订单金额合计 - 所有收入金额合计
       indent.update!(amount: indent.orders.pluck(:price).sum, arrear: indent.orders.pluck(:arrear).sum)
       # 删除子订单前，先将金额退回到代理商余额、修改代理商历史金额
-      if agent.balance > 0
+      if agent.balance.positive?
         agent.update!(balance: agent.balance + order.price, history: agent.history - order.price)
       else
         agent.update!(history: agent.history - order.price)
@@ -271,7 +261,7 @@ class OrdersController < ApplicationController
     end
     @indents = @indents.where(agent_id: params[:agent_id]) if params[:agent_id].present?
     @indents = @indents.where("name like '%#{params[:indent_name]}%'") if params[:indent_name].present?
-    @indents = @indents.includes(:agent, :sent, orders: [:packages, :order_category, :sent]).page(params[:page])
+    @indents = @indents.includes(:agent, :sent, orders: %i[packages order_category sent]).page(params[:page])
   end
 
   # 生产任务
@@ -298,12 +288,13 @@ class OrdersController < ApplicationController
       agent = indent.agent
       # 在更新之前保存订单 （原）金额、（原）欠款
       origin_indent_amount = indent.orders.pluck(:price).sum
-      origin_indent_arrear = indent.arrear
+      # origin_indent_arrear = indent.arrear
       origin_order_amount = @order.price
-      origin_order_arrear = @order.arrear
+      # origin_order_arrear = @order.arrear
       origin_agent_balance = agent.balance
 
-      msg = import_order_units(params[:file], @order.name)
+      # msg = import_order_units(params[:file], @order.name)
+      import_order_units(params[:file], @order.name)
 
       # 更新子订单金额、代理商余额、收入记录  开始
       sum_units = 0
@@ -312,7 +303,7 @@ class OrdersController < ApplicationController
       # 自定义报价中的部件 尺寸 不参与计算
       sum_units += group_units[true].map { |u| u.number * u.price }.sum if group_units[true]
       # 正常拆单部件 尺寸 参与计算
-      sum_units += group_units[false].map { |u| u.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * u.number * u.price }.sum if group_units[false]
+      sum_units += group_units[false].map { |u| u.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result * item } / (1000 * 1000).to_f * u.number * u.price }.sum if group_units[false]
       # 计算 配件 金额
       sum_parts = @order.parts.map { |p| p.number * p.price }.sum
       # 计算 工艺 金额
@@ -371,7 +362,7 @@ class OrdersController < ApplicationController
       # 自定义报价中的部件 尺寸 不参与计算
       sum_units += group_units[true].map { |u| u.number * u.price }.sum if group_units[true]
       # 正常拆单部件 尺寸 参与计算
-      sum_units += group_units[false].map { |u| u.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * u.number * u.price }.sum if group_units[false]
+      sum_units += group_units[false].map { |u| u.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result * item } / (1000 * 1000).to_f * u.number * u.price }.sum if group_units[false]
       # 计算 配件 金额
       sum_parts = @order.parts.map { |p| p.number * p.price }.sum
       # 计算 工艺 金额
@@ -444,11 +435,11 @@ class OrdersController < ApplicationController
       @order_units = @order.units
       @packages = @order.packages
       # 打印尺寸需存在users表的default_print_size
-      label_size = params[:order_label_size].to_i > 0 ? params[:order_label_size].to_i : 1
+      label_size = params[:order_label_size].to_i.positive? ? params[:order_label_size].to_i : 1
       # （打印）标签属性设置
       @length = (params[:length].presence || 80).to_i
       @width = (params[:width].presence || 60).to_i
-      if @order.order_category.name == '配件'        # @order.packages.destroy_all
+      if @order.order_category.name == '配件' # @order.packages.destroy_all
         package = Package.find_or_create_by(order_id: @order.id)
         package.part_ids = @order.parts.pluck(:id).join(',')
         package.label_size = label_size
@@ -540,7 +531,7 @@ class OrdersController < ApplicationController
     label_size = params[:label_size].to_i
     length = (params[:length].presence || 80).to_i
     width = (params[:width].presence || 60).to_i
-    if label_size > 0 && packages.present?
+    if label_size.positive? && packages.present?
       packages.destroy_all
       @order.packages.create(unit_ids: @order.units.pluck(:id).join(','),
                              part_ids: @order.parts.pluck(:id).join(','),
@@ -580,7 +571,8 @@ class OrdersController < ApplicationController
                                       money: tmp_money,
                                       note: "【#{today}】从子订单【#{@order.name}】手动转入【#{target_order.name}】金额【#{tmp_money}元】")
           @order.incomes.order(created_at: :desc).each do |i|
-            break if tmp_money == 0
+            break if tmp_money.zero?
+
             if i.money <= tmp_money
               tmp_money -= i.money
               i.destroy!
@@ -595,7 +587,8 @@ class OrdersController < ApplicationController
         else # 将金额转到代理商余额
           agent = @order.agent
           @order.incomes.order(created_at: :desc).each do |i|
-            break if tmp_money == 0
+            break if tmp_money.zero?
+
             if i.money <= tmp_money
               tmp_money -= i.money
               i.destroy!
@@ -630,12 +623,12 @@ class OrdersController < ApplicationController
     params.require(:order).permit(:indent_id, :name, :order_category_id, :ply, :texture, :material_price, :agent_id,
                                   :color, :length, :width, :height, :number, :price, :customer, :delivery_address, :user_id,
                                   :status, :oftype, :note, :deleted, :file, :_destroy, :is_use_order_material, :arrear,
-                                  units_attributes: [:id, :full_name, :number, :ply, :texture, :color, :is_custom,
-                                                     :length, :width, :size, :uom, :price, :note, :_destroy],
-                                  parts_attributes: [:id, :part_category_id, :order_id,
-                                                     :name, :buy, :price, :store, :uom, :number, :brand, :note,
-                                                     :supply_id, :deleted, :_destroy],
-                                  crafts_attributes: [:id, :order_id, :full_name, :uom, :craft_category_id,
-                                                      :price, :number, :note, :status, :deleted, :_destroy])
+                                  units_attributes: %i[id full_name number ply texture color is_custom
+                                                       length width size uom price note _destroy],
+                                  parts_attributes: %i[id part_category_id order_id
+                                                       name buy price store uom number brand note
+                                                       supply_id deleted _destroy],
+                                  crafts_attributes: %i[id order_id full_name uom craft_category_id
+                                                        price number note status deleted _destroy])
   end
 end

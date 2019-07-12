@@ -1,5 +1,5 @@
 class BanksController < ApplicationController
-  before_action :set_bank, only: [:show, :edit, :update, :destroy]
+  before_action :set_bank, only: %i[show edit update destroy]
 
   # GET /banks
   # GET /banks.json
@@ -13,8 +13,7 @@ class BanksController < ApplicationController
 
   # GET /banks/1
   # GET /banks/1.json
-  def show
-  end
+  def show; end
 
   # GET /banks/new
   def new
@@ -22,8 +21,7 @@ class BanksController < ApplicationController
   end
 
   # GET /banks/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /banks
   # POST /banks.json
@@ -55,6 +53,7 @@ class BanksController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_bank
     @bank = Bank.find(params[:id])

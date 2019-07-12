@@ -39,13 +39,14 @@ class UnitCategoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_unit_category
-      @unit_category = UnitCategory.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def unit_category_params
-      params.require(:unit_category).permit(:name, :note, :deleted)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_unit_category
+    @unit_category = UnitCategory.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def unit_category_params
+    params.require(:unit_category).permit(:name, :note, :deleted)
+  end
 end

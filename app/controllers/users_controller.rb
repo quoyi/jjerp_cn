@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   # skip_before_action :authenticate_user!
-  before_action :set_current_user, only: [:edit, :update]
+  before_action :set_current_user, only: %i[edit update]
 
   def index
     params[:start_at] ||= Date.today.beginning_of_month
@@ -15,13 +15,13 @@ class UsersController < ApplicationController
       amount = 0
       orders.each do |order|
         order.units.each do |unit|
-          unless unit.is_backboard?
-            if unit.size.blank?
-              material_number += unit.number
-            else
-              material_number += unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result *= item } / (1000 * 1000).to_f * unit.number
-            end
-          end
+          next if unit.backboard?
+
+          material_number += if unit.size.blank?
+                               unit.number
+                             else
+                               unit.size.split(/[xX*×]/).map(&:to_i).inject(1) { |result, item| result * item } / (1000 * 1000).to_f * unit.number
+                             end
         end
         amount += order.price
       end
@@ -55,7 +55,7 @@ class UsersController < ApplicationController
         if user_params[:password].blank?
           params = user_params.except(:password)
           msg = '您的信息（密码除外）已修改！'
-        else 
+        else
           params = user_params
           msg = '您的信息（包含密码）已修改，请重新登录。'
         end
@@ -71,19 +71,19 @@ class UsersController < ApplicationController
 
   private
 
-    def set_current_user
-      @user = User.find(params[:id])
-    end
+  def set_current_user
+    @user = User.find(params[:id])
+  end
 
-    def user_params
-      params.require(:user).permit(:id, :role_ids, :name, :email, :username, :password, :mobile, :start_at, :end_at)
-    end
+  def user_params
+    params.require(:user).permit(:id, :role_ids, :name, :email, :username, :password, :mobile, :start_at, :end_at)
+  end
 
-    def change_role
-      Role.find(params[:user][:role_ids].to_i) unless params[:user][:role_ids].blank?
-    end
+  def change_role
+    Role.find(params[:user][:role_ids].to_i) unless params[:user][:role_ids].blank?
+  end
 
-    def update_permission?
-      current_user.id == @user.id && (current_user.has_role?('super_admin') || !current_user.has_role?('admin'))
-    end
+  def update_permission?
+    current_user.id == @user.id && (current_user.roles?('super_admin') || !current_user.roles?('admin'))
+  end
 end

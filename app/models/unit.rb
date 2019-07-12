@@ -1,43 +1,3 @@
-# == Schema Information
-#
-# Table name: units
-#
-#  id               :integer          not null, primary key
-#  unit_category_id :integer          default(1)
-#  order_id         :integer
-#  name             :string(255)      default(""), not null
-#  full_name        :string(255)
-#  material_id      :integer
-#  ply              :integer          default(1)
-#  texture          :integer
-#  color            :integer
-#  length           :integer          default(1), not null
-#  width            :integer          default(1), not null
-#  number           :decimal(8, 2)    default(0.0), not null
-#  uom              :string(255)
-#  price            :decimal(8, 2)    default(0.0)
-#  size             :string(255)      default("")
-#  note             :string(255)
-#  supply_id        :integer
-#  is_custom        :boolean          default(FALSE)
-#  is_printed       :boolean          default(FALSE)
-#  edge             :string(255)
-#  customer         :string(255)
-#  out_edge_thick   :integer          default(0), not null
-#  in_edge_thick    :integer          default(0), not null
-#  back_texture     :string(255)
-#  door_type        :string(255)
-#  door_mould       :string(255)
-#  door_handle_type :string(255)
-#  door_edge_type   :string(255)
-#  door_edge_thick  :integer
-#  state            :integer          default(0)
-#  craft            :string(255)
-#  deleted          :boolean          default(FALSE)
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#
-
 class Unit < ActiveRecord::Base
   belongs_to :unit_category
   belongs_to :supply
@@ -52,28 +12,28 @@ class Unit < ActiveRecord::Base
   # }
 
   def ply_name
-    MaterialCategory.find_by(id: self.ply).try(:name)
+    MaterialCategory.find_by(id: ply).try(:name)
   end
 
   def color_name
-    MaterialCategory.find_by(id: self.color).try(:name)
+    MaterialCategory.find_by(id: color).try(:name)
   end
 
   def texture_name
-    MaterialCategory.find_by(id: self.texture).try(:name) 
+    MaterialCategory.find_by(id: texture).try(:name)
   end
 
   def generate_name
     last = 0
-    order_name = self.order.name
-    unit_last = self.order.units.last
-    last = unit_last.name.split("-B-".upcase())[1] if unit_last.present?
+    order_name = order.name
+    unit_last = order.units.last
+    last = unit_last.name.split('-B-'.upcase)[1] if unit_last.present?
 
-    self.name = (order_name + "-B-" + (last.to_i + 1).to_s).upcase() unless self.name.present?
+    self.name = (order_name + '-B-' + (last.to_i + 1).to_s).upcase unless name.present?
   end
 
   # 指定 ply 是否为背板
-  def is_backboard?
+  def backboard?
     # 这里不能指定 self.where() 的原因： 实例对象调用此方法时会报错。
     mc = MaterialCategory.find_by_id(ply)
     if mc
@@ -84,3 +44,49 @@ class Unit < ActiveRecord::Base
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: units
+#
+#  id               :integer          not null, primary key
+#  back_texture     :string(255)
+#  color            :integer
+#  craft            :string(255)
+#  customer         :string(255)
+#  deleted          :boolean          default(FALSE)
+#  door_edge_thick  :integer
+#  door_edge_type   :string(255)
+#  door_handle_type :string(255)
+#  door_mould       :string(255)
+#  door_type        :string(255)
+#  edge             :string(255)
+#  full_name        :string(255)
+#  in_edge_thick    :integer          default(0), not null
+#  is_custom        :boolean          default(FALSE)
+#  is_printed       :boolean          default(FALSE)
+#  length           :integer          default(1), not null
+#  name             :string(255)      default(""), not null
+#  note             :string(255)
+#  number           :decimal(8, 2)    default(0.0), not null
+#  out_edge_thick   :integer          default(0), not null
+#  ply              :integer          default(1)
+#  price            :decimal(8, 2)    default(0.0)
+#  size             :string(255)      default("")
+#  state            :integer          default(0)
+#  texture          :integer
+#  uom              :string(255)
+#  width            :integer          default(1), not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  material_id      :integer
+#  order_id         :integer
+#  supply_id        :integer
+#  unit_category_id :integer          default(1)
+#
+# Indexes
+#
+#  index_units_on_name              (name)
+#  index_units_on_order_id          (order_id)
+#  index_units_on_unit_category_id  (unit_category_id)
+#

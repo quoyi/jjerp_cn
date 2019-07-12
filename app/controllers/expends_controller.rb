@@ -1,6 +1,6 @@
 class ExpendsController < ApplicationController
   include BanksHelper
-  before_action :set_expend, only: [:show, :edit, :update, :destroy]
+  before_action :set_expend, only: %i[show edit update destroy]
 
   # GET /expends
   # GET /expends.json
@@ -22,8 +22,7 @@ class ExpendsController < ApplicationController
 
   # GET /expends/1
   # GET /expends/1.json
-  def show
-  end
+  def show; end
 
   # GET /expends/new
   def new
@@ -31,8 +30,7 @@ class ExpendsController < ApplicationController
   end
 
   # GET /expends/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /expends
   # POST /expends.json
@@ -40,7 +38,7 @@ class ExpendsController < ApplicationController
     @expend = Expend.new(expend_params)
     if @expend.save
       # 修改银行卡的收入信息
-      updateIncomeExpend(expend_params, 1)
+      update_income_expend(expend_params, 1)
       redirect_to expends_path, notice: '支出记录创建成功！'
     else
       redirect_to expends_path, error: '支出记录创建失败！'
@@ -52,7 +50,7 @@ class ExpendsController < ApplicationController
   def update
     if @expend.update(expend_params)
       # 修改银行卡的收入信息
-      updateIncomeExpend(expend_params, 1)
+      update_income_expend(expend_params, 1)
       redirect_to expends_path, notice: '支出记录编辑成功！'
     else
       redirect_to expends_path, error: '支出记录编辑失败！'
@@ -67,6 +65,7 @@ class ExpendsController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_expend
     @expend = Expend.find(params[:id])

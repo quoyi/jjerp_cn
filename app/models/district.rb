@@ -1,11 +1,20 @@
+class District < ActiveRecord::Base
+end
+
 # == Schema Information
 #
 # Table name: districts
 #
 #  id      :integer          not null, primary key
-#  city_id :integer
 #  name    :string(255)
+#  city_id :integer
 #
-
-class District < ActiveRecord::Base
-end
+# Indexes
+#
+#  index_districts_on_city_id           (city_id)
+#  index_districts_on_city_id_and_name  (city_id,name) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (city_id => cities.id)
+#

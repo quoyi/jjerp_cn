@@ -1,5 +1,5 @@
 class UomsController < ApplicationController
-  before_action :set_uom, only: [:show, :edit, :update, :destroy]
+  before_action :set_uom, only: %i[show edit update destroy]
 
   # GET /uoms
   # GET /uoms.json
@@ -10,8 +10,7 @@ class UomsController < ApplicationController
 
   # GET /uoms/1
   # GET /uoms/1.json
-  def show
-  end
+  def show; end
 
   # GET /uoms/new
   def new
@@ -42,8 +41,8 @@ class UomsController < ApplicationController
   # PATCH/PUT /uoms/1
   # PATCH/PUT /uoms/1.json
   def update
-    #@uom.update_attributes(deleted: false) if params[:reset].present? && params[:reset]
-    #@uom.update_attributes(name: params[:name]) if params[:name].present? && params[:name]
+    # @uom.update_attributes(deleted: false) if params[:reset].present? && params[:reset]
+    # @uom.update_attributes(name: params[:name]) if params[:name].present? && params[:name]
     if @uom.update(uom_params)
       redirect_to uoms_path, notice: '单位编辑成功！'
     else
@@ -62,13 +61,14 @@ class UomsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_uom
-      @uom = Uom.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def uom_params
-      params.require(:uom).permit(:name, :val, :note, :deleted)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_uom
+    @uom = Uom.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def uom_params
+    params.require(:uom).permit(:name, :val, :note, :deleted)
+  end
 end

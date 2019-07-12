@@ -1,16 +1,20 @@
+class Package < ActiveRecord::Base
+  belongs_to :order
+end
+
 # == Schema Information
 #
 # Table name: packages
 #
 #  id         :integer          not null, primary key
-#  order_id   :integer          not null
-#  unit_ids   :string(255)      default("")
+#  is_batch   :boolean          default(FALSE), not null
+#  label_size :integer          default(0)
 #  part_ids   :string(255)      default("")
 #  print_size :string(255)
-#  label_size :integer          default(0)
-#  is_batch   :boolean          default(FALSE), not null
+#  unit_ids   :string(255)      default("")
+#  order_id   :integer          not null
 #
-
-class Package < ActiveRecord::Base
-  belongs_to :order
-end
+# Indexes
+#
+#  index_packages_on_order_id  (order_id)
+#

@@ -1,5 +1,5 @@
 class UserCategoriesController < ApplicationController
-  before_action :set_user_category, only: [:show, :edit, :update, :destroy]
+  before_action :set_user_category, only: %i[show edit update destroy]
 
   # GET /user_categories
   # GET /user_categories.json
@@ -9,8 +9,7 @@ class UserCategoriesController < ApplicationController
 
   # GET /user_categories/1
   # GET /user_categories/1.json
-  def show
-  end
+  def show; end
 
   # GET /user_categories/new
   def new
@@ -18,8 +17,7 @@ class UserCategoriesController < ApplicationController
   end
 
   # GET /user_categories/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /user_categories
   # POST /user_categories.json
@@ -62,13 +60,14 @@ class UserCategoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user_category
-      @user_category = UserCategory.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def user_category_params
-      params.fetch(:user_category, {})
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_user_category
+    @user_category = UserCategory.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def user_category_params
+    params.fetch(:user_category, {})
+  end
 end

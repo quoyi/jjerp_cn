@@ -26,7 +26,7 @@ config/secrets.yml
 !.gitignore
 
 # Ignore application configuration
-#/config/application.yml
+config/application.yml
 
 # Mac drectory file
 .DS_Store

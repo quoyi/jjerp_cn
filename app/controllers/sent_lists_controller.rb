@@ -1,7 +1,7 @@
 class SentListsController < ApplicationController
   include OrdersHelper
   include SentListsHelper
-  before_action :set_sent_list, only: [:show, :edit, :update, :destroy, :download]
+  before_action :set_sent_list, only: %i[show edit update destroy download]
 
   # GET /sent_lists
   # GET /sent_lists.json
@@ -13,7 +13,7 @@ class SentListsController < ApplicationController
                                       params[:start_at].to_datetime.beginning_of_day,
                                       params[:end_at].to_datetime.end_of_day)
     end
-    
+
     if params[:agent_id].present?
       @agent_id = params[:agent_id]
       @orders = Order.where(agent_id: @agent_id)
@@ -21,14 +21,13 @@ class SentListsController < ApplicationController
       @sents = Sent.where(owner: @orders || @indents)
       @sent_lists = @sent_lists.where(id: @sents.pluck(:sent_list_id))
     end
-    
+
     @sent_lists = @sent_lists.page(params[:page])
   end
 
   # GET /sent_lists/1
   # GET /sent_lists/1.json
-  def show
-  end
+  def show; end
 
   # GET /sent_lists/new
   def new
@@ -36,8 +35,7 @@ class SentListsController < ApplicationController
   end
 
   # GET /sent_lists/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /sent_lists
   # POST /sent_lists.json
@@ -106,7 +104,7 @@ class SentListsController < ApplicationController
   def download
     respond_to do |format|
       format.xls do
-        send_file "#{Rails.root}/public/excels/sent_lists/" + @sent_list.name + ".xls", type: 'text/xls; charset=utf-8'
+        send_file "#{Rails.root}/public/excels/sent_lists/" + @sent_list.name + '.xls', type: 'text/xls; charset=utf-8'
       end
       format.pdf do
         # 打印尺寸毫米（长宽）
@@ -120,53 +118,56 @@ class SentListsController < ApplicationController
 
   private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_sent_list
-      @sent_list = SentList.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_sent_list
+    @sent_list = SentList.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def sent_list_params
-      params.require(:sent_list).permit(:name, :total, :created_by, :deleted)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def sent_list_params
+    params.require(:sent_list).permit(:name, :total, :created_by, :deleted)
+  end
 
-    # 下载报价单并转换为csv
-    def to_csv(send_list)
-      return [] if send_list.nil?
-      # make excel using utf8 to open csv file
-      # head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
-      # head = '\xEF\xBB\xBF'.split(' ').map{|a|a.hex.chr}.join()
-      # head = ""
-      CSV.generate do |csv|
-        csv << ['序号', '地区', '收货人', '联系方式', '订单编号', '橱', '衣', '门', '配', '合计', '代收', '物流名称']
+  # 下载报价单并转换为csv
+  def to_csv(send_list)
+    return [] if send_list.nil?
 
-        index = 0
-        send_list.sents.group_by { |s| [s.area, s.receiver, s.contact, s.logistics] }.each_pair do  |keys, values|
-          sents = []
-          sents << index += 1
-          sents <<  keys[0]
-          sents <<  keys[1]
-          sents <<  keys[2]
-          sents <<  values.first.owner.name
-          sents <<  values.first.cupboard
-          sents <<  values.first.robe
-          sents <<  values.first.door
-          sents <<  values.first.part
-          sents <<  values.map { |sent| sent.cupboard + sent.robe + sent.door + sent.part }.sum
-          sents <<  values.map(&:collection).sum
-          sents <<  keys[3]
-          csv << sents
-          values.each_with_index do |v, i|
-            next if i.zero?
-            sents_group = ['', '', '', '']
-            sents_group <<  v.owner.name
-            sents_group <<  v.cupboard
-            sents_group <<  v.robe
-            sents_group <<  v.door
-            sents_group <<  v.part
-            csv << sents_group
-          end
+    # make excel using utf8 to open csv file
+    # head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
+    # head = '\xEF\xBB\xBF'.split(' ').map{|a|a.hex.chr}.join()
+    # head = ""
+    CSV.generate do |csv|
+      csv << %w[序号 地区 收货人 联系方式 订单编号 橱 衣 门 配 合计 代收 物流名称]
+
+      index = 0
+      send_list.sents.group_by { |s| [s.area, s.receiver, s.contact, s.logistics] }.each_pair do |keys, values|
+        sents = []
+        sents << index += 1
+        sents <<  keys[0]
+        sents <<  keys[1]
+        sents <<  keys[2]
+        sents <<  values.first.owner.name
+        sents <<  values.first.cupboard
+        sents <<  values.first.robe
+        sents <<  values.first.door
+        sents <<  values.first.part
+        sents <<  values.map { |sent| sent.cupboard + sent.robe + sent.door + sent.part }.sum
+        sents <<  values.map(&:collection).sum
+        sents <<  keys[3]
+        csv << sents
+        values.each_with_index do |v, i|
+          next if i.zero?
+
+          sents_group = ['', '', '', '']
+          sents_group <<  v.owner.name
+          sents_group <<  v.cupboard
+          sents_group <<  v.robe
+          sents_group <<  v.door
+          sents_group <<  v.part
+          csv << sents_group
         end
-      end # .encode('gb2312', :invalid => :replace, :undef => :replace, :replace => "?")
+      end
     end
+    # .encode('gb2312', :invalid => :replace, :undef => :replace, :replace => "?")
+  end
 end

@@ -1,21 +1,21 @@
+class Expend < ActiveRecord::Base
+  belongs_to :bank
+end
+
 # == Schema Information
 #
 # Table name: expends
 #
 #  id         :integer          not null, primary key
-#  name       :string(255)
-#  bank_id    :integer
-#  reason     :string(255)
-#  money      :decimal(12, 2)   default(0.0)
-#  username   :string(255)
-#  expend_at  :datetime
-#  status     :integer
-#  note       :string(255)
 #  deleted    :boolean          default(FALSE), not null
+#  expend_at  :datetime
+#  money      :decimal(12, 2)   default(0.0)
+#  name       :string(255)
+#  note       :string(255)
+#  reason     :string(255)
+#  status     :integer
+#  username   :string(255)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  bank_id    :integer
 #
-
-class Expend < ActiveRecord::Base
-  belongs_to :bank
-end

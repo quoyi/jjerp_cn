@@ -1,5 +1,5 @@
 class CraftCategoriesController < ApplicationController
-  before_action :set_craft_category, only: [:show, :edit, :update, :destroy]
+  before_action :set_craft_category, only: %i[show edit update destroy]
 
   # GET /craft_categories
   # GET /craft_categories.json
@@ -13,8 +13,7 @@ class CraftCategoriesController < ApplicationController
 
   # GET /craft_categories/1
   # GET /craft_categories/1.json
-  def show
-  end
+  def show; end
 
   # GET /craft_categories/1
   # GET /craft_categories/1.json
@@ -82,6 +81,6 @@ class CraftCategoriesController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def craft_category_params
     params.require(:craft_category).permit(:full_name, :uom, :price, :note, :deleted, :reset,
-                                           crafts_attributes: [:id, :order_id, :full_name, :uom, :craft_category_id, :price, :number, :note, :status, :deleted, :_destroy])
+                                           crafts_attributes: %i[id order_id full_name uom craft_category_id price number note status deleted _destroy])
   end
 end

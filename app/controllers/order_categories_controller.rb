@@ -35,13 +35,14 @@ class OrderCategoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_order_category
-      @order_category = OrderCategory.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def order_category_params
-      params.require(:order_category).permit(:name, :note, :deleted)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_order_category
+    @order_category = OrderCategory.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def order_category_params
+    params.require(:order_category).permit(:name, :note, :deleted)
+  end
 end

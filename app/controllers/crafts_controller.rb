@@ -1,24 +1,22 @@
 class CraftsController < ApplicationController
-  before_action :set_craft, only: [:show, :edit, :update, :destroy]
+  before_action :set_craft, only: %i[show edit update destroy]
 
   # GET /crafts
   # GET /crafts.json
   def index
     @crafts = Craft.all
     @craft = Craft.new
-    if params[:start_at].present? && params[:end_at].present?
-      @crafts = @crafts.where("created_at between ? and ?", params[:start_at], params[:end_at])
-    end
+    @crafts = @crafts.where('created_at between ? and ?', params[:start_at], params[:end_at]) if params[:start_at].present? && params[:end_at].present?
 
     # 配件统计信息
     crafts_arr = []
-    @crafts.group_by{|c| c.craft_category_id}.each_pair do |key, value|
+    @crafts.group_by(&:craft_category_id).each_pair do |key, value|
       craft_category = CraftCategory.find_by(id: key)
-      total_number = 0 
-      value.each{|craft| total_number += craft.number}
-      crafts_arr << {name: craft_category.full_name, number: total_number} if craft_category
+      total_number = 0
+      value.each { |craft| total_number += craft.number }
+      crafts_arr << { name: craft_category.full_name, number: total_number } if craft_category
     end
-    @crafts_arr = crafts_arr.sort_by{|m| m[:number] }
+    @crafts_arr = crafts_arr.sort_by { |m| m[:number] }
     @crafts_arr = @crafts_arr.reverse if params[:sort].present? && params[:sort] == 'desc'
     respond_to do |format|
       format.html { @crafts = @crafts.page(params[:page]) }
@@ -27,8 +25,7 @@ class CraftsController < ApplicationController
 
   # GET /crafts/1
   # GET /crafts/1.json
-  def show
-  end
+  def show; end
 
   # GET /crafts/new
   def new
@@ -36,8 +33,7 @@ class CraftsController < ApplicationController
   end
 
   # GET /crafts/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /crafts
   # POST /crafts.json
@@ -75,13 +71,14 @@ class CraftsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_craft
-      @craft = Craft.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def craft_params
-      params.require(:craft).permit(:order_id, :craft_category_id, :full_name, :note, :status, :price, :number, :deleted, :reset)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_craft
+    @craft = Craft.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def craft_params
+    params.require(:craft).permit(:order_id, :craft_category_id, :full_name, :note, :status, :price, :number, :deleted, :reset)
+  end
 end

@@ -1,5 +1,5 @@
 class MaterialsController < ApplicationController
-  before_action :set_material, only: [:show, :edit, :update, :destroy]
+  before_action :set_material, only: %i[show edit update destroy]
 
   # GET /materials
   # GET /materials.json
@@ -11,7 +11,7 @@ class MaterialsController < ApplicationController
                                     params[:start_at].to_datetime.beginning_of_day,
                                     params[:end_at].to_datetime.end_of_day)
     end
-    
+
     # 板料统计信息 (全部 / 所选时间段)
     materials_arr = []
     Unit.all.group_by { |u| [u.ply, u.texture, u.color] }.each_pair do |key, value|
@@ -40,8 +40,7 @@ class MaterialsController < ApplicationController
 
   # GET /materials/1
   # GET /materials/1.json
-  def show
-  end
+  def show; end
 
   # POST /materials/condition
   # POST /materials.json
@@ -87,7 +86,7 @@ class MaterialsController < ApplicationController
         format.html { redirect_to materials_path, notice: "板料 #{@material.full_name} 更新成功！" }
         format.json { render :show, status: :ok, location: @material }
       else
-        format.html { render :back, error: "板料编辑失败！" }
+        format.html { render :back, error: '板料编辑失败！' }
         format.json { render json: @material.errors, status: :unprocessable_entity }
       end
     end
@@ -101,14 +100,15 @@ class MaterialsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_material
-      @material = Material.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def material_params
-      params.require(:material).permit(:name, :full_name, :ply, :texture, :color, :store, :buy,
-                                      :price, :uom, :supply_id, :deleted)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_material
+    @material = Material.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def material_params
+    params.require(:material).permit(:name, :full_name, :ply, :texture, :color, :store, :buy,
+                                     :price, :uom, :supply_id, :deleted)
+  end
 end

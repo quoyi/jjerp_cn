@@ -1,5 +1,5 @@
 class PermissionsController < ApplicationController
-  before_action :set_permission, only: [:show, :edit, :update, :destroy]
+  before_action :set_permission, only: %i[show edit update destroy]
 
   # GET /permissions
   # GET /permissions.json
@@ -9,8 +9,7 @@ class PermissionsController < ApplicationController
 
   # GET /permissions/1
   # GET /permissions/1.json
-  def show
-  end
+  def show; end
 
   # GET /permissions/new
   def new
@@ -18,8 +17,7 @@ class PermissionsController < ApplicationController
   end
 
   # GET /permissions/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /permissions
   # POST /permissions.json
@@ -62,13 +60,14 @@ class PermissionsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_permission
-      @permission = Permission.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def permission_params
-      params.fetch(:permission, {})
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_permission
+    @permission = Permission.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def permission_params
+    params.fetch(:permission, {})
+  end
 end
