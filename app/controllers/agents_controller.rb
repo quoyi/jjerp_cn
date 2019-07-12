@@ -1,15 +1,15 @@
 class AgentsController < ApplicationController
-  before_action :set_agent, only: [:show, :edit, :update, :destroy]
+  before_action :set_agent, only: %i[show edit update destroy]
 
   # GET /agents
   # GET /agents.json
   def index
     tmp_agent = Agent.order(:created_at).last
     tmp_name = tmp_agent.present? ? tmp_agent.name.gsub('DL', '').to_i + 1 : 1
-    @agent = Agent.new(name: "DL".upcase() + tmp_name.to_s.rjust(4, "0"))
+    @agent = Agent.new(name: 'DL'.upcase + tmp_name.to_s.rjust(4, '0'))
     @agents = Agent.where(deleted: false).order(created_at: :desc)
     # 代理商列表页面查询用
-    @agent_full_name, @agent_contacts, @agent_mobile = 3.times.map{""}
+    @agent_full_name, @agent_contacts, @agent_mobile = 3.times.map { '' }
     # 提供给 select2 查询
     if params[:term].present?
       @agents = @agents.where("#{params[:oftype]} like '%#{params[:term]}%'")
@@ -32,39 +32,39 @@ class AgentsController < ApplicationController
         @agents = @agents.where("mobile like '%#{@agent_mobile}%'")
       end
     end
-    
+
     # @agents = @agents.where("full_name like :keyword", keyword: "%#{params[:term]}%") if params[:term].present?
     # 配件统计信息(将电话号码相同的所有代理商视为同一个代理商，分组统计)
     agents_arr = []
-    @agents.group_by{|a| a.mobile}.each_pair do |key, value|
+    @agents.group_by(&:mobile).each_pair do |key, value|
       agent = Agent.find_by(mobile: key)
       number = 0
       total = 0
-      value.each do |agent|
+      value.each do |_agent|
         number += agent.orders.count
         total += agent.orders.pluck(:price).sum
       end
-      agents_arr << {name: agent.full_name, number: number, money: total}
+      agents_arr << { name: agent.full_name, number: number, money: total }
     end
-    @agents_arr = agents_arr.sort_by{|m| m[:money] }
+    @agents_arr = agents_arr.sort_by { |m| m[:money] }
     @agents_arr = @agents_arr.reverse if params[:sort].present? && params[:sort] == 'desc'
 
     respond_to do |format|
       format.html { @agents = @agents.page(params[:page]) }
-      format.json {
+      format.json do
         if params[:page]
           per = 6
-          size = @agents.offset((params[:page].to_i - 1) * per).size  # 剩下的记录条数
-          result = @agents.offset((params[:page].to_i - 1) * per).limit(per)  # 当前显示的所有记录
+          size = @agents.offset((params[:page].to_i - 1) * per).size # 剩下的记录条数
+          result = @agents.offset((params[:page].to_i - 1) * per).limit(per) # 当前显示的所有记录
           if params[:oftype].present?
-            result = result.map{|ac| {id: ac.id, text: (ac.full_name)}}  if params[:oftype] == 'full_name'
-            result = result.map{|ac| {id: ac.id, text: (ac.contacts)}}  if params[:oftype] == 'contacts'
-            result = result.map{|ac| {id: ac.id, text: (ac.mobile)}}  if params[:oftype] == 'mobile'
+            result = result.map { |ac| { id: ac.id, text: ac.full_name } } if params[:oftype] == 'full_name'
+            result = result.map { |ac| { id: ac.id, text: ac.contacts } } if params[:oftype] == 'contacts'
+            result = result.map { |ac| { id: ac.id, text: ac.mobile } } if params[:oftype] == 'mobile'
           end
           # result = result << {id: "", text: '全部'} if params[:page].to_i == 1
         end
-        render json: {:agents => result.reverse, :total => size} 
-      }
+        render json: { agents: result.reverse, total: size }
+      end
     end
   end
 
@@ -83,8 +83,7 @@ class AgentsController < ApplicationController
   end
 
   # GET /agents/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /agents
   # POST /agents.json
@@ -126,16 +125,17 @@ class AgentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_agent
-      @agent = Agent.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def agent_params
-      params.require(:agent).permit(:name, :province, :city, :district, :town, :address, :delivery_address,
-                                    :full_name, :contacts, :mobile, :e_account, :fax, :email,
-                                    :wechar, :logistics, :order_condition, :send_condition,
-                                    :cycle, :note, :deleted, :history, :balance)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_agent
+    @agent = Agent.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def agent_params
+    params.require(:agent).permit(:name, :province, :city, :district, :town, :address, :delivery_address,
+                                  :full_name, :contacts, :mobile, :e_account, :fax, :email,
+                                  :wechar, :logistics, :order_condition, :send_condition,
+                                  :cycle, :note, :deleted, :history, :balance)
+  end
 end

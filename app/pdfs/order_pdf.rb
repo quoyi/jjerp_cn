@@ -6,7 +6,7 @@ class OrderPdf < Prawn::Document
 
   def initialize(length, width, ids, order)
     super(page_size: [mm2pt(length), mm2pt(width)], margin: [2, 2])
-    
+
     font "#{Rails.root}/app/assets/fonts/msyh.ttf", size: 12
     # @length = mm2pt(length) - 4  # 可能需要转换
     # 生成条形码

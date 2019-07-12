@@ -1,5 +1,5 @@
 class SentsController < ApplicationController
-  before_action :set_sent, only: [:show, :edit, :update, :destroy]
+  before_action :set_sent, only: %i[show edit update destroy]
   include SentsHelper
   include OrdersHelper
   # GET /sents
@@ -10,7 +10,7 @@ class SentsController < ApplicationController
       owner_type: Order.name
     }
     @sents = Sent.where(owner_type: Order.name).order('id desc')
-    
+
     if params[:order_name].present?
       order = Order.where("name like '%#{params[:order_name]}%'").first
       condition[:owner_id] = order.present? ? order.id : -1
@@ -30,8 +30,7 @@ class SentsController < ApplicationController
 
   # GET /sents/1
   # GET /sents/1.json
-  def show
-  end
+  def show; end
 
   # GET /sents/new
   def new
@@ -39,8 +38,7 @@ class SentsController < ApplicationController
   end
 
   # GET /sents/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /sents
   # POST /sents.json
@@ -52,6 +50,7 @@ class SentsController < ApplicationController
           # 所有已打包的子订单添加发货记录
           @sent.owner.orders.each do |order|
             next unless order.packaged?
+
             cupboard, robe, door, part = Array.new(4) { 0 }
             case order.order_category.name
             when '橱柜' then cupboard = order.packages.pluck(:label_size).sum
@@ -111,6 +110,7 @@ class SentsController < ApplicationController
           # 所有已打包的子订单添加发货记录
           @sent.owner.orders.each do |order|
             next unless order.packaged?
+
             cupboard_sum, robe_sum, door_sum, part_sum = Array.new(4) { 0 }
             case order.order_category.name
             when '橱柜'
@@ -210,19 +210,20 @@ class SentsController < ApplicationController
 
   def to_csv(object)
     return [] if object.nil?
+
     # make excel using utf8 to open csv file
-    head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
+    head = 'EF BB BF'.split(' ').map { |a| a.hex.chr }.join
     total = 0
     CSV.generate(head) do |csv|
-      headers = [Time.new.strftime('%Y-%m-%d'),'发货清单']
+      headers = [Time.new.strftime('%Y-%m-%d'), '发货清单']
       csv << headers
       # 获取字段名称
-      column_names = [ '序号', '地区', '收货人', '联系方式', '订单编号', '橱', '衣', '门', '配', '合计', '代收', '物流名称', '货号']
+      column_names = %w[序号 地区 收货人 联系方式 订单编号 橱 衣 门 配 合计 代收 物流名称 货号]
       csv << column_names
-      object.each_with_index do |obj,i|
+      object.each_with_index do |obj, i|
         total += obj.cupboard + obj.robe + obj.door + obj.part
         values = []
-        values << i+1
+        values << i + 1
         values << obj.area
         values << obj.receiver
         values << "\t" + obj.contact
@@ -243,14 +244,14 @@ class SentsController < ApplicationController
 
   private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_sent
-      @sent = Sent.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_sent
+    @sent = Sent.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def sent_params
-      params.require(:sent).permit(:id, :sent_list_id, :name, :sent_at, :area, :receiver, :contact, :cupboard, :robe, :door, 
-                                   :part, :collection, :collection, :logistics, :logistics_code, :owner_id, :owner_type)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def sent_params
+    params.require(:sent).permit(:id, :sent_list_id, :name, :sent_at, :area, :receiver, :contact, :cupboard, :robe, :door,
+                                 :part, :collection, :collection, :logistics, :logistics_code, :owner_id, :owner_type)
+  end
 end

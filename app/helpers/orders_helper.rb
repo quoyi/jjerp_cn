@@ -4,30 +4,31 @@ module OrdersHelper
   # name: 子订单编号
   def import_order_units(file, name)
     if file.original_filename !~ /.csv$/
-      _return = "文件格式不正确！"
+      msg = '文件格式不正确！'
     else
       # 这里的编码问题是个隐患
-      table = CSV.read(file.path, {headers: true, encoding: 'GB18030:UTF-8'})
+      table = CSV.read(file.path, headers: true, encoding: 'GB18030:UTF-8')
       headers = table.headers[0..15].map(&:strip)
-      template = ["部件名称", "板材", "长", "宽", "厚", "数量", "裁切尺寸", "柜体名称", "订单号", "订货商", "终端信息", "封边", "纹理", "备注", "条码", "流水号"]
+      template = %w[部件名称 板材 长 宽 厚 数量 裁切尺寸 柜体名称 订单号 订货商 终端信息 封边 纹理 备注 条码 流水号]
       index = 0
-      _return = "文件导入错误！"
+      msg = '文件导入错误！'
       if headers == template
         order = Order.find_by(name: name)
         # 子订单的板料信息
-        # order_material = MaterialCategory.find_by_id(order.color).try(:name) + 
-        #                  MaterialCategory.find_by_id(order.texture).try(:name) + 
+        # order_material = MaterialCategory.find_by_id(order.color).try(:name) +
+        #                  MaterialCategory.find_by_id(order.texture).try(:name) +
         #                  MaterialCategory.find_by_id(order.ply).try(:name)
-        order_material = MaterialCategory.where("id in (#{order.color},#{order.texture}, #{order.ply})").order(oftype: :desc).map(&:name).join()
+        order_material = MaterialCategory.where("id in (#{order.color},#{order.texture}, #{order.ply})").order(oftype: :desc).map(&:name).join
         return "未找到板料#{order_material}" unless Material.find_by(full_name: order_material)
+
         if order
           # 开启事务
           begin
             ActiveRecord::Base.transaction do
-              units = Unit.where(order_id: order.id).order("name ASC")
+              units = Unit.where(order_id: order.id).order('name ASC')
               # 其实这里可以不用提取出来（性能上一样，都是计算两次）
-              last_units = units.last
-              last_unit_index = last_units.present? ? (last_units.name.split(/-/).last.to_i + 1).to_s : '1'
+              # last_units = units.last
+              # last_unit_index = last_units.present? ? (last_units.name.split(/-/).last.to_i + 1).to_s : '1'
               units.destroy_all
               # 删除已存在的拆单记录
               # Unit.where(order_id: order.id).destroy_all
@@ -35,15 +36,16 @@ module OrdersHelper
               unit_price = Material.find_by(ply: order.ply, texture: order.texture, color: order.color).try(:price).to_f
               table.each do |row|
                 next if row[0].blank?
+
                 # next if row[8].blank? || row[8].strip != name
                 # ply = row[1].split(/板/).last
                 # ply = ply.gsub(/厚/, 'mm')
                 # unless Material.all.map(&:full_name).include?(order_material)
-                #   _return = "未找到板料#{order_material}"
+                #   msg = "未找到板料#{order_material}"
                 # end
                 unit = Unit.new(
                   order_id: order.id,
-                  #name: order.name + "-B-" + (index + 1).to_s,
+                  # name: order.name + "-B-" + (index + 1).to_s,
                   full_name: row[0],
                   ply: order.ply,
                   texture: order.texture,
@@ -60,73 +62,73 @@ module OrdersHelper
                 unit.save!
                 index += 1
               end
-              if index > 0
+              if index.positive?
                 # 导入成功后的其他逻辑
                 # order.separated!
-                _return = "导入成功！本次导入 #{index} 条记录"
+                msg = "导入成功！本次导入 #{index} 条记录"
               else
                 # 当导入的记录条数没有变化时，回滚事务（找回删除掉的拆单记录）!!注意:必须在回滚之前做处理!!
-                _return = "所选文件中未找到订单号 #{name} 对应的记录！"
+                msg = "所选文件中未找到订单号 #{name} 对应的记录！"
                 raise ActiveRecord::Rollback
               end
             end
-          rescue ActiveRecord::RecordInvalid => exception
-            _return = "数据格式不正确，请检查！"
+          rescue ActiveRecord::RecordInvalid => _e
+            msg = '数据格式不正确，请检查！'
           end
         else
-          _return = "未找到编号为 #{name} 的订单，请检查订单号是否正确！"
+          msg = "未找到编号为 #{name} 的订单，请检查订单号是否正确！"
         end
       else
-        _return = "上传文件的表头错误！#{template}"
+        msg = "上传文件的表头错误！#{template}"
       end
     end
-    return _return
+    msg
   end
 
   def export_offers(indent)
-    filename = indent.name + ".xls"
+    filename = indent.name + '.xls'
     offers = indent.offers
     wb = WriteExcel.new("#{Rails.root}/public/excels/offers/" + filename)
     ws = wb.add_worksheet
     ws.set_column('A:H', 25) # 设置列宽
-    ws.set_column("C:C", 40)
+    ws.set_column('C:C', 40)
 
     # 第一行
     title_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 28) # 水平居中、垂直居中、加粗、字号28
     info_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 0, size: 16, border: 1)
     thead_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 16, bg_color: 'gray', border: 1)
-    ws.merge_range("A1:H1", '报价单', title_format)
+    ws.merge_range('A1:H1', '报价单', title_format)
     ws.set_row(0, 34) # 设置行高
 
     # 空行(合并单元格、正文样式)
-    # ws.write_blank(1,0) 
+    # ws.write_blank(1,0)
     # ws.merge_range("A2:H2", '', info_format)
     ws.set_row(1, 23)
-    ws.write_row("A2", ["总订单号", indent.name, '代理商', indent.agent.full_name,
-              '终端客户', indent.customer, '套数', indent.orders.map(&:number).sum()], thead_format)
+    ws.write_row('A2', ['总订单号', indent.name, '代理商', indent.agent.full_name,
+                        '终端客户', indent.customer, '套数', indent.orders.map(&:number).sum], thead_format)
     ws.set_row(2, 23)
-    ws.write_row("A3", ['下单时间', indent.verify_at, '发货时间', indent.require_at, '状态', indent.status_name,
-              '金额￥', offers.map{|o| o.order.number * o.total}.sum().round], thead_format)
+    ws.write_row('A3', ['下单时间', indent.verify_at, '发货时间', indent.require_at, '状态', indent.status_name,
+                        '金额￥', offers.map { |o| o.order.number * o.total }.sum.round], thead_format)
     ws.set_row(3, 23)
-    ws.write_row("A4", ['序号', '类型', '名称', '单价￥', '单位', '数量', '备注', '总价￥'], thead_format)
+    ws.write_row('A4', ['序号', '类型', '名称', '单价￥', '单位', '数量', '备注', '总价￥'], thead_format)
 
     row_num = 5
-    offers.group_by(&:order_id).each_pair do |order_id, ofs|
+    offers.group_by(&:order_id).each_pair do |_order_id, ofs|
       ofs.each_with_index do |offer, index|
-        ws.write_row("A" + row_num.to_s, [index + 1, offer.item_type_name, offer.item_name, offer.price.round(2),
-                     offer.uom, offer.number, offer.note, offer.total.round], info_format)
+        ws.write_row('A' + row_num.to_s, [index + 1, offer.item_type_name, offer.item_name, offer.price.round(2),
+                                          offer.uom, offer.number, offer.note, offer.total.round], info_format)
         ws.set_row(row_num - 1, 20)
         row_num += 1
       end
       # 第一组报价单对应的订单信息
       order = ofs.first.order
-      order_total = order.offers.map{|o| o.price * o.number}.sum().round
+      order_total = order.offers.map { |o| o.price * o.number }.sum.round
       orders_total = order_total * order.number
-      ws.write_row("A" + row_num.to_s, ['子订单号', order.name, '单套合计￥', order_total, '备注', order.note,
-                '项目合计￥', orders_total], info_format)
+      ws.write_row('A' + row_num.to_s, ['子订单号', order.name, '单套合计￥', order_total, '备注', order.note,
+                                        '项目合计￥', orders_total], info_format)
       ws.set_row(row_num - 1, 20)
       row_num += 1
-      ws.merge_range("A" + row_num.to_s + ":H" + row_num.to_s, "", info_format)
+      ws.merge_range('A' + row_num.to_s + ':H' + row_num.to_s, '', info_format)
       ws.set_row(row_num - 1, 20)
       row_num += 1
     end
@@ -136,10 +138,10 @@ module OrdersHelper
   # 导出Excel格式 orders
   def export_orders(filename, orders, start_at, end_at)
     # 全局变量，当前行数
-    row_num = "5"
-    indents = orders.group(:indent_id).map{|o| o.indent }
+    row_num = '5'
+    indents = orders.group(:indent_id).map(&:indent)
     total = indents.map(&:amount).sum
-    wb  = WriteExcel.new("#{Rails.root}/public/excels/orders/" + filename)
+    wb = WriteExcel.new("#{Rails.root}/public/excels/orders/" + filename)
     ws = wb.add_worksheet
     ws.set_column('A:H', 28)
 
@@ -150,11 +152,11 @@ module OrdersHelper
     ws.set_row(0, 34)
 
     # 空一行
-    ws.write_blank(1 , 0)
+    ws.write_blank(1, 0)
     ws.merge_range('A2:H2', '', info_format)
 
     # 第3行：公共信息
-    
+
     ws.write('A3', '起止时间：', info_format)
     ws.write('B3', start_at.to_s + ' 到 ' + end_at.to_s, info_format)
     ws.write('C3', '总订单数：', info_format)
@@ -166,7 +168,7 @@ module OrdersHelper
     ws.set_row(2, 28)
 
     # 空一行
-    ws.write_blank(3 , 0)
+    ws.write_blank(3, 0)
     ws.merge_range('A4:H4', '', info_format)
 
     # 第5行：订单信息
@@ -175,8 +177,11 @@ module OrdersHelper
     myblue = wb.set_custom_color(14, 0, 204, 255)
     mybluewhite = wb.set_custom_color(15, 204, 255, 255)
     indents.each_with_index do |indent, ii|
-      indent_format = ii % 2 == 0 ? wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 16, bg_color: myorange, border: 1) 
-                                  : wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 16, bg_color: myblue, border: 1)
+      indent_format = if ii.even?
+                        wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 16, bg_color: myorange, border: 1)
+                      else
+                        wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 16, bg_color: myblue, border: 1)
+                      end
       # 总订单信息一
       ws.set_row(row_num.to_i - 1, 28) # 设置第5行行高
       ws.write('A' + row_num, '总订单号', indent_format)
@@ -201,8 +206,11 @@ module OrdersHelper
 
       order_title_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 12, bg_color: myyellow, border: 1)
       order_info_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 12, bg_color: 'gray', border: 1)
-      order_format = ii % 2 == 0 ? wb.add_format(align: 'center', valign: 'vcenter', bold: 0, size: 12, bg_color: myyellow, border: 1)
-                                 : wb.add_format(align: 'center', valign: 'vcenter', bold: 0, size: 12, bg_color: mybluewhite, border: 1)
+      order_format = if ii.even?
+                       wb.add_format(align: 'center', valign: 'vcenter', bold: 0, size: 12, bg_color: myyellow, border: 1)
+                     else
+                       wb.add_format(align: 'center', valign: 'vcenter', bold: 0, size: 12, bg_color: mybluewhite, border: 1)
+                     end
       ws.set_row(row_num.to_i, 20) # 设置第7行行高
       row_num = (row_num.to_i + 1).to_s
       # 子订单信息表头
@@ -214,8 +222,8 @@ module OrdersHelper
       ws.write('F' + row_num, '数量', order_title_format)
       ws.write('G' + row_num, '备注', order_title_format)
       ws.write('H' + row_num, '总价￥', order_title_format)
-      #子订单信息
-      indent.orders.each_with_index do |order, oi|
+      # 子订单信息
+      indent.orders.each_with_index do |order, _oi|
         # 子订单信息一
         ws.set_row(row_num.to_i, 20)
         row_num = (row_num.to_i + 1).to_s
@@ -243,13 +251,12 @@ module OrdersHelper
       end
       ws.set_row(row_num.to_i, 20)
       row_num = (row_num.to_i + 1).to_s
-      ws.merge_range('A' + row_num   + ':H' + row_num, '', info_format) # 空一行
+      ws.merge_range('A' + row_num + ':H' + row_num, '', info_format) # 空一行
 
       row_num = (row_num.to_i + 1).to_s
     end
     wb.close
   end
-
 
   # 修改子订单和总订单
   # def update_order_and_indent(order)
@@ -268,12 +275,12 @@ module OrdersHelper
   #     # indent_sum += o.price
   #     o.save!
   #   # end
-  #   # 
+  #   #
   #   # indent_sum = indent.orders.pluck(:price).sum
 
   #   # arrear_sum = indent.incomes.map(&:money).sum.to_f
   #   # indent.amount = indent_sum  # 总订单金额 = 所有子订单金额合计
-  #   # # 欠款 = 金额 - 收入 
+  #   # # 欠款 = 金额 - 收入
   #   # indent.arrear = indent_sum - arrear_sum
   #   # indent.save!
 
@@ -284,22 +291,17 @@ module OrdersHelper
   #   # indent.total_arrear += (new_total - old_total)
   # end
 
-
   # 修改子订单、总订单状态
   def update_order_status(order)
     indent = order.indent
     offers = order.reload.offers
     status = Order.statuses[order.status]
-    if status == 0 && !offers.empty?
-      order.offered!
-    end
-    if status == 1 && offers.empty?
-      order.offering!
-    end
-    
+    order.offered! if status.zero? && !offers.empty?
+    order.offering! if status == 1 && offers.empty?
+
     # 所有子订单中，最小状态值作为总订单的状态
-    min_status = indent.orders.map{|o|Order.statuses[o.status]}.min
-    max_status = indent.orders.map{|o|Order.statuses[o.status]}.max
+    min_status = indent.orders.map { |o| Order.statuses[o.status] }.min
+    max_status = indent.orders.map { |o| Order.statuses[o.status] }.max
     indent.update!(status: min_status, max_status: max_status)
   end
 end

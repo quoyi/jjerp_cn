@@ -45,14 +45,14 @@ class User < ActiveRecord::Base
   #   self.roles << Role.find_by_nick("other") if self.roles.nil?
   # end
 
-  def has_role?(nick)
+  def roles?(nick)
     # self.roles.exists?(nick: nick)
     # roles.any? { |r| r.nick.underscore.to_sym == role_sym }
-    self.roles.pluck(:nick).include?(nick)
+    roles.pluck(:nick).include?(nick)
   end
 
   # def append_role(nick)
-  #   return true if has_role?(nick)
+  #   return true if roles?(nick)
   #   role = Role.find_by_nick(nick)
   #   return false unless role
   #   self.roles << role
@@ -75,8 +75,8 @@ class User < ActiveRecord::Base
 
   after_save :add_normal_role
 
-  def role?(r)
-    roles.exists?(nick: r)
+  def role?(role_name)
+    roles.exists?(nick: role_name)
   end
 
   def admin?
@@ -85,22 +85,24 @@ class User < ActiveRecord::Base
 
   def add_role!(role_nick)
     return true if role?(role_nick)
+
     role = Role.find_by_nick(role_nick)
     return false unless role
+
     roles << role
   end
 
   def permission?(klass, action)
     return true if roles.find { |r| r.nick == Role::ADMINISTRATOR }
+
     roles.find { |r| r.permission?(klass, action) }
   end
 
   def permit!(klass, action)
-    fail Account::PermissionDenied unless permission?(klass, action)
+    raise Account::PermissionDenied unless permission?(klass, action)
   end
 
   def add_normal_role
     add_role!('normal')
   end
-  
 end

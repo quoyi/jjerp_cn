@@ -2,7 +2,7 @@ class IndentsController < ApplicationController
   include IndentsHelper
   include OrdersHelper
   include OffersHelper
-  before_action :set_indent, only: [:show, :edit, :update, :destroy]
+  before_action :set_indent, only: %i[show edit update destroy]
   skip_before_filter :verify_authenticity_token, only: [:part_list]
 
   # GET /indents
@@ -167,61 +167,62 @@ class IndentsController < ApplicationController
 
   private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_indent
-      @indent = Indent.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_indent
+    @indent = Indent.find(params[:id])
+  end
 
-    # 下载报价单并转换为csv
-    def to_csv(indent)
-      return [] if indent.nil?
-      offers = indent.offers
-      # make excel using utf8 to open csv file
-      # head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
-      # head = '\xEF\xBB\xBF'.split(' ').map{|a|a.hex.chr}.join()
-      # head = ""
-      CSV.generate do |csv|
-        # 获取字段名称
-        csv << ['总订单号', indent.name, '代理商', indent.agent.full_name,
-                '终端客户', indent.customer, '套数', indent.orders.map(&:number).sum]
-        csv << ['下单时间', indent.verify_at, '发货时间', indent.require_at, '状态', indent.status_name,
-                '金额￥', offers.map { |o| o.order.number * o.total }.sum]
-        csv << ['序号', '类型', '名称', '单价￥', '单位', '数量', '备注', '总价￥']
-        offers.group_by(&:order_id).each_pair do |_order_id, offers|
-          offers.each_with_index do |offer, index|
-            values = []
-            values << index + 1
-            values << offer.item_type_name
-            values << offer.item_name
-            values << offer.price
-            values << offer.uom
-            values << offer.number
-            values << offer.note
-            values << offer.total
-            csv << values
-          end
-          order = offers.first.order
-          order_total = offers.map(&:total).sum
-          orders_total = order_total * order.number
-          csv << ['子订单号', order.name, '单套合计￥', order_total, '单项套数', order.number,
-                  '项目合计￥', orders_total]
-          csv << ['', '', '', '', '', '', '', '']
+  # 下载报价单并转换为csv
+  def to_csv(indent)
+    return [] if indent.nil?
+
+    offers = indent.offers
+    # make excel using utf8 to open csv file
+    # head = 'EF BB BF'.split(' ').map{|a|a.hex.chr}.join()
+    # head = '\xEF\xBB\xBF'.split(' ').map{|a|a.hex.chr}.join()
+    # head = ""
+    CSV.generate do |csv|
+      # 获取字段名称
+      csv << ['总订单号', indent.name, '代理商', indent.agent.full_name,
+              '终端客户', indent.customer, '套数', indent.orders.map(&:number).sum]
+      csv << ['下单时间', indent.verify_at, '发货时间', indent.require_at, '状态', indent.status_name,
+              '金额￥', offers.map { |o| o.order.number * o.total }.sum]
+      csv << ['序号', '类型', '名称', '单价￥', '单位', '数量', '备注', '总价￥']
+      offers.group_by(&:order_id).each_pair do |_order_id, _offers|
+        offers.each_with_index do |offer, index|
+          values = []
+          values << index + 1
+          values << offer.item_type_name
+          values << offer.item_name
+          values << offer.price
+          values << offer.uom
+          values << offer.number
+          values << offer.note
+          values << offer.total
+          csv << values
         end
-      end.encode('gb2312', invalid: :replace, undef: :replace, replace: '?')
-    end
+        order = offers.first.order
+        order_total = offers.map(&:total).sum
+        orders_total = order_total * order.number
+        csv << ['子订单号', order.name, '单套合计￥', order_total, '单项套数', order.number,
+                '项目合计￥', orders_total]
+        csv << ['', '', '', '', '', '', '', '']
+      end
+    end.encode('gb2312', invalid: :replace, undef: :replace, replace: '?')
+  end
 
-    def indent_params
-      params.require(:indent).permit(:id, :name, :offer_id, :agent_id, :customer, :verify_at, :require_at, :note, :delivery_address,
-                                     :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted, :status,
-                                     orders_attributes: [:id, :order_category_id, :customer, :number, :ply, :material_price,
-                                                         :texture, :color, :price, :length, :width, :height, :oftype,
-                                                         :agent_id, :name, :status, :deleted, :customer,
-                                                         :note, :is_use_order_material, :delivery_address, :_destroy],
-                                     order_parts_attributes: [:id, :order_category_id, :customer, :number, :ply, :material_price,
-                                                              :texture, :color, :price, :length, :width, :height, :oftype,
-                                                              :agent_id, :name, :status, :deleted, :customer,
-                                                              :note, :is_use_order_material, :delivery_address, :_destroy],
-                                     offers_attributes: [:id, :order_id, :item_id, :item_type, :item_name,
-                                                         :uom, :number, :price, :note, :_destroy])
-    end
+  def indent_params
+    params.require(:indent).permit(:id, :name, :offer_id, :agent_id, :customer, :verify_at, :require_at, :note, :delivery_address,
+                                   :logistics, :amount, :arrear, :total_history, :total_arrear, :deleted, :status,
+                                   orders_attributes: %i[id order_category_id customer number ply material_price
+                                                         texture color price length width height oftype
+                                                         agent_id name status deleted customer
+                                                         note is_use_order_material delivery_address _destroy],
+                                   order_parts_attributes: %i[id order_category_id customer number ply material_price
+                                                              texture color price length width height oftype
+                                                              agent_id name status deleted customer
+                                                              note is_use_order_material delivery_address _destroy],
+                                   offers_attributes: %i[id order_id item_id item_type item_name
+                                                         uom number price note _destroy])
+  end
 end

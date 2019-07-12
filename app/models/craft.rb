@@ -22,7 +22,6 @@ class Craft < ActiveRecord::Base
   before_save :generate_full_name
 
   def generate_full_name
-    self.full_name = CraftCategory.find_by_id(self.craft_category_id).full_name unless full_name.present?
+    self.full_name = CraftCategory.find_by_id(craft_category_id).full_name unless full_name.present?
   end
-
 end

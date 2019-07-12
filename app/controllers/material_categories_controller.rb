@@ -1,5 +1,5 @@
 class MaterialCategoriesController < ApplicationController
-  before_action :set_material_category, only: [:show, :edit, :update, :destroy]
+  before_action :set_material_category, only: %i[show edit update destroy]
 
   # GET /material_categories
   # GET /material_categories.json
@@ -8,23 +8,21 @@ class MaterialCategoriesController < ApplicationController
     @material_categories = MaterialCategory.all
     if params[:oftype].present?
       @material_categories = MaterialCategory.where(oftype: MaterialCategory.oftypes[params[:oftype]])
-      if params[:term].present?
-        @material_categories = @material_categories.where("name like '%#{params[:term]}%'")
-      end
+      @material_categories = @material_categories.where("name like '%#{params[:term]}%'") if params[:term].present?
     end
     respond_to do |format|
       format.html { @material_categories = @material_categories.page(params[:page]) }
-      format.json {
+      format.json do
         # @material_categories.where(oftype: MaterialCategory.oftypes[params[:type]]) if params[:type].present?
         if params[:page]
           per = 6
-          size = @material_categories.offset((params[:page].to_i - 1) * per).size  # 剩下的记录条数
-          result = @material_categories.offset((params[:page].to_i - 1) * per).limit(per)  # 当前显示的所有记录
-          result = result.map{|mc| {id: mc.id, text: mc.name}}
+          size = @material_categories.offset((params[:page].to_i - 1) * per).size # 剩下的记录条数
+          result = @material_categories.offset((params[:page].to_i - 1) * per).limit(per) # 当前显示的所有记录
+          result = result.map { |mc| { id: mc.id, text: mc.name } }
           # result = result << {id: "", text: '全部'} if params[:page].to_i == 1
         end
-        render json: {:material_categories => result, :total => size} 
-      }
+        render json: { material_categories: result, total: size }
+      end
     end
   end
 
@@ -65,6 +63,7 @@ class MaterialCategoriesController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_material_category
     @material_category = MaterialCategory.find(params[:id])

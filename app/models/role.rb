@@ -24,13 +24,13 @@ class Role < ActiveRecord::Base
   validates_presence_of :nick
   validates_uniqueness_of :nick
 
+  @permissions = {}
 
-  @@permissions = {}
   cattr_reader :permissions
 
   def self.register_permission(hash)
     klass = hash.delete(:class)
-    klass.constantize.rescue_from Account::PermissionDenied do |exception|
+    klass.constantize.rescue_from Account::PermissionDenied do |_exception|
       redirect_to :back, error: '没有访问权限'
     end
 
@@ -38,9 +38,9 @@ class Role < ActiveRecord::Base
       current_user.permit!(self.class, action_name)
     end
 
-    @@permissions[klass] ||= {}
-    @@permissions[klass][:name] = hash[:name]
-    @@permissions[klass][:actions] = hash[:actions]
+    @permissions[klass] ||= {}
+    @permissions[klass][:name] = hash[:name]
+    @permissions[klass][:actions] = hash[:actions]
   end
 
   def permission?(klass, action)
@@ -50,5 +50,4 @@ class Role < ActiveRecord::Base
   def editable?
     nick != ADMINISTRATOR
   end
-
 end

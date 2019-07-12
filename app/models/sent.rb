@@ -33,8 +33,8 @@ class Sent < ActiveRecord::Base
 
   private
 
-    def sync_order_status
-      owner.packaged!
-      owner.indent.packaged! if owner.name = Order
-    end
+  def sync_order_status
+    owner.packaged!
+    owner.indent.packaged! if owner.name == Order
+  end
 end

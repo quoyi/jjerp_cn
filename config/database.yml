@@ -12,22 +12,20 @@
 default: &default
   adapter: mysql2
   encoding: utf8
-  pool: 5
-  username: root
-  password: 123abc..
-  # socket: /tmp/mysql.sock  # Mac 下默认为此路径
-  # socket: /var/run/mysqld/mysqld.sock  # Ubuntu 下默认为此路径
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: <%= ENV.fetch('DATABASE_USERNAME') { 'root' } %>
+  password: <%= ENV.fetch('DATABASE_PASSWORD') { '123abc..' } %>
 
 development:
   <<: *default
-  database: jjerp_dev
+  database: <%= ENV.fetch('DATABASE_NAME') { 'jjerp_dev' } %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: jjerp_test
+  database: <%= ENV.fetch('DATABASE_NAME') { 'jjerp_test' } %>
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -50,6 +48,6 @@ test:
 #
 production:
   <<: *default
-  database: jjerp_pro
-  username: root
-  password: 123abc..
+  database: <%= ENV.fetch('DATABASE_NAME') { 'jjerp_pro' } %>
+  username: <%= ENV.fetch('DATABASE_USERNAME') { 'root' } %>
+  password: <%= ENV.fetch('DATABASE_PASSWORD') { '123abc..' } %>

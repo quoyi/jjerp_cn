@@ -1,5 +1,5 @@
 class UnitsController < ApplicationController
-  before_action :set_unit, only: [:show, :edit, :update, :destroy]
+  before_action :set_unit, only: %i[show edit update destroy]
 
   # GET /units
   # GET /units.json
@@ -13,8 +13,7 @@ class UnitsController < ApplicationController
 
   # GET /units/1
   # GET /units/1.json
-  def show
-  end
+  def show; end
 
   # GET /units/new
   def new
@@ -22,8 +21,7 @@ class UnitsController < ApplicationController
   end
 
   # GET /units/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /units
   # POST /units.json
@@ -54,6 +52,7 @@ class UnitsController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_unit
     @unit = Unit.find(params[:id])
@@ -62,9 +61,9 @@ class UnitsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def unit_params
     params.require(:unit).permit(:id, :unit_category_id, :order_id, :name, :full_name, :is_custom,
-                                :material_id,:ply, :texture, :color, :length, :width, :supply_id,
-                                :number, :uom, :price, :size, :note, :edge, :customer, :out_edge_thick,
-                                :in_edge_thick, :back_texture, :door_type, :door_mould, :door_handle_type,
-                                :door_edge_type, :door_edge_thick, :task, :state, :craft, :deleted)
+                                 :material_id, :ply, :texture, :color, :length, :width, :supply_id,
+                                 :number, :uom, :price, :size, :note, :edge, :customer, :out_edge_thick,
+                                 :in_edge_thick, :back_texture, :door_type, :door_mould, :door_handle_type,
+                                 :door_edge_type, :door_edge_thick, :task, :state, :craft, :deleted)
   end
 end

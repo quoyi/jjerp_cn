@@ -45,11 +45,12 @@ class Agent < ActiveRecord::Base
   # end
 
   protected
+
   def generate_address
-    self.address = Province.find(self.province).try(:name) if self.province.present?
-    self.address = self.address.to_s + City.find(self.city).try(:name) if self.city.present?
-    self.address = self.address.to_s + District.find(self.district).try(:name) if self.district.present?
-    self.address = self.address.to_s + self.town.to_s
+    self.address = Province.find(province).try(:name) if province.present?
+    self.address = address.to_s + City.find(city).try(:name) if city.present?
+    self.address = address.to_s + District.find(district).try(:name) if district.present?
+    self.address = address.to_s + town.to_s
     # if self.city.present?
     #   tmp_address = ""
     #   city_name = ChinaCity.get(city)
@@ -62,35 +63,35 @@ class Agent < ActiveRecord::Base
     # else
     #   tmp_address = ChinaCity.get(province)
     # end
-    tmp_address = ""
-    province_name = Province.find(province).name.gsub("省", "")
-    if self.city.present?
+    tmp_address = ''
+    province_name = Province.find(province).name.gsub('省', '')
+    if city.present?
       city_name = City.find(city).name
       if (city_name =~ /(自治州|区划)$/).present?
-        tmp_address =  province_name + city_name.gsub("土家族苗族自治州", "").gsub("省直辖县级行政区划", "")
-        if self.district.present?
-          tmp_address = tmp_address + District.find(district).name.gsub("市", "").gsub("县", "").gsub("林区", "")
-        elsif self.town.present?
-          tmp_address = tmp_address + town
-        else
-          tmp_address = tmp_address
-        end
+        tmp_address =  province_name + city_name.gsub('土家族苗族自治州', '').gsub('省直辖县级行政区划', '')
+        tmp_address = if district.present?
+                        tmp_address + District.find(district).name.gsub('市', '').gsub('县', '').gsub('林区', '')
+                      elsif town.present?
+                        tmp_address + town
+                      else
+                        tmp_address
+                      end
       elsif (city_name =~ /(市辖区|县)$/).present?
         tmp_address = province_name
         if district.present?
           tmp_district = District.find(district).name
-          tmp_address = tmp_address + (tmp_district.length > 2 ? tmp_district.gsub('县', '') : tmp_district)
+          tmp_address += (tmp_district.length > 2 ? tmp_district.gsub('县', '') : tmp_district)
         elsif town.present?
-          tmp_address = tmp_address + town
+          tmp_address += town
         else
           tmp_address = tmp_address
         end
       else
-        tmp_address = province_name + city_name.gsub("市", "")
+        tmp_address = province_name + city_name.gsub('市', '')
         if district.present?
-          tmp_district =  District.find(district).name.gsub("土家族自治县", "").gsub("市辖区","")
-          tmp_address = tmp_address + (tmp_district.length > 2 ? tmp_district.gsub("区", "").gsub('县', '') : tmp_district)
-          tmp_address = (tmp_address.gsub(province_name, '') + self.town) if self.town.present?
+          tmp_district = District.find(district).name.gsub('土家族自治县', '').gsub('市辖区', '')
+          tmp_address += (tmp_district.length > 2 ? tmp_district.gsub('区', '').gsub('县', '') : tmp_district)
+          tmp_address = (tmp_address.gsub(province_name, '') + town) if town.present?
         elsif town.present?
           tmp_address += town
         else

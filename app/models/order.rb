@@ -178,7 +178,7 @@ class Order < ActiveRecord::Base
     number = 0
     self.units.each do |unit|
       # 计算非背板板料面积
-      unless unit.is_backboard?
+      unless unit.backboard?
         if unit.size.blank?
           number += unit.number
         else

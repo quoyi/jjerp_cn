@@ -41,10 +41,10 @@ class Indent < ActiveRecord::Base
   scope :not_sent, -> { where('status >= ? AND status <= ?', statuses[:packaged], statuses[:sent]) }
 
   # 下单条件：1.正常单  2.补单  3.加急单 4.批量单
-  enum oftype: [:normal, :repair, :instancy, :batch]
+  enum oftype: %i[normal repair instancy batch]
 
   def self.oftype
-    [%w(正常单 normal), %w(补单 repair), %w(加急单 instancy), %w(批量单 batch)]
+    [%w[正常单 normal], %w[补单 repair], %w[加急单 instancy], %w[批量单 batch]]
   end
 
   def oftype_name
@@ -59,10 +59,10 @@ class Indent < ActiveRecord::Base
   end
 
   # 状态：0.报价中 1.已报价 2.生产中 3.已入库 4.已发货
-  enum status: [:offering, :offered, :producing, :packaged, :sending, :sent, :over]
+  enum status: %i[offering offered producing packaged sending sent over]
 
   def self.status
-    [%w(报价中 offering), %w(已报价 offered), %w(生产中 producing), %w(已入库 packaged), %w(发货中 sending), %w(已发货 sent), %w(已完成 over)]
+    [%w[报价中 offering], %w[已报价 offered], %w[生产中 producing], %w[已入库 packaged], %w[发货中 sending], %w[已发货 sent], %w[已完成 over]]
   end
 
   def status_name

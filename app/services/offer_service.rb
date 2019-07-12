@@ -12,6 +12,7 @@ class OfferService < BaseService
         material = Material.find_by(ply: unit.ply, texture: unit.texture, color: unit.color) ||
                    Material.find_by(ply: order.ply, texture: order.texture, color: order.color)
         return '"基础数据 — 板料"中未找到对应板料，请联系管理员添加！' if material.nil?
+
         # 导入的部件板料存在时，以部件的材质信息为准。否则，以订单的材质信息为准
         offer = Offer.find_or_create_by(item_id: material.id,
                                         item_type: Offer.item_types[:unit],

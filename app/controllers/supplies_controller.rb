@@ -1,5 +1,5 @@
 class SuppliesController < ApplicationController
-  before_action :set_supply, only: [:show, :edit, :update, :destroy]
+  before_action :set_supply, only: %i[show edit update destroy]
 
   # GET /supplies
   # GET /supplies.json
@@ -14,8 +14,7 @@ class SuppliesController < ApplicationController
 
   # GET /supplies/1
   # GET /supplies/1.json
-  def show
-  end
+  def show; end
 
   # GET /supplies/new
   def new
@@ -23,8 +22,7 @@ class SuppliesController < ApplicationController
   end
 
   # GET /supplies/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /supplies
   # POST /supplies.json
@@ -56,6 +54,7 @@ class SuppliesController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_supply
     @supply = Supply.find(params[:id])

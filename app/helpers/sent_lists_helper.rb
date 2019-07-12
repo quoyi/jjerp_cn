@@ -25,7 +25,7 @@ module SentListsHelper
     ws.merge_range('A2:N2', sent_list.created_by.split(' ')[0] + ' 发货清单', table_title_format)
     ws.set_row(1, 28) # 设置行高
 
-    header = %w(序号 地区 收货人 联系方式 订单编号 橱 衣 门 配 合计 代收 物流名称 备注 货号)
+    header = %w[序号 地区 收货人 联系方式 订单编号 橱 衣 门 配 合计 代收 物流名称 备注 货号]
     ws.write_row('A3', header, table_header_format)
     ws.set_row(2, 28)
 

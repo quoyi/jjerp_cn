@@ -6,13 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 8
-# Cop supports --auto-correct.
-Layout/AlignArray:
-  Exclude:
-    - 'app/helpers/indents_helper.rb'
-    - 'app/helpers/orders_helper.rb'
-    - 'app/pdfs/sent_list_pdf.rb'
 
 # Offense count: 35
 # Cop supports --auto-correct.
@@ -153,12 +146,6 @@ Layout/ExtraSpacing:
     - 'db/schema.rb'
     - 'db/seeds.rb'
 
-# Offense count: 17
-# Cop supports --auto-correct.
-# Configuration parameters: IndentationWidth.
-# SupportedStyles: special_inside_parentheses, consistent, align_braces
-Layout/IndentHash:
-  EnforcedStyle: consistent
 
 # Offense count: 60
 # Cop supports --auto-correct.

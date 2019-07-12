@@ -25,14 +25,14 @@ class Material < ActiveRecord::Base
   before_create :generate_code
   validates_presence_of :ply, :texture, :color, :buy, :price
   # 联合唯一
-  validates_uniqueness_of :ply, scope: [:texture, :color]
-  
+  validates_uniqueness_of :ply, scope: %i[texture color]
+
   # 生成编码
   def generate_code
-    self.name = "JCBL" + Time.new.strftime('%y%m%d') + SecureRandom.hex(2).upcase
-    _ply = MaterialCategory.find_by_id(self.ply).try(:name)
-    _texture = MaterialCategory.find_by_id(self.texture).try(:name)
-    _color = MaterialCategory.find_by_id(self.color).try(:name)
-    self.full_name = _color + _texture + _ply
+    self.name = 'JCBL' + Time.new.strftime('%y%m%d') + SecureRandom.hex(2).upcase
+    ply = MaterialCategory.find_by_id(ply).try(:name)
+    texture = MaterialCategory.find_by_id(texture).try(:name)
+    color = MaterialCategory.find_by_id(color).try(:name)
+    self.full_name = color + texture + ply
   end
 end

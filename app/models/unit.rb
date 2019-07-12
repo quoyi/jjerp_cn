@@ -52,28 +52,28 @@ class Unit < ActiveRecord::Base
   # }
 
   def ply_name
-    MaterialCategory.find_by(id: self.ply).try(:name)
+    MaterialCategory.find_by(id: ply).try(:name)
   end
 
   def color_name
-    MaterialCategory.find_by(id: self.color).try(:name)
+    MaterialCategory.find_by(id: color).try(:name)
   end
 
   def texture_name
-    MaterialCategory.find_by(id: self.texture).try(:name) 
+    MaterialCategory.find_by(id: texture).try(:name)
   end
 
   def generate_name
     last = 0
-    order_name = self.order.name
-    unit_last = self.order.units.last
-    last = unit_last.name.split("-B-".upcase())[1] if unit_last.present?
+    order_name = order.name
+    unit_last = order.units.last
+    last = unit_last.name.split('-B-'.upcase)[1] if unit_last.present?
 
-    self.name = (order_name + "-B-" + (last.to_i + 1).to_s).upcase() unless self.name.present?
+    self.name = (order_name + '-B-' + (last.to_i + 1).to_s).upcase unless name.present?
   end
 
   # 指定 ply 是否为背板
-  def is_backboard?
+  def backboard?
     # 这里不能指定 self.where() 的原因： 实例对象调用此方法时会报错。
     mc = MaterialCategory.find_by_id(ply)
     if mc

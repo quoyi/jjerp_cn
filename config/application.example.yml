@@ -1,0 +1,45 @@
+# Add configuration values here, as shown below.
+#
+# pusher_app_id: "2954"
+# pusher_key: 7381a978f7dd7f9a1117
+# pusher_secret: abdc3b896a0ffb85d373
+# stripe_api_key: sk_test_2J0l093xOyW72XUYJHE4Dv2r
+# stripe_publishable_key: pk_test_ro9jV5SNwGb1yYlQfzG17LHK
+#
+# production:
+#   stripe_api_key: sk_live_EeHnL644i6zo4Iyq4v1KdV9H
+#   stripe_publishable_key: pk_live_9lcthxpSIHbGwmdO941O1XVU
+
+secret_keys: e870779fe373f941439314a5769cd8b26c2294736a4bc1a61ee21403b1b65a21e56cdda6b57a92475df5da641571bfaa8cc1dfee6b33f972e5dfcdc9d382f70a
+
+APP_NAME: 伊思尔
+
+# 邮箱配置
+EMAIL_ADDRESS: smtp.qq.com
+EMAIL_PORT: 25
+EMAIL_DOMAIN: qq.com
+EMAIL_AUTH: login
+EMAIL_ESA: 'true'
+EMAIL_USERNAME: 197569105@qq.com
+EMAIL_SENDER: jjerp_cn@qq.com
+EMAIL_PASSWORD: ibxdeahblpagbhja
+
+development:
+  DATABASE_NAME: jjerp_dev
+  DATABASE_USERANEM: root
+  DATABASE_PASSWORD:
+
+test:
+  DATABASE_NAME: jjerp_dev
+  DATABASE_USERANEM: root
+  DATABASE_PASSWORD:
+
+staging:
+  DATABASE_NAME: jjerp_dev
+  DATABASE_USERANEM: root
+  DATABASE_PASSWORD:
+
+production:
+  DATABASE_NAME: jjerp_dev
+  DATABASE_USERANEM: root
+  DATABASE_PASSWORD:

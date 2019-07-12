@@ -1,25 +1,23 @@
 class PartsController < ApplicationController
-  before_action :set_part, only: [:show, :edit, :update, :destroy]
+  before_action :set_part, only: %i[show edit update destroy]
 
   # GET /parts
   # GET /parts.json
   def index
     @part = Part.new
     @parts = Part.where(deleted: false)
-    @parts = Part.joins(:part_category).where(part_categories: {name: params[:name]}) if params[:name].present? && params[:name] != '所有'
-    if params[:start_at].present? && params[:end_at].present?
-      @parts = @parts.where("created_at between ? and ?", params[:start_at], params[:end_at])
-    end
+    @parts = Part.joins(:part_category).where(part_categories: { name: params[:name] }) if params[:name].present? && params[:name] != '所有'
+    @parts = @parts.where('created_at between ? and ?', params[:start_at], params[:end_at]) if params[:start_at].present? && params[:end_at].present?
 
     # 配件统计信息
     parts_arr = []
-    @parts.group_by{|p| p.part_category_id}.each_pair do |key, value|
+    @parts.group_by(&:part_category_id).each_pair do |key, value|
       part_category = PartCategory.find_by(id: key)
-      total_number = 0 
-      value.each{|part| total_number += part.number}
-      parts_arr << {name: part_category.name, number: total_number}
+      total_number = 0
+      value.each { |part| total_number += part.number }
+      parts_arr << { name: part_category.name, number: total_number }
     end
-    @parts_arr = parts_arr.sort_by{|m| m[:number] }
+    @parts_arr = parts_arr.sort_by { |m| m[:number] }
     @parts_arr = @parts_arr.reverse if params[:sort].present? && params[:sort] == 'desc'
     respond_to do |format|
       format.html { @parts = @parts.page(params[:page]) }
@@ -32,8 +30,7 @@ class PartsController < ApplicationController
   end
 
   # GET /parts/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /parts
   # POST /parts.json
@@ -64,6 +61,7 @@ class PartsController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_part
     @part = Part.find(params[:id])
@@ -72,6 +70,6 @@ class PartsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def part_params
     params.require(:part).permit(:part_category_id, :buy, :price, :store, :name,
-                                :uom, :number, :brand, :note, :supply_id, :deleted)
+                                 :uom, :number, :brand, :note, :supply_id, :deleted)
   end
 end

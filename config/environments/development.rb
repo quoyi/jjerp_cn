@@ -48,11 +48,11 @@ Rails.application.configure do
   # 邮件服务器配置
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: ENV['email_address'],
-    port: ENV['email_port'],
-    domain: ENV['email_domain'],
-    authentication: ENV['email_auth'],
-    user_name: ENV['email_username'],
-    password: ENV['email_password']
+    address: ENV['EMAIL_ADDRESS'],
+    port: ENV['EMAIL_PORT'],
+    domain: ENV['EMAIL_DOMAIN'],
+    authentication: ENV['EMAIL_AUTH'],
+    user_name: ENV['EMAIL_USERNAME'],
+    password: ENV['EMAIL_PASSWORD']
   }
 end
