@@ -1,23 +1,3 @@
-# == Schema Information
-#
-# Table name: materials
-#
-#  id         :integer          not null, primary key
-#  name       :string(255)      default(""), not null
-#  full_name  :string(255)      not null
-#  ply        :integer          not null
-#  texture    :integer          not null
-#  color      :integer          not null
-#  store      :integer          default(1), not null
-#  buy        :decimal(8, 2)    not null
-#  price      :decimal(8, 2)    not null
-#  uom        :string(255)
-#  supply_id  :integer
-#  deleted    :boolean          default(FALSE)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#
-
 class Material < ActiveRecord::Base
   belongs_to :material_category
   belongs_to :supply
@@ -36,3 +16,32 @@ class Material < ActiveRecord::Base
     self.full_name = color + texture + ply
   end
 end
+
+# == Schema Information
+#
+# Table name: materials
+#
+#  id         :integer          not null, primary key
+#  buy        :decimal(8, 2)    not null
+#  color      :integer          not null
+#  deleted    :boolean          default(FALSE)
+#  full_name  :string(255)      not null
+#  name       :string(255)      default(""), not null
+#  ply        :integer          not null
+#  price      :decimal(8, 2)    not null
+#  store      :integer          default(1), not null
+#  texture    :integer          not null
+#  uom        :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  supply_id  :integer
+#
+# Indexes
+#
+#  index_materials_on_ply_and_texture_and_color  (ply,texture,color) UNIQUE
+#  index_materials_on_supply_id                  (supply_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (supply_id => supplies.id)
+#

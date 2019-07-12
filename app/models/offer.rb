@@ -1,25 +1,3 @@
-# == Schema Information
-#
-# Table name: offers
-#
-#  id         :integer          not null, primary key
-#  indent_id  :integer
-#  order_id   :integer
-#  display    :integer
-#  item_id    :integer
-#  item_type  :integer          default(0)
-#  item_name  :string(255)
-#  uom        :string(255)
-#  number     :decimal(10, 6)   default(0.0)
-#  price      :decimal(8, 2)    default(0.0)
-#  sum        :decimal(12, 2)   default(0.0)
-#  total      :decimal(12, 2)   default(0.0)
-#  note       :string(255)
-#  deleted    :boolean          default(FALSE)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#
-
 class Offer < ActiveRecord::Base
   include OrdersHelper
   belongs_to :indent
@@ -74,3 +52,31 @@ class Offer < ActiveRecord::Base
     indent.update!(amount: indent_amount, arrear: indent_amount - indent_income)
   end
 end
+
+# == Schema Information
+#
+# Table name: offers
+#
+#  id         :integer          not null, primary key
+#  deleted    :boolean          default(FALSE)
+#  display    :integer
+#  item_name  :string(255)
+#  item_type  :integer          default(0)
+#  note       :string(255)
+#  number     :decimal(10, 6)   default(0.0)
+#  price      :decimal(8, 2)    default(0.0)
+#  sum        :decimal(12, 2)   default(0.0)
+#  total      :decimal(12, 2)   default(0.0)
+#  uom        :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  indent_id  :integer
+#  item_id    :integer
+#  order_id   :integer
+#
+# Indexes
+#
+#  index_offers_on_indent_id                                     (indent_id)
+#  index_offers_on_item_id_and_item_type_and_order_id_and_price  (item_id,item_type,order_id,price) UNIQUE
+#  index_offers_on_order_id                                      (order_id)
+#

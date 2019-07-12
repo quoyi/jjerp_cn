@@ -1,43 +1,3 @@
-# == Schema Information
-#
-# Table name: units
-#
-#  id               :integer          not null, primary key
-#  unit_category_id :integer          default(1)
-#  order_id         :integer
-#  name             :string(255)      default(""), not null
-#  full_name        :string(255)
-#  material_id      :integer
-#  ply              :integer          default(1)
-#  texture          :integer
-#  color            :integer
-#  length           :integer          default(1), not null
-#  width            :integer          default(1), not null
-#  number           :decimal(8, 2)    default(0.0), not null
-#  uom              :string(255)
-#  price            :decimal(8, 2)    default(0.0)
-#  size             :string(255)      default("")
-#  note             :string(255)
-#  supply_id        :integer
-#  is_custom        :boolean          default(FALSE)
-#  is_printed       :boolean          default(FALSE)
-#  edge             :string(255)
-#  customer         :string(255)
-#  out_edge_thick   :integer          default(0), not null
-#  in_edge_thick    :integer          default(0), not null
-#  back_texture     :string(255)
-#  door_type        :string(255)
-#  door_mould       :string(255)
-#  door_handle_type :string(255)
-#  door_edge_type   :string(255)
-#  door_edge_thick  :integer
-#  state            :integer          default(0)
-#  craft            :string(255)
-#  deleted          :boolean          default(FALSE)
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#
-
 class Unit < ActiveRecord::Base
   belongs_to :unit_category
   belongs_to :supply
@@ -84,3 +44,49 @@ class Unit < ActiveRecord::Base
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: units
+#
+#  id               :integer          not null, primary key
+#  back_texture     :string(255)
+#  color            :integer
+#  craft            :string(255)
+#  customer         :string(255)
+#  deleted          :boolean          default(FALSE)
+#  door_edge_thick  :integer
+#  door_edge_type   :string(255)
+#  door_handle_type :string(255)
+#  door_mould       :string(255)
+#  door_type        :string(255)
+#  edge             :string(255)
+#  full_name        :string(255)
+#  in_edge_thick    :integer          default(0), not null
+#  is_custom        :boolean          default(FALSE)
+#  is_printed       :boolean          default(FALSE)
+#  length           :integer          default(1), not null
+#  name             :string(255)      default(""), not null
+#  note             :string(255)
+#  number           :decimal(8, 2)    default(0.0), not null
+#  out_edge_thick   :integer          default(0), not null
+#  ply              :integer          default(1)
+#  price            :decimal(8, 2)    default(0.0)
+#  size             :string(255)      default("")
+#  state            :integer          default(0)
+#  texture          :integer
+#  uom              :string(255)
+#  width            :integer          default(1), not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  material_id      :integer
+#  order_id         :integer
+#  supply_id        :integer
+#  unit_category_id :integer          default(1)
+#
+# Indexes
+#
+#  index_units_on_name              (name)
+#  index_units_on_order_id          (order_id)
+#  index_units_on_unit_category_id  (unit_category_id)
+#

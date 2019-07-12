@@ -1,16 +1,3 @@
-# == Schema Information
-#
-# Table name: material_categories
-#
-#  id         :integer          not null, primary key
-#  oftype     :integer          not null
-#  name       :string(255)
-#  note       :string(255)
-#  deleted    :boolean          default(FALSE)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#
-
 class MaterialCategory < ActiveRecord::Base
   has_many :material
   validates_presence_of :oftype, :name
@@ -34,3 +21,20 @@ class MaterialCategory < ActiveRecord::Base
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: material_categories
+#
+#  id         :integer          not null, primary key
+#  deleted    :boolean          default(FALSE)
+#  name       :string(255)
+#  note       :string(255)
+#  oftype     :integer          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_material_categories_on_oftype  (oftype)
+#

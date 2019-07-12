@@ -16,7 +16,7 @@ APP_NAME: 伊思尔
 
 # 邮箱配置
 EMAIL_ADDRESS: smtp.qq.com
-EMAIL_PORT: 25
+EMAIL_PORT: '25'
 EMAIL_DOMAIN: qq.com
 EMAIL_AUTH: login
 EMAIL_ESA: 'true'

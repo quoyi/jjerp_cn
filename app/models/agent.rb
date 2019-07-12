@@ -1,35 +1,3 @@
-# == Schema Information
-#
-# Table name: agents
-#
-#  id               :integer          not null, primary key
-#  name             :string(255)      default(""), not null
-#  province         :string(255)
-#  city             :string(255)
-#  district         :string(255)
-#  town             :string(255)
-#  address          :string(255)      default(""), not null
-#  full_name        :string(255)      not null
-#  contacts         :string(255)
-#  mobile           :string(255)
-#  e_account        :string(255)
-#  fax              :string(255)
-#  email            :string(255)
-#  wechar           :string(255)
-#  balance          :decimal(12, 2)   default(0.0), not null
-#  arrear           :decimal(12, 2)   default(0.0), not null
-#  history          :decimal(12, 2)   default(0.0), not null
-#  logistics        :string(255)
-#  order_condition  :integer
-#  send_condition   :integer
-#  cycle            :string(255)
-#  note             :string(255)
-#  deleted          :boolean          default(FALSE)
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  delivery_address :string(255)      default(""), not null
-#
-
 class Agent < ActiveRecord::Base
   has_many :indents
   has_many :orders
@@ -106,3 +74,40 @@ class Agent < ActiveRecord::Base
     self.delivery_address = tmp_address
   end
 end
+
+# == Schema Information
+#
+# Table name: agents
+#
+#  id               :integer          not null, primary key
+#  address          :string(255)      default(""), not null
+#  arrear           :decimal(12, 2)   default(0.0), not null
+#  balance          :decimal(12, 2)   default(0.0), not null
+#  city             :string(255)
+#  contacts         :string(255)
+#  cycle            :string(255)
+#  deleted          :boolean          default(FALSE)
+#  delivery_address :string(255)      default(""), not null
+#  district         :string(255)
+#  e_account        :string(255)
+#  email            :string(255)
+#  fax              :string(255)
+#  full_name        :string(255)      not null
+#  history          :decimal(12, 2)   default(0.0), not null
+#  logistics        :string(255)
+#  mobile           :string(255)
+#  name             :string(255)      default(""), not null
+#  note             :string(255)
+#  order_condition  :integer
+#  province         :string(255)
+#  send_condition   :integer
+#  town             :string(255)
+#  wechar           :string(255)
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#
+# Indexes
+#
+#  index_agents_on_full_name  (full_name)
+#  index_agents_on_name       (name)
+#

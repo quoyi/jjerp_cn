@@ -1,22 +1,31 @@
+class Task < ActiveRecord::Base
+end
+
 # == Schema Information
 #
 # Table name: tasks
 #
 #  id           :integer          not null, primary key
-#  order_id     :integer
-#  item_id      :integer
-#  item_type    :string(255)
-#  sequence     :string(255)
 #  area         :decimal(9, 6)
-#  mix_status   :integer          default(0)
 #  availability :decimal(8, 2)
-#  work         :integer          default(0)
-#  state        :integer
-#  number       :integer
 #  deleted      :boolean          default(FALSE)
+#  item_type    :string(255)
+#  mix_status   :integer          default(0)
+#  number       :integer
+#  sequence     :string(255)
+#  state        :integer
+#  work         :integer          default(0)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  item_id      :integer
+#  order_id     :integer
 #
-
-class Task < ActiveRecord::Base
-end
+# Indexes
+#
+#  index_tasks_on_item_id   (item_id)
+#  index_tasks_on_order_id  (order_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (order_id => orders.id)
+#

@@ -1,25 +1,3 @@
-# == Schema Information
-#
-# Table name: incomes
-#
-#  id         :integer          not null, primary key
-#  name       :string(255)
-#  bank_id    :integer
-#  reason     :string(255)
-#  money      :decimal(12, 2)   default(0.0)
-#  username   :string(255)
-#  income_at  :datetime
-#  status     :integer
-#  note       :string(255)
-#  deleted    :boolean          default(FALSE), not null
-#  source     :string(255)      default("")
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  indent_id  :integer
-#  order_id   :integer
-#  agent_id   :integer
-#
-
 class Income < ActiveRecord::Base
   belongs_to :indent
   belongs_to :bank
@@ -42,3 +20,30 @@ class Income < ActiveRecord::Base
   #   # self.indent.save!
   # end
 end
+
+# == Schema Information
+#
+# Table name: incomes
+#
+#  id         :integer          not null, primary key
+#  deleted    :boolean          default(FALSE), not null
+#  income_at  :datetime
+#  money      :decimal(12, 2)   default(0.0)
+#  name       :string(255)
+#  note       :string(255)
+#  reason     :string(255)
+#  source     :string(255)      default("")
+#  status     :integer
+#  username   :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  agent_id   :integer
+#  bank_id    :integer
+#  indent_id  :integer
+#  order_id   :integer
+#
+# Indexes
+#
+#  index_incomes_on_bank_id    (bank_id)
+#  index_incomes_on_income_at  (income_at)
+#

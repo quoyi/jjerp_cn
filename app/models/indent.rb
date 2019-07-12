@@ -1,27 +1,3 @@
-# == Schema Information
-#
-# Table name: indents
-#
-#  id               :integer          not null, primary key
-#  name             :string(255)      not null
-#  agent_id         :integer          not null
-#  customer         :string(255)
-#  verify_at        :date
-#  require_at       :date
-#  logistics        :string(255)
-#  delivery_address :string(255)
-#  status           :integer          default(0)
-#  note             :string(255)
-#  amount           :decimal(8, 2)    default(0.0)
-#  arrear           :decimal(8, 2)    default(0.0)
-#  total_history    :decimal(8, 2)    default(0.0)
-#  total_arrear     :decimal(8, 2)    default(0.0)
-#  deleted          :boolean          default(FALSE), not null
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  max_status       :integer          default(0), not null
-#
-
 class Indent < ActiveRecord::Base
   has_many :offers, dependent: :destroy
   has_many :orders, dependent: :destroy
@@ -83,3 +59,32 @@ class Indent < ActiveRecord::Base
     orders.where('order_category_id = 4 and ply = 0 and texture = 0 and color = 0')
   end
 end
+
+# == Schema Information
+#
+# Table name: indents
+#
+#  id               :integer          not null, primary key
+#  amount           :decimal(8, 2)    default(0.0)
+#  arrear           :decimal(8, 2)    default(0.0)
+#  customer         :string(255)
+#  deleted          :boolean          default(FALSE), not null
+#  delivery_address :string(255)
+#  logistics        :string(255)
+#  max_status       :integer          default(0), not null
+#  name             :string(255)      not null
+#  note             :string(255)
+#  require_at       :date
+#  status           :integer          default(0)
+#  total_arrear     :decimal(8, 2)    default(0.0)
+#  total_history    :decimal(8, 2)    default(0.0)
+#  verify_at        :date
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  agent_id         :integer          not null
+#
+# Indexes
+#
+#  index_indents_on_agent_id  (agent_id)
+#  index_indents_on_name      (name)
+#

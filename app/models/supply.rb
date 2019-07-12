@@ -1,19 +1,3 @@
-# == Schema Information
-#
-# Table name: supplies
-#
-#  id           :integer          not null, primary key
-#  name         :string(255)      not null
-#  full_name    :string(255)      not null
-#  mobile       :string(255)
-#  bank_account :string(255)
-#  address      :string(255)
-#  note         :string(255)
-#  deleted      :boolean          default(FALSE)
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#
-
 class Supply < ActiveRecord::Base
   has_many :part
   has_many :unit
@@ -22,3 +6,24 @@ class Supply < ActiveRecord::Base
   validates :name, uniqueness: true
   validates :full_name, uniqueness: { scope: :name }
 end
+
+# == Schema Information
+#
+# Table name: supplies
+#
+#  id           :integer          not null, primary key
+#  address      :string(255)
+#  bank_account :string(255)
+#  deleted      :boolean          default(FALSE)
+#  full_name    :string(255)      not null
+#  mobile       :string(255)
+#  name         :string(255)      not null
+#  note         :string(255)
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+# Indexes
+#
+#  index_supplies_on_full_name  (full_name)
+#  index_supplies_on_name       (name)
+#

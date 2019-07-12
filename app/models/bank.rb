@@ -1,19 +1,3 @@
-# == Schema Information
-#
-# Table name: banks
-#
-#  id         :integer          not null, primary key
-#  name       :string(255)
-#  bank_name  :string(255)
-#  bank_card  :string(255)
-#  balance    :decimal(12, 2)   default(0.0)
-#  incomes    :decimal(12, 2)   default(0.0)
-#  expends    :decimal(12, 2)   default(0.0)
-#  is_default :boolean          default(FALSE)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#
-
 class Bank < ActiveRecord::Base
   has_many :income
   has_many :expend
@@ -27,3 +11,23 @@ class Bank < ActiveRecord::Base
     self.is_default = 1 if Bank.count.zero?
   end
 end
+
+# == Schema Information
+#
+# Table name: banks
+#
+#  id         :integer          not null, primary key
+#  balance    :decimal(12, 2)   default(0.0)
+#  bank_card  :string(255)
+#  bank_name  :string(255)
+#  expends    :decimal(12, 2)   default(0.0)
+#  incomes    :decimal(12, 2)   default(0.0)
+#  is_default :boolean          default(FALSE)
+#  name       :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_banks_on_is_default  (is_default)
+#
