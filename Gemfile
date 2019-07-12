@@ -16,6 +16,8 @@ gem 'select2-rails', '~> 4.0.3'
 gem 'jquery-turbolinks'
 gem 'turbolinks', '~> 2.5.3', '< 5.0.0'
 
+gem 'sentry-raven'
+
 # 权限认证
 gem 'devise'
 # gem 'cancancan'
