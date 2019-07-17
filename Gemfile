@@ -70,7 +70,7 @@ gem 'prawnto_2', require: 'prawnto'
 gem 'china_city'
 
 group :development, :test do
-  gem 'annotate'
+  # gem 'annotate'
   gem 'overcommit'
   gem 'pry'
   gem 'rubocop'
