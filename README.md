@@ -41,3 +41,51 @@ config.action_mailer.smtp_settings = {
 ```sh
 grep -rl "ActiveRecord::Migration$" db | xargs sed -i "" "s/ActiveRecord::Migration/ActiveRecord::Migration[6.0]/g"
 ```
+
+## 移除 Sprockets
+
+- 从 `Gemfile` 中移除 `sass-rails`
+- 修改 `config/application.rb` 引用
+
+  ```ruby
+  # require 'rails/all'
+  require "rails"
+  # Pick the frameworks you want:
+  require "active_model/railtie"
+  require "active_job/railtie"
+  require "active_record/railtie"
+  require "active_storage/engine"
+  require "action_controller/railtie"
+  require "action_mailer/railtie"
+  require "action_mailbox/engine"
+  require "action_text/engine"
+  require "action_view/railtie"
+  require "action_cable/engine"
+  # require "sprockets/railtie"
+  require "rails/test_unit/railtie"
+  ```
+
+- 从 `config/environments/development.rb` 中移除
+
+  ```ruby
+  # Debug mode disables concatenation and preprocessing of assets.
+  # This option may cause significant delays in view rendering with a large
+  # number of complex assets
+  config.assets.debug = true
+
+  # Suppress logger output for asset requests
+  config.assets.quiet = true
+  ```
+
+- 从 `config/environments/production.rb` 中移除
+
+  ```ruby
+  # Compress CSS using a preprocessor.
+  # config.assets.css_compressor = :sass
+
+  # Do not fallback to assets pipeline if a precompiled asset is missed.
+  config.assets.compile = false
+  ```
+
+- 移除 `config/initializers/assets.rb` 文件
+- ~~删除 `app/assets` 目录~~（建议保留作为回退备份）

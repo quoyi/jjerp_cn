@@ -257,16 +257,6 @@ GEM
     ruby-hmac (0.4.0)
     ruby-progressbar (1.10.1)
     ruby2_keywords (0.0.2)
-    sass-rails (6.0.0)
-      sassc-rails (~> 2.1, >= 2.1.1)
-    sassc (2.4.0)
-      ffi (~> 1.9)
-    sassc-rails (2.1.2)
-      railties (>= 4.0.0)
-      sassc (>= 2.0)
-      sprockets (> 3.0)
-      sprockets-rails
-      tilt
     semantic_range (2.3.0)
     sentry-raven (3.1.1)
       faraday (>= 1.0)
@@ -285,7 +275,6 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     thor (1.0.1)
-    tilt (2.0.10)
     ttfunk (1.6.2.1)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
@@ -350,7 +339,6 @@ DEPENDENCIES
   qiniu (~> 6.8.1)
   rails (= 6.1.0.rc1)
   rubocop
-  sass-rails (>= 6)
   sentry-raven
   simple_form
   spring
