@@ -1,4 +1,4 @@
-class OrderCategory < ActiveRecord::Base
+class OrderCategory < ApplicationRecord
   has_many :order
   validates :name, presence: true, uniqueness: true
 end

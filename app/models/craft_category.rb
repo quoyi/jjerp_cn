@@ -1,4 +1,4 @@
-class CraftCategory < ActiveRecord::Base
+class CraftCategory < ApplicationRecord
   attr_accessor :reset
   has_many :crafts
 end

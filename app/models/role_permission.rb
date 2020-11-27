@@ -1,4 +1,4 @@
-class RolePermission < ActiveRecord::Base
+class RolePermission < ApplicationRecord
   belongs_to :role
   def permission?(klass, action)
     if action

@@ -1,4 +1,4 @@
-class UserRole < ActiveRecord::Base
+class UserRole < ApplicationRecord
 end
 
 # == Schema Information

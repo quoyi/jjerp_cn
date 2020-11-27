@@ -1,4 +1,4 @@
-class PartCategory < ActiveRecord::Base
+class PartCategory < ApplicationRecord
   # 定义自连接
   has_many :subobject, class_name: 'PartCategory', foreign_key: 'parent_id'
   has_many :part

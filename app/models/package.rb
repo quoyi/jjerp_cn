@@ -1,4 +1,4 @@
-class Package < ActiveRecord::Base
+class Package < ApplicationRecord
   belongs_to :order
 end
 

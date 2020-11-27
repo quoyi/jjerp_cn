@@ -1,4 +1,4 @@
-class MaterialCategory < ActiveRecord::Base
+class MaterialCategory < ApplicationRecord
   has_many :material
   validates_presence_of :oftype, :name
   # validates :name, uniqueness: {scope: :oftype}

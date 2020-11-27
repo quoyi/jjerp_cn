@@ -1,4 +1,4 @@
-class Order < ActiveRecord::Base
+class Order < ApplicationRecord
   include OffersHelper
   belongs_to :order_category
   belongs_to :indent

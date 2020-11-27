@@ -1,4 +1,4 @@
-class Unit < ActiveRecord::Base
+class Unit < ApplicationRecord
   belongs_to :unit_category
   belongs_to :supply
   belongs_to :order

@@ -1,4 +1,4 @@
-class Sent < ActiveRecord::Base
+class Sent < ApplicationRecord
   belongs_to :sent_list
   belongs_to :owner, polymorphic: true
   after_destroy :sync_order_status

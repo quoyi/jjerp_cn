@@ -1,4 +1,4 @@
-class Expend < ActiveRecord::Base
+class Expend < ApplicationRecord
   belongs_to :bank
 end
 

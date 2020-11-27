@@ -1,4 +1,4 @@
-class Part < ActiveRecord::Base
+class Part < ApplicationRecord
   belongs_to :part_category
   belongs_to :supply
   belongs_to :order

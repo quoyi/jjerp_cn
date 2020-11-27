@@ -1,4 +1,4 @@
-class Income < ActiveRecord::Base
+class Income < ApplicationRecord
   belongs_to :indent
   belongs_to :bank
   belongs_to :order

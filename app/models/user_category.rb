@@ -1,4 +1,4 @@
-class UserCategory < ActiveRecord::Base
+class UserCategory < ApplicationRecord
 end
 
 # == Schema Information

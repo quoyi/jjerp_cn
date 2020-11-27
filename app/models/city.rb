@@ -1,4 +1,4 @@
-class City < ActiveRecord::Base
+class City < ApplicationRecord
 end
 
 # == Schema Information

@@ -1,4 +1,4 @@
-class Supply < ActiveRecord::Base
+class Supply < ApplicationRecord
   has_many :part
   has_many :unit
   has_many :material

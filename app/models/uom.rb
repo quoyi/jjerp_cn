@@ -1,4 +1,4 @@
-class Uom < ActiveRecord::Base
+class Uom < ApplicationRecord
   validates_uniqueness_of :name
 end
 

@@ -1,4 +1,4 @@
-class Bank < ActiveRecord::Base
+class Bank < ApplicationRecord
   has_many :income
   has_many :expend
   before_save :set_default_bank

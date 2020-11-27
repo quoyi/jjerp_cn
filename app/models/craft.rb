@@ -1,4 +1,4 @@
-class Craft < ActiveRecord::Base
+class Craft < ApplicationRecord
   belongs_to :order
   belongs_to :craft_category
   before_save :generate_full_name

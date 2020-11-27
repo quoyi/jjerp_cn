@@ -1,4 +1,4 @@
-class Agent < ActiveRecord::Base
+class Agent < ApplicationRecord
   has_many :indents
   has_many :orders
   has_many :incomes

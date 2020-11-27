@@ -1,4 +1,4 @@
-class Material < ActiveRecord::Base
+class Material < ApplicationRecord
   belongs_to :material_category
   belongs_to :supply
   has_many :unit

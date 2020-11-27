@@ -1,4 +1,4 @@
-class Indent < ActiveRecord::Base
+class Indent < ApplicationRecord
   has_many :offers, dependent: :destroy
   has_many :orders, dependent: :destroy
   has_many :order_parts # 虚构配件补单（ 实际为订单orders ）

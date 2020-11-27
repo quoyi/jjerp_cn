@@ -1,4 +1,4 @@
-class SentList < ActiveRecord::Base
+class SentList < ApplicationRecord
   has_many :sents, dependent: :destroy
 
   before_create :generate_code

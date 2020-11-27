@@ -1,4 +1,4 @@
-class Role < ActiveRecord::Base
+class Role < ApplicationRecord
   # 冻结常量 ADMINISTRATOR 防止被修改
   ADMINISTRATOR = 'super_admin'.freeze
   has_and_belongs_to_many :users, join_table: :user_roles

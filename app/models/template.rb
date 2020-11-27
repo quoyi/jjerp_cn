@@ -1,4 +1,4 @@
-class Template < ActiveRecord::Base
+class Template < ApplicationRecord
 end
 
 # == Schema Information
