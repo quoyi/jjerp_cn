@@ -11,18 +11,18 @@
 // about supported directives.
 // 注意: 不能同时引入 bootstrap(完整版) 和 bootstrap-sprockets(精简版) ,否则要出错！！！
 //
-//= require jquery
-//= require jquery.turbolinks
-//= require jquery_ujs
-//= require turbolinks
-//= require select2-full
-//= require select2_locale_zh-CN
-//= require jquery.serializejson.min
-//= require jquery.noty.packaged.min
-//= require jquery.noty.bootstrapTheme
-//= require bootstrap
-//= require jquery_nested_form
-//= require bootstrap-datepicker/core
-//= require bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN
-//= require 'china_city/jquery.china_city'
-//= require_tree .
+/////require jquery
+/////require jquery.turbolinks
+/////require jquery_ujs
+/////require turbolinks
+/////require select2-full
+/////require select2_locale_zh-CN
+/////require jquery.serializejson.min
+/////require jquery.noty.packaged.min
+/////require jquery.noty.bootstrapTheme
+/////require bootstrap
+/////require jquery_nested_form
+/////require bootstrap-datepicker/core
+/////require bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN
+/////require 'china_city/jquery.china_city'
+/////require_tree .

@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="<%= I18n.locale %>">
   <head>
-    <title><%= ENV.fetch('APP_NAME') { '伊思尔生产管理' } %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <%= favicon_link_tag 'favicon.ico', rel: 'shortcut icon', type: 'image/png' %>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <%= render 'layouts/shim' %>
+    <title><%= ENV.fetch('APP_NAME') { '伊思尔生产管理' } %></title>
+
+    <%#= favicon_pack_tag 'favicon.ico', rel: 'shortcut icon', type: 'image/png' %>
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <%= action_cable_meta_tag %>
     
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 

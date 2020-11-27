@@ -16,4 +16,11 @@ environment.plugins.prepend(
   })
 );
 
+// environment.splitChunks();
+
+// 解决第三方库样式文件相对路径问题
+environment.loaders.get('sass').use.splice(-1, 0, {
+  loader: 'resolve-url-loader'
+});
+
 module.exports = environment
