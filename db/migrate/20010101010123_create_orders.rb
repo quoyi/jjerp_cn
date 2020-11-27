@@ -1,4 +1,4 @@
-class CreateOrders < ActiveRecord::Migration
+class CreateOrders < ActiveRecord::Migration[6.0]
   def change
     # 子订单
     create_table :orders do |t|

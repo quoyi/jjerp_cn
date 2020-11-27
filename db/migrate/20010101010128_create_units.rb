@@ -1,4 +1,4 @@
-class CreateUnits < ActiveRecord::Migration
+class CreateUnits < ActiveRecord::Migration[6.0]
   def change
     # 部件
     create_table :units do |t|

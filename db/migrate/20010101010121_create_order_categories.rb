@@ -1,4 +1,4 @@
-class CreateOrderCategories < ActiveRecord::Migration
+class CreateOrderCategories < ActiveRecord::Migration[6.0]
   def change
     # 子订单类型
     create_table :order_categories do |t|

@@ -1,4 +1,4 @@
-class CreatePartCategories < ActiveRecord::Migration
+class CreatePartCategories < ActiveRecord::Migration[6.0]
   def change
     # 配件类型
     create_table :part_categories do |t|

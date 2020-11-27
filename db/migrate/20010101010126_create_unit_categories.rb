@@ -1,4 +1,4 @@
-class CreateUnitCategories < ActiveRecord::Migration
+class CreateUnitCategories < ActiveRecord::Migration[6.0]
   def change
     # 部件类型
     create_table :unit_categories do |t|

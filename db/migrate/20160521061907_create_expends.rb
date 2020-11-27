@@ -1,4 +1,4 @@
-class CreateExpends < ActiveRecord::Migration
+class CreateExpends < ActiveRecord::Migration[6.0]
   def change
     # 支出
     create_table :expends do |t|

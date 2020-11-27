@@ -1,4 +1,4 @@
-class CreateSents < ActiveRecord::Migration
+class CreateSents < ActiveRecord::Migration[6.0]
   def change
     # 发货
     create_table :sents do |t|

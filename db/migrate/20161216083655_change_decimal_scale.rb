@@ -1,4 +1,4 @@
-class ChangeDecimalScale < ActiveRecord::Migration
+class ChangeDecimalScale < ActiveRecord::Migration[6.0]
   def change
   	change_column :agents, :balance, :decimal, precision: 12, scale: 2, null: false, default: 0
   	change_column :agents, :arrear, :decimal, precision: 12, scale: 2, null: false, default: 0

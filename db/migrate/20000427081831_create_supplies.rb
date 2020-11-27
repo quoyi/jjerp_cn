@@ -1,4 +1,4 @@
-class CreateSupplies < ActiveRecord::Migration
+class CreateSupplies < ActiveRecord::Migration[6.0]
   def change
     # 供应商
     create_table :supplies do |t|

@@ -1,4 +1,4 @@
-class CreateOffers < ActiveRecord::Migration
+class CreateOffers < ActiveRecord::Migration[6.0]
   def change
     # 报价单
     create_table :offers do |t|

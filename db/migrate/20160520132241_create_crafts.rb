@@ -1,4 +1,4 @@
-class CreateCrafts < ActiveRecord::Migration
+class CreateCrafts < ActiveRecord::Migration[6.0]
   def change
     # 工艺
     create_table :crafts do |t|

@@ -1,4 +1,4 @@
-class CreatePackages < ActiveRecord::Migration
+class CreatePackages < ActiveRecord::Migration[6.0]
   def change
     create_table :packages do |t|
       t.references :order, null: false, index: true # 子定单号

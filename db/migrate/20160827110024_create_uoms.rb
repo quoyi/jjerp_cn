@@ -1,4 +1,4 @@
-class CreateUoms < ActiveRecord::Migration
+class CreateUoms < ActiveRecord::Migration[6.0]
   def change
     create_table :uoms do |t|
       t.string :name, null: false, default: ""

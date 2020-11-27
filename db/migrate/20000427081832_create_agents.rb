@@ -1,4 +1,4 @@
-class CreateAgents < ActiveRecord::Migration
+class CreateAgents < ActiveRecord::Migration[6.0]
   def change
     # 代理商
     create_table :agents do |t|

@@ -1,4 +1,4 @@
-class CreateSentLists < ActiveRecord::Migration
+class CreateSentLists < ActiveRecord::Migration[6.0]
   # 发货清单
   def change
     create_table :sent_lists do |t|

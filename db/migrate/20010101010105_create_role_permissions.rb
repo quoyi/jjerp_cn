@@ -1,4 +1,4 @@
-class CreateRolePermissions < ActiveRecord::Migration
+class CreateRolePermissions < ActiveRecord::Migration[6.0]
   def change
     # 角色 -- 权限 中间表
     create_table :role_permissions do |t|

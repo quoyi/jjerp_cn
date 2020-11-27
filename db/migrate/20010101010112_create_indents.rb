@@ -1,4 +1,4 @@
-class CreateIndents < ActiveRecord::Migration
+class CreateIndents < ActiveRecord::Migration[6.0]
   def change
     # 总订单
     create_table :indents do |t|

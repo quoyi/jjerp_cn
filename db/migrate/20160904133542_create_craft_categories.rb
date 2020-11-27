@@ -1,4 +1,4 @@
-class CreateCraftCategories < ActiveRecord::Migration
+class CreateCraftCategories < ActiveRecord::Migration[6.0]
   def change
     # 工艺类型
     create_table :craft_categories do |t|

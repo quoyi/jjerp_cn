@@ -1,4 +1,4 @@
-class CreateDepartments < ActiveRecord::Migration
+class CreateDepartments < ActiveRecord::Migration[6.0]
   def change
     # 部门
     create_table :departments do |t|

@@ -1,4 +1,4 @@
-class CreateTasks < ActiveRecord::Migration
+class CreateTasks < ActiveRecord::Migration[6.0]
   def change
     # 生产任务
     create_table :tasks do |t|

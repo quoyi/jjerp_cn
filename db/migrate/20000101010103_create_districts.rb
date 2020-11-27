@@ -1,4 +1,4 @@
-class CreateDistricts < ActiveRecord::Migration
+class CreateDistricts < ActiveRecord::Migration[6.0]
   def change
     # 区、县
     create_table :districts do |t|

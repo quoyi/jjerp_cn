@@ -1,4 +1,4 @@
-class CreateCities < ActiveRecord::Migration
+class CreateCities < ActiveRecord::Migration[6.0]
   def change
     create_table :cities do |t|
       t.references :province, index: true, foreign_key: true

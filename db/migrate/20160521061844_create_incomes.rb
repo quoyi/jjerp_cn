@@ -1,4 +1,4 @@
-class CreateIncomes < ActiveRecord::Migration
+class CreateIncomes < ActiveRecord::Migration[6.0]
   def change
     # 收入
     create_table :incomes do |t|

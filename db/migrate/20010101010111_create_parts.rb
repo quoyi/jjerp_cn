@@ -1,4 +1,4 @@
-class CreateParts < ActiveRecord::Migration
+class CreateParts < ActiveRecord::Migration[6.0]
   def change
     # 配件
     create_table :parts do |t|

@@ -1,4 +1,4 @@
-class CreateUserCategories < ActiveRecord::Migration
+class CreateUserCategories < ActiveRecord::Migration[6.0]
   def change
     # 用户类型
     create_table :user_categories do |t|

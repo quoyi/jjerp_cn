@@ -1,4 +1,4 @@
-class CreateMaterials < ActiveRecord::Migration
+class CreateMaterials < ActiveRecord::Migration[6.0]
   def change
     # 板料
     create_table :materials do |t|
