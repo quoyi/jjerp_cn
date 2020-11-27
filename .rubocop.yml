@@ -12,6 +12,8 @@ AllCops:
     - 'bin/*'
     - 'config/application.rb'
     - 'config/deploy/staging.rb'
+    - 'config/initializers/simple_form.rb'
+    - 'config/initializers/simple_form_bootstrap.rb'
     - 'db/schema.rb'
 
 Bundler/OrderedGems:
@@ -168,7 +170,6 @@ Layout/TrailingEmptyLines:
     - 'db/seeds.rb'
     - 'lib/account.rb'
     - 'lib/account/permission_denied.rb'
-    - 'lib/jjerp.cn/CustomError.rb'
 
 # Offense count: 10
 # Cop supports --auto-correct.
@@ -238,13 +239,6 @@ Metrics/ModuleLength:
 # Configuration parameters: IgnoredMethods.
 Metrics/PerceivedComplexity:
   Max: 51
-
-# Offense count: 1
-# Configuration parameters: ExpectMatchingDefinition, CheckDefinitionPathHierarchy, Regex, IgnoreExecutableScripts, AllowedAcronyms.
-# AllowedAcronyms: CLI, DSL, ACL, API, ASCII, CPU, CSS, DNS, EOF, GUID, HTML, HTTP, HTTPS, ID, IP, JSON, LHS, QPS, RAM, RHS, RPC, SLA, SMTP, SQL, SSH, TCP, TLS, TTL, UDP, UI, UID, UUID, URI, URL, UTF8, VM, XML, XMPP, XSRF, XSS
-Naming/FileName:
-  Exclude:
-    - 'lib/jjerp.cn/CustomError.rb'
 
 # Offense count: 770
 # Configuration parameters: AllowedChars.

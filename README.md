@@ -35,3 +35,9 @@ config.action_mailer.smtp_settings = {
   password: ENV['email_password'] # 此处的密码并非 QQ 登录密码，而是启用 SMTP 时生成的秘钥。
 }
 ```
+
+## 批量修改 migration 文件
+
+```sh
+grep -rl "ActiveRecord::Migration$" db | xargs sed -i "" "s/ActiveRecord::Migration/ActiveRecord::Migration[6.0]/g"
+```
