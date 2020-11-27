@@ -3,7 +3,7 @@ class IndentsController < ApplicationController
   include OrdersHelper
   include OffersHelper
   before_action :set_indent, only: %i[show edit update destroy]
-  skip_before_filter :verify_authenticity_token, only: [:part_list]
+  skip_before_action :verify_authenticity_token, only: [:part_list]
 
   # GET /indents
   # GET /indents.json
