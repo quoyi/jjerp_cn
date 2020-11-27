@@ -9,10 +9,15 @@
 AllCops:
   NewCops: disable
   Exclude:
+    - 'bin/*'
     - 'config/application.rb'
     - 'config/deploy/staging.rb'
     - 'db/schema.rb'
 
+# 逻辑不确定，暂时不处理
+Lint/UselessAssignment:
+  Exclude:
+    - 'app/models/order.rb'
 
 # Offense count: 9
 # Cop supports --auto-correct.
@@ -39,14 +44,6 @@ Layout/EmptyLinesAroundBlockBody:
   Exclude:
     - 'db/migrate/20010101010101_devise_create_users.rb'
     - 'lib/tasks/my_task.rake'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines, beginning_only, ending_only
-Layout/EmptyLinesAroundClassBody:
-  Exclude:
-    - 'config/application.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -198,11 +195,6 @@ Lint/UnusedBlockArgument:
   Exclude:
     - 'db/init/role.rb'
 
-# Offense count: 2
-Lint/UselessAssignment:
-  Exclude:
-    - 'db/init/role.rb'
-
 # Offense count: 65
 # Configuration parameters: IgnoredMethods.
 Metrics/AbcSize:
@@ -306,11 +298,7 @@ Style/Encoding:
 # Cop supports --auto-correct.
 Style/ExpandPathArguments:
   Exclude:
-    - 'bin/bundle'
-    - 'bin/rails'
-    - 'bin/setup'
     - 'config.ru'
-    - 'config/application.rb'
     - 'config/boot.rb'
     - 'config/environment.rb'
 
@@ -386,7 +374,6 @@ Style/StringConcatenation:
 Style/StringLiterals:
   Exclude:
     - 'bin/setup'
-    - 'config/application.rb'
     - 'config/initializers/mime_types.rb'
     - 'config/initializers/sentry.rb'
     - 'config/schedule.rb'

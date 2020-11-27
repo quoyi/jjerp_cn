@@ -63,16 +63,14 @@ class Order < ActiveRecord::Base
   end
 
   def income_status
-    if price == 0
+    if price.zero?
       '未报价'
+    elsif incomes.pluck(:money).sum >= price
+      '全款'
+    elsif incomes.pluck(:money).sum.zero?
+      '未打款'
     else
-      if incomes.pluck(:money).sum >= price
-        '全款'
-      elsif incomes.pluck(:money).sum.to_i == 0
-        '未打款'
-      else
-        '定金'
-      end
+      '定金'
     end
   end
 
@@ -147,8 +145,6 @@ class Order < ActiveRecord::Base
     end
     self.material_number = number
   end
-
-  def caseType(type, str); end
 
   private
 
