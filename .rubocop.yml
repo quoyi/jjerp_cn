@@ -14,6 +14,9 @@ AllCops:
     - 'config/deploy/staging.rb'
     - 'db/schema.rb'
 
+Bundler/OrderedGems:
+  Enabled: false
+
 # 逻辑不确定，暂时不处理
 Lint/UselessAssignment:
   Exclude:
