@@ -13,7 +13,7 @@ class Material < ActiveRecord::Base
     ply = MaterialCategory.find_by_id(ply).try(:name)
     texture = MaterialCategory.find_by_id(texture).try(:name)
     color = MaterialCategory.find_by_id(color).try(:name)
-    self.full_name = color + texture + ply
+    self.full_name = "#{color}#{texture}#{ply}"
   end
 end
 
