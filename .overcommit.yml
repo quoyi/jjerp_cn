@@ -38,9 +38,9 @@
 PreCommit:
   AuthorName:
     enabled: false
-  RuboCop:
-    enabled: true
-    command: ['bundle', 'exec', 'rubocop', '-c', '.rubocop.yml']
+  # RuboCop:
+  #   enabled: true
+  #   command: ['bundle', 'exec', 'rubocop', '-c', '.rubocop.yml']
 
 # PrePush:
 #   RSpec:

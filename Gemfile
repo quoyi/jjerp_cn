@@ -1,14 +1,15 @@
-# source 'https://rubygems.org'
-source 'https://gems.ruby-china.com'
+source 'https://rubygems.org'
+# source 'https://gems.ruby-china.com'
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}.git" }
 
 # 指定ruby版本
-ruby '2.4.5'
+ruby '2.6.5'
 gem 'bootstrap-sass'
 gem 'figaro'
 gem 'font-awesome-sass', '~> 4.2.0'
 gem 'jquery-rails'
 gem 'mysql2', '>= 0.3.13', '< 0.5'
-gem 'rails', '~> 4.2.11'
+gem 'rails'
 gem 'sass-rails', '~> 5.0'
 gem 'select2-rails', '~> 4.0.3'
 # 这里不指定小于 5.0.0 时会导致左边菜单无法切换
@@ -70,7 +71,7 @@ gem 'prawnto_2', require: 'prawnto'
 gem 'china_city'
 
 group :development, :test do
-  # gem 'annotate'
+  gem 'annotate'
   gem 'overcommit'
   gem 'pry'
   gem 'rubocop'
