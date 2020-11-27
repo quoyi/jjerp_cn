@@ -1,91 +1,72 @@
 Rails.application.routes.draw do
-  resources :templates
-  resources :craft_categories do
-    collection do
-      post :find
-    end
-  end
-  resources :uoms
+  # 发货计划
   resources :sent_lists do
     member do
       get :download
     end
   end
-  resources :banks
+
+  # 发货
   resources :sents do
+    # 修改发货信息、补充发货信息
+    get :change, :replenish, on: :collection
+  end
+
+  # 收入
+  resources :incomes do
+    # 财务统计、订单扣款
+    get :stat, :deduct, on: :collection
+  end
+
+  # 供应商、单位、任务、工艺
+  resources :supplies, :units, :tasks, :crafts, :expends, :offers, :banks, :uoms, :templates
+
+  # 子订单
+  resources :orders do
     collection do
-      get :change # 修改发货信息
-      get :replenish # 补充发货信息
+      # 查找指定 name（订单号）的子订单、、未发货、生产中、导出、未打包、打包、已打包
+      get :find, :not_sent, :producing, :export, :unpack, :package, :packaged
+      # 导入拆单数据、打包
+      post :import, :package
+    end
+    member do
+      # 自定义报价、重新打印标签、转款
+      get :custom_offer, :reprint, :change_income
+      # 打包、重新打印标签、转款
+      post :pack, :reprint, :change_income
     end
   end
 
-  resources :offers
-  resources :expends
-  resources :incomes do
-    collection do
-      get :stat # 财务统计
-      get :deduct # 订单扣款
-    end
-  end
-  resources :crafts
-  resources :tasks
-  resources :units
-  resources :supplies
-  resources :agents do
-    collection do
-      get :search
-    end
-  end
-  resources :unit_categories
-  resources :user_categories
-  resources :order_categories
-  resources :part_categories do
-    collection do
-      post :find
-    end
-  end
-  resources :material_categories
-  resources :products
-  resources :parts
-  resources :materials do
-    collection do
-      post :find # 查找指定板料
-    end
-  end
+  # 总订单
   resources :indents do
-    collection do
-      get :incomes # 到款详细
-      get :generate # 生成报价单
-      get :export_offer # 导出报价单
-      get :export_parts # 导出配件清单
-      get :preview # 预览配件清单
-    end
+    # 到款详细、生成报价单、导出报价单、导出配件清单、预览配件清单
+    get :incomes, :generate, :export_offer, :export_parts, :preview, on: :collection
   end
-  resources :orders do
-    collection do
-      get :find # 查找指定name（订单号）的子订单
-      post :import # 导入拆单数据
-      get :not_sent # 未发货
-      get :producing # 生产中
-      get :export # 导出
-      get :unpack # 未打包
-      get :package # 打包
-      post :package # 打包
-      get :packaged # 已打包
-    end
-    member do
-      get :custom_offer # 自定义报价
-      # get :package # 打包
-      post :pack # 打包
-      get :reprint # 重新打印标签
-      post :reprint # 重新打印标签
-      get :change_income # 转款
-      post :change_income # 转款
-    end
+
+  # 工艺类型
+  resources :craft_categories do
+    post :find, on: :collection
   end
-  resources :departments
-  resources :permissions
-  resources :roles
+  # 部件类型
+  resources :part_categories do
+    post :find, on: :collection
+  end
+  # 板材类型、订单类型、用户类型、单位类型
+  resources :material_categories, :order_categories, :user_categories, :unit_categories
+
+  # 板材
+  resources :materials do
+    post :find, on: :collection # 查找指定板料
+  end
+
+  # 代理商
+  resources :agents do
+    get :search, on: :collection
+  end
+
+  # 角色、权限、部门、部件、产品
+  resources :roles, :permissions, :departments, :parts, :products
+
   devise_for :users, controllers: {
     sessions: 'users/sessions',
     registrations: 'users/registrations',
@@ -103,58 +84,4 @@ Rails.application.routes.draw do
   root 'statics#index'
 
   # mount ChinaCity::Engine => '/china_city'
-
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
-
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
-
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
-
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
-
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
-
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     #   end
 end

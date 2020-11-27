@@ -1,6 +1,6 @@
 require File.expand_path('../boot', __FILE__)
 
-require 'csv'
+# require 'csv'
 require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
@@ -13,34 +13,18 @@ module Jjerp
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    # config.time_zone = 'Central Time (US & Canada)'
-    config.autoload_paths << Rails.root.join("lib")
-    config.autoload_paths << Rails.root.join('app').join('pdfs')
-
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
-    I18n.config.enforce_available_locales = false
-    config.i18n.available_locales = ["zh-CN"]
+    config.time_zone = 'Beijing'
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
     config.i18n.default_locale = "zh-CN".to_sym
-    config.before_configuration do
-      I18n.locale = "zh-CN".to_sym
-      I18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '**', '*.{rb,yml}')]
-      I18n.reload!
-    end
+
+    config.autoload_paths << Rails.root.join("lib")
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
-    # 定制 rails generator scaffold
     config.generators do |g|
-      g.orm :active_record
-      g.template_engine :erb
-      g.test_framework :test_unit, fixture: true
-      g.stylesheets false # 禁止生成scss
+      g.helper false
+      g.stylesheets false
     end
-
   end
 end
