@@ -1,10 +1,24 @@
-<!-- Footer starts -->
-<footer>
-  <div class="container">
-    <div class="copy text-center">
-      版权所有 &copy; - <%= link_to '久久居', Rails.env.development? ? templates_path : root_path %>
-      &nbsp;&nbsp;备案号：<%= link_to '鄂ICP备16005840号','http://www.miitbeian.gov.cn/' %>
+<%# 页脚-版权 开始 %>
+<section class="py-0 bg-dark">
+  <div>
+    <hr class="my-0 border-600 opacity-25" />
+    <div class="container py-3">
+      <div class="row justify-content-between fs--1">
+        <div class="col-12 col-sm-auto text-center">
+          <p class="mb-0 text-600 opacity-85">
+            <%# 小屏幕时换行 %>
+            <%# <br class="d-sm-none" /> %>
+            Copyright &copy; 2016-<%= Time.current.year %> 
+            <%= link_to ENV['APP_NAME'], root_path, class: 'text-white opacity-85' %>
+          </p>
+        </div>
+        <div class="col-12 col-sm-auto text-center">
+          <p class="mb-0 text-600 opacity-85">
+            <%= link_to '鄂 ICP 备 16005840 号', 'http://www.miitbeian.gov.cn/', class: 'text-reset' %>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
-</footer>
-<!-- Footer ends -->
+</section>
+<%# 页脚-版权 结束 %>
