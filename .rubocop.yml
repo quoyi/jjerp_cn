@@ -14,6 +14,7 @@ AllCops:
     - 'config/deploy/staging.rb'
     - 'config/initializers/simple_form.rb'
     - 'config/initializers/simple_form_bootstrap.rb'
+    - 'config/puma.rb'
     - 'db/schema.rb'
 
 Bundler/OrderedGems:
