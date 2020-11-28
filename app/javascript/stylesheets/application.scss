@@ -3,16 +3,16 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts/";
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 @import "~@fortawesome/fontawesome-free/scss/brands.scss";
 
+// fonts
+@import "./googleapis";
+
+@import "~perfect-scrollbar/css/perfect-scrollbar";
+
 $owl-image-path: "~owl.carousel/src/img/";
 @import "~owl.carousel/src/scss/owl.carousel";
 @import "~owl.carousel/src/scss/owl.theme.default";
 
-// fonts
-@import "./googleapis";
-
-@import "~perfect-scrollbar";
-
 @import "./falcon/theme";
 
 // custom stylesheets
-@import "static";
+@import "./static";

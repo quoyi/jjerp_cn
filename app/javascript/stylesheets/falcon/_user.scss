@@ -1,5 +1,12 @@
-// 
-// 
-// user.scss
-//
 // Place your own theme CSS or SCSS rules below this line, these rules will override any Bootstrap and theme variables.
+
+/*-----------------------------------------------
+|   Social Outline Buttons
+-----------------------------------------------*/
+.btn-outline-weixin {
+  @include button-outline-variant($weixin);
+}
+
+.btn-outline-qq {
+  @include button-outline-variant($qq);
+}
