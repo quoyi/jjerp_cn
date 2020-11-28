@@ -6,7 +6,7 @@ RuCaptcha.configure do
   # self.expires_in = 120
 
   # Override cache_store configuration just only [:null_store, :memory_store, :file_store]
-  self.cache_store = :mem_cache_store
+  # self.cache_store = :mem_cache_store
 
   # Disable cache_store check
   # self.skip_cache_store_check = true
