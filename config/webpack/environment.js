@@ -4,13 +4,16 @@ const webpack = require('webpack')
 environment.plugins.prepend(
   'Provide',
   new webpack.ProvidePlugin({
-    $: 'jquery',
     _: 'lodash',
+    $: 'jquery',
     jQuery: 'jquery',
-    jquery: 'jquery',
+    is: 'is_js/is',
+    'window._': 'lodash',
+    'window.$': 'jquery',
+    'window.jQuery': 'jquery',
+    'window.is': 'is_js/is',
     Popper: ['popper.js', 'default'],
     ActionCable: '@rails/actioncable',
-    is: 'is_js/is',
     Stickyfill: 'stickyfilljs',
     PerfectScrollbar: 'perfect-scrollbar'
   })
