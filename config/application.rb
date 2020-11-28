@@ -36,6 +36,8 @@ module Jjerp
 
     config.autoload_paths << Rails.root.join("lib")
 
+    config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
+
     config.generators do |g|
       g.helper false
       g.stylesheets false
