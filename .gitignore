@@ -22,7 +22,6 @@ public/images/*
 database.yml
 config/secrets.yml
 
-*.lock
 !.gitignore
 
 # Ignore application configuration

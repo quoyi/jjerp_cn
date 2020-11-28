@@ -15,7 +15,8 @@ environment.plugins.prepend(
     Popper: ['popper.js', 'default'],
     ActionCable: '@rails/actioncable',
     Stickyfill: 'stickyfilljs',
-    PerfectScrollbar: 'perfect-scrollbar'
+    PerfectScrollbar: 'perfect-scrollbar',
+    Typed: 'typed.js'
   })
 );
 

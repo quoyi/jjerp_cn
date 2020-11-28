@@ -1,0 +1,21 @@
+@import "~bootstrap/scss/functions";
+@import "./theme/functions";
+@import "./dark/user-variables";
+@import "./dark/variables";
+@import "./theme/variables";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/bootstrap";
+
+// Flatpickr Darm theme
+@import "~flatpickr/dist/themes/dark.css";
+
+/*-----------------------------------------------
+|   Theme Styles
+-----------------------------------------------*/
+@import "./theme/theme";
+@import "./dark/override";
+
+/*-----------------------------------------------
+|   User Styles
+-----------------------------------------------*/
+@import "./dark/user";
