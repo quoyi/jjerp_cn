@@ -19,7 +19,7 @@ environment.plugins.prepend(
   })
 );
 
-// environment.splitChunks();
+environment.splitChunks();
 
 // 解决第三方库样式文件相对路径问题
 environment.loaders.get('sass').use.splice(-1, 0, {
