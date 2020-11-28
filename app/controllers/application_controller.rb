@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   # 重写用户登陆成功后跳转路径
   def after_sign_in_path_for(_resource)
     BaseService.user = current_user
-    validate_date? ? statics_home_path : statics_about_path
+    validate_date? ? home_path : root_path
   end
 
   # def after_sign_up_path_for(resource)
@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
     if validate_date?
       authenticate_user!
     else
-      render statics_about_path
+      render about_path
     end
   end
 

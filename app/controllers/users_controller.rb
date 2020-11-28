@@ -35,13 +35,13 @@ class UsersController < ApplicationController
   end
 
   def edit
-    redirect_to statics_home_path, error: '没有权限访问该页面！' unless update_permission?
+    redirect_to home_path, error: '没有权限访问该页面！' unless update_permission?
     @role = @user.roles.first
   end
 
   def profile
     @user = User.find_by(id: params[:user_id]) if params[:user_id].present?
-    redirect_to statics_home_path, error: '没有权限访问该页面！' unless update_permission?
+    redirect_to home_path, error: '没有权限访问该页面！' unless update_permission?
   end
 
   def update

@@ -78,10 +78,14 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :edit, :update] do
     get :profile
   end
+
   get 'areas/find'
-  get 'statics/home'
-  get 'statics/about'
-  root 'statics#index'
+
+  controller :static do
+    get :home, :about, :contact
+  end
+
+  root 'static#index'
 
   # mount ChinaCity::Engine => '/china_city'
 end
