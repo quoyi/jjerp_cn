@@ -1,20 +1,28 @@
 class StaticController < ApplicationController
   skip_before_action :authenticate!, except: [:home]
 
-  # GET /
+  # GET / 首页
   def index
     redirect_to home_path if current_user
   end
 
-  # GET /about
+  # GET /about 关于
   def about
   end
 
-  # GET /contact
+  # GET /contact 联系我们
   def contact
   end
 
-  # GET /home
+  # GET /terms 服务条款
+  def terms
+  end
+
+  # GET /privacy 隐私政策
+  def privacy
+  end
+
+  # GET /home 个人主页
   def home
     # current_user.roles.map{|r|r.nick}.include?("admin")
     # @indents = Indent.where(agent_id: current_user.id)

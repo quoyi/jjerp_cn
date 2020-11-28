@@ -82,7 +82,8 @@ Rails.application.routes.draw do
   get 'areas/find'
 
   controller :static do
-    get :home, :about, :contact
+    # 个人主页、关于、联系、服务条款、隐私政策
+    get :home, :about, :contact, :terms, :privacy
   end
 
   root 'static#index'
