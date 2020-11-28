@@ -1,10 +1,12 @@
 source 'https://rubygems.org'
 # source 'https://gems.ruby-china.com'
+
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}.git" }
 
 ruby '2.6.6'
 
 gem 'rails', '6.1.0.rc1'
+gem 'rails-i18n'
 # gem 'mysql2', '~> 0.5'
 gem 'pg'
 gem 'puma', '~> 5.0'
@@ -14,25 +16,32 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'redis', '~> 4.0'
 gem 'hiredis'
+gem 'image_processing', '~> 1.2'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-# Use Active Storage variant
-# gem 'image_processing', '~> 1.2'
 
 gem 'devise'
-# gem 'cancancan'
+gem 'cancancan'
 # gem 'rolify'
 
-# gem 'bootstrap-datepicker-rails', '~> 1.6', '>= 1.6.0.1'
-# gem 'select2-rails', '~> 4.0.3'
-
+gem 'kaminari'
 gem 'simple_form'
 gem 'nested_form'
+gem 'rucaptcha'
+gem 'recaptcha'
+gem 'social-share-button'
+gem 'ancestry'
+gem 'enumize'
+gem 'ransack'
+gem 'by_star', git: 'git://github.com/radar/by_star'
+gem 'bulk_insert', github: 'huacnlee/bulk_insert', branch: 'fix-for-rails-6.1'
 gem 'figaro'
-# gem 'by_star', git: 'git://github.com/radar/by_star'
+gem 'lograge'
+# gem 'activestorage-aliyun'
+gem 'rack-attack'
 gem 'sentry-raven'
-gem 'newrelic_rpm' # 性能监控(performance monitoring)
-
+# gem 'newrelic_rpm' # 性能监控(performance monitoring)
+# gem 'rails_workflow' # 工作流（已无法使用，需要修改）
 # 读写excel
 gem 'writeexcel', '~> 1.0', '>= 1.0.5'
 # 字符转换（解决乱码）
@@ -49,8 +58,6 @@ gem 'qiniu', '~> 6.8.1'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
-# 分页
-gem 'kaminari'
 
 # 打印
 gem 'prawn'
@@ -61,14 +68,18 @@ gem 'prawnto_2', require: 'prawnto'
 gem 'china_city'
 
 group :development, :test do
-  gem 'annotate'
+  gem 'bullet', github: 'flyerhzm/bullet'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'overcommit'
   gem 'pry'
-  gem 'rubocop'
+  gem 'pry-byebug'
 end
 
 group :development do
+  gem 'annotate'
+  gem 'rubocop'
+  gem 'better_errors'
+  gem 'binding_of_caller'
   gem 'capistrano', '~> 3.6'
   gem 'capistrano-bundler'
   gem 'capistrano-passenger'
@@ -76,6 +87,8 @@ group :development do
   gem 'capistrano-rails-db'
   gem 'capistrano-rvm'
   gem 'listen', '~> 3.2'
+  gem 'squasher'
   gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'web-console', '>= 4.0.3'
 end
