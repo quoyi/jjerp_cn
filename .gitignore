@@ -1,5 +1,32 @@
-log/*
-tmp/*
+/.bundle
+
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+
+/storage/*
+!/storage/.keep
+
+/public/assets
+.byebug_history
+
+/config/master.key
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+
+.DS_Store
+package-lock.json
+config/application.yml
 
 !public/excels/offers
 !public/excels/orders
@@ -13,28 +40,6 @@ public/excels/parts/*
 public/excels/sent_lists/*
 public/excels/incomes/*
 public/excels/expends/*
-
-public/assets/*
-
 !public/images
 public/images/*
 
-database.yml
-config/secrets.yml
-
-!.gitignore
-
-# Ignore application configuration
-config/application.yml
-
-# Mac drectory file
-.DS_Store
-
-/public/packs
-/public/packs-test
-/node_modules
-
-/yarn-error.log
-yarn-debug.log*
-.yarn-integrity
-package-lock.json
