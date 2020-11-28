@@ -12,7 +12,10 @@
 
 ActiveRecord::Schema.define(version: 2020_11_27_193723) do
 
-  create_table "active_storage_attachments", charset: "utf8", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -22,7 +25,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", charset: "utf8", force: :cascade do |t|
+  create_table "active_storage_blobs", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -34,13 +37,13 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", charset: "utf8", force: :cascade do |t|
+  create_table "active_storage_variant_records", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "agents", charset: "utf8", force: :cascade do |t|
+  create_table "agents", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.string "province"
     t.string "city"
@@ -70,7 +73,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["name"], name: "index_agents_on_name"
   end
 
-  create_table "banks", charset: "utf8", force: :cascade do |t|
+  create_table "banks", force: :cascade do |t|
     t.string "name"
     t.string "bank_name"
     t.string "bank_card"
@@ -83,14 +86,14 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["is_default"], name: "index_banks_on_is_default"
   end
 
-  create_table "cities", charset: "utf8", force: :cascade do |t|
+  create_table "cities", force: :cascade do |t|
     t.bigint "province_id"
     t.string "name"
     t.index ["province_id", "name"], name: "index_cities_on_province_id_and_name", unique: true
     t.index ["province_id"], name: "index_cities_on_province_id"
   end
 
-  create_table "craft_categories", charset: "utf8", force: :cascade do |t|
+  create_table "craft_categories", force: :cascade do |t|
     t.string "full_name", default: "", null: false
     t.string "uom", default: ""
     t.decimal "price", precision: 8, scale: 2, default: "0.0", null: false
@@ -101,7 +104,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["full_name"], name: "index_craft_categories_on_full_name", unique: true
   end
 
-  create_table "crafts", charset: "utf8", force: :cascade do |t|
+  create_table "crafts", force: :cascade do |t|
     t.bigint "order_id"
     t.bigint "craft_category_id"
     t.string "full_name", default: ""
@@ -118,7 +121,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["order_id"], name: "index_crafts_on_order_id"
   end
 
-  create_table "departments", charset: "utf8", force: :cascade do |t|
+  create_table "departments", force: :cascade do |t|
     t.string "name", null: false
     t.string "full_name", default: "", null: false
     t.bigint "user_id"
@@ -132,14 +135,14 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["user_id"], name: "index_departments_on_user_id"
   end
 
-  create_table "districts", charset: "utf8", force: :cascade do |t|
+  create_table "districts", force: :cascade do |t|
     t.bigint "city_id"
     t.string "name"
     t.index ["city_id", "name"], name: "index_districts_on_city_id_and_name", unique: true
     t.index ["city_id"], name: "index_districts_on_city_id"
   end
 
-  create_table "expends", charset: "utf8", force: :cascade do |t|
+  create_table "expends", force: :cascade do |t|
     t.string "name"
     t.bigint "bank_id"
     t.string "reason"
@@ -154,7 +157,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["bank_id"], name: "index_expends_on_bank_id"
   end
 
-  create_table "incomes", charset: "utf8", force: :cascade do |t|
+  create_table "incomes", force: :cascade do |t|
     t.string "name"
     t.bigint "bank_id"
     t.string "reason"
@@ -177,7 +180,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["order_id"], name: "index_incomes_on_order_id"
   end
 
-  create_table "indents", charset: "utf8", force: :cascade do |t|
+  create_table "indents", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "agent_id", null: false
     t.string "customer"
@@ -199,7 +202,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["name"], name: "index_indents_on_name"
   end
 
-  create_table "material_categories", charset: "utf8", force: :cascade do |t|
+  create_table "material_categories", force: :cascade do |t|
     t.integer "oftype", null: false
     t.string "name"
     t.string "note"
@@ -209,7 +212,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["oftype"], name: "index_material_categories_on_oftype"
   end
 
-  create_table "materials", charset: "utf8", force: :cascade do |t|
+  create_table "materials", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.string "full_name", null: false
     t.integer "ply", null: false
@@ -227,7 +230,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["supply_id"], name: "index_materials_on_supply_id"
   end
 
-  create_table "offers", charset: "utf8", force: :cascade do |t|
+  create_table "offers", force: :cascade do |t|
     t.bigint "indent_id"
     t.bigint "order_id"
     t.integer "display"
@@ -248,7 +251,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["order_id"], name: "index_offers_on_order_id"
   end
 
-  create_table "order_categories", charset: "utf8", force: :cascade do |t|
+  create_table "order_categories", force: :cascade do |t|
     t.string "name", null: false
     t.string "note"
     t.boolean "deleted", default: false, null: false
@@ -256,7 +259,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "orders", charset: "utf8", force: :cascade do |t|
+  create_table "orders", force: :cascade do |t|
     t.bigint "indent_id", null: false
     t.string "name", default: "", null: false
     t.bigint "order_category_id", default: 1, null: false
@@ -294,7 +297,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["order_category_id"], name: "index_orders_on_order_category_id"
   end
 
-  create_table "packages", charset: "utf8", force: :cascade do |t|
+  create_table "packages", force: :cascade do |t|
     t.bigint "order_id", null: false
     t.string "unit_ids", default: ""
     t.string "part_ids", default: ""
@@ -304,7 +307,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["order_id"], name: "index_packages_on_order_id"
   end
 
-  create_table "part_categories", charset: "utf8", force: :cascade do |t|
+  create_table "part_categories", force: :cascade do |t|
     t.bigint "parent_id", default: 1
     t.string "name", default: "", null: false
     t.decimal "buy", precision: 8, scale: 2, default: "0.0"
@@ -322,7 +325,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["supply_id"], name: "index_part_categories_on_supply_id"
   end
 
-  create_table "parts", charset: "utf8", force: :cascade do |t|
+  create_table "parts", force: :cascade do |t|
     t.bigint "part_category_id", null: false
     t.bigint "order_id", null: false
     t.string "name"
@@ -344,7 +347,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["supply_id"], name: "index_parts_on_supply_id"
   end
 
-  create_table "permissions", charset: "utf8", force: :cascade do |t|
+  create_table "permissions", force: :cascade do |t|
     t.string "name"
     t.string "klass", null: false
     t.string "actions", null: false
@@ -354,11 +357,11 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "provinces", charset: "utf8", force: :cascade do |t|
+  create_table "provinces", force: :cascade do |t|
     t.string "name"
   end
 
-  create_table "role_permissions", charset: "utf8", force: :cascade do |t|
+  create_table "role_permissions", force: :cascade do |t|
     t.bigint "role_id"
     t.bigint "permission_id"
     t.string "klass", null: false
@@ -370,7 +373,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["role_id"], name: "index_role_permissions_on_role_id"
   end
 
-  create_table "roles", charset: "utf8", force: :cascade do |t|
+  create_table "roles", force: :cascade do |t|
     t.string "name", null: false
     t.string "nick"
     t.string "note"
@@ -381,7 +384,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["name"], name: "index_roles_on_name"
   end
 
-  create_table "sent_lists", charset: "utf8", force: :cascade do |t|
+  create_table "sent_lists", force: :cascade do |t|
     t.string "name"
     t.integer "total"
     t.string "created_by"
@@ -390,7 +393,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "sents", charset: "utf8", force: :cascade do |t|
+  create_table "sents", force: :cascade do |t|
     t.integer "owner_id", null: false
     t.string "owner_type", null: false
     t.integer "sent_list_id"
@@ -410,7 +413,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "supplies", charset: "utf8", force: :cascade do |t|
+  create_table "supplies", force: :cascade do |t|
     t.string "name", null: false
     t.string "full_name", null: false
     t.string "mobile"
@@ -424,7 +427,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["name"], name: "index_supplies_on_name"
   end
 
-  create_table "tasks", charset: "utf8", force: :cascade do |t|
+  create_table "tasks", force: :cascade do |t|
     t.bigint "order_id"
     t.integer "item_id"
     t.string "item_type"
@@ -442,7 +445,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["order_id"], name: "index_tasks_on_order_id"
   end
 
-  create_table "templates", charset: "utf8", force: :cascade do |t|
+  create_table "templates", force: :cascade do |t|
     t.string "name", null: false
     t.integer "creator", null: false
     t.decimal "price", precision: 8, scale: 2, default: "0.0"
@@ -452,7 +455,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["name"], name: "index_templates_on_name"
   end
 
-  create_table "unit_categories", charset: "utf8", force: :cascade do |t|
+  create_table "unit_categories", force: :cascade do |t|
     t.string "name", null: false
     t.string "note"
     t.boolean "deleted", default: false, null: false
@@ -460,7 +463,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "units", charset: "utf8", force: :cascade do |t|
+  create_table "units", force: :cascade do |t|
     t.bigint "unit_category_id", default: 1
     t.bigint "order_id"
     t.string "name", default: "", null: false
@@ -501,7 +504,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["unit_category_id"], name: "index_units_on_unit_category_id"
   end
 
-  create_table "uoms", charset: "utf8", force: :cascade do |t|
+  create_table "uoms", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.string "val"
     t.string "note", default: ""
@@ -511,7 +514,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["name"], name: "index_uoms_on_name", unique: true
   end
 
-  create_table "user_categories", charset: "utf8", force: :cascade do |t|
+  create_table "user_categories", force: :cascade do |t|
     t.string "serial", null: false
     t.string "name", null: false
     t.string "nick", default: ""
@@ -523,7 +526,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["serial"], name: "index_user_categories_on_serial"
   end
 
-  create_table "user_roles", charset: "utf8", force: :cascade do |t|
+  create_table "user_roles", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "role_id"
     t.datetime "created_at", precision: 6, null: false
@@ -532,7 +535,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_193723) do
     t.index ["user_id"], name: "index_user_roles_on_user_id"
   end
 
-  create_table "users", charset: "utf8", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.integer "user_category", default: 0, null: false
     t.string "username", default: "", null: false
     t.string "mobile", default: "", null: false
