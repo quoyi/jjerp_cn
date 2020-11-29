@@ -51,7 +51,7 @@ gem 'writeexcel', github: 'cxn03651/writeexcel'
 gem 'whenever', github: 'javan/whenever'
 gem 'barby', github: 'toretore/barby' # 条形码
 gem 'chunky_png', github: 'wvanbergen/chunky_png'
-gem 'qiniu'
+# gem 'qiniu'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 # gem 'sdoc', '~> 0.4.0', group: :doc
