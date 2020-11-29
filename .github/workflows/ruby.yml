@@ -41,8 +41,7 @@ jobs:
     - name: Install library for postgres
       run: sudo apt-get install libpq-dev
     - name: Setup Database
-      run: |
-        bundle exec rails db:setup
+      run: bundle exec rails db:setup
       env:
         POSTGRES_PASSWORD: postgres
         POSTGRES_USER: postgres
