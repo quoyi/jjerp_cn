@@ -54,8 +54,8 @@ jobs:
         with:
           node-version: 12.18.3
           
-      - name: Rubocop
-        run: bin/rubocop
+      # - name: Rubocop
+      #   run: bin/rubocop
 
       - name: Install dependencies
         run: |
