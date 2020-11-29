@@ -33,7 +33,7 @@ gem 'social-share-button'
 gem 'ancestry'
 gem 'enumize'
 gem 'ransack', github: 'activerecord-hackery/ransack'
-gem 'by_star', git: 'git://github.com/radar/by_star'
+gem 'by_star', github: 'radar/by_star'
 gem 'bulk_insert', github: 'huacnlee/bulk_insert', branch: 'fix-for-rails-6.1'
 gem 'figaro'
 gem 'lograge'
@@ -43,15 +43,15 @@ gem 'sentry-raven'
 # gem 'newrelic_rpm' # 性能监控(performance monitoring)
 # gem 'rails_workflow' # 工作流（已无法使用，需要修改）
 # 读写excel
-gem 'writeexcel', '~> 1.0', '>= 1.0.5'
+gem 'writeexcel', github: 'cxn03651/writeexcel'
 # 字符转换（解决乱码）
 # gem 'iconv', '~> 1.0', '>= 1.0.4'
 
 # 定时任务，用于定时清理 public/excels/ 目录
-gem 'whenever', '~> 0.9.7'
-gem 'barby', '~> 0.6.4' # 条形码
-gem 'chunky_png'
-gem 'qiniu', '~> 6.8.1'
+gem 'whenever', github: 'javan/whenever'
+gem 'barby', github: 'toretore/barby' # 条形码
+gem 'chunky_png', github: 'wvanbergen/chunky_png'
+gem 'qiniu'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 # gem 'sdoc', '~> 0.4.0', group: :doc
