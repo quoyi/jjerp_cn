@@ -97,7 +97,7 @@
     <li class="nav-item dropdown dropdown-on-hover">
       <a class="nav-link pr-0" id="navbarDropdownUser" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <div class="avatar avatar-xl">
-          <img class="rounded-circle" src="../assets/img/team/3-thumb.png" alt="" />
+          <%= image_tag current_user.avatar_url, class: 'rounded-circle', alt: 'Avatar' %>
         </div>
       </a>
       <div class="dropdown-menu dropdown-menu-right py-0" aria-labelledby="navbarDropdownUser">
@@ -115,8 +115,8 @@
 
           <div class="dropdown-divider"></div>
 
-          <a class="dropdown-item" href="../pages/settings.html">Settings</a>
-          <a class="dropdown-item" href="../authentication/basic/logout.html">Logout</a>
+          <%= link_to '个人设置', user_profile_path(current_user), class: 'dropdown-item' %>
+          <%= link_to '退出系统', destroy_user_session_path, method: :delete, class: 'dropdown-item' %>
         </div>
       </div>
     </li>
@@ -125,81 +125,12 @@
 <% else %>
   <%# 未登录，显示 登录 & 注册 %>
   <ul class="navbar-nav ml-auto">
-    <!-- 登录 -->
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" id="navbarDropdownLogin" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">登录</a>
-      <div class="dropdown-menu dropdown-menu-right dropdown-menu-card" aria-labelledby="navbarDropdownLogin">
-        <div class="card shadow-none navbar-card-login">
-          <div class="card-body fs--1 p-4 font-weight-normal">
-            <!-- 标题 开始 -->
-            <div class="row text-left justify-content-between align-items-center mb-2">
-              <div class="col-auto"><h5 class="mb-0">登录</h5></div>
-              <div class="col-auto">
-                <p class="fs--1 text-600 mb-0">
-                  还没有账号？<%= link_to '注册账号', '#!', class: 'text-decoration-none', data: { toggle: 'modal', target: '#registerModal' } %>
-                </p>
-              </div>
-            </div>
-            <!-- 标题 结束 -->
-
-            <!-- 登录表单 开始 -->
-            <%= simple_form_for(User.new, url: new_user_session_url, html: { class: 'mt-3' }) do |f| %>
-              <div class="form-inputs">
-                <%= f.input :username, label: false, required: true, placeholder: '请输入账号' %>
-                <%= f.input :password, label: false, required: true, placeholder: '请输入密码' %>
-                <div class="row justify-content-between align-items-center">
-                  <div class="col-auto">
-                    <div class="custom-control custom-checkbox">
-                      <input class="custom-control-input" type="checkbox" id="modal-checkbox" />
-                      <label class="custom-control-label user-select-none" for="modal-checkbox">记住我的登录状态</label>
-                    </div>
-                  </div>
-                  <div class="col-auto">
-                    <%= link_to "忘记密码？", new_user_password_path, class: 'fs--1 text-decoration-none' %>
-                  </div>
-                </div>
-                <div class="form-actions">
-                  <%= f.submit '登       录', class: 'btn btn-primary btn-block mt-3' %>
-                </div>
-              </div>
-            <% end %>
-            <!-- 登录表单 结束 -->
-
-            <div class="w-100 position-relative mt-4">
-              <hr class="text-300" />
-              <div class="position-absolute absolute-centered t-0 px-3 bg-white text-sans-serif fs--1 text-500 text-nowrap user-select-none">第三方平台账号登录</div>
-            </div>
-
-            <!-- 三方登录 开始 -->
-            <div class="form-group mb-0">
-              <div class="row no-gutters">
-                <div class="col-sm-6 pr-sm-1">
-                  <%= link_to '#!', class: 'btn btn-outline-weixin btn-sm btn-block mt-2' do %>
-                    <span class="fab fa-weixin mr-2" data-fa-transform="grow-8"></span> 微信登录
-                  <% end %>
-                </div>
-                <div class="col-sm-6 pl-sm-1">
-                  <%= link_to '#', class: 'btn btn-outline-qq btn-sm btn-block mt-2' do %>
-                    <span class="fab fa-qq mr-2" data-fa-transform="grow-8"></span> QQ 登录
-                  <% end %>
-                </div>
-              </div>
-            </div>
-            <!-- 三方登录 结束 -->
-          </div>
-        </div>
-      </div>
+    <li class="nav-item">
+      <%= link_to "登录", new_user_session_path, remote: true, class: 'nav-link', aria: { haspopup: false, expanded: false } %>
     </li>
 
-    <!--
     <li class="nav-item">
-      <%#= link_to '登录', '#!', class: 'nav-link', data: { toggle: 'modal', target: '#authenticationModal' } %>
-    </li>
-    -->
-
-    <!-- 注册 -->
-    <li class="nav-item">
-      <%= link_to '注册账号', '#!', class: 'nav-link', data: { toggle: 'modal', target: '#authenticationModal' } %>
+      <%= link_to '注册账号', new_user_registration_path, remote: true, class: 'nav-link', aria: { haspopup: false, expanded: false } %>
     </li>
   </ul>
 <% end %>

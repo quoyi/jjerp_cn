@@ -1,0 +1,6 @@
+$modal = $('#globalModal');
+$('.modal-body', $modal).html("<%= j render partial: 'users/registrations/form' %>");
+<%# 显示后自动焦点 %>
+$modal.on('shown.bs.modal', () => $('#user_email').focus());
+<%# 显示 %>
+$modal.modal();

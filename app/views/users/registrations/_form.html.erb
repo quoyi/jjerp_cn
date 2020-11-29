@@ -1,0 +1,72 @@
+<%# 标题 %>
+<div class="row text-left justify-content-between align-items-center mb-2 user-select-none">
+  <div class="col-auto"><h5 id="authenticationModalLabel">注册账号</h5></div>
+  <div class="col-auto">
+    <p class="fs--1 text-600 mb-0">
+      已有账号？<%= link_to "马上登录", new_user_session_path, remote: true, class: 'text-decoration-none', aria: { haspopup: false, expanded: false } %>
+    </p>
+  </div>
+</div>
+
+<%# 注册表单 %>
+<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), remote: true, html: { class: 'mt-3' }) do |f| %>
+  <%= f.error_notification message: resource.errors %>
+  <%#= render "users/shared/error_messages", resource: resource %>
+
+  <div class="form-inputs">
+    <%#= f.input :username, label: false, required: true, placeholder: 'Username' %>
+    <%= f.input :email,
+                label: false,
+                required: true,
+                placeholder: '输入账号',
+                input_html: { autocomplete: "email" } %>
+
+    <div class="form-row">
+      <%= f.input :password,
+                  label: false,
+                  required: true,
+                  placeholder: '输入密码',
+                  wrapper_html: { class: 'col-6' },
+                  input_html: { autocomplete: "password" } %>
+      <%= f.input :password_confirmation,
+                  label: false,
+                  required: true,
+                  placeholder: '重复输入密码',
+                  wrapper_html: { class: 'col-6' },
+                  input_html: { autocomplete: "password" } %>
+    </div>
+
+    <div class="custom-control custom-checkbox">
+      <input class="custom-control-input" type="checkbox" id="modal-register-checkbox" />
+      <label class="custom-control-label user-select-none" for="modal-register-checkbox">
+        我同意 <%= link_to "《服务条款》", terms_path, class: 'text-decoration-none' %> 和 <%= link_to "《隐私政策》", privacy_path, class: 'text-decoration-none' %>。
+      </label>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit '注册账号', class: 'btn btn-primary btn-block mt-3', data: { disable_with: '提交中' } %>
+  </div>
+<% end %>
+
+<%# 分割线 %>
+<div class="w-100 position-relative mt-4">
+  <hr class="text-300" />
+  <div class="position-absolute absolute-centered t-0 px-3 bg-white text-sans-serif fs--1 text-500 text-nowrap user-select-none">第三方平台账号登录</div>
+</div>
+
+<%# 第三方登录 %>
+<div class="form-group mb-0">
+  <div class="row no-gutters">
+    <div class="col-sm-6 pr-sm-1">
+      <%= link_to '#!', class: 'btn btn-outline-weixin btn-sm btn-block mt-2' do %>
+        <span class="fab fa-weixin mr-2" data-fa-transform="grow-8"></span> 微信登录
+      <% end %>
+    </div>
+    <div class="col-sm-6 pl-sm-1">
+      <%= link_to '#', class: 'btn btn-outline-qq btn-sm btn-block mt-2' do %>
+        <span class="fab fa-qq mr-2" data-fa-transform="grow-8"></span> QQ 登录
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -409,6 +409,14 @@ SimpleForm.setup do |config|
     b.use :hint, wrap_with: { tag: 'small', class: 'form-text text-muted' }
   end
 
+  # 记住登录状态
+  config.wrappers :remember_boolean, tag: 'div', class: 'col-auto' do |b|
+    b.use :html5
+    b.wrapper :form_check_wrapper, tag: 'div', class: 'custom-control custom-checkbox' do |bb|
+      bb.use :input, class: 'custom-control-input'
+      bb.use :label, class: 'custom-control-label'
+    end
+  end
 
   # The default wrapper to be used by the FormBuilder.
   config.default_wrapper = :vertical_form
