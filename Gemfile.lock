@@ -6,6 +6,15 @@ GIT
       activesupport (>= 3.2.0)
 
 GIT
+  remote: https://github.com/activerecord-hackery/ransack.git
+  revision: d50885772cfa9c2534c06f7edb0eb4141f2e1a4a
+  specs:
+    ransack (2.4.0)
+      activerecord (>= 5.2.4)
+      activesupport (>= 5.2.4)
+      i18n
+
+GIT
   remote: https://github.com/flyerhzm/bullet.git
   revision: dfd77088eb8c06f8876ced1dee8a0111d08c1378
   specs:
@@ -290,10 +299,6 @@ GEM
       thor (~> 1.0)
     rainbow (3.0.0)
     rake (13.0.1)
-    ransack (2.4.0)
-      activerecord (>= 5.2.4)
-      activesupport (>= 5.2.4)
-      i18n
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -431,7 +436,7 @@ DEPENDENCIES
   rack-attack
   rails (= 6.1.0.rc1)
   rails-i18n
-  ransack
+  ransack!
   recaptcha
   redis (~> 4.0)
   rubocop
