@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_with_term!
-    return redirect_to(expired_url) if Date.today > Date.new(2018, 1, 15)
+    return redirect_to(expired_url) if Date.today > Date.new(2028, 1, 15)
 
     authenticate_user!
   end
