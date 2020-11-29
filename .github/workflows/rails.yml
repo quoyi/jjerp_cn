@@ -9,9 +9,9 @@ name: Rails
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ $default-branch ]
   pull_request:
-    branches: [ develop ]
+    branches: [ $default-branch ]
 
 jobs:
   test:
@@ -35,6 +35,9 @@ jobs:
           - 6379:6379
 
     steps:
+      - name: GitHub Status
+        uses: crazy-max/ghaction-github-status@v2
+
       - name: Set up actions
         uses: actions/checkout@v2
 
@@ -42,13 +45,17 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6
+          bundler-cache: true
         env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
       - name: Set up Nodejs
         uses: actions/setup-node@v1
         with:
           node-version: 12.18.3
+          
+      - name: Rubocop
+        run: rubocop
 
       - name: Install dependencies
         run: |
