@@ -12,9 +12,11 @@ AllCops:
     - 'bin/*'
     - 'config/application.rb'
     - 'config/deploy/staging.rb'
+    - 'config/environments/*.rb'
     - 'config/initializers/simple_form.rb'
     - 'config/initializers/simple_form_bootstrap.rb'
     - 'config/puma.rb'
+    - 'db/migrate/*.rb'
     - 'db/schema.rb'
 
 Bundler/OrderedGems:
@@ -31,7 +33,6 @@ Layout/EmptyLines:
   Exclude:
     - 'config/deploy/staging.rb'
     - 'db/init/basic.rb'
-    - 'db/migrate/20010101010101_devise_create_users.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -42,74 +43,11 @@ Layout/EmptyLinesAroundAttributeAccessor:
     - 'app/models/craft_category.rb'
     - 'app/models/user.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, no_empty_lines
-Layout/EmptyLinesAroundBlockBody:
-  Exclude:
-    - 'db/migrate/20010101010101_devise_create_users.rb'
-    - 'lib/tasks/my_task.rake'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Layout/EmptyLinesAroundMethodBody:
-  Exclude:
-    - 'db/migrate/20161216083655_change_decimal_scale.rb'
-
-# Offense count: 86
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment, AllowBeforeTrailingComments, ForceEqualSignAlignment.
-Layout/ExtraSpacing:
-  Exclude:
-    - 'bin/setup'
-    - 'db/migrate/20010101010107_create_departments.rb'
-    - 'db/migrate/20010101010125_create_tasks.rb'
-    - 'db/seeds.rb'
-
-# Offense count: 73
-# Cop supports --auto-correct.
-# Configuration parameters: AllowMultipleStyles, EnforcedHashRocketStyle, EnforcedColonStyle, EnforcedLastArgumentHashStyle.
-# SupportedHashRocketStyles: key, separator, table
-# SupportedColonStyles: key, separator, table
-# SupportedLastArgumentHashStyles: always_inspect, always_ignore, ignore_implicit, ignore_explicit
-Layout/HashAlignment:
-  Exclude:
-    - 'config/initializers/load_permissions.rb'
-    - 'lib/tasks/auto_annotate_models.rake'
-
-# Offense count: 19
-# Cop supports --auto-correct.
-# Configuration parameters: IndentationWidth, EnforcedStyle.
-# SupportedStyles: spaces, tabs
-Layout/IndentationStyle:
-  Exclude:
-    - 'db/migrate/20161203111920_update_part_number_scale.rb'
-    - 'db/migrate/20161210011222_remove_not_null_from_incomes.rb'
-    - 'db/migrate/20161210061055_add_agent_id_to_incomes.rb'
-    - 'db/migrate/20161216083655_change_decimal_scale.rb'
-
 # Offense count: 6
 # Cop supports --auto-correct.
 # Configuration parameters: Width, IgnoredPatterns.
 Layout/IndentationWidth:
   Exclude:
-    - 'db/migrate/20161203111920_update_part_number_scale.rb'
-    - 'db/migrate/20161210011222_remove_not_null_from_incomes.rb'
-    - 'db/migrate/20161210061055_add_agent_id_to_incomes.rb'
-    - 'db/migrate/20161216083655_change_decimal_scale.rb'
-
-# Offense count: 29
-# Cop supports --auto-correct.
-# Configuration parameters: AllowDoxygenCommentStyle, AllowGemfileRubyComment.
-Layout/LeadingCommentSpace:
-  Exclude:
-    - 'db/init/role.rb'
-    - 'db/migrate/20000427081831_create_supplies.rb'
-    - 'db/migrate/20010101010125_create_tasks.rb'
-    - 'db/migrate/20010101010128_create_units.rb'
-    - 'db/migrate/20160617133111_create_sents.rb'
-    - 'db/migrate/20160815072837_create_sent_lists.rb'
 
 # Offense count: 25
 # Cop supports --auto-correct.
@@ -117,8 +55,6 @@ Layout/SpaceAfterColon:
   Exclude:
     - 'db/init/basic.rb'
     - 'db/init/role.rb'
-    - 'db/migrate/20010101010128_create_units.rb'
-    - 'db/migrate/20160619003924_create_banks.rb'
 
 # Offense count: 6
 # Cop supports --auto-correct.
@@ -139,7 +75,6 @@ Layout/SpaceBeforeBlockBraces:
 # Configuration parameters: AllowForAlignment.
 Layout/SpaceBeforeFirstArg:
   Exclude:
-    - 'db/migrate/20010101010107_create_departments.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -167,21 +102,9 @@ Layout/TrailingEmptyLines:
     - 'config/schedule.rb'
     - 'db/init/basic.rb'
     - 'db/init/role.rb'
-    - 'db/migrate/20000101010103_create_districts.rb'
     - 'db/seeds.rb'
     - 'lib/account.rb'
     - 'lib/account/permission_denied.rb'
-
-# Offense count: 10
-# Cop supports --auto-correct.
-# Configuration parameters: AllowInHeredoc.
-Layout/TrailingWhitespace:
-  Exclude:
-    - 'db/init/role.rb'
-    - 'db/migrate/20010101010128_create_units.rb'
-    - 'db/migrate/20160617133111_create_sents.rb'
-    - 'db/migrate/20160815072837_create_sent_lists.rb'
-    - 'db/migrate/20161216112325_create_templates.rb'
 
 # Offense count: 2
 Lint/SelfAssignment:
@@ -241,50 +164,17 @@ Metrics/ModuleLength:
 Metrics/PerceivedComplexity:
   Max: 51
 
-# Offense count: 770
-# Configuration parameters: AllowedChars.
 Style/AsciiComments:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/CaseLikeIf:
-  Exclude:
-    - 'app/helpers/banks_helper.rb'
-
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: nested, compact
 Style/ClassAndModuleChildren:
-  Exclude:
-    - 'app/controllers/users/confirmations_controller.rb'
-    - 'app/controllers/users/omniauth_callbacks_controller.rb'
-    - 'app/controllers/users/passwords_controller.rb'
-    - 'app/controllers/users/registrations_controller.rb'
-    - 'app/controllers/users/sessions_controller.rb'
-    - 'app/controllers/users/unlocks_controller.rb'
+  EnforcedStyle: compact
 
-
-# Offense count: 147
 Style/Documentation:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty, nil, both
-Style/EmptyElse:
-  Exclude:
-    - 'db/seeds.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: compact, expanded
 Style/EmptyMethod:
-  Exclude:
-    - 'db/migrate/20161222063648_add_name_index_to_orders.rb'
+  EnforcedStyle: expanded
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -315,7 +205,6 @@ Style/FrozenStringLiteralComment:
 Style/HashSyntax:
   Exclude:
     - 'db/init/role.rb'
-    - 'db/migrate/20010101010109_create_materials.rb'
 
 
 # Offense count: 16
@@ -324,13 +213,6 @@ Style/IfUnlessModifier:
   Exclude:
     - 'db/init/role.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, MinBodyLength.
-# SupportedStyles: skip_modifier_ifs, always
-Style/Next:
-  Exclude:
-    - 'lib/tasks/my_task.rake'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -376,14 +258,9 @@ Style/StringLiterals:
     - 'config/initializers/sentry.rb'
     - 'config/schedule.rb'
     - 'db/init/role.rb'
-    - 'db/migrate/20010101010101_devise_create_users.rb'
-    - 'db/migrate/20160521061844_create_incomes.rb'
-    - 'db/migrate/20160617133111_create_sents.rb'
-    - 'db/migrate/20160827110024_create_uoms.rb'
     - 'db/schema.rb'
     - 'lib/account.rb'
     - 'lib/tasks/app.rake'
-    - 'lib/tasks/my_task.rake'
 
 # Offense count: 42
 # Cop supports --auto-correct.

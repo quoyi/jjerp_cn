@@ -40,6 +40,7 @@ config.action_mailer.smtp_settings = {
 
 ```sh
 grep -rl "ActiveRecord::Migration$" db | xargs sed -i "" "s/ActiveRecord::Migration/ActiveRecord::Migration[6.0]/g"
+squasher -m 6.0 -r 202012
 ```
 
 ## 移除 Sprockets
