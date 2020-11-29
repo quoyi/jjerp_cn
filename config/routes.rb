@@ -67,6 +67,12 @@ Rails.application.routes.draw do
   # 角色、权限、部门、部件、产品
   resources :roles, :permissions, :departments, :parts, :products
 
+  authenticate :user, ->(u) { u.admin? } do
+    # mount Sidekiq::Web, at: "sidekiq"
+    mount PgHero::Engine, at: 'pghero'
+    # mount ExceptionTrack::Engine, at: "exception-track"
+  end
+
   draw :users
 
   get 'areas/find'

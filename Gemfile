@@ -35,8 +35,11 @@ gem 'enumize'
 gem 'ransack', github: 'activerecord-hackery/ransack'
 gem 'by_star', github: 'radar/by_star'
 gem 'bulk_insert', github: 'huacnlee/bulk_insert', branch: 'fix-for-rails-6.1'
+gem 'pghero', github: 'ankane/pghero'
+gem 'pg_query', '>= 0.9.0'
 gem 'figaro'
 gem 'lograge'
+gem 'rubocop', require: false
 # gem 'activestorage-aliyun'
 gem 'rack-attack'
 gem 'sentry-raven'
@@ -77,7 +80,6 @@ end
 
 group :development do
   gem 'annotate'
-  gem 'rubocop'
   gem 'overcommit'
   gem 'better_errors'
   gem 'binding_of_caller'

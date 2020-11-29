@@ -8,6 +8,13 @@ GIT
       i18n
 
 GIT
+  remote: https://github.com/ankane/pghero.git
+  revision: 1340c30df38ecd503f84ced549ca2b912dbf6306
+  specs:
+    pghero (2.7.3)
+      activerecord (>= 5)
+
+GIT
   remote: https://github.com/cxn03651/writeexcel.git
   revision: d0345067c21b14a7141ba66b6752be8f4be379de
   specs:
@@ -265,6 +272,7 @@ GEM
       ast (~> 2.4.1)
     pdf-core (0.8.1)
     pg (1.2.3)
+    pg_query (1.2.0)
     prawn (2.3.0)
       pdf-core (~> 0.8.1)
       ttfunk (~> 1.6)
@@ -452,6 +460,8 @@ DEPENDENCIES
   nested_form
   overcommit
   pg
+  pg_query (>= 0.9.0)
+  pghero!
   prawn
   prawn-print
   prawn-table
