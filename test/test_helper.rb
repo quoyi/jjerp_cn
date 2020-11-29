@@ -3,6 +3,14 @@ require_relative '../config/environment'
 require 'rails/test_help'
 
 class ActiveSupport::TestCase
+  # parallelize_setup do |worker|
+  #   # setup databases
+  # end
+
+  # parallelize_teardown do |worker|
+  #   # cleanup databases
+  # end
+
   # Run tests in parallel with specified workers
   parallelize(workers: :number_of_processors)
 
