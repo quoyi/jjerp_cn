@@ -9,7 +9,8 @@ class UserCategoriesController < ApplicationController
 
   # GET /user_categories/1
   # GET /user_categories/1.json
-  def show; end
+  def show
+  end
 
   # GET /user_categories/new
   def new
@@ -17,7 +18,8 @@ class UserCategoriesController < ApplicationController
   end
 
   # GET /user_categories/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /user_categories
   # POST /user_categories.json

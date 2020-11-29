@@ -27,7 +27,8 @@ class SentListsController < ApplicationController
 
   # GET /sent_lists/1
   # GET /sent_lists/1.json
-  def show; end
+  def show
+  end
 
   # GET /sent_lists/new
   def new
@@ -35,7 +36,8 @@ class SentListsController < ApplicationController
   end
 
   # GET /sent_lists/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /sent_lists
   # POST /sent_lists.json
@@ -104,7 +106,7 @@ class SentListsController < ApplicationController
   def download
     respond_to do |format|
       format.xls do
-        send_file "#{Rails.root}/public/excels/sent_lists/" + @sent_list.name + '.xls', type: 'text/xls; charset=utf-8'
+        send_file Rails.root.join("public/excels/sent_lists/#{@sent_list.name}.xls"), type: 'text/xls; charset=utf-8'
       end
       format.pdf do
         # 打印尺寸毫米（长宽）

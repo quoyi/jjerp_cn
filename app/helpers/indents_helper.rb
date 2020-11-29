@@ -23,7 +23,7 @@ module IndentsHelper
 
   # 导出 配件清单
   def export_part_list(result)
-    wb = WriteExcel.new("#{Rails.root}/public/excels/parts/" + result['file_name'] + '.xls')
+    wb = WriteExcel.new(Rails.root.join("public/excels/parts/#{result['file_name']}.xls"))
     ws = wb.add_worksheet
     # 标题样式：水平居中、垂直居中、加粗、字号20
     title_format = wb.add_format(align: 'center', valign: 'vcenter', bold: 1, size: 20, border: 1)
@@ -53,49 +53,49 @@ module IndentsHelper
 
       indent_num += 1
 
-      ws.write_row('A' + indent_num.to_s, ['总订单号', value['indent'].name,
-                                           '代理商', value['indent'].agent.try(:full_name),
-                                           '终端客户', value['indent'].customer],
+      ws.write_row("A#{indent_num}", ['总订单号', value['indent'].name,
+                                      '代理商', value['indent'].agent.try(:full_name),
+                                      '终端客户', value['indent'].customer],
                    table_title_format)
       ws.set_row(indent_num - 1, 28) # 设置行高
 
       if num_cupboard.positive?
         indent_num += 1
-        ws.merge_range('A' + indent_num.to_s + ':F' + indent_num.to_s, "橱柜配件清单#{value['cupboard_orders_name'].join('，')}", table_title_format)
+        ws.merge_range("A#{indent_num}:F#{indent_num}", "橱柜配件清单#{value['cupboard_orders_name'].join('，')}", table_title_format)
         ws.set_row(indent_num - 1, 28) # 设置行高
         indent_num += 1
 
-        ws.merge_range('E' + indent_num.to_s + ':F' + indent_num.to_s, '', info_format)
-        ws.write_row('A' + indent_num.to_s, %w[名称 规格 品牌 数量 备注], table_header_format)
+        ws.merge_range("E#{indent_num}:F#{indent_num}", '', info_format)
+        ws.write_row("A#{indent_num}", %w[名称 规格 品牌 数量 备注], table_header_format)
         value['cupboard'].each_value do |cupboards|
           indent_num += 1
-          ws.merge_range('E' + indent_num.to_s + ':F' + indent_num.to_s, '', info_format)
-          ws.write_row('A' + indent_num.to_s, [cupboards.first.part_category.try(:name), cupboards.first.uom,
-                                               cupboards.first.brand, cupboards.map(&:number).sum,
-                                               cupboards.map(&:note).join(' ')], info_format)
+          ws.merge_range("E#{indent_num}:F#{indent_num}", '', info_format)
+          ws.write_row("A#{indent_num}", [cupboards.first.part_category.try(:name), cupboards.first.uom,
+                                          cupboards.first.brand, cupboards.map(&:number).sum,
+                                          cupboards.map(&:note).join(' ')], info_format)
         end
         indent_num += 1
-        ws.merge_range('A' + indent_num.to_s + ':F' + indent_num.to_s, '', info_format)
+        ws.merge_range("A#{indent_num}:F#{indent_num}", '', info_format)
       end
 
       next unless num_others.positive?
 
       indent_num += 1
-      ws.merge_range('A' + indent_num.to_s + ':F' + indent_num.to_s, "衣柜配件清单#{value['other_orders_name'].join('，')}", table_title_format)
+      ws.merge_range("A#{indent_num}:F#{indent_num}", "衣柜配件清单#{value['other_orders_name'].join('，')}", table_title_format)
       ws.set_row(indent_num - 1, 28) # 设置行高
       indent_num += 1
 
-      ws.merge_range('E' + indent_num.to_s + ':F' + indent_num.to_s, '', info_format)
-      ws.write_row('A' + indent_num.to_s, %w[名称 规格 品牌 数量 备注], table_header_format)
+      ws.merge_range("E#{indent_num}:F#{indent_num}", '', info_format)
+      ws.write_row("A#{indent_num}", %w[名称 规格 品牌 数量 备注], table_header_format)
       value['others'].each_value do |others|
         indent_num += 1
-        ws.merge_range('E' + indent_num.to_s + ':F' + indent_num.to_s, '', info_format)
-        ws.write_row('A' + indent_num.to_s, [others.first.part_category.try(:name), others.first.uom,
-                                             others.first.brand, others.map(&:number).sum,
-                                             others.first.note], info_format)
+        ws.merge_range("E#{indent_num}:F#{indent_num}", '', info_format)
+        ws.write_row("A#{indent_num}", [others.first.part_category.try(:name), others.first.uom,
+                                        others.first.brand, others.map(&:number).sum,
+                                        others.first.note], info_format)
       end
       indent_num += 1
-      ws.merge_range('A' + indent_num.to_s + ':F' + indent_num.to_s, '', info_format)
+      ws.merge_range("A#{indent_num}:F#{indent_num}", '', info_format)
     end
 
     wb.close

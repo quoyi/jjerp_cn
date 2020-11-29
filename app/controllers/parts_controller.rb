@@ -30,7 +30,8 @@ class PartsController < ApplicationController
   end
 
   # GET /parts/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /parts
   # POST /parts.json

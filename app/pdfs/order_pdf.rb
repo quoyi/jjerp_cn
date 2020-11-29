@@ -11,7 +11,7 @@ class OrderPdf < Prawn::Document
     # @length = mm2pt(length) - 4  # 可能需要转换
     # 生成条形码
     tmp_code = order.name.split('-')
-    barcode = Barby::Code39.new(tmp_code[1] + '-' + tmp_code[2])
+    barcode = Barby::Code39.new("#{tmp_code[1]}-#{tmp_code[2]}")
     File.open("#{Rails.root}/public/images/#{order.name}.png", 'wb') { |f| f.write barcode.to_png }
     # 调用 打印 方法
     ids.downto(1).each_with_index do |_id, index|

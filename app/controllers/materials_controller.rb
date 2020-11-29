@@ -40,7 +40,8 @@ class MaterialsController < ApplicationController
 
   # GET /materials/1
   # GET /materials/1.json
-  def show; end
+  def show
+  end
 
   # POST /materials/condition
   # POST /materials.json

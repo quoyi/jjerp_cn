@@ -69,7 +69,7 @@ gem 'china_city'
 
 group :development, :test do
   gem 'bullet', github: 'flyerhzm/bullet'
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'overcommit'
   gem 'pry'
   gem 'pry-byebug'

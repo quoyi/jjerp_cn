@@ -128,9 +128,9 @@ class OrdersController < ApplicationController
       format.xls do
         # 分页
         @download = @orders if params[:format] == 'xls'
-        filename = Time.now.strftime('%Y%m%d%H%M%S%L') + '.xls'
+        filename = "#{Time.now.strftime('%Y%m%d%H%M%S%L')}.xls"
         export_orders(filename, @download, params[:start_at], params[:end_at])
-        send_file "#{Rails.root}/public/excels/orders/" + filename, type: 'text/xls; charset=utf-8'
+        send_file Rails.root.join("public/excels/orders/#{filename}"), type: 'text/xls; charset=utf-8'
       end
     end
   end
@@ -176,7 +176,8 @@ class OrdersController < ApplicationController
   end
 
   # GET /orders/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /orders
   # POST /orders.json
@@ -443,7 +444,7 @@ class OrdersController < ApplicationController
         package = Package.find_or_create_by(order_id: @order.id)
         package.part_ids = @order.parts.pluck(:id).join(',')
         package.label_size = label_size
-        package.print_size = @length.to_s + '*' + @width.to_s
+        package.print_size = "#{@length}*#{@width}"
         package.is_batch = params[:is_batch].to_i if params[:is_batch].present?
         package.save!
         @order.parts.update_all(is_printed: true)
@@ -451,7 +452,7 @@ class OrdersController < ApplicationController
         IndentService.sync_status(@order.indent)
       elsif params[:order_unit_ids].present? && params[:order_unit_ids] != '{}'
         # 这些值需存在数据库表package中
-        logger.debug '自定义日志：' + label_size.to_s
+        logger.debug "自定义日志：#{label_size}"
         ids = ActiveSupport::JSON.decode(params[:order_unit_ids])
 
         ids.each_value do |value|
@@ -465,7 +466,7 @@ class OrdersController < ApplicationController
           package = Package.find_or_create_by(order_id: @order.id)
           package.unit_ids = unit_ids.compact.join(',')
           package.label_size = label_size
-          package.print_size = @length.to_s + '*' + @width.to_s
+          package.print_size = "#{@length}*#{@width}"
           package.is_batch = params[:is_batch].to_i if params[:is_batch].present?
           package.save!
           # 更新包装状态（已打印）
@@ -536,7 +537,7 @@ class OrdersController < ApplicationController
       @order.packages.create(unit_ids: @order.units.pluck(:id).join(','),
                              part_ids: @order.parts.pluck(:id).join(','),
                              label_size: label_size,
-                             print_size: length.to_s + '*' + width.to_s,
+                             print_size: "#{length}*#{width}",
                              is_batch: true)
     end
     respond_to do |format|

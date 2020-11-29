@@ -14,7 +14,8 @@ class RolesController < ApplicationController
   end
 
   # GET /roles/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /roles
   # POST /roles.json

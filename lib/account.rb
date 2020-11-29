@@ -1,3 +1,3 @@
-require "account/permission_denied"
+require 'account/permission_denied'
 module Account
 end

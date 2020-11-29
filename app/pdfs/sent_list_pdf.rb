@@ -15,7 +15,7 @@ class SentListPdf < Prawn::Document
 
   def print_content
     # sents = @sent_list.sents
-    text @sent_list.name + ' 发货清单', align: :left
+    text "#{@sent_list.name} 发货清单", align: :left
     tbody = [%w[序号 地区 收货人 联系方式 订单编号 橱 衣 门 配 合计 代收 物流名称 备注]]
     @sent_list.sents.each_with_index do |sent, index|
       sent_total = sent.cupboard + sent.robe + sent.door + sent.part
@@ -27,6 +27,6 @@ class SentListPdf < Prawn::Document
       row.width = mm2pt(297) - 10
     end
     count = @sent_list.sents.map { |sent| sent.cupboard + sent.robe + sent.door + sent.part }.flatten.sum
-    text '发货时间：[' + @sent_list.created_by.to_s + '][数量合计：' + count.to_s + ']件', align: :right
+    text "发货时间：[#{@sent_list.created_by}][数量合计：#{count}]件", align: :right
   end
 end

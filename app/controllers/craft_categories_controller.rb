@@ -13,7 +13,8 @@ class CraftCategoriesController < ApplicationController
 
   # GET /craft_categories/1
   # GET /craft_categories/1.json
-  def show; end
+  def show
+  end
 
   # GET /craft_categories/1
   # GET /craft_categories/1.json

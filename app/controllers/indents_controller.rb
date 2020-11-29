@@ -118,7 +118,7 @@ class IndentsController < ApplicationController
       #   render text: to_csv(@indent)
       # end
       format.xls do
-        send_file "#{Rails.root}/public/excels/offers/" + @indent.name + '.xls', type: 'text/xls; charset=utf-8'
+        send_file Rails.root.join("public/excels/offers/#{@indent.name}.xls"), type: 'text/xls; charset=utf-8'
       end
     end
   end
@@ -128,11 +128,11 @@ class IndentsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to indents_path, notice: '配件清单导出成功' }
       format.xls do
-        send_file "#{Rails.root}/public/excels/parts/" + params[:file_name] + '.xls', type: 'text/xls; charset=utf-8'
+        send_file Rails.root.join("public/excels/parts/#{params[:file_name]}.xls"), type: 'text/xls; charset=utf-8'
       end
     end
     # 不能删，否则下载时找不到文件
-    # File.delete("#{Rails.root}/public/excels/parts/" + params[:file_name] + ".xls")
+    # File.delete(Rails.root.join("public/excels/parts/#{params[:file_name]}.xls"))
   end
 
   # 配件清单预览(返回结果如下：)
@@ -142,7 +142,7 @@ class IndentsController < ApplicationController
       ids = params[:ids].split(',')
       @indents = Indent.where(id: ids).order(created_at: :desc)
       # 添加文件名称，方便下载使用
-      @result['file_name'] = '配件清单-' + Time.now.strftime('%Y%m%d-') + SecureRandom.hex(2).upcase
+      @result['file_name'] = "配件清单-#{Time.current.strftime('%Y%m%d-')}#{SecureRandom.hex(2).upcase}"
       @indents.each do |indent|
         indent_parts = {}
         indent_parts['indent'] = indent

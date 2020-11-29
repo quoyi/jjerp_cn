@@ -34,14 +34,15 @@ class IncomesController < ApplicationController
       format.xls do
         timestamp = Time.now.strftime('%Y%m%d%H%M%S%L')
         create_incomes(timestamp, @incomes)
-        send_file "#{Rails.root}/public/excels/incomes/" + timestamp + '.xls', type: 'text/xls; charset=utf-8'
+        send_file Rails.root.join("public/excels/incomes/#{timestamp}.xls"), type: 'text/xls; charset=utf-8'
       end
     end
   end
 
   # GET /incomes/1
   # GET /incomes/1.json
-  def show; end
+  def show
+  end
 
   # GET /incomes/new
   def new

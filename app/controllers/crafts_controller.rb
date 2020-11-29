@@ -25,7 +25,8 @@ class CraftsController < ApplicationController
 
   # GET /crafts/1
   # GET /crafts/1.json
-  def show; end
+  def show
+  end
 
   # GET /crafts/new
   def new
@@ -33,7 +34,8 @@ class CraftsController < ApplicationController
   end
 
   # GET /crafts/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /crafts
   # POST /crafts.json

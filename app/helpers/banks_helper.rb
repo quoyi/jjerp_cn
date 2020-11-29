@@ -6,11 +6,12 @@ module BanksHelper
   def update_income_expend(bank_id, money, type)
     bank = Bank.find_by_id(bank_id)
     # 添加支出时，需要增、减余额
-    if type == 'income'
+    case type
+    when 'income'
       bank.update!(balance: bank.balance - money, expends: bank.expends + money)
       # bank.expends += money
       # bank.balance -= money
-    elsif type == 'expend' # 添加收入时，需要增、减余额
+    when 'expend'
       # bank.incomes += money
       # bank.balance += money
       bank.update!(balance: bank.balance + money, incomes: bank.incomes + money)

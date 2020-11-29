@@ -8,7 +8,7 @@ class Part < ApplicationRecord
 
   # 自动生成编号
   def generate_name
-    self.name = order.name + '-p-' + (Part.where(order_id: order.id).size + 1).to_s
+    self.name = "#{order.name}-p-#{Part.where(order_id: order.id).size + 1}"
   end
 end
 

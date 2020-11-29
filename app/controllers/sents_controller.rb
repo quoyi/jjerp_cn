@@ -30,7 +30,8 @@ class SentsController < ApplicationController
 
   # GET /sents/1
   # GET /sents/1.json
-  def show; end
+  def show
+  end
 
   # GET /sents/new
   def new
@@ -38,7 +39,8 @@ class SentsController < ApplicationController
   end
 
   # GET /sents/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /sents
   # POST /sents.json
@@ -198,7 +200,7 @@ class SentsController < ApplicationController
       IndentService.sync_status(@sent.owner.indent) if @sent.owner.instance_of?(Order)
       if sent_list.sents.empty?
         sent_list.destroy!
-        filename = "#{Rails.root}/public/excels/sent_lists/" + sent_list.name + '.xls'
+        filename = Rails.root.join("public/excels/sent_lists/#{sent_list.name}.xls")
         # 删除文件
         File.delete(filename) if File.exist?(filename)
         redirect_to sent_lists_path, notice: '发货记录已删除！'
@@ -226,7 +228,7 @@ class SentsController < ApplicationController
         values << i + 1
         values << obj.area
         values << obj.receiver
-        values << "\t" + obj.contact
+        values << "\t#{obj.contact}"
         values << obj.owner.name
         values << obj.cupboard
         values << obj.robe

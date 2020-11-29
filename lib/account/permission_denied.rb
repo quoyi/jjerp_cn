@@ -1,4 +1,2 @@
-module Account
-  class PermissionDenied < StandardError
-  end
+class Account::PermissionDenied < StandardError
 end

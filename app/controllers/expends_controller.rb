@@ -22,7 +22,8 @@ class ExpendsController < ApplicationController
 
   # GET /expends/1
   # GET /expends/1.json
-  def show; end
+  def show
+  end
 
   # GET /expends/new
   def new
@@ -30,7 +31,8 @@ class ExpendsController < ApplicationController
   end
 
   # GET /expends/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /expends
   # POST /expends.json

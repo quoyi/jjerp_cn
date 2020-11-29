@@ -83,7 +83,8 @@ class AgentsController < ApplicationController
   end
 
   # GET /agents/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /agents
   # POST /agents.json

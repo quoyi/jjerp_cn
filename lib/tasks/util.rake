@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :util do
   desc '清理 public/excels/**/*.xls 临时文件'
   task :clear do

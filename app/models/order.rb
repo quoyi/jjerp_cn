@@ -42,10 +42,10 @@ class Order < ApplicationRecord
   # end
 
   # 订单状态：0.报价中 1.已报价 2.生产中 3.已入库 4.已发货
-  enum status: [:offering, :offered, :producing, :packaged, :sending, :sent, :over]
+  enum status: %i[offering offered producing packaged sending sent over]
 
   def self.status
-    [['报价中', 'offering'], ['已报价', 'offered'], ['生产中', 'producing'], ['已入库', 'packaged'], ['发货中', 'sending'], ['已发货', 'sent'], ['已完成', 'over']]
+    [%w[报价中 offering], %w[已报价 offered], %w[生产中 producing], %w[已入库 packaged], %w[发货中 sending], %w[已发货 sent], %w[已完成 over]]
   end
 
   def status_name
@@ -75,10 +75,10 @@ class Order < ApplicationRecord
   end
 
   # 类型：0.正常单 1.补单 3.加急单  4.批量单
-  enum oftype: [:normal, :add, :fast, :batch]
+  enum oftype: %i[normal add fast batch]
 
   def self.oftype
-    [['正常单', 'normal'], ['补单', 'add'], ['加急单', 'fast'], ['批量单', 'batch']]
+    [%w[正常单 normal], %w[补单 add], %w[加急单 fast], %w[批量单 batch]]
   end
 
   def oftype_name

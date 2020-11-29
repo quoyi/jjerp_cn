@@ -10,7 +10,8 @@ class UomsController < ApplicationController
 
   # GET /uoms/1
   # GET /uoms/1.json
-  def show; end
+  def show
+  end
 
   # GET /uoms/new
   def new

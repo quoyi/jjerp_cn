@@ -9,7 +9,8 @@ class TemplatesController < ApplicationController
 
   # GET /templates/1
   # GET /templates/1.json
-  def show; end
+  def show
+  end
 
   # GET /templates/new
   def new
@@ -17,7 +18,8 @@ class TemplatesController < ApplicationController
   end
 
   # GET /templates/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /templates
   # POST /templates.json

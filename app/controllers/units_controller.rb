@@ -13,7 +13,8 @@ class UnitsController < ApplicationController
 
   # GET /units/1
   # GET /units/1.json
-  def show; end
+  def show
+  end
 
   # GET /units/new
   def new
@@ -21,7 +22,8 @@ class UnitsController < ApplicationController
   end
 
   # GET /units/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /units
   # POST /units.json

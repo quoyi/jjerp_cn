@@ -9,7 +9,8 @@ class DepartmentsController < ApplicationController
 
   # GET /departments/1
   # GET /departments/1.json
-  def show; end
+  def show
+  end
 
   # GET /departments/new
   def new
@@ -17,7 +18,8 @@ class DepartmentsController < ApplicationController
   end
 
   # GET /departments/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /departments
   # POST /departments.json

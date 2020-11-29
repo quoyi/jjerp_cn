@@ -29,7 +29,7 @@ class Unit < ApplicationRecord
     unit_last = order.units.last
     last = unit_last.name.split('-B-'.upcase)[1] if unit_last.present?
 
-    self.name = (order_name + '-B-' + (last.to_i + 1).to_s).upcase unless name.present?
+    self.name = "#{order_name}-B-#{last.to_i + 1}".upcase unless name.present?
   end
 
   # 指定 ply 是否为背板

@@ -9,7 +9,7 @@ class Material < ApplicationRecord
 
   # 生成编码
   def generate_code
-    self.name = 'JCBL' + Time.new.strftime('%y%m%d') + SecureRandom.hex(2).upcase
+    self.name = "JCBL#{Time.new.strftime('%y%m%d')}#{SecureRandom.hex(2).upcase}"
     ply = MaterialCategory.find_by_id(ply).try(:name)
     texture = MaterialCategory.find_by_id(texture).try(:name)
     color = MaterialCategory.find_by_id(color).try(:name)
