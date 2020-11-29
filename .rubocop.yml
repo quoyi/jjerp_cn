@@ -73,7 +73,7 @@ Style/AsciiComments:
   Enabled: false
 
 Style/ClassAndModuleChildren:
-  EnforcedStyle: compact
+  Enabled: false
 
 Style/Documentation:
   Enabled: false
