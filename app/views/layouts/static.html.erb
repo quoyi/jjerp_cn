@@ -3,10 +3,7 @@
     <main class="main" id="top">
       <%= render 'layouts/navbar' %>
       
-        <%# 常规页面需要包裹 %>
-        <div class="container pt-7" data-layout="container">
-          <%= yield %>
-        </div>
+      <%= yield %>
 
       <%= render 'layouts/footer' %>
       <%= render 'layouts/modal' %>

@@ -4,12 +4,32 @@
   <%= content_tag :div, params[:message], :id => "flash_danger" %>
 </div>
 <% end %>
+
+<div class="card mb-3">
+  <div class="card-body rounded-soft bg-gradient">
+    <div class="row text-white align-items-center no-gutters">
+      <div class="col">
+        <h4 class="text-white mb-0">Today $764.39</h4>
+        <p class="fs--1 font-weight-semi-bold">Yesterday <span class="opacity-50">$684.87</span></p>
+      </div>
+      <div class="col-auto d-none d-sm-block">
+        <select class="custom-select custom-select-sm mb-3" id="dashboard-chart-select">
+          <option value="all">All Payments</option>
+          <option value="successful" selected="selected">Successful Payments</option>
+          <option value="failed">Failed Payments</option>
+        </select>
+      </div>
+    </div>
+    <canvas class="max-w-100 rounded" id="chart-line" width="1618" height="375" aria-label="Line chart" role="img"></canvas>
+  </div>
+</div>
+
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
     <div class="panel-title">
       <h2 class="pull-left"><i class="fa fa-lg fa-desktop"></i> 个人首页 </h2>
       <div class="pull-right panel-options">
-        <%= link_to '刷新', home_path, class: 'btn btn-info' %>
+        <%= link_to '刷新', user_path(current_user), class: 'btn btn-info' %>
         <%= link_to '个人设置', user_profile_path(current_user), class: 'btn btn-default' %>
       </div>
     </div>

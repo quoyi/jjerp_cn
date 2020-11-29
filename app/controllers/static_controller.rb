@@ -1,9 +1,9 @@
 class StaticController < ApplicationController
-  skip_before_action :authenticate_with_term!, except: %i[home]
+  skip_before_action :authenticate_with_term!
 
   # GET / 首页
   def index
-    redirect_to home_path if current_user
+    redirect_to user_path(current_user) if current_user
   end
 
   # GET /about 关于
@@ -27,8 +27,8 @@ class StaticController < ApplicationController
   end
 
   # GET /home 个人主页
-  def home
-    # current_user.roles.map{|r|r.nick}.include?("admin")
-    # @indents = Indent.where(agent_id: current_user.id)
-  end
+  # def home
+  #   # current_user.roles.map{|r|r.nick}.include?("admin")
+  #   # @indents = Indent.where(agent_id: current_user.id)
+  # end
 end

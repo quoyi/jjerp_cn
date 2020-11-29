@@ -27,9 +27,10 @@
                         还没有账号?<br>
                         <%= link_to '立刻注册', new_user_registration_path, class: 'text-white text-underline' %>
                       </p>
-                      <p class="mb-0 mt-4 mt-md-5 fs--1 font-weight-semi-bold text-white opacity-75">Read our 
-                        <a class="text-underline text-white" href="#!">terms</a> and 
-                        <a class="text-underline text-white" href="#!">conditions </a>
+                       和 
+                      <p class="mb-0 mt-4 mt-md-5 fs--1 font-weight-semi-bold text-white opacity-75">
+                        <%= link_to "《服务条款》", terms_path, class: 'text-underline text-white' %>
+                        和 <%= link_to "《隐私政策》", privacy_path, class: 'text-underline text-white' %>
                       </p>
                     </div>
                   </div>

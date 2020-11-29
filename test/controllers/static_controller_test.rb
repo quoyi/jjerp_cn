@@ -31,8 +31,8 @@ class StaticControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should get home' do
-    get home_url
-    assert_redirected_to new_user_session_url
-  end
+  # test 'should get home' do
+  #   get home_url
+  #   assert_redirected_to new_user_session_url
+  # end
 end
