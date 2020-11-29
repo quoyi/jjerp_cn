@@ -70,7 +70,6 @@ gem 'china_city'
 group :development, :test do
   gem 'bullet', github: 'flyerhzm/bullet'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'overcommit'
   gem 'pry'
   gem 'pry-byebug'
 end
@@ -78,6 +77,7 @@ end
 group :development do
   gem 'annotate'
   gem 'rubocop'
+  gem 'overcommit'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'capistrano', '~> 3.6'
@@ -91,4 +91,13 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'web-console', '>= 4.0.3'
+end
+
+group :test do
+  gem 'database_cleaner-active_record'
+  gem 'database_cleaner-redis'
+  gem 'rails-controller-testing'
+  gem 'capybara', '>= 3.26'
+  gem 'selenium-webdriver'
+  gem 'webdrivers'
 end

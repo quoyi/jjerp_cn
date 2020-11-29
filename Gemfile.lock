@@ -92,6 +92,8 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
+    addressable (2.7.0)
+      public_suffix (>= 2.0.2, < 5.0)
     airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
     ancestry (3.2.1)
@@ -131,7 +133,15 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
-    childprocess (4.0.0)
+    capybara (3.34.0)
+      addressable
+      mini_mime (>= 0.1.3)
+      nokogiri (~> 1.8)
+      rack (>= 1.6.0)
+      rack-test (>= 0.6.3)
+      regexp_parser (~> 1.5)
+      xpath (~> 3.2)
+    childprocess (3.0.0)
     china_city (0.0.4)
       jquery-rails
       rails (>= 3.1.0)
@@ -147,6 +157,13 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.7)
     crass (1.0.6)
+    database_cleaner (1.8.5)
+    database_cleaner-active_record (1.8.0)
+      activerecord
+      database_cleaner (~> 1.8.0)
+    database_cleaner-redis (1.8.0)
+      database_cleaner (~> 1.8.0)
+      redis
     debug_inspector (0.0.3)
     devise (4.7.3)
       bcrypt (~> 3.0)
@@ -254,6 +271,7 @@ GEM
     pry-byebug (3.9.0)
       byebug (~> 11.0)
       pry (~> 0.13.0)
+    public_suffix (4.0.6)
     puma (5.0.4)
       nio4r (~> 2.0)
     qiniu (6.8.1)
@@ -283,6 +301,10 @@ GEM
       bundler (>= 1.15.0)
       railties (= 6.1.0.rc1)
       sprockets-rails (>= 2.0.0)
+    rails-controller-testing (1.0.5)
+      actionpack (>= 5.0.1.rc1)
+      actionview (>= 5.0.1.rc1)
+      activesupport (>= 5.0.1.rc1)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -305,7 +327,7 @@ GEM
     recaptcha (5.6.0)
       json
     redis (4.2.5)
-    regexp_parser (2.0.0)
+    regexp_parser (1.8.2)
     request_store (1.5.0)
       rack (>= 1.4)
     responders (3.0.1)
@@ -333,8 +355,12 @@ GEM
     ruby-vips (2.0.17)
       ffi (~> 1.9)
     ruby2_keywords (0.0.2)
+    rubyzip (2.3.0)
     rucaptcha (2.5.3)
       railties (>= 3.2)
+    selenium-webdriver (3.142.7)
+      childprocess (>= 0.5, < 4.0)
+      rubyzip (>= 1.2.2)
     semantic_range (2.3.0)
     sentry-raven (3.1.1)
       faraday (>= 1.0)
@@ -377,6 +403,10 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
+    webdrivers (4.4.1)
+      nokogiri (~> 1.6)
+      rubyzip (>= 1.3.0)
+      selenium-webdriver (>= 3.0, < 4.0)
     webpacker (5.2.1)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
@@ -388,6 +418,8 @@ GEM
     whenever (0.9.7)
       chronic (>= 0.6.3)
     writeexcel (1.0.5)
+    xpath (3.2.0)
+      nokogiri (~> 1.8)
     zeitwerk (2.4.2)
 
 PLATFORMS
@@ -411,8 +443,11 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rails-db
   capistrano-rvm
+  capybara (>= 3.26)
   china_city
   chunky_png
+  database_cleaner-active_record
+  database_cleaner-redis
   devise
   enumize
   figaro
@@ -435,12 +470,14 @@ DEPENDENCIES
   qiniu (~> 6.8.1)
   rack-attack
   rails (= 6.1.0.rc1)
+  rails-controller-testing
   rails-i18n
   ransack!
   recaptcha
   redis (~> 4.0)
   rubocop
   rucaptcha
+  selenium-webdriver
   sentry-raven
   simple_form
   social-share-button
@@ -449,6 +486,7 @@ DEPENDENCIES
   squasher
   turbolinks (~> 5)
   web-console (>= 4.0.3)
+  webdrivers
   webpacker (~> 5.0)
   whenever (~> 0.9.7)
   writeexcel (~> 1.0, >= 1.0.5)
