@@ -51,7 +51,3 @@ config/application.yml
 /public/excels/sent_lists/*
 !/public/excels/sent_lists/
 !/public/excels/sent_lists/.keep
-
-/public/images/*
-!/public/images/
-!/public/images/.keep
