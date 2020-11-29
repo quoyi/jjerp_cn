@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'qiniu'
-Qiniu.establish_connection! access_key: 'ttBdVzznFEazytbwWBqoHUwRKCFPo3osakSGg5Nv',
-                            secret_key: 'ExLSnZ1Z-KOGV5Qt_4EAw0gt45fkcBojBNX0jzw2'
+# require 'qiniu'
+# Qiniu.establish_connection! access_key: 'ttBdVzznFEazytbwWBqoHUwRKCFPo3osakSGg5Nv',
+#                             secret_key: 'ExLSnZ1Z-KOGV5Qt_4EAw0gt45fkcBojBNX0jzw2'
 
 # # 要上传的空间
 # bucket = 'jjerp-cn'
