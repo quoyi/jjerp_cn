@@ -1,5 +1,5 @@
 namespace :util do
-  desc '清除 public/excels/**/*.xls 临时文件'
+  desc '清理 public/excels/**/*.xls 临时文件'
   task :clear do
     # excels = Dir.glob(Rails.root.join('public/excels/**/*.xls'))
     # File.delete(*excels)
@@ -9,5 +9,12 @@ namespace :util do
         File.delete(file)
       end
     end
+  end
+
+  desc '生成项目配置文件 application.yml'
+  task :config do
+    template = Rails.root.join('config/application.example.yml')
+    target = Rails.root.join('config/application.yml')
+    cp template, target, verbose: true unless File.exist?(target)
   end
 end

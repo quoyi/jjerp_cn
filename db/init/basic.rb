@@ -62,7 +62,6 @@ Material.create(id: 18, ply: 6, texture: 9, color: 15, store: 50, buy: 100.00, p
 Material.create(id: 19, ply: 6, texture: 10, color: 14, store: 50, buy: 100.00, price: 290.00, name: '39fd6s', full_name: '国色天香密度板18mm', uom: '平方', supply_id: 1);
 puts 'created Material success ! '
 
-
 ####################################### 银行卡 #######################################
 Bank.create(name: '张三', bank_name: '中国银行', bank_card: '627001702381000001', balance: 0, is_default: 1)
 Bank.create(name: '李四', bank_name: '工商银行', bank_card: '627001702381000002', balance: 0)
