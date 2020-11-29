@@ -35,43 +35,44 @@ jobs:
           - 6379:6379
 
     steps:
-    - uses: actions/checkout@v2
+      - name: Set up actions
+        uses: actions/checkout@v2
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.6
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
-    - name: Set up Nodejs
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12.18.3
+      - name: Set up Nodejs
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.18.3
 
-    - name: Install dependencies
-      run: |
-          sudo apt-get -yqq install libpq-dev build-essential libcurl4-openssl-dev
-          gem install bundler
-          bundle install --jobs 4 --retry 3
-          yarn install
+      - name: Install dependencies
+        run: |
+            sudo apt-get -yqq install libpq-dev build-essential libcurl4-openssl-dev
+            gem install bundler
+            bundle install --jobs 4 --retry 3
+            yarn install
 
-    - name: Setup test database
-      env:
-        RAILS_ENV: test
-        PGHOST: localhost
-        POSTGRES_DB: actions_test
-        POSTGRES_USER: actions_postgres
-        POSTGRES_PASSWORD: actions_postgres
-      run: |
-        cp config/database.ci.yml config/database.yml
-        rake db:create db:migrate
+      - name: Set up database
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+          POSTGRES_DB: actions_test
+          POSTGRES_USER: actions_postgres
+          POSTGRES_PASSWORD: actions_postgres
+        run: |
+          cp config/database.ci.yml config/database.yml
+          rake db:create db:migrate
 
-    - name: Run tests
-      env:
-        PGHOST: localhost
-        POSTGRES_DB: actions_test
-        POSTGRES_USER: actions_postgres
-        POSTGRES_PASSWORD: actions_postgres
-        PGPORT: ${{ job.services.postgres.ports[5432] }}
-      run: bundle exec rails test
+      - name: Run tests
+        env:
+          PGHOST: localhost
+          POSTGRES_DB: actions_test
+          POSTGRES_USER: actions_postgres
+          POSTGRES_PASSWORD: actions_postgres
+          PGPORT: ${{ job.services.postgres.ports[5432] }}
+        run: bundle exec rails test
