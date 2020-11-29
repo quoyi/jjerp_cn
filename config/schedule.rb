@@ -24,6 +24,6 @@ set :output, "/home/zw/work/jjerp.cn/log/crontab.log"
 
 # 定时任务(每天晚上12点删除 public/excels/* )
 every :day, at: '12:00 pm' do
-  # 执行 自定义 task:clear_excels 清除 .xls 文件
-  rake "my_task:clear_excels"
+  # 执行 自定义 task 清除 .xls 文件
+  rake "util:clear"
 end
