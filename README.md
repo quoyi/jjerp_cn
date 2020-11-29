@@ -1,5 +1,9 @@
 # 初始化 jjerp.cn 代码仓库
 
+## TODOList
+
+- [ ] 重构 `db/init/area.rb` 数据 [县以上行政区划代码](http://www.mca.gov.cn/article/sj/xzqh/2020/2020/2020112010001.html)
+
 ## 项目笔记
 
 ```shell

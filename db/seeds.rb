@@ -8,18 +8,15 @@
 ####################################### 用户种类 #######################################
 
 # 根据不同环境，初始化数据
-if Rails.env.development?  # 开发环境
+if Rails.env.development? # 开发环境
   # 初始化开发环境数据
   require "#{Rails.root}/db/init/area"
   require "#{Rails.root}/db/init/role"
   require "#{Rails.root}/db/init/basic"
-elsif Rails.env.production?  # 生产环境
+elsif Rails.env.production? # 生产环境
   # 初始化生产环境数据
   require "#{Rails.root}/db/init/area"
   require "#{Rails.root}/db/init/role"
-else # 其他（测试）环境
-  # 初始化测试环境数据
-  # require "#{Rails.root}/db/init/role"
 end
 
 ####################################### 权限 #######################################
@@ -38,4 +35,3 @@ end
 # Permission.find_or_create_by!(name: '收入', klass: 'IncomesController', actions: 'index,edit,update,:destroy,:show')
 # Permission.find_or_create_by!(name: '支出', klass: 'ExpendsController', actions: 'index,edit,update,:destroy,:show')
 # puts 'created Role success ! '
-
