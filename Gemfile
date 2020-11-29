@@ -94,8 +94,8 @@ group :development do
 end
 
 group :test do
-  gem 'database_cleaner-active_record'
-  gem 'database_cleaner-redis'
+  # gem 'database_cleaner-active_record'
+  # gem 'database_cleaner-redis'
   gem 'rails-controller-testing'
   gem 'capybara', '>= 3.26'
   gem 'selenium-webdriver'
