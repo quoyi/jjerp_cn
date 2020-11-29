@@ -67,13 +67,17 @@ Rails.application.routes.draw do
   # 角色、权限、部门、部件、产品
   resources :roles, :permissions, :departments, :parts, :products
 
-  devise_for :users, controllers: {
-    sessions: 'users/sessions',
-    registrations: 'users/registrations',
-    passwords: 'users/passwords',
-    confirmations: 'users/confirmations',
-    unlocks: 'users/unlocks'
-  }
+  # 参考文档
+  devise_for :users, path: '',
+                     path_names: {
+                       sign_in: 'login',
+                       sign_out: 'logout',
+                       password: 'secret',
+                       confirmation: 'verify',
+                       unlock: 'unlock',
+                       registration: 'register',
+                       sign_up: 'register'
+                     }
   # 自定义 controller 必须在 devise 之下定义，否则会被覆盖(冲突)
   resources :users, only: %i[index edit update] do
     get :profile
@@ -82,8 +86,8 @@ Rails.application.routes.draw do
   get 'areas/find'
 
   controller :static do
-    # 个人主页、关于、联系、服务条款、隐私政策
-    get :home, :about, :contact, :terms, :privacy
+    # 关于、联系、服务条款、隐私政策、授权过期、个人主页
+    get :about, :contact, :terms, :privacy, :expired, :home
   end
 
   root 'static#index'

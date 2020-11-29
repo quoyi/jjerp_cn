@@ -94,3 +94,8 @@ squasher -m 6.0 -r 202012
 
 - 移除 `config/initializers/assets.rb` 文件
 - ~~删除 `app/assets` 目录~~（建议保留作为回退备份）
+
+## 文档
+
+- [可用断言](https://guides.rubyonrails.org/testing.html#available-assertions)
+- [并行测试](https://guides.rubyonrails.org/testing.html#parallel-testing-with-processes)

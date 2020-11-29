@@ -1,5 +1,7 @@
 import '../stylesheets/application';
 
+import "trix"
+import "@rails/actiontext"
 import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"

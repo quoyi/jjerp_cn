@@ -1,5 +1,5 @@
 class StaticController < ApplicationController
-  skip_before_action :authenticate!, except: [:home]
+  skip_before_action :authenticate_with_term!, except: %i[home]
 
   # GET / 首页
   def index
@@ -20,6 +20,10 @@ class StaticController < ApplicationController
 
   # GET /privacy 隐私政策
   def privacy
+  end
+
+  # GET /expired 授权过期
+  def expired
   end
 
   # GET /home 个人主页
