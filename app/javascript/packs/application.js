@@ -1,5 +1,7 @@
 import '../stylesheets/application';
 
+global.$ = window.$ = window.jQuery = $;
+
 import "trix"
 import "@rails/actiontext"
 import Rails from "@rails/ujs"

@@ -79,7 +79,8 @@ Rails.application.routes.draw do
 
   controller :static do
     # 关于、联系、服务条款、隐私政策、授权过期、个人主页
-    get :about, :contact, :terms, :privacy, :expired, :home
+    # get :about, :contact, :terms, :privacy, :expired, :home
+    get :terms, :privacy, :expired, :home
   end
 
   root 'static#index'

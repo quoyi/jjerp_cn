@@ -7,12 +7,12 @@ class StaticController < ApplicationController
   end
 
   # GET /about 关于
-  def about
-  end
+  # def about
+  # end
 
   # GET /contact 联系我们
-  def contact
-  end
+  # def contact
+  # end
 
   # GET /terms 服务条款
   def terms
