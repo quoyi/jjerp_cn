@@ -6,7 +6,8 @@ RuCaptcha.configure do
   # self.expires_in = 120
 
   # Override cache_store configuration just only [:null_store, :memory_store, :file_store]
-  # self.cache_store = :mem_cache_store
+  # 开发环境可能为 null_store 需要添加此配置
+  self.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
 
   # Disable cache_store check
   # self.skip_cache_store_check = true
