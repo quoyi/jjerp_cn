@@ -1,4 +1,4 @@
-<h2>Sign up</h2>
+<h2>注册账号</h2>
 
 <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
   <%= f.error_notification %>
@@ -10,7 +10,7 @@
                 input_html: { autocomplete: "email" }%>
     <%= f.input :password,
                 required: true,
-                hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
+                hint: ("至少 #{@minimum_password_length} 个字符" if @minimum_password_length),
                 input_html: { autocomplete: "new-password" } %>
     <%= f.input :password_confirmation,
                 required: true,
@@ -18,8 +18,8 @@
   </div>
 
   <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
+    <%= f.button :submit, '注册账号', class: 'btn btn-primary btn-block mt-3' %>
   </div>
 <% end %>
 
-<%= render "devise/shared/links" %>
+<%= render "users/shared/links" %>

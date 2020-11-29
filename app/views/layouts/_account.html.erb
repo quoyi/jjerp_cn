@@ -126,11 +126,13 @@
   <%# 未登录，显示 登录 & 注册 %>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
-      <%= link_to "登录", new_user_session_path, remote: true, class: 'nav-link', aria: { haspopup: false, expanded: false } %>
+      <%#= link_to "登录", new_user_session_path, remote: true, class: 'nav-link', aria: { haspopup: false, expanded: false } %>
+      <%= link_to "登录", new_user_session_path, class: 'nav-link', aria: { haspopup: false, expanded: false } %>
     </li>
 
     <li class="nav-item">
-      <%= link_to '注册账号', new_user_registration_path, remote: true, class: 'nav-link', aria: { haspopup: false, expanded: false } %>
+      <%#= link_to '注册账号', new_user_registration_path, remote: true, class: 'nav-link', aria: { haspopup: false, expanded: false } %>
+      <%= link_to '注册账号', new_user_registration_path, class: 'nav-link', aria: { haspopup: false, expanded: false } %>
     </li>
   </ul>
 <% end %>
