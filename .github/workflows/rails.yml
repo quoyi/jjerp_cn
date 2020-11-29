@@ -1,0 +1,77 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
+# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+
+name: Ruby
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:11
+        env:
+          POSTGRES_PASSWORD: actions_postgres
+          POSTGRES_USER: actions_postgres
+          POSTGRES_DB: actions_test
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis
+        options: --entrypoint redis-server
+        ports:
+          - 6379:6379
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.6
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+
+    - name: Set up Nodejs
+      run: actions/setup-node@v1
+      with:
+        node-version: 12.18.3
+
+    - name: Install dependencies
+      run: |
+          sudo apt-get -yqq install libpq-dev build-essential libcurl4-openssl-dev
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+          yarn install
+
+    - name: Setup test database
+      env:
+        RAILS_ENV: test
+        PGHOST: localhost
+        POSTGRES_DB: actions_test
+        POSTGRES_USER: actions_postgres
+        POSTGRES_PASSWORD: actions_postgres
+      run: |
+        cp config/database.ci.yml config/database.yml
+        rake db:create db:migrate
+
+    - name: Run tests
+      env:
+        PGHOST: localhost
+        POSTGRES_DB: actions_test
+        POSTGRES_USER: actions_postgres
+        POSTGRES_PASSWORD: actions_postgres
+        PGPORT: ${{ job.services.postgres.ports[5432] }}
+      run: bundle exec rails test
