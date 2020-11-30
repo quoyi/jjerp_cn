@@ -4291,6 +4291,21 @@ last-call-webpack-plugin@^3.0.0:
     lodash "^4.17.5"
     webpack-sources "^1.1.0"
 
+leaflet.markercluster@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.npm.taobao.org/leaflet.markercluster/download/leaflet.markercluster-1.4.1.tgz#b53f2c4f2ca7306ddab1dbb6f1861d5e8aa6c5e5"
+  integrity sha1-tT8sTyynMG3asdu28YYdXoqmxeU=
+
+leaflet.tilelayer.colorfilter@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.npm.taobao.org/leaflet.tilelayer.colorfilter/download/leaflet.tilelayer.colorfilter-1.2.5.tgz#f1ecbc1500352362643c4c04e5d8b6a2b49784c3"
+  integrity sha1-8ey8FQA1I2JkPEwE5di2orSXhMM=
+
+leaflet@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.npm.taobao.org/leaflet/download/leaflet-1.7.1.tgz#10d684916edfe1bf41d688a3b97127c0322a2a19"
+  integrity sha1-ENaEkW7f4b9B1oijuXEnwDIqKhk=
+
 lines-and-columns@^1.1.6:
   version "1.1.6"
   resolved "https://registry.npm.taobao.org/lines-and-columns/download/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
