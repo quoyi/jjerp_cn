@@ -23,6 +23,7 @@ gem 'image_processing', '~> 1.2'
 gem 'devise'
 gem 'cancancan'
 # gem 'rolify'
+gem 'hashid-rails', '~> 1.0'
 
 gem 'kaminari'
 gem 'simple_form'

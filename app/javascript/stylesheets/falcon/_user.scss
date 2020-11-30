@@ -3,12 +3,50 @@
 /*-----------------------------------------------
 |   Social Outline Buttons
 -----------------------------------------------*/
+
+// Devise 页面按钮
 .btn-outline-weixin {
   @include button-outline-variant($weixin);
 }
 
 .btn-outline-qq {
   @include button-outline-variant($qq);
+}
+
+// devise 页面背景
+.bg-auth-card-shape {
+  background-image: url(./img/illustrations/half-circle.png);
+}
+
+// 个人首页 - 趋势图
+#banner {
+  .bg-holder {
+    background-image: url(./img/illustrations/bg-1.jpg);
+    background-position: center bottom;
+  }
+}
+
+// 个人首页 - 分类统计
+.card-deck {
+  .card {
+    min-width: 12rem;
+
+    &:nth-child(1) {
+      .bg-card {
+        background-image: url(./img/illustrations/corner-1.png);
+      }
+    }
+    &:nth-child(2) {
+      .bg-card {
+        background-image: url(./img/illustrations/corner-2.png);
+      }
+    }
+    &:nth-child(3) {
+      .bg-card {
+        background-image: url(./img/illustrations/corner-3.png);
+      }
+    }
+  }
 }
 
 // 自定义提示样式

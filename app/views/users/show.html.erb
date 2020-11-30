@@ -6,13 +6,6 @@
 <% end %>
 <%# 面包屑导航 结束 %>
 
-<% if params[:message] %>
-<div class="alert alert-danger%>">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  <%= content_tag :div, params[:message], :id => "flash_danger" %>
-</div>
-<% end %>
-
 <%# 趋势图 开始 %>
 <% if current_user.role?("super_admin") || current_user.role?("admin") %>
   <div class="card mb-3">
@@ -52,9 +45,8 @@
 
 <!-- 分类统计 开始 -->
 <div class="card-deck">
-  <div class="card mb-3 overflow-hidden" style="min-width: 12rem">
-    <div class="bg-holder bg-card" style="background-image:url(assets/img/illustrations/corner-1.png);"></div>
-
+  <div class="card mb-3 overflow-hidden">
+    <div class="bg-holder bg-card"></div>
     <div class="card-body position-relative">
       <h6>
         Customers<span class="badge badge-soft-warning rounded-capsule ml-2">-0.23%</span>
@@ -66,9 +58,8 @@
     </div>
   </div>
 
-  <div class="card mb-3 overflow-hidden" style="min-width: 12rem">
-    <div class="bg-holder bg-card" style="background-image:url(assets/img/illustrations/corner-2.png);"></div>
-
+  <div class="card mb-3 overflow-hidden">
+    <div class="bg-holder bg-card"></div>
     <div class="card-body position-relative">
       <h6>
         Orders<span class="badge badge-soft-info rounded-capsule ml-2">0.0%</span>
@@ -80,9 +71,8 @@
     </div>
   </div>
 
-  <div class="card mb-3 overflow-hidden" style="min-width: 12rem">
-    <div class="bg-holder bg-card" style="background-image:url(assets/img/illustrations/corner-3.png);"></div>
-
+  <div class="card mb-3 overflow-hidden">
+    <div class="bg-holder bg-card"></div>
     <div class="card-body position-relative">
       <h6>
         Revenue<span class="badge badge-soft-success rounded-capsule ml-2">9.54%</span>

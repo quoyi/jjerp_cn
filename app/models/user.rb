@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Hashid::Rails
+
   has_and_belongs_to_many :roles, join_table: :user_roles
   # 引入 devise 默认模块 :database_authenticatable, :registerable, :confirmable, :recoverable,
   #  :rememberable, :trackable, :validatable, :lockable, :timeoutable and :omniauthable

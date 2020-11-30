@@ -39,12 +39,14 @@
             <a class="notification notification-flush bg-200" href="#!">
               <div class="notification-avatar">
                 <div class="avatar avatar-2xl mr-3">
-                  <img class="rounded-circle" src="../assets/img/team/1-thumb.png" alt="" />
+                  <%= image_pack_tag '1-thumb.png', class: 'rounded-circle', alt: '' %>
                 </div>
               </div>
               <div class="notification-body">
                 <p class="mb-1"><strong>Emma Watson</strong> replied to your comment : "Hello world 😍"</p>
-                <span class="notification-time"><span class="mr-1" role="img" aria-label="表情符号">💬</span>Just now</span>
+                <span class="notification-time">
+                  <span class="mr-1" role="img" aria-label="表情符号">💬</span>Just now
+                </span>
               </div>
             </a>
           </div>
@@ -66,7 +68,7 @@
             <a class="notification notification-flush" href="#!">
               <div class="notification-avatar">
                 <div class="avatar avatar-2xl mr-3">
-                  <img class="rounded-circle" src="../assets/img/icons/weather-sm.jpg" alt="" />
+                  <%= image_pack_tag 'weather-sm.jpg', class: 'rounded-circle', alt: '' %>
                 </div>
               </div>
               <div class="notification-body">
