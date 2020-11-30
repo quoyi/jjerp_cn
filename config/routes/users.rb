@@ -14,6 +14,6 @@ devise_for :users, path: '',
                    }
 
 # 必须在 devise 之下
-resources :users, only: %i[index show edit update] do
+resources :users, only: %i[index edit update] do
   get :profile
 end

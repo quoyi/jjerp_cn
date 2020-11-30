@@ -34,17 +34,14 @@ class UsersController < ApplicationController
     # end
   end
 
-  def show
-  end
-
   def edit
-    redirect_to user_path(current_user), error: '没有权限访问该页面！' unless update_permission?
+    redirect_to dashboard_path, error: '没有权限访问该页面！' unless update_permission?
     @role = @user.roles.first
   end
 
   def profile
     @user = User.find_by(id: params[:user_id]) if params[:user_id].present?
-    redirect_to user_path(current_user), error: '没有权限访问该页面！' unless update_permission?
+    redirect_to dashboard_path, error: '没有权限访问该页面！' unless update_permission?
   end
 
   def update
@@ -70,6 +67,10 @@ class UsersController < ApplicationController
       flash[:error] = '没有权限执行此操作！'
     end
     redirect_to :back
+  end
+
+  # GET /dashboard
+  def dashboard
   end
 
   private

@@ -83,6 +83,8 @@ Rails.application.routes.draw do
     get :terms, :privacy, :expired
   end
 
+  get :dashboard, to: 'users#dashboard'
+
   root 'static#index'
 
   # mount ChinaCity::Engine => '/china_city'

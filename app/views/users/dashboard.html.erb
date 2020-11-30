@@ -1,7 +1,7 @@
 <%# 面包屑导航 开始 %>
 <%= content_for :breadcrumb do %>
   <li class="breadcrumb-item active" aria-current="个人首页">
-    <%= link_to '个人首页', user_path(current_user), class: 'text-decoration-none' %>
+    <%= link_to '个人首页', dashboard_path, class: 'text-decoration-none' %>
   </li>
 <% end %>
 <%# 面包屑导航 结束 %>

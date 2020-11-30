@@ -3,7 +3,7 @@ class StaticController < ApplicationController
 
   # GET / 首页
   def index
-    redirect_to user_path(current_user) if current_user
+    redirect_to dashboard_path if current_user
   end
 
   # GET /about 关于

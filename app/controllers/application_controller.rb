@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   # 重写用户登陆成功后跳转路径
   def after_sign_in_path_for(_resource)
     # BaseService.user = current_user
-    invalid_term? ? root_path : user_path(current_user)
+    invalid_term? ? root_path : dashboard_path
   end
 
   # def after_sign_up_path_for(resource)
