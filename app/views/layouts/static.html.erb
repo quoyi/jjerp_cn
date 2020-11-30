@@ -1,12 +1,13 @@
 <%= render 'layouts/frame' do %>
   <body data-spy="scroll" data-target="#static-scroll">
     <main class="main" id="top">
-      <%= render 'layouts/navbar' %>
+      <%= render 'layouts/static/navbar' %>
       
       <%= yield %>
 
-      <%= render 'layouts/footer' %>
-      <%= render 'layouts/modal' %>
+      <%= render 'layouts/static/footer' %>
+      <%= render 'layouts/common/modal' %>
     </main>
+    <%= render 'layouts/common/toast' %>
   </body>
 <% end %>

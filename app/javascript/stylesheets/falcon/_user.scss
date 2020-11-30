@@ -10,3 +10,29 @@
 .btn-outline-qq {
   @include button-outline-variant($qq);
 }
+
+// 自定义提示样式
+.toast-container {
+  .toast {
+    background-color: $gray-200;
+    box-shadow: 0 1px 10px 0 rgba(0, 0, 0, .1), 0 2px 15px 0 rgba(0 , 0, 0, .05) !important;
+    opacity: 1 !important;
+    border: 0 !important;
+
+    .toast-close-button{
+      font-size: map_get($font-sizes, 0) !important;
+      text-shadow: none;
+      font-weight: $font-weight-light !important;
+    }
+
+    .toast-progress{
+      height: 0.125rem !important;
+      background-color: hsla(0, 0%, 100%, .7) !important;
+      opacity: 1 !important;
+    }
+  }
+  .toast-success { background-color: #DAFAEB; color: #25D170; }
+  .toast-error { background-color: #FBE0E6; color: #DD1E46; }
+  .toast-info { background-color: #EAECEF; color: #818B9B; }
+  .toast-warning { background-color: #FEECE3; color: #F06B30; }
+}

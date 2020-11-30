@@ -1,0 +1,7 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">管理系统</li>
+
+    <%= yield :breadcrumb if content_for?(:breadcrumb) %>
+  </ol>
+</nav>

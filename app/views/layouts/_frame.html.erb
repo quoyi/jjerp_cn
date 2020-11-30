@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<%= I18n.locale %>">
+<html lang="<%= I18n.locale %>" dir="ltr">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,7 +7,7 @@
 
     <title><%= ENV.fetch('APP_NAME') { '伊思尔生产管理' } %></title>
 
-    <%= favicon_pack_tag 'media/images/favicon.ico', rel: 'shortcut icon', type: 'image/png' %>
+    <%= favicon_pack_tag 'favicon.ico', rel: 'shortcut icon', type: 'image/png' %>
 
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>

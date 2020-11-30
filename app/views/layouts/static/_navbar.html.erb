@@ -1,0 +1,41 @@
+<%# 顶部导航 %>
+<nav class="navbar navbar-standard navbar-expand-lg fixed-top navbar-dark navbar-theme">
+  <div class="container">
+    <!-- 品牌 -->
+    <%= link_to root_path, class: 'navbar-brand' do %>
+      <span class="text-white"><%= ENV['APP_NAME'] %></span>
+    <% end %>
+
+    <!-- Toggler -->
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#static-scroll" aria-controls="static-scroll" aria-expanded="false" aria-label="切换导航">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- 顶部导航 -->
+    <div id="static-scroll" class="collapse navbar-collapse scrollbar perfect-scrollbar">
+      <%# 导航菜单-左边 %>
+      <ul class="navbar-nav">
+        <li class="nav-item"><%= link_to '首页', "#banner", class: 'nav-link', data: { turbolinks: false } %></li>
+        <li class="nav-item"><%= link_to '联系', '#contact', class: 'nav-link', data: { turbolinks: false } %></li>
+        <li class="nav-item"><%= link_to '关于我们', '#about', class: 'nav-link', data: { turbolinks: false } %></li>
+      </ul>
+
+      <%#= render 'layouts/common/account' %>
+
+      <%# 导航条-右边（采用 “用户登陆后不能访问首页” 方式） %>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <%# 模态框登录链接，需要使用 `app/views/users/sessions/new.js.erb` %>
+          <%#= link_to "登录", new_user_session_path, remote: true, class: 'nav-link', aria: { haspopup: false, expanded: false } %>
+          <%= link_to "登录", new_user_session_path, class: 'nav-link' %>
+        </li>
+
+        <li class="nav-item">
+          <%# 模态框登录链接，需要使用 `app/views/users/registrations/new.js.erb` %>
+          <%#= link_to '注册账号', new_user_registration_path, remote: true, class: 'nav-link', aria: { haspopup: false, expanded: false } %>
+          <%= link_to '注册账号', new_user_registration_path, class: 'nav-link' %>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

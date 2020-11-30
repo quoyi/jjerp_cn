@@ -51,11 +51,11 @@ class User < ApplicationRecord
   after_save :add_normal_role
 
   # 用户头像
-  def avatar_url
-    return Rails.application.routes.url_helpers.url_for('avatar.png') unless avatar.attached?
+  # def avatar_url
+  #   return Rails.application.routes.url_helpers.url_for('avatar.png') unless avatar.attached?
 
-    url_for(avatar)
-  end
+  #   url_for(avatar)
+  # end
 
   def role?(role_name)
     roles.exists?(nick: role_name)

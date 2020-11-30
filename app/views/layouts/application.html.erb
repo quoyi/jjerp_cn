@@ -1,15 +1,25 @@
 <%= render 'layouts/frame' do %>
-  <body data-spy="scroll" data-target="#static-scroll">
+  <body>
     <main class="main" id="top">
-      <%= render 'layouts/navbar' %>
-      
-        <%# 常规页面需要包裹 %>
-        <div class="container pt-7" data-layout="container">
-          <%= yield %>
-        </div>
+      <%# 常规页面需要包裹 %>
+      <div class="container" data-layout="container">
+        <%# 垂直导航 %>
+        <%= render 'layouts/application/sidebar' %>
 
-      <%= render 'layouts/footer' %>
-      <%= render 'layouts/modal' %>
+        <div class="content">
+          <%# 顶部导航 %>
+          <%= render 'layouts/application/navbar' %>
+          <%# 面包屑导航 %>
+          <%= render 'layouts/application/breadcrumb' %>
+
+          <%= yield %>
+
+          <%= render 'layouts/application/footer' %>
+        </div>
+      </div>
     </main>
+
+    <%= render 'layouts/common/toast' %>
+    <%= render 'layouts/common/modal' %>
   </body>
 <% end %>
