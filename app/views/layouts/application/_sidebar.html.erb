@@ -22,42 +22,295 @@
   <!-- 侧边导航条 开始 -->
   <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
     <div class="navbar-vertical-content perfect-scrollbar scrollbar">
+      <%# 基础菜单 开始 %>
       <ul class="navbar-nav flex-column">
-        <!-- Home 开始 -->
-        <li class="nav-item">
-          <a class="nav-link dropdown-indicator" href="#home" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="home">
+        <li class="nav-item <%= 'active' if action_name == 'dashboard' %>">
+          <%= link_to dashboard_path, class: 'nav-link' do %>
             <div class="d-flex align-items-center">
-              <span class="nav-link-icon">
-                <span class="fas fa-chart-pie"></span>
-              </span>
-              <span class="nav-link-text">Home</span>
+              <span class="nav-link-icon"><i class="fas fa-tachometer-alt"></i></span>
+              <span class="nav-link-text">个人首页</span>
             </div>
-          </a>
-          <ul class="nav collapse show" id="home" data-parent="#navbarVerticalCollapse">
-            <li class="nav-item active"><a class="nav-link" href="index.html">Dashboard</a>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="home/dashboard-alt.html">Dashboard alt</a>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="home/feed.html">Feed</a>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="home/landing.html">Landing</a>
-            </li>
-          </ul>
+          <% end %>
         </li>
-        <!-- Home 结束 -->
+
+        <!-- 员工管理 开始 -->
+        <% if permission?("RolesController") || permission?("UsersController") %>
+          <li class="nav-item">
+            <a class="nav-link dropdown-indicator" href="#employees" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="employees">
+              <div class="d-flex align-items-center">
+                <span class="nav-link-icon"><i class="fas fa-users"></i></span>
+                <span class="nav-link-text">员工权限</span>
+              </div>
+            </a>
+            <ul class="nav collapse <%= 'show' if ['users', 'roles'].include?(controller_name) %>" id="employees" data-parent="#navbarVerticalCollapse">
+              <% if permission?("UsersController") %>
+                <li class="nav-item <%= actived?('users') %>">
+                  <%= link_to '员工信息', users_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+              <% if permission?("RolesController") %>
+                <li class="nav-item <%= actived?('roles') %>">
+                  <%= link_to '角色权限', roles_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
+        <!-- 员工管理 结束 -->
+
+
+        <%# 基础数据 开始 %>
+        <% if permission?("AgentsController") ||
+              permission?("SuppliessController") ||
+              permission?("UomsController") ||
+              permission?("OrderCategoriesController") ||
+              permission?("UnitCategoriesController") ||
+              permission?("UnitsController") ||
+              permission?("PartCategoriesController") ||
+              permission?("PartsController") ||
+              permission?("MaterialCategoriesController") ||
+              permission?("MaterialsController") ||
+              permission?("CraftsController")
+        %>
+          <li class="nav-item">
+            <a class="nav-link dropdown-indicator" href="#employees" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="employees">
+              <div class="d-flex align-items-center">
+                <span class="nav-link-icon"><i class="fas fa-cogs"></i></span>
+                <span class="nav-link-text">基础数据</span>
+              </div>
+            </a>
+            <ul class="nav collapse <%= 'show' if ['agents', 'supplies', 'uoms', 'order_categories', 'unit_categories', 'units', 'part_categories', 'parts', 'material_categories', 'materials', 'craft_categories', 'crafts'].include?(controller_name) %>" id="employees" data-parent="#navbarVerticalCollapse">
+              <% if permission?('AgentsController') %>
+                <li class="nav-item <%= actived?('agents') %>">
+                  <%= link_to '代理商', agents_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+              <% if permission?("SuppliesController") %>
+                <li class="nav-item <%= actived?('supplies') %>">
+                  <%= link_to '供应商', supplies_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+              <% if permission?("UomsController") %>
+                <li class="nav-item <%= actived?('uoms') %>">
+                  <%= link_to '单位', uoms_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+
+              <% if permission?("UnitCategoriesController")%>
+                <li class="nav-item <%= actived?('unit_categories') %>">
+                  <%= link_to '部件类型', unit_categories_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+              <% if permission?("UnitsController")%>
+                <li class="nav-item <%= actived?('units') %>">
+                  <%= link_to '部件', units_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+
+              <% if permission?("PartCategoriesController")%>
+                <li class="nav-item <%= actived?('part_categories') %>">
+                  <%= link_to '配件类型', part_categories_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+              <% if permission?("PartsController")%>
+                <li class="nav-item <%= actived?('parts') %>">
+                  <%= link_to '配件', parts_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+
+              <% if permission?("MaterialCategoriesController") %>
+                <li class="nav-item <%= actived?('material_categories') %>">
+                  <%= link_to '板料类型', material_categories_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+              <% if permission?("MaterialsController") %>
+                <li class="nav-item <%= actived?('materials') %>">
+                  <%= link_to '板料', materials_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+              <% if permission?("CraftCategoriesController") %>
+                <li class="nav-item <%= actived?('craft_categories') %>">
+                  <%= link_to '工艺类型', craft_categories_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+              <% if permission?("CraftsController") %>
+                <li class="nav-item <%= actived?('crafts') %>">
+                  <%= link_to '工艺', crafts_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+            </ul>
+          </li>
+        <% end %>
+        <%# 基础数据 结束 %>
+
+
+        <%# 财务 开始 %>
+        <% if permission?("IncomesController") ||
+              permission?("ExpendsController") ||
+              permission?("BanksController")
+        %>
+          <li class="nav-item">
+            <a class="nav-link dropdown-indicator" href="#finances" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="finances">
+              <div class="d-flex align-items-center">
+                <span class="nav-link-icon"><i class="fas fa-calculator"></i></span>
+                <span class="nav-link-text">财务数据</span>
+              </div>
+            </a>
+            <ul class="nav collapse <%= 'show' if ['banks', 'incomes', 'expends'].include?(controller_name) %>" id="finances" data-parent="#navbarVerticalCollapse">
+              <% if permission?("IncomesController") %>
+                <li class="nav-item <%= actived?('incomes') %>">
+                  <%= link_to '收入管理', incomes_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+              <% if permission?("ExpendsController") %>
+                <li class="nav-item <%= actived?('expends') %>">
+                  <%= link_to '支出管理', expends_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+              <% if permission?("IncomesController", 'stat') %>
+                <li class="nav-item <%= actived?('incomes') %>">
+                  <%= link_to '收支统计', stat_incomes_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+              <% if permission?("BanksController") %>
+                <li class="nav-item <%= actived?('banks') %>">
+                  <%= link_to '银行账户', banks_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+              
+            </ul>
+          </li>
+        <% end %>
+        <%# 财务 结束 %>
       </ul>
+      <%# 基础菜单 结束 %>
+
 
       <%# 分割线 %>
       <div class="navbar-vertical-divider">
         <hr class="navbar-vertical-hr my-2" />
       </div>
 
+      <%# 订单菜单 开始 %>
+      <ul class="navbar-nav flex-column">
+        <% if permission?("IndentsController") ||
+              permission?("OrdersController")
+        %>
+          <li class="nav-item">
+            <a class="nav-link dropdown-indicator" href="#orders" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="orders">
+              <div class="d-flex align-items-center">
+                <span class="nav-link-icon"><i class="fas fa-briefcase"></i></span>
+                <span class="nav-link-text">订单管理</span>
+              </div>
+            </a>
+            <ul class="nav collapse <%= 'show' if ['indents', 'orders'].include?(controller_name) && 'index' == action_name %>" id="orders" data-parent="#navbarVerticalCollapse">
+              <% if permission?("IndentsController") %>
+                <li class="nav-item <%= actived?('indents') %>">
+                  <%= link_to '总订单', indents_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+              <% if permission?("OrdersController") %>
+                <li class="nav-item <%= actived?('orders') %>">
+                  <%= link_to '子订单', orders_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
+        <%# 订单菜单 结束 %>
+
+        <%# 生产任务 开始 %>
+        <% if permission?("OrdersController", "unpack") ||
+              permission?("OrdersController", "package") ||
+              permission?("OrdersController", "producing") ||
+              permission?("OrdersController", "packaged")
+        %>
+          <li class="nav-item">
+            <a class="nav-link dropdown-indicator" href="#produces" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="produces">
+              <div class="d-flex align-items-center">
+                <span class="nav-link-icon"><i class="fas fa-wrench"></i></span>
+                <span class="nav-link-text">生产任务</span>
+              </div>
+            </a>
+            <ul class="nav collapse <%= 'show' if ['indents', 'orders'].include?(controller_name) && ['unpack', 'producing', 'package', 'packaged'].include?(action_name) %>" id="produces" data-parent="#navbarVerticalCollapse">
+              <% if permission?("OrdersController") %>
+                <li class="nav-item <%= actived?('orders', 'producing') %>">
+                  <%= link_to '生产中', producing_orders_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+              <% if permission?("OrdersController", 'unpack') ||
+                    permission?("OrdersController", 'package')
+              %>
+                <li class="nav-item <%= actived?('orders', ['unpack', 'package']) %>">
+                  <%= link_to '未打包', unpack_orders_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+              <% if permission?("OrdersController", 'packaged') %>
+                <li class="nav-item <%= actived?('orders', 'packaged') %>">
+                  <%= link_to '已打包', packaged_orders_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
+        <%# 生产任务 结束 %>
+
+        <%# 物流发货 开始 %>
+        <% if permission?("OrdersController", "not_sent") ||
+              permission?("SentListsController") ||
+              permission?("SentsController")
+        %>
+          <li class="nav-item">
+            <a class="nav-link dropdown-indicator" href="#logistics" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="logistics">
+              <div class="d-flex align-items-center">
+                <span class="nav-link-icon"><i class="fas fa-truck"></i></span>
+                <span class="nav-link-text">物流发货</span>
+              </div>
+            </a>
+            <ul class="nav collapse <%= 'show' if ['orders', 'sent_list', 'sents'].include?(controller_name) && ['not_sent'].include?(action_name) %>" id="logistics" data-parent="#navbarVerticalCollapse">
+              <% if permission?("OrdersController", 'not_sent') %>
+                <li class="nav-item <%= actived?('orders', 'not_sent') %>">
+                  <%= link_to '待发货', not_sent_orders_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+              <% if permission?("SentListsController") %>
+                <li class="nav-item <%= actived?('sent_lists', ['index', 'show', 'edit']) %>">
+                  <%= link_to '发货清单', sent_lists_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+
+              <% if permission?("SentsController") %>
+                <li class="nav-item <%= actived?('sents') %>">
+                  <%= link_to '发货/确认', sents_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
+        <%# 物流发货 结束 %>
+      </ul>
+
       <%# 导航设置 %>
       <div class="settings px-3 px-xl-0">
         <div class="navbar-vertical-divider px-0">
           <hr class="navbar-vertical-hr my-3" />
         </div>
-        <a class="btn btn-sm btn-block btn-purchase mb-3" href="https://themes.getbootstrap.com/product/falcon-admin-dashboard-webapp-template/">Purchase</a>
+        <%= link_to '购买定制服务', '#', class: 'btn btn-sm btn-block btn-purchase mb-3' %>
       </div>
 
     </div>

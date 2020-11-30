@@ -25,4 +25,16 @@ module ApplicationHelper
       '成功'
     end
   end
+
+  # 是否有权限
+  def permission?(controller, action = 'index')
+    current_user.permission?(controller, action)
+  end
+
+  # 是否激活
+  def actived?(controller, action = 'index')
+    return nil unless controller_name == controller
+
+    'active' if ([] << action).flatten.include?(action_name)
+  end
 end
