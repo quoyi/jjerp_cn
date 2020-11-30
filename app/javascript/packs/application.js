@@ -1,6 +1,11 @@
 import '../stylesheets/application';
 
-global.$ = window.$ = window.jQuery = $;
+// 已通过 `config/webpack/environment.js` 配置
+// global.$ = window.$ = window.jQuery = $;
+// window.Stickyfill = Stickyfill;
+// window.PerfectScrollbar = PerfectScrollbar;
+// window.Typed = Typed;
+// window.Chart = Chart;
 
 import "trix"
 import "@rails/actiontext"
@@ -15,8 +20,22 @@ ActiveStorage.start()
 
 import "bootstrap/dist/js/bootstrap";
 import "@fortawesome/fontawesome-free/js/all";
+// import "stickyfilljs/dist/stickyfill";
 import "sticky-kit/dist/sticky-kit";
-import "owl.carousel/dist/owl.carousel";
+// import "is_js/is";
+// import "lodash/lodash";
+// import "perfect-scrollbar/dist/perfect-scrollbar";
+// import "chart.js/dist/Chart";
+import "datatables/media/js/jquery.dataTables";
+import "datatables.net-bs4/js/dataTables.bootstrap4";
+import "datatables.net-responsive/js/dataTables.responsive";
+import "datatables.net-responsive-bs4/js/responsive.bootstrap4";
+import "leaflet/dist/leaflet";
+import "leaflet.markercluster/dist/leaflet.markercluster";
+import "leaflet.tilelayer.colorfilter/src/leaflet-tilelayer-colorfilter";
+
+import "owl.carousel/dist/owl.carousel"; // 目前仅静态页面使用
+
 import "./theme";
 import "./events";
 

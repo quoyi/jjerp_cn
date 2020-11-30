@@ -11,12 +11,18 @@ environment.plugins.prepend(
     'window._': 'lodash',
     'window.$': 'jquery',
     'window.jQuery': 'jquery',
+    'global.$': 'jquery',
     'window.is': 'is_js/is',
     Popper: ['popper.js', 'default'],
     ActionCable: '@rails/actioncable',
     Stickyfill: 'stickyfilljs',
+    'window.Stickyfill': 'stickyfilljs',
     PerfectScrollbar: 'perfect-scrollbar',
-    Typed: 'typed.js'
+    'window.PerfectScrollbar': 'perfect-scrollbar',
+    Typed: 'typed.js',
+    'window.Typed': 'typed.js',
+    Chart: 'chart.js',
+    'window.Chart': 'chart.js'
   })
 );
 
