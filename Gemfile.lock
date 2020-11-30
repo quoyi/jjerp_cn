@@ -397,9 +397,6 @@ GEM
       net-ssh (>= 2.8.0)
     thor (1.0.1)
     ttfunk (1.6.2.1)
-    turbolinks (5.2.1)
-      turbolinks-source (~> 5.2)
-    turbolinks-source (5.2.0)
     tzinfo (2.0.3)
       concurrent-ruby (~> 1.0)
     unicode-display_width (1.7.0)
@@ -490,7 +487,6 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.0.0)
   squasher
-  turbolinks (~> 5)
   web-console (>= 4.0.3)
   webdrivers
   webpacker (~> 5.0)

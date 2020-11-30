@@ -48,6 +48,14 @@ grep -rl "ActiveRecord::Migration$" db | xargs sed -i "" "s/ActiveRecord::Migrat
 squasher -m 6.0 -r 202012
 ```
 
+## 移除 Turbolinks
+
+1. Remove `gem 'turbolinks', '~> 5'` from `Gemfile`
+2. Remove `require('turbolinks').start()` from `app/javascript/application.js`
+3. Remove `, 'data-turbolinks-track': 'reload'` from `app/views/layouts/application.html.erb`
+4. Run `yarn remove turbolinks`
+5. Run `rails tmp:cache:clear`
+
 ## 移除 Sprockets
 
 - 从 `Gemfile` 中移除 `sass-rails`
