@@ -1,3 +1,17 @@
+<%= content_for :breadcrumb do %>
+  <li class="breadcrumb-item active" aria-current="总订单">
+    <%= link_to '总订单', '#', class: 'text-decoration-none' %>
+  </li>
+<% end %>
+
+<%= render partial: 'common/table', locals: { title: '总订单', list: @indents } %>
+
+
+<p class="d-block m-5 p-5"></p>
+<h1>下面的数据是要删除的</h1>
+<p class="d-block m-5 p-5"></p>
+
+
 <div class="panel-warning">
   <div class="content-box-header panel-heading">
     <div class="panel-title" style="margin-bottom: 2px; padding-bottom: 0px;">

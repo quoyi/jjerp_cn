@@ -1,0 +1,89 @@
+<div class="card mb-3">
+  <div class="card-header">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-4 col-sm-auto d-flex align-items-center pr-0">
+        <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0"><%= local_assigns[:title] %></h5>
+      </div>
+
+      <div class="col-8 col-sm-auto ml-auto text-right pl-0">
+        <%# 全选后功能下拉框 %>
+        <div class="d-none" id="table-list-actions">
+          <div class="input-group input-group-sm">
+            <select class="custom-select cus" aria-label="Bulk actions">
+              <option selected="">Bulk actions</option>
+              <option value="Refund">Refund</option>
+              <option value="Delete">Delete</option>
+              <option value="Archive">Archive</option>
+            </select>
+            <button class="btn btn-falcon-default btn-sm ml-2" type="button">Apply</button>
+          </div>
+        </div>
+
+        <%# 表单按钮区 %>
+        <div id="table-dashboard-actions">
+          <%= link_to '#!', class: 'btn btn-falcon-default btn-sm' do %>
+            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+            <span class="d-none d-sm-inline-block ml-1">新建</span>
+          <% end %>
+          <%= link_to '#!', class: 'btn btn-falcon-default btn-sm mx-2' do %>
+            <span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span>
+            <span class="d-none d-sm-inline-block ml-1">过滤</span>
+          <% end %>
+          <%= link_to '#!', class: 'btn btn-falcon-default btn-sm' do %>
+            <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+            <span class="d-none d-sm-inline-block ml-1">导出</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="falcon-data-table">
+      <table class="table table-sm mb-0 table-striped table-dashboard fs--1 data-table border-bottom border-200" data-options='{"searching":false,"responsive":false,"info":false,"lengthChange":false,"sWrapper":"falcon-data-table-wrapper","dom":"<&#39;row mx-1&#39;<&#39;col-sm-12 col-md-6&#39;l><&#39;col-sm-12 col-md-6&#39;f>><&#39;table-responsive&#39;tr><&#39;row no-gutters px-1 py-3 align-items-center justify-content-center&#39;<&#39;col-auto&#39;p>>","language":{"paginate":{"next":"<span class=\"fas fa-chevron-right\"></span>","previous":"<span class=\"fas fa-chevron-left\"></span>"}}}'>
+        <thead class="bg-200 text-900">
+          <tr>
+            <th class="align-middle no-sort">
+              <div class="custom-control custom-checkbox">
+                <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" type="checkbox" data-checkbox-body="#table-list" data-checkbox-actions="#table-list-actions" data-checkbox-replaced-element="#table-dashboard-actions">
+                <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
+              </div>
+            </th>
+            <th class="align-middle sort">Order</th>
+            <th class="align-middle sort pr-7">Date</th>
+            <th class="align-middle sort" style="min-width: 12.5rem;">Ship To</th>
+            <th class="align-middle sort text-center">Status</th>
+            <th class="align-middle sort text-right">Amount</th>
+            <th class="no-sort"></th>
+          </tr>
+        </thead>
+
+        <tbody id="table-list">
+          <% local_assigns[:list].each_with_index do |item, index| %>
+            <tr class="btn-reveal-trigger">
+              <%# checkbox %>
+              <td class="py-2 align-middle">
+                <div class="custom-control custom-checkbox">
+                  <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-<%= index %>" />
+                  <label class="custom-control-label" for="checkbox-<%= index %>"></label>
+                </div>
+              </td>
+              <td><%= item.id %></td>
+              <td class="py-2 align-middle white-space-nowrap">
+                <div class="dropdown text-sans-serif">
+                  <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal mr-3" type="button" id="order-dropdown-0" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                  <div class="dropdown-menu dropdown-menu-right border py-0" aria-labelledby="order-dropdown-0">
+                    <div class="bg-white py-2"><a class="dropdown-item" href="#!">完成</a><a class="dropdown-item" href="#!">Processing</a><a class="dropdown-item" href="#!">On Hold</a><a class="dropdown-item" href="#!">Pending</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item text-danger" href="#!">删除</a>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
